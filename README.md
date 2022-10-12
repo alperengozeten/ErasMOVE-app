@@ -4,7 +4,7 @@
 #### - Hazal Buluş (21903435) :gem:
 #### - Halil Alperen Gözeten (21902464) :crown:
 #### - Süleyman Gökhan Tekin (21902512) :crown:
-#### - Korhan Kemal Kaya (21903250) :crown:
+#### - Korhan Kemal Kaya (21903357) :crown:
 #### - Kürşad Güzelkaya (21902103) :crown:
 
 ## Description :memo:
