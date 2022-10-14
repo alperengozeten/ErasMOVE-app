@@ -4,12 +4,12 @@
 #### - Hazal Buluş (21903435) :gem:
 #### - Halil Alperen Gözeten (21902464) :crown:
 #### - Süleyman Gökhan Tekin (21902512) :crown:
-#### - Korhan Kemal Kaya (21903357) :crown:
+#### - Korhan Kemal Kaya (21903250) :crown:
 #### - Kürşad Güzelkaya (21902103) :crown:
 
 ## Description :memo:
 
-**ErasMOVE** is a website that will be designed to provide ease to students, staff, and department personnel during the Erasmus and Exchange applications. The department coordinators can easily keep track of applications and update information related to the students or universities. Students, on the other hand, can handle pre-application and post-application processes through our app and contact university staff for document-related issues. Besides, the partner university department coordinators can manage their universities’ profiles and interact with incoming students.
+**ErasMOVE** is a website that will be designed to provide ease to students, staff, and department personnel during the Erasmus and Exchange applications. The department coordinators can easily keep track of the application processes of students and update information related to the students or universities. Students, on the other hand, can handle pre-application and post-application processes through our app and contact university staff for document-related issues. The course coordinator and the administrative staff will be the other actors in our app who will have the ability to manage document and course-related requests of students. Incoming students, as the least essential actor, can propose a list of courses they plan to take and track its status.
 
 ## Roles in ErasMOVE :memo:
 
@@ -26,7 +26,8 @@
 -   If the CGPA of an Erasmus student drops below 2.5 or 3.0 for an Exchange student, their acceptance will be canceled, and the process of finding a new student from the waiting will be started by the department coordinator.
     
 -   Information related to approved/rejected courses will be logged and will be available to the next applicants.
-
+    
+-   Actors can send messages to other actors through our application, or they can be directed to send an email by clicking the mail button.
 
 ## :man_student: :woman_student: What Outgoing Students Can Do in ErasMOVE
 
@@ -39,14 +40,14 @@
 -   Students will be able to create a request for a course that they want to take in their mobility as a possible equivalence of a course in Bilkent. In the request, the student will be able to attach the syllabus of the course and explain the contents. The request will be delivered to the related course coordinator for their approval.
     
 
--   Students will be able to create pre-approval forms to get approval for their planned courses from the department coordinator. While creating this form, students will have the option to merge some courses depending on their university (i.e. universities in France). The system won’t accept the form unless the total ECTS workload of the courses is below 30 (this is strict) or above 40 (more flexible).
+-   Students will be able to create pre-approval forms to get approval for their planned courses from the department coordinator (there will be two of these if the student is a double major or doing a minor). While creating this form, students will have the option to merge some courses depending on their university (i.e. universities in France). The system won’t accept the form unless the total ECTS workload of the courses is below 30 (this is strict) or above 40 (more flexible).
     
 -   In case a student cancels their placement, the top student on the waiting list might be offered this empty slot by the department coordinator. Students will have the ability to accept or decline this offer.
     
 -   The student will be able to create a new (secondary) pre-approval form through our system in case he/she fails to take the desired courses at registration in the mobility. The same process for approval will start once again.
     
 
--   Each student will have a profile containing their related information such as department, current GPA, semester, etc. Information related to different language proficiencies (German, French, etc.) will also be displayed on the profile page of students. Most importantly, they will be able to see the current status of their application.
+-   Each student will have a profile containing their related information such as department, current GPA, semester, double major and minor status, etc. Information related to different language proficiencies (German, French, etc.) will also be displayed on the profile page of students. Most importantly, they will be able to see the current status of their application.
     
 -   Each admitted student will have an option on their profile page to request a Learning Agreement and Acceptance Letter, which is required by the visa processes.
     
@@ -62,9 +63,9 @@
 
 ## :man_office_worker: :woman_office_worker: What Department Coordinator Can Do in ErasMOVE
 
--  Will be able to see the placements of the students listed with decreasing scores calculated by considering students’ ENG 101/102 grades and their CGPA.
+-   Will be able to see the placements of the students listed with decreasing scores calculated by considering students’ ENG 101/102 grades and their CGPA.
     
--   Will be able to approve the language proficiency of students applying to universities with language requirements other than English, like German, French, etc.
+-   Will be able to approve the language proficiency of students applying to universities with language requirements other than English; like German, French, etc, according to the results of the language exams conducted by Bilkent University.
     
 -   Will be able to make changes to the announcement page where the information related to application deadlines and conditions will be displayed.
     
@@ -80,7 +81,7 @@
 
 -   Get notifications and emails about a student’s file requests, and they will be able to see the list of requests.
     
--   For the placements to be done, a sheet including information about applicants, their GPA’s and ENG101/102 notes will be uploaded by administrative staff.
+-   For the placements to be done, a sheet including information about applicants, their cumulative GPA’s and ENG 101/102 notes will be uploaded by administrative staff initially.
     
 -   They will also be able to submit the requested file to the system.
     
@@ -90,11 +91,12 @@
 
 -   The course coordinator will get a notification about the requests of students to accept or decline a course in another university as an equivalence of the course that they’re coordinating.
     
-
 -   If the course requires a report, the course coordinator can request the report from the students who took this course on mobility to approve or disapprove it.
     
 -   The course coordinator will also have a to-do list in their profile where they can see the list of requests of students.
 
 ## :man_student: :woman_student: What Incoming Students Can Do in ErasMOVE
 
-- Outgoing student actors will have the lowest priority in the design and implementation of our application. We plan to provide them to create a request for their planned courses in Bilkent.
+-   Outgoing student actors will have the lowest priority in the design and implementation of our application.
+    
+-   We plan to provide them with the ability to create a proposal for their planned courses in Bilkent, which will then be approved by the department coordinator.
