@@ -1,13 +1,31 @@
 import '../styles/App.css';
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import HeaderContainer from '../containers/HeaderContainer';
+import DashboardContainer from '../containers/DashboardContainer';
+import LoginContainer from '../containers/LoginContainer';
+
 
 const App = ({ initApp }) => {
   useEffect(() => {
     initApp('appText');
   }, [initApp]);
 
-  return (<div className="App">ErasMOVE</div>);
+  return (
+    <Router>
+      <div className="App">
+        {/* <Suspense fallback={<div />}> */}
+        <HeaderContainer />
+        <Routes>
+          <Route path="/dash" element={<DashboardContainer />} />
+          <Route path="/" element={<LoginContainer />} />
+        </Routes>
+        {/* </Suspense> */}
+      </div>
+    </Router>
+  );
 };
 
 App.propTypes = {

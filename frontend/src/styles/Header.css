@@ -1,0 +1,66 @@
+.header {
+  background-color: rgb(14, 172, 133);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  height: 60px;
+  align-items: center;
+}
+
+.app-info {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  margin: 15px;
+
+}
+
+.app-info img {
+  margin: 10px;
+}
+
+.authenticated {
+  flex: 5;
+  display: flex;
+  align-items: center
+}
+
+.authenticated .nav-container {
+  flex: 3;
+}
+
+.navigation .nav-link {
+  text-decoration: none;
+  margin-right: 20px;
+  color: #000;
+  font-size: 20px;
+}
+
+.logout {
+  flex: 2;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 30px;
+}
+
+@media(max-width: 1000px) {
+  .none-mobile-1000 {
+    display: none;
+  }
+
+}
+
+@media(max-width: 500px) {
+  .none-mobile-500 {
+    display: none;
+  }
+
+  .logout-btn {
+    padding: 7px 10px;
+  }
+
+  .logout .icon {
+    margin: auto;
+  }
+}
