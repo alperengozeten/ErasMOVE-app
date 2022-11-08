@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HeaderContainer from '../containers/HeaderContainer';
 import DashboardContainer from '../containers/DashboardContainer';
 import LoginContainer from '../containers/LoginContainer';
-
+import ForgotPasswordContainer from '../containers/ForgotPasswordContainer';
 
 const App = ({ initApp }) => {
   useEffect(() => {
@@ -21,6 +21,7 @@ const App = ({ initApp }) => {
         <Routes>
           <Route path="/dash" element={<DashboardContainer />} />
           <Route path="/" element={<LoginContainer />} />
+          <Route path="/forgotPassword" element={<ForgotPasswordContainer />} />
         </Routes>
         {/* </Suspense> */}
       </div>

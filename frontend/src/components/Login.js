@@ -1,6 +1,6 @@
 import React from 'react';
 import { func } from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Login = ({ logInRequest }) => {
@@ -14,6 +14,7 @@ const Login = ({ logInRequest }) => {
         <input id="username" className='inp' placeholder='username'></input>
         <input type={"password"} id="password" className='inp' placeholder='password'></input>
         <button className='login-btn' onClick={() => logInRequest(navigate)}>Login</button> 
+        <p> Did you forgot your password? <Link to="/forgotPassword">Forgot Password</Link></p>
     </div>
   );
 };
