@@ -37,7 +37,10 @@ const ForgotPassword = ({ sendCodeRequest, changePasswordRequest }) => {
   );
 };
 
-ForgotPassword.propTypes = {};
+ForgotPassword.propTypes = {
+  sendCodeRequest: f => f,
+  changePasswordRequest: f => f,
+};
 
 
 export default ForgotPassword;
