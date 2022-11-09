@@ -8,7 +8,7 @@ const Header = () => {
 
   const logOut = () => {
     console.log("LogOut");
-  }
+  };
 
   const status = 'authenticated';
   return (
@@ -27,7 +27,7 @@ const Header = () => {
           </div>
           <div className="logout">
             <Link to="/">
-              <button className="btn logout-btn" type="button" onClick={logOut}>
+              <button className="btn logout-btn" type="button" onClick={ logOut }>
                 <span className="none-mobile-500">Sign Out</span>
               </button>
             </Link>

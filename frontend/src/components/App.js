@@ -19,9 +19,9 @@ const App = ({ initApp }) => {
         {/* <Suspense fallback={<div />}> */}
         <HeaderContainer />
         <Routes>
-          <Route path="/dash" element={<DashboardContainer />} />
-          <Route path="/" element={<LoginContainer />} />
-          <Route path="/forgotPassword" element={<ForgotPasswordContainer />} />
+          <Route path="/dash" element={ <DashboardContainer /> } />
+          <Route path="/" element={ <LoginContainer /> } />
+          <Route path="/forgotPassword" element={ <ForgotPasswordContainer /> } />
         </Routes>
         {/* </Suspense> */}
       </div>

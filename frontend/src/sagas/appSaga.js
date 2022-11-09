@@ -5,7 +5,7 @@ import { INIT_APP } from '../constants/actionTypes';
 
 
 function initApp() {
-  console.log("Init app saga")
+  console.log("Init app saga");
 }
 
 const appSagas = [

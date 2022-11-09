@@ -12,17 +12,17 @@ const Login = ({ logInRequest }) => {
   const logIn = () => {
     const user = {
       email,
-      password
-    }
+      password,
+    };
     logInRequest(user, navigate);
-  }
+  };
   
   return (
     <div className="login">
       <div>ErasMOVE</div>
-        <input id="email" className='inp' placeholder='email' value={email} onChange={e => setEmail(e.target.value)}></input>
-        <input type={"password"} id="password" className='inp' placeholder='password' value={password} onChange={e => setPassword(e.target.value)}></input>
-        <button className='login-btn' onClick={() => logIn()}>Login</button> 
+        <input id="email" className='inp' placeholder='email' value={ email } onChange={ e => setEmail(e.target.value) }></input>
+        <input type={ "password" } id="password" className='inp' placeholder='password' value={ password } onChange={ e => setPassword(e.target.value) }></input>
+        <button className='login-btn' onClick={ () => logIn() }>Login</button> 
         <p> Did you forgot your password? <Link to="/forgotPassword">Forgot Password</Link></p>
     </div>
   );

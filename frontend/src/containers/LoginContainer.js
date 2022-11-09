@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 
 import Login from '../components/Login';
-import { logInRequest } from '../actions'
+import { logInRequest } from '../actions';
 
 const mapStateToProps = state => {
-  return {};
+  return state;
 };
 
 const mapActionsToProps = {
