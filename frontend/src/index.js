@@ -33,11 +33,11 @@ const root = ReactDOM.createRoot(container);
 
 // Initial render
 root.render(
-  <Provider store={store}>
+  <Provider store={ store }>
     <React.StrictMode>
       <AppContainer />
     </React.StrictMode>
-  </Provider>
+  </Provider>,
 );
 
 // If you want to start measuring performance in your app, pass a function
