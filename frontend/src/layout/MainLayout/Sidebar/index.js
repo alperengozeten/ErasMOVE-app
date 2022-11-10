@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 
 // material-ui
@@ -12,7 +13,7 @@ import { BrowserView, MobileView } from 'react-device-detect';
 import MenuList from './MenuList';
 import LogoSection from '../LogoSection';
 import MenuCard from './MenuCard';
-import { drawerWidth } from 'store/constant';
+import { drawerWidth } from '../../../constants/themeConstant';
 
 // ==============================|| SIDEBAR DRAWER ||============================== //
 

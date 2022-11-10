@@ -23,3 +23,14 @@ export const CHANGE_PASSWORD_FAIL = 'CHANGE_PASSWORD_FAIL';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
 export const GET_USER = 'GET_USER';
+
+export const SET_MENU = 'SET_MENU';
+
+export const MENU_OPEN = 'MENU_OPEN';
+
+export const SET_FONT_FAMILY = 'SET_FONT_FAMILY';
+
+export const SET_BORDER_RADIUS = 'SET_BORDER_RADIUS'; 
+
+
+

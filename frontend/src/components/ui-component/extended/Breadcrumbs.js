@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -8,8 +9,8 @@ import { Box, Card, Divider, Grid, Typography } from '@mui/material';
 import MuiBreadcrumbs from '@mui/material/Breadcrumbs';
 
 // project imports
-import config from 'config';
-import { gridSpacing } from 'store/constant';
+import config from '../../../config';
+import { gridSpacing } from '../../../constants/themeConstant';
 
 // assets
 import { IconTallymark1 } from '@tabler/icons';
@@ -42,9 +43,9 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
     const [item, setItem] = useState();
 
     // set active item state
-    const getCollapse = (menu) => {
+    const getCollapse = menu => {
         if (menu.children) {
-            menu.children.filter((collapse) => {
+            menu.children.filter(collapse => {
                 if (collapse.type && collapse.type === 'collapse') {
                     getCollapse(collapse);
                 } else if (collapse.type && collapse.type === 'item') {
@@ -59,7 +60,7 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
     };
 
     useEffect(() => {
-        navigation?.items?.map((menu) => {
+        navigation?.items?.map(menu => {
             if (menu.type && menu.type === 'group') {
                 getCollapse(menu);
             }

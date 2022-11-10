@@ -1,47 +1,20 @@
 import React from 'react';
-import { func } from 'prop-types';
 import { Link } from 'react-router-dom';
-
-
-//   return (
-//     <div className="login">
-//       <div>ErasMOVE</div>
-//         <input id="email" className='inp' placeholder='email' value={ email } onChange={ e => setEmail(e.target.value) }></input>
-//         <input type={ "password" } id="password" className='inp' placeholder='password' value={ password } onChange={ e => setPassword(e.target.value) }></input>
-//         <button className='login-btn' onClick={ () => logIn() }>Login</button> 
-//         <p> Did you forgot your password? <Link to="/forgotPassword">Forgot Password</Link></p>
-//     </div>
-//   );
-// };
-
-// const [password, setPassword] = useState('');
-    // const [email, setEmail] = useState('');
-
-    // const navigate = useNavigate();
-
-    // const logIn = () => {
-    //   const user = {
-    //     email,
-    //     password,
-    //   };
-    //   logInRequest(user, navigate);
-    // };
+import PropTypes from 'prop-types';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 
 // project imports
 import AuthWrapper1 from './AuthWrapper1';
 import AuthCardWrapper from './AuthCardWrapper';
-import AuthLogin from './AuthLoginForm';
+import AuthLoginForm from './AuthLoginForm';
 import AuthFooter from '../ui-component/cards/AuthFooter';
 
 // assets
 
-// ================================|| AUTH3 - LOGIN ||================================ //
-
-const Login = () => {
+const Login = ({ logInRequest }) => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -86,22 +59,7 @@ const Login = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={ 12 }>
-                                        <AuthLogin />
-                                    </Grid>
-                                    <Grid item xs={ 12 }>
-                                        <Divider />
-                                    </Grid>
-                                    <Grid item xs={ 12 }>
-                                        <Grid item container direction="column" alignItems="center" xs={ 12 }>
-                                            <Typography
-                                                component={ Link }
-                                                to="/pages/register/register3"
-                                                variant="subtitle1"
-                                                sx={ { textDecoration: 'none' } }
-                                            >
-                                                Don&apos;t have an account?
-                                            </Typography>
-                                        </Grid>
+                                        <AuthLoginForm logInRequest={ logInRequest } />
                                     </Grid>
                                 </Grid>
                             </AuthCardWrapper>
@@ -120,7 +78,7 @@ const Login = () => {
 
 
 Login.propTypes = {
-  logInRequest: func.isRequired,
+  logInRequest: PropTypes.func.isRequired,
 };
 
 

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -25,8 +26,8 @@ import {
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import Transitions from 'ui-component/extended/Transitions';
+import MainCard from '../../../../components/ui-component/cards/MainCard';
+import Transitions from '../../../../components/ui-component/extended/Transitions';
 import NotificationList from './NotificationList';
 
 // assets
@@ -66,10 +67,10 @@ const NotificationSection = () => {
     const anchorRef = useRef(null);
 
     const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+        setOpen(prevOpen => !prevOpen);
     };
 
-    const handleClose = (event) => {
+    const handleClose = event => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
@@ -84,7 +85,7 @@ const NotificationSection = () => {
         prevOpen.current = open;
     }, [open]);
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         if (event?.target.value) setValue(event?.target.value);
     };
 
@@ -186,7 +187,7 @@ const NotificationSection = () => {
                                                                     native: true
                                                                 }}
                                                             >
-                                                                {status.map((option) => (
+                                                                {status.map(option => (
                                                                     <option key={option.value} value={option.value}>
                                                                         {option.label}
                                                                     </option>

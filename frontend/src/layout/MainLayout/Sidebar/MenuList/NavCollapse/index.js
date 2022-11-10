@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -17,7 +18,7 @@ import { IconChevronDown, IconChevronUp } from '@tabler/icons';
 
 const NavCollapse = ({ menu, level }) => {
     const theme = useTheme();
-    const customization = useSelector((state) => state.customization);
+    const customization = useSelector(state => state.customization);
 
     const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState(null);
@@ -28,7 +29,7 @@ const NavCollapse = ({ menu, level }) => {
     };
 
     // menu collapse & item
-    const menus = menu.children?.map((item) => {
+    const menus = menu.children?.map(item => {
         switch (item.type) {
             case 'collapse':
                 return <NavCollapse key={item.id} menu={item} level={level + 1} />;

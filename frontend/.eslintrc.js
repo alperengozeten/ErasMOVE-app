@@ -7,6 +7,7 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        // "plugin:react/jsx-runtime",
     ],
     "overrides": [
     ],
@@ -16,7 +17,6 @@ module.exports = {
     },
     "plugins": [
         "react",
-        "react/jsx-runtime",
     ],
     "rules":{
       "react/display-name": [0, { "ignoreTranspilerName": true }],
