@@ -1,40 +1,31 @@
-import '../styles/App.css';
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import HeaderContainer from '../containers/HeaderContainer';
-import DashboardContainer from '../containers/DashboardContainer';
-import LoginContainer from '../containers/LoginContainer';
-import ForgotPasswordContainer from '../containers/ForgotPasswordContainer';
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
 
-const App = ({ initApp }) => {
-  useEffect(() => {
-    initApp('appText');
-  }, [initApp]);
+// routing
+import Routes from './routes/mainRouter';
 
-  return (
-    <Router>
-      <div className="App">
-        {/* <Suspense fallback={<div />}> */}
-        <HeaderContainer />
-        <Routes>
-          <Route path="/dash" element={ <DashboardContainer /> } />
-          <Route path="/" element={ <LoginContainer /> } />
-          <Route path="/forgotPassword" element={ <ForgotPasswordContainer /> } />
-        </Routes>
-        {/* </Suspense> */}
-      </div>
-    </Router>
-  );
-};
+// defaultTheme
+import themes from '../themes';
 
-App.propTypes = {
-  initApp: PropTypes.func.isRequired,
-};
+// project imports
+import NavigationScroll from '../layout/NavigationScroll';
 
-App.defaultProps = {
-  initApp: f => f,
+// ==============================|| APP ||============================== //
+
+const App = () => {
+    const customization = useSelector(state => state.customization);
+
+    return (
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={ themes(customization) }>
+              <CssBaseline />
+              <Routes />
+            </ThemeProvider>
+        </StyledEngineProvider>
+    );
 };
 
 export default App;
