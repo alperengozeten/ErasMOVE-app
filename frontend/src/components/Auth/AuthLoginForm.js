@@ -1,4 +1,5 @@
 import { React, useState } from 'react';
+import PropTypes from 'prop-types';
 // import { useSelector } from 'react-redux';
 
 // material-ui
@@ -7,7 +8,6 @@ import {
     Box,
     Button,
     Checkbox,
-    Divider,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -32,22 +32,31 @@ import AnimateButton from '../ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
+
+//   return (
+//     <div className="login">
+//       <div>ErasMOVE</div>
+//         <input id="email" className='inp' placeholder='email' value={ email } onChange={ e => setEmail(e.target.value) }></input>
+//         <input type={ "password" } id="password" className='inp' placeholder='password' value={ password } onChange={ e => setPassword(e.target.value) }></input>
+//         <button className='login-btn' onClick={ () => logIn() }>Login</button> 
+//         <p> Did you forgot your password? <Link to="/forgotPassword">Forgot Password</Link></p>
+//     </div>
+//   );
+// };
 
 
-// ============================|| FIREBASE - LOGIN ||============================ //
-
-const FirebaseLogin = ({ ...others }) => {
+const AuthLoginForm = ({ logInRequest }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
-    // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    // const customization = useSelector(state => state.customization);
+
     const [checked, setChecked] = useState(true);
-
-    const googleHandler = async () => {
-        console.error('Login');
-    };
-
     const [showPassword, setShowPassword] = useState(false);
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    
+    const navigate = useNavigate();
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -56,57 +65,18 @@ const FirebaseLogin = ({ ...others }) => {
         event.preventDefault();
     };
 
+    const logIn = e => {
+        e.preventDefault();
+        const user = {
+            email,
+            password,
+        };
+        logInRequest(user, navigate);
+    };
+
     return (
         <>
             <Grid container direction="column" justifyContent="center" spacing={ 2 }>
-                <Grid item xs={ 12 }>
-                    <AnimateButton>
-                        <Button
-                            disableElevation
-                            fullWidth
-                            onClick={ googleHandler }
-                            size="large"
-                            variant="outlined"
-                            sx={ {
-                                color: 'grey.700',
-                                backgroundColor: theme.palette.grey[50],
-                                borderColor: theme.palette.grey[100],
-                            } }
-                        >
-                            Sign in with Google
-                        </Button>
-                    </AnimateButton>
-                </Grid>
-                <Grid item xs={ 12 }>
-                    <Box
-                        sx={ {
-                            alignItems: 'center',
-                            display: 'flex',
-                        } }
-                    >
-                        <Divider sx={ { flexGrow: 1 } } orientation="horizontal" />
-
-                        <Button
-                            variant="outlined"
-                            sx={ {
-                                cursor: 'unset',
-                                m: 2,
-                                py: 0.5,
-                                px: 7,
-                                borderColor: `${theme.palette.grey[100]} !important`,
-                                color: `${theme.palette.grey[900]}!important`,
-                                fontWeight: 500,
-                                // borderRadius: `${customization.borderRadius}px`,
-                            } }
-                            disableRipple
-                            disabled
-                        >
-                            OR
-                        </Button>
-
-                        <Divider sx={ { flexGrow: 1 } } orientation="horizontal" />
-                    </Box>
-                </Grid>
                 <Grid item xs={ 12 } container alignItems="center" justifyContent="center">
                     <Box sx={ { mb: 2 } }>
                         <Typography variant="subtitle1">Sign in with Email address</Typography>
@@ -140,17 +110,17 @@ const FirebaseLogin = ({ ...others }) => {
                     }
                 } }
             >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                    <form noValidate onSubmit={ handleSubmit } { ...others }>
+                {({ errors, handleBlur, isSubmitting, touched }) => (
+                    <form noValidate onSubmit={ logIn }>
                         <FormControl fullWidth error={ Boolean(touched.email && errors.email) } sx={ { ...theme.typography.customInput } }>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
-                                value={ values.email }
+                                value={ email }
                                 name="email"
                                 onBlur={ handleBlur }
-                                onChange={ handleChange }
+                                onChange={ e => setEmail(e.target.value) }
                                 label="Email Address / Username"
                                 inputProps={ {} }
                             />
@@ -170,10 +140,10 @@ const FirebaseLogin = ({ ...others }) => {
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
                                 type={ showPassword ? 'text' : 'password' }
-                                value={ values.password }
+                                value={ password }
                                 name="password"
                                 onBlur={ handleBlur }
-                                onChange={ handleChange }
+                                onChange={ e => setPassword(e.target.value) }
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -240,4 +210,12 @@ const FirebaseLogin = ({ ...others }) => {
     );
 };
 
-export default FirebaseLogin;
+AuthLoginForm.propTypes = {
+  logInRequest: PropTypes.func.isRequired,
+};
+
+AuthLoginForm.defaultProps = {
+  logInRequest: f => f,
+};
+
+export default AuthLoginForm;

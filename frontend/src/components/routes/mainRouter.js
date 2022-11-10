@@ -1,39 +1,28 @@
-import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 
 // import HeaderContainer from '../containers/HeaderContainer';
-import DashboardContainer from '../../containers/DashboardContainer';
 import LoginContainer from '../../containers/LoginContainer';
+import AuthenticatedRouter from './authenticatedRouter';
 import ForgotPasswordContainer from '../../containers/ForgotPasswordContainer';
 
-const App = ({ initApp }) => {
-  useEffect(() => {
-    initApp('appText');
-  }, [initApp]);
+const mainRouter = () => {
 
   return (
-    <Router>
-      <div className="App">
-        {/* <Suspense fallback={<div />}> */}
-        {/* <HeaderContainer /> */}
-        <Routes>
-          <Route path="/dash" element={ <DashboardContainer /> } />
-          <Route path="/" element={ <LoginContainer /> } />
-          <Route path="/forgotPassword" element={ <ForgotPasswordContainer /> } />
-        </Routes>
-        {/* </Suspense> */}
-      </div>
-    </Router>
+    <div className="mainRouter">
+      {/* <Suspense fallback={<div />}> */}
+      <Routes>
+        <Route path="/" element={ <LoginContainer /> } />
+        <Route path="/main" element={ <AuthenticatedRouter /> } />
+        <Route path="/forgotPassword" element={ <ForgotPasswordContainer /> } />
+      </Routes>
+      {/* </Suspense> */}
+    </div>
   );
 };
 
-App.propTypes = {
-  initApp: PropTypes.func.isRequired,
-};
+mainRouter.propTypes = {};
 
-App.defaultProps = {
-  initApp: f => f,
-};
+mainRouter.defaultProps = {};
 
-export default App;
+export default mainRouter;

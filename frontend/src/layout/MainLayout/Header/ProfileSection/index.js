@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -31,10 +32,10 @@ import {
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
-import Transitions from 'ui-component/extended/Transitions';
+import MainCard from '../../../../components/ui-component/cards/MainCard';
+import Transitions from '../../../../components/ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
+import User1 from '../../../../assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
@@ -43,7 +44,7 @@ import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 
 const ProfileSection = () => {
     const theme = useTheme();
-    const customization = useSelector((state) => state.customization);
+    const customization = useSelector(state => state.customization);
     const navigate = useNavigate();
 
     const [sdm, setSdm] = useState(true);
@@ -59,7 +60,7 @@ const ProfileSection = () => {
         console.log('Logout');
     };
 
-    const handleClose = (event) => {
+    const handleClose = event => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
@@ -75,7 +76,7 @@ const ProfileSection = () => {
         }
     };
     const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
+        setOpen(prevOpen => !prevOpen);
     };
 
     const prevOpen = useRef(open);
@@ -168,7 +169,7 @@ const ProfileSection = () => {
                                             sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
                                             id="input-search-profile"
                                             value={value}
-                                            onChange={(e) => setValue(e.target.value)}
+                                            onChange={e => setValue(e.target.value)}
                                             placeholder="Search profile options"
                                             startAdornment={
                                                 <InputAdornment position="start">
@@ -203,7 +204,7 @@ const ProfileSection = () => {
                                                                     <Switch
                                                                         color="primary"
                                                                         checked={sdm}
-                                                                        onChange={(e) => setSdm(e.target.checked)}
+                                                                        onChange={e => setSdm(e.target.checked)}
                                                                         name="sdm"
                                                                         size="small"
                                                                     />
@@ -218,7 +219,7 @@ const ProfileSection = () => {
                                                                 <Grid item>
                                                                     <Switch
                                                                         checked={notification}
-                                                                        onChange={(e) => setNotification(e.target.checked)}
+                                                                        onChange={e => setNotification(e.target.checked)}
                                                                         name="sdm"
                                                                         size="small"
                                                                     />
@@ -248,7 +249,7 @@ const ProfileSection = () => {
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
                                                     selected={selectedIndex === 0}
-                                                    onClick={(event) => handleListItemClick(event, 0, '/user/account-profile/profile1')}
+                                                    onClick={event => handleListItemClick(event, 0, '/user/account-profile/profile1')}
                                                 >
                                                     <ListItemIcon>
                                                         <IconSettings stroke={1.5} size="1.3rem" />
@@ -258,7 +259,7 @@ const ProfileSection = () => {
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
                                                     selected={selectedIndex === 1}
-                                                    onClick={(event) => handleListItemClick(event, 1, '/user/social-profile/posts')}
+                                                    onClick={event => handleListItemClick(event, 1, '/user/social-profile/posts')}
                                                 >
                                                     <ListItemIcon>
                                                         <IconUser stroke={1.5} size="1.3rem" />

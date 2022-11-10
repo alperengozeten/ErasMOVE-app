@@ -47,7 +47,7 @@ function* logInRequest({ payload: {user, navigate} }) {
     });
 
     // Redirect user to dashboard
-    navigate('/dash');
+    navigate('/main');
   } else {
     const empty = user.email == '' ? 'email' : 'password';
 

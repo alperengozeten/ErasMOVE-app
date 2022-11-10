@@ -8,13 +8,13 @@ import { styled, useTheme } from '@mui/material/styles';
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
 
 // project imports
-import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
+import Breadcrumbs from '../../components/ui-component/extended/Breadcrumbs';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import Customization from '../Customization';
-import navigation from 'menu-items';
-import { drawerWidth } from 'store/constant';
-import { SET_MENU } from 'store/actions';
+import navigation from '../../menu-items';
+import { drawerWidth } from '../../constants/themeConstant';
+import { SET_MENU } from '../../constants/actionTypes'; 
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
@@ -70,7 +70,7 @@ const MainLayout = () => {
     const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
 
     // Handle left drawer
-    const leftDrawerOpened = useSelector(state => state.customization.opened);
+    const leftDrawerOpened = useSelector(state => state.customization?.opened);
     const dispatch = useDispatch();
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
