@@ -5,13 +5,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, StyledEngineProvider } from "@mui/material";
 
-<<<<<<< Updated upstream
 import Routes from '../routes';
 import themes from '../themes';
-=======
-import Routes from "./routes/mainRouter";
-import themes from "../themes";
->>>>>>> Stashed changes
 // import NavigationScroll from '../layout/NavigationScroll';
 
 const App = () => {
