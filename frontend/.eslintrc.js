@@ -19,6 +19,12 @@ module.exports = {
         "react",
     ],
     "rules":{
+      "no-unused-vars": [
+          1,
+          {
+              "ignoreRestSiblings": false
+          }
+      ],
       "react/display-name": [0, { "ignoreTranspilerName": true }],
       "semi": [2, "always"],
       // "react/jsx-curly-spacing": [2, {"when": "always"}],
