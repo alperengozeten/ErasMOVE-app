@@ -1,4 +1,4 @@
-import { LOG_IN_SUCCESS, LOG_OUT } from '../constants/actionTypes';
+import { LOG_IN_SUCCESS, LOG_OUT_SUCCESS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   status: localStorage.getItem('key') ? 'authenticated' : 'not-authenticated',
@@ -11,7 +11,7 @@ const loginReducer = (state = INITIAL_STATE, action) => {
       localStorage.setItem('key', action.payload);
       return { ...state, status: 'authenticated', key: action.payload };
     }
-    case LOG_OUT: {
+    case LOG_OUT_SUCCESS: {
       localStorage.removeItem('key');
       return { ...state, status: 'not-authenticated', key: null };
     }

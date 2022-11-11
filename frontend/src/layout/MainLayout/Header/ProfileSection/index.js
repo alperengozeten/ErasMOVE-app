@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -34,9 +34,8 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 // project imports
 import MainCard from '../../../../components/ui-component/cards/MainCard';
 import Transitions from '../../../../components/ui-component/extended/Transitions';
-import UpgradePlanCard from './UpgradePlanCard';
 import User1 from '../../../../assets/images/users/user-round.svg';
-
+import { logOutRequest } from '../../../../actions';
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 
@@ -46,6 +45,7 @@ const ProfileSection = () => {
     const theme = useTheme();
     const customization = useSelector(state => state.customization);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState('');
@@ -58,6 +58,7 @@ const ProfileSection = () => {
     const anchorRef = useRef(null);
     const handleLogout = async () => {
         console.log('Logout');
+        dispatch(logOutRequest(navigate));
     };
 
     const handleClose = event => {
@@ -185,7 +186,6 @@ const ProfileSection = () => {
                                     </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
-                                            <UpgradePlanCard />
                                             <Divider />
                                             <Card
                                                 sx={{

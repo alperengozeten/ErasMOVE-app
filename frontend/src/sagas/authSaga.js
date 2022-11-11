@@ -13,6 +13,7 @@ import {
   LOG_IN_FAIL,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
+  LOG_OUT_REQUEST,
   SEND_CODE_FAIL,
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
@@ -61,6 +62,16 @@ function* logInRequest({ payload: {user, navigate} }) {
 
 }
 
+function* logOutRequest({ payload: navigate }) {
+  //TODO: API call to send code request
+
+  yield put({
+    type: SEND_CODE_SUCCESS,
+    payload: {},
+  });
+  navigate('/');
+}
+
 function* sendCodeRequest({ payload: email }) {
   
   console.log('Code Email: ', email);
@@ -103,6 +114,7 @@ function* changePasswordRequest({ payload: user }) {
 
 const loginSagas = [
   takeEvery(LOG_IN_REQUEST, logInRequest),
+  takeEvery(LOG_OUT_REQUEST, logOutRequest),
   takeEvery(SEND_CODE_REQUEST, sendCodeRequest),
   takeEvery(CHANGE_PASSWORD_REQUEST, changePasswordRequest),
 ];
