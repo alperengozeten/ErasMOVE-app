@@ -106,7 +106,7 @@ const MainLayout = () => {
             <Main theme={ theme } open={ leftDrawerOpened }>
                 {/* breadcrumb */}
                 <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign />
-                <Outlet />
+                <Outlet style={{ backgroundColor: 'blue' }} />
             </Main>
             <Customization />
         </Box>
