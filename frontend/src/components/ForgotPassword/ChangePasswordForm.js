@@ -7,19 +7,18 @@ import { useTheme } from '@mui/material/styles';
 import {
     Box,
     Button,
-    Checkbox,
     FormControl,
-    FormControlLabel,
     FormHelperText,
-    Grid,
     IconButton,
     InputAdornment,
     InputLabel,
     OutlinedInput,
-    Stack,
-    Typography,
     // useMediaQuery,
 } from '@mui/material';
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useNavigate } from 'react-router-dom';
 
 // third party
 import * as Yup from 'yup';
@@ -30,18 +29,17 @@ import useScriptRef from '../../hooks/useScriptRef';
 import AnimateButton from '../ui-component/extended/AnimateButton';
 
 // assets
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Link, useNavigate } from 'react-router-dom';
 
-const AuthLoginForm = ({ logInRequest }) => {
+const ChangePasswordForm = ({ changePasswordRequest }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
 
-    const [checked, setChecked] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [password, setPassword] = useState('');
+    const [passwordAgain, setPasswordAgain] = useState('');
     const [email, setEmail] = useState('');
+    const [code, setCode] = useState('');
+
     
     const navigate = useNavigate();
 
@@ -53,35 +51,34 @@ const AuthLoginForm = ({ logInRequest }) => {
         event.preventDefault();
     };
 
-    const logIn = e => {
-        e.preventDefault();
-        const user = {
-            email,
-            password,
-        };
-        logInRequest(user, navigate);
+    const changePassword = e => {
+      e.preventDefault();
+      const user = {
+          email,
+          code,
+          password,
+          passwordAgain,
+      };
+      changePasswordRequest(user, navigate);
     };
 
     return (
         <>
-            <Grid container direction="column" justifyContent="center" spacing={ 2 }>
-                <Grid item xs={ 12 } container alignItems="center" justifyContent="center">
-                    <Box sx={ { mb: 2 } }>
-                        <Typography variant="subtitle1">Sign in with Email address</Typography>
-                    </Box>
-                </Grid>
-            </Grid>
-
             <Formik
                 validationSchema={ Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    code: Yup.string().max(255).required('Activation Code is required'),
                     password: Yup.string().max(255).required('Password is required'),
+                    passwordAgain: Yup.string().max(255).required('Password Again is required'),
                 }) }
-                onSubmit={ async (values, { setErrors, setStatus, setSubmitting }) => {
-                    try {
+                onSubmit={ async (event, values, { setErrors, setStatus, setSubmitting }) => {
+                  event.preventDefault();  
+                  try {
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
+
+                            changePassword();
                         }
                     } catch (err) {
                         console.error(err);
@@ -94,7 +91,7 @@ const AuthLoginForm = ({ logInRequest }) => {
                 } }
             >
                 {({ errors, handleBlur, isSubmitting, touched }) => (
-                    <form noValidate onSubmit={ logIn }>
+                    <form noValidate onSubmit={ changePassword }>
                         <FormControl fullWidth error={ Boolean(touched.email && errors.email) } sx={ { ...theme.typography.customInput } }>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
@@ -110,6 +107,24 @@ const AuthLoginForm = ({ logInRequest }) => {
                             {touched.email && errors.email && (
                                 <FormHelperText error id="standard-weight-helper-text-email-login">
                                     {errors.email}
+                                </FormHelperText>
+                            )}
+                        </FormControl>
+                        <FormControl fullWidth error={ Boolean(touched.code && errors.code) } sx={ { ...theme.typography.customInput } }>
+                            <InputLabel htmlFor="outlined-adornment-email-login">Activation Code</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-code-change-pw"
+                                type="text"
+                                value={ code }
+                                name="code"
+                                onBlur={ handleBlur }
+                                onChange={ e => setCode(e.target.value) }
+                                label="Activation Code"
+                                inputProps={ {} }
+                            />
+                            {touched.code && errors.code && (
+                                <FormHelperText error id="standard-weight-helper-text-email-login">
+                                    {errors.code}
                                 </FormHelperText>
                             )}
                         </FormControl>
@@ -149,24 +164,41 @@ const AuthLoginForm = ({ logInRequest }) => {
                                 </FormHelperText>
                             )}
                         </FormControl>
-                        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={ 1 }>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={ checked }
-                                        onChange={ event => setChecked(event.target.checked) }
-                                        name="checked"
-                                        color="primary"
-                                    />
+                        <FormControl
+                            fullWidth
+                            error={ Boolean(touched.passwordAgain && errors.passwordAgain) }
+                            sx={ { ...theme.typography.customInput } }
+                        >
+                            <InputLabel htmlFor="outlined-adornment-password-login">Password Again</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-password-login"
+                                type={ showPassword ? 'text' : 'password' }
+                                value={ passwordAgain }
+                                name="passwordAgain"
+                                onBlur={ handleBlur }
+                                onChange={ e => setPasswordAgain(e.target.value) }
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={ handleClickShowPassword }
+                                            onMouseDown={ handleMouseDownPassword }
+                                            edge="end"
+                                            size="large"
+                                        >
+                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
                                 }
-                                label="Remember me"
+                                label="PasswordAgain"
+                                inputProps={ {} }
                             />
-                            <Link to={'/forgotPassword'}>
-                                <Typography variant="subtitle1" color="secondary" sx={ { textDecoration: 'none', cursor: 'pointer' } }>
-                                    Forgot Password?
-                                </Typography>
-                            </Link>
-                        </Stack>
+                            {touched.passwordAgain && errors.passwordAgain && (
+                                <FormHelperText error id="standard-weight-helper-text-password-login">
+                                    {errors.passwordAgain}
+                                </FormHelperText>
+                            )}
+                        </FormControl>
                         {errors.submit && (
                             <Box sx={ { mt: 3 } }>
                                 <FormHelperText error>{errors.submit}</FormHelperText>
@@ -184,7 +216,7 @@ const AuthLoginForm = ({ logInRequest }) => {
                                     variant="contained"
                                     color="secondary"
                                 >
-                                    Sign in
+                                    Change Password
                                 </Button>
                             </AnimateButton>
                         </Box>
@@ -195,12 +227,12 @@ const AuthLoginForm = ({ logInRequest }) => {
     );
 };
 
-AuthLoginForm.propTypes = {
-  logInRequest: PropTypes.func.isRequired,
+ChangePasswordForm.propTypes = {
+  changePasswordRequest: PropTypes.func.isRequired,
 };
 
-AuthLoginForm.defaultProps = {
-  logInRequest: f => f,
+ChangePasswordForm.defaultProps = {
+  changePasswordRequest: f => f,
 };
 
-export default AuthLoginForm;
+export default ChangePasswordForm;
