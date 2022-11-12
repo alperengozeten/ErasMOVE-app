@@ -40,8 +40,6 @@ const AuthLoginForm = ({ logInRequest }) => {
 
     const [checked, setChecked] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
-    const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
     
     const navigate = useNavigate();
 
@@ -51,15 +49,6 @@ const AuthLoginForm = ({ logInRequest }) => {
 
     const handleMouseDownPassword = event => {
         event.preventDefault();
-    };
-
-    const logIn = e => {
-        e.preventDefault();
-        const user = {
-            email,
-            password,
-        };
-        logInRequest(user, navigate);
     };
 
     return (
@@ -73,6 +62,11 @@ const AuthLoginForm = ({ logInRequest }) => {
             </Grid>
 
             <Formik
+                initialValues={{
+                    email: '',
+                    password: '',
+                    submit: null
+                }}
                 validationSchema={ Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     password: Yup.string().max(255).required('Password is required'),
@@ -83,6 +77,11 @@ const AuthLoginForm = ({ logInRequest }) => {
                             setStatus({ success: true });
                             setSubmitting(false);
                         }
+                        const user = {
+                            email: values.email,
+                            password: values.password,
+                        };
+                        logInRequest(user, navigate);
                     } catch (err) {
                         console.error(err);
                         if (scriptedRef.current) {
@@ -93,18 +92,18 @@ const AuthLoginForm = ({ logInRequest }) => {
                     }
                 } }
             >
-                {({ errors, handleBlur, isSubmitting, touched }) => (
-                    <form noValidate onSubmit={ logIn }>
+                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+                    <form noValidate onSubmit={ handleSubmit }>
                         <FormControl fullWidth error={ Boolean(touched.email && errors.email) } sx={ { ...theme.typography.customInput } }>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
-                                value={ email }
+                                value={ values.email }
                                 name="email"
                                 onBlur={ handleBlur }
-                                onChange={ e => setEmail(e.target.value) }
-                                label="Email Address / Username"
+                                onChange={ handleChange }
+                                label="Email Address"
                                 inputProps={ {} }
                             />
                             {touched.email && errors.email && (
@@ -123,10 +122,10 @@ const AuthLoginForm = ({ logInRequest }) => {
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
                                 type={ showPassword ? 'text' : 'password' }
-                                value={ password }
+                                value={ values.password }
                                 name="password"
                                 onBlur={ handleBlur }
-                                onChange={ e => setPassword(e.target.value) }
+                                onChange={ handleChange }
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton

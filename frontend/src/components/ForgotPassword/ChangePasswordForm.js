@@ -35,10 +35,7 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
     const scriptedRef = useScriptRef();
 
     const [showPassword, setShowPassword] = useState(false);
-    const [password, setPassword] = useState('');
-    const [passwordAgain, setPasswordAgain] = useState('');
-    const [email, setEmail] = useState('');
-    const [code, setCode] = useState('');
+    const [showPasswordAgain, setShowPasswordAgain] = useState(false);
 
     
     const navigate = useNavigate();
@@ -47,24 +44,24 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
         setShowPassword(!showPassword);
     };
 
-    const handleMouseDownPassword = event => {
-        event.preventDefault();
+    const handleClickShowPasswordAgain = () => {
+        setShowPasswordAgain(!showPasswordAgain);
     };
 
-    const changePassword = e => {
-      e.preventDefault();
-      const user = {
-          email,
-          code,
-          password,
-          passwordAgain,
-      };
-      changePasswordRequest(user, navigate);
+    const handleMouseDownPassword = event => {
+        event.preventDefault();
     };
 
     return (
         <>
             <Formik
+                initialValues={{
+                    email: '',
+                    code: '',
+                    password: '',
+                    passwordAgain: '',
+                    submit: null
+                }}
                 validationSchema={ Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
                     code: Yup.string().max(255).required('Activation Code is required'),
@@ -78,7 +75,13 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
                             setStatus({ success: true });
                             setSubmitting(false);
 
-                            changePassword();
+                            const user = {
+                                email: values.email,
+                                code: values.code,
+                                password: values.password,
+                                passwordAgain: values.passwordAgain,
+                            };
+                            changePasswordRequest(user, navigate);
                         }
                     } catch (err) {
                         console.error(err);
@@ -90,18 +93,18 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
                     }
                 } }
             >
-                {({ errors, handleBlur, isSubmitting, touched }) => (
-                    <form noValidate onSubmit={ changePassword }>
+                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+                    <form noValidate onSubmit={ handleSubmit }>
                         <FormControl fullWidth error={ Boolean(touched.email && errors.email) } sx={ { ...theme.typography.customInput } }>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
-                                value={ email }
+                                value={ values.email }
                                 name="email"
                                 onBlur={ handleBlur }
-                                onChange={ e => setEmail(e.target.value) }
-                                label="Email Address / Username"
+                                onChange={ handleChange }
+                                label="Email Address"
                                 inputProps={ {} }
                             />
                             {touched.email && errors.email && (
@@ -115,10 +118,10 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
                             <OutlinedInput
                                 id="outlined-adornment-code-change-pw"
                                 type="text"
-                                value={ code }
+                                value={ values.code }
                                 name="code"
                                 onBlur={ handleBlur }
-                                onChange={ e => setCode(e.target.value) }
+                                onChange={ handleChange }
                                 label="Activation Code"
                                 inputProps={ {} }
                             />
@@ -138,10 +141,10 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
                                 type={ showPassword ? 'text' : 'password' }
-                                value={ password }
+                                value={ values.password }
                                 name="password"
                                 onBlur={ handleBlur }
-                                onChange={ e => setPassword(e.target.value) }
+                                onChange={ handleChange }
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
@@ -172,21 +175,21 @@ const ChangePasswordForm = ({ changePasswordRequest }) => {
                             <InputLabel htmlFor="outlined-adornment-password-login">Password Again</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-password-login"
-                                type={ showPassword ? 'text' : 'password' }
-                                value={ passwordAgain }
+                                type={ showPasswordAgain ? 'text' : 'password' }
+                                value={ values.passwordAgain }
                                 name="passwordAgain"
                                 onBlur={ handleBlur }
-                                onChange={ e => setPasswordAgain(e.target.value) }
+                                onChange={ handleChange }
                                 endAdornment={
                                     <InputAdornment position="end">
                                         <IconButton
                                             aria-label="toggle password visibility"
-                                            onClick={ handleClickShowPassword }
+                                            onClick={ handleClickShowPasswordAgain }
                                             onMouseDown={ handleMouseDownPassword }
                                             edge="end"
                                             size="large"
                                         >
-                                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                                            {showPasswordAgain ? <Visibility /> : <VisibilityOff />}
                                         </IconButton>
                                     </InputAdornment>
                                 }
