@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 // import { useSelector } from 'react-redux';
 
@@ -29,19 +29,14 @@ const SendCodeForm = ({ sendCodeRequest }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
 
-    const [email, setEmail] = useState('');
-    
-    const logIn = e => {
-        e.preventDefault();
-        sendCodeRequest(email);
-    };
-
     return (
         <>
             <Formik
+                initialValues={{
+                    email: '',
+                }}
                 validationSchema={ Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required'),
                 }) }
                 onSubmit={ async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
@@ -49,6 +44,7 @@ const SendCodeForm = ({ sendCodeRequest }) => {
                             setStatus({ success: true });
                             setSubmitting(false);
                         }
+                        sendCodeRequest(values.email);
                     } catch (err) {
                         console.error(err);
                         if (scriptedRef.current) {
@@ -59,18 +55,18 @@ const SendCodeForm = ({ sendCodeRequest }) => {
                     }
                 } }
             >
-                {({ errors, handleBlur, isSubmitting, touched }) => (
-                    <form noValidate onSubmit={ logIn }>
+                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+                    <form noValidate onSubmit={ handleSubmit }>
                         <FormControl fullWidth error={ Boolean(touched.email && errors.email) } sx={ { ...theme.typography.customInput } }>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
                                 type="email"
-                                value={ email }
+                                value={ values.email }
                                 name="email"
                                 onBlur={ handleBlur }
-                                onChange={ e => setEmail(e.target.value) }
-                                label="Email Address / Username"
+                                onChange={ handleChange }
+                                label="Email Address"
                                 inputProps={ {} }
                             />
                             {touched.email && errors.email && (
