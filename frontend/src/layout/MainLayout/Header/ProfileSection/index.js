@@ -15,12 +15,10 @@ import {
     ClickAwayListener,
     Divider,
     Grid,
-    InputAdornment,
     List,
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    OutlinedInput,
     Paper,
     Popper,
     Stack,
@@ -37,7 +35,7 @@ import Transitions from '../../../../components/ui-component/extended/Transition
 import User1 from '../../../../assets/images/users/user-round.svg';
 import { logOutRequest } from '../../../../actions';
 // assets
-import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -48,7 +46,6 @@ const ProfileSection = () => {
     const dispatch = useDispatch();
 
     const [sdm, setSdm] = useState(true);
-    const [value, setValue] = useState('');
     const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
@@ -164,25 +161,8 @@ const ProfileSection = () => {
                                                     Johne Doe
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2">Project Admin</Typography>
+                                            <Typography variant="subtitle2">Outgoing Student</Typography>
                                         </Stack>
-                                        <OutlinedInput
-                                            sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
-                                            id="input-search-profile"
-                                            value={value}
-                                            onChange={e => setValue(e.target.value)}
-                                            placeholder="Search profile options"
-                                            startAdornment={
-                                                <InputAdornment position="start">
-                                                    <IconSearch stroke={1.5} size="1rem" color={theme.palette.grey[500]} />
-                                                </InputAdornment>
-                                            }
-                                            aria-describedby="search-helper-text"
-                                            inputProps={{
-                                                'aria-label': 'weight'
-                                            }}
-                                        />
-                                        <Divider />
                                     </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
