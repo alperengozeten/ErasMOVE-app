@@ -3,7 +3,9 @@ import React from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import DashboardContainer from '../containers/DashboardContainer';
-import UserTable from '../components/table';
+import ApplicationList from '../components/studentLists/ApplicationList';
+import PlacementList from '../components/studentLists/PlacementList';
+import WaitingList from '../components/studentLists/WaitingList';
 
 const MainRoutes = {
     path: '/main',
@@ -14,8 +16,16 @@ const MainRoutes = {
             element: <DashboardContainer />
         },
         {
-            path: '/main/userTable',
-            element: <UserTable />
+            path: '/main/applicationList',
+            element: <ApplicationList />
+        },
+        {
+            path: '/main/placementList',
+            element: <PlacementList />
+        },
+        {
+            path: '/main/waitingList',
+            element: <WaitingList />
         },
     ]
 };

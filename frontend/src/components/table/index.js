@@ -28,7 +28,7 @@ import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
 // mock
-import USERLIST from '../../_mock/user';
+import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -190,7 +190,7 @@ const UserTable = () => {
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
 
                         <TableCell align="left">
-                          <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

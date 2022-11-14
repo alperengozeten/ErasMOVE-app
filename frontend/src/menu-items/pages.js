@@ -8,21 +8,36 @@ const icons = {
 
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
-const pages = {
-    id: 'pages',
-    title: 'Pages',
-    caption: 'Pages Caption',
+const students = {
+    id: 'students',
+    title: 'Students',
     type: 'group',
     children: [
         {
-            id: 'userTable',
-            title: 'Table',
+            id: 'applicationList',
+            title: 'Application List',
             type: 'item',
-            url: '/main/userTable',
+            url: '/main/applicationList',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
+            id: 'placementList',
+            title: 'Placement List',
+            type: 'item',
+            url: '/main/placementList',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        },
+        {
+            id: 'waitingList',
+            title: 'Waiting List',
+            type: 'item',
+            url: '/main/waitingList',
             icon: icons.IconDashboard,
             breadcrumbs: false
         }
     ]
 };
 
-export default pages;
+export default students;
