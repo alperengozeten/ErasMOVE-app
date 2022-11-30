@@ -1,12 +1,11 @@
 package com.erasmuarrem.ErasMove.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -20,6 +19,9 @@ public abstract class User {
     private String name;
     private String email;
     private String hashedPassword;
+
+    @OneToMany
+    private List<CourseApprovalRequest> courseApprovalRequestList;
 
     // put notification, chat, ...
     // Maybe put a token here later on
