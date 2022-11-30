@@ -20,8 +20,8 @@ public abstract class User {
     private String email;
     private String hashedPassword;
 
-    @OneToMany
-    private List<CourseApprovalRequest> courseApprovalRequestList;
+    //@OneToMany
+    //private List<CourseApprovalRequest> courseApprovalRequestList;
 
     // put notification, chat, ...
     // Maybe put a token here later on

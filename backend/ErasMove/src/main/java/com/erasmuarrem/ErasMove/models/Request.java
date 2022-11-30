@@ -19,4 +19,7 @@ public abstract class Request {
 
     private Boolean isResponded;
 
+    @OneToOne
+    private OutgoingStudent student;
+
 }
