@@ -26,7 +26,7 @@ public class OutgoingStudentService {
     }
 
     public void addOutgoingStudent(OutgoingStudent outgoingStudent) {
-        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudent.getID());
+        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findByEmail(outgoingStudent.getEmail());
 
         if ( outgoingStudentOptional.isPresent() ) {
             throw new IllegalStateException("student exists!");

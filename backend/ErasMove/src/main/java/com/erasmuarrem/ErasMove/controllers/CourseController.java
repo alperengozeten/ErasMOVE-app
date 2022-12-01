@@ -34,4 +34,9 @@ public class CourseController {
     public void addNewCourse(@RequestBody Course course) {
         courseService.addNewCourse(course);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteCourse(@PathVariable("id") Long id) {
+        return courseService.deleteCourse(id);
+    }
 }

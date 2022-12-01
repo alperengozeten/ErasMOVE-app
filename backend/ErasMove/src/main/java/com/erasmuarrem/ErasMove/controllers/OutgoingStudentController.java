@@ -32,7 +32,7 @@ public class OutgoingStudentController {
     }
 
     @PostMapping("/add")
-    public void addOutgoingStudent(OutgoingStudent outgoingStudent) {
+    public void addOutgoingStudent(@RequestBody OutgoingStudent outgoingStudent) {
         outgoingStudentService.addOutgoingStudent(outgoingStudent);
     }
 

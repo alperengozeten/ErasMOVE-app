@@ -35,4 +35,19 @@ public class CourseService {
 
         courseRepository.save(course);
     }
+
+    public String deleteCourse(Long id) {
+        String output;
+        Optional<Course> courseOptional = courseRepository.findById(id);
+
+        if ( courseOptional.isPresent() ) {
+            output = "Course with id " + id + " is deleted!";
+        }
+        else {
+            output = "Course with id " + id + " not found!";
+        }
+        courseRepository.deleteById(id);
+
+        return output;
+    }
 }
