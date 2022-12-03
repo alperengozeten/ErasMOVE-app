@@ -74,7 +74,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 const WaitingStudentsTable = ({ applications }) => {
-    console.log(applications);
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -169,7 +168,7 @@ const WaitingStudentsTable = ({ applications }) => {
 
                         <TableCell align="right">
                             <Button variant="contained" color="inherit" size="small" endIcon={<SendIcon />}>
-                                Send Replacement Offer
+                                Replacement Offer
                             </Button>
                         </TableCell>
                       </TableRow>
