@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import { Toolbar, Typography, OutlinedInput, InputAdornment,TableCell,Button } from '@mui/material';
 // component
 import Iconify from '../../table/iconify';
 
@@ -65,19 +65,12 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
           }
         />
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )}
+       <TableCell align="right">
+                            <Button variant="contained" color="inherit" size="small">
+                                Add a new university
+                            </Button>
+                        </TableCell>
+
     </StyledRoot>
   );
 }

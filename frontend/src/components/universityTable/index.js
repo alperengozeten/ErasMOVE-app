@@ -1,29 +1,29 @@
 import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
+
 // @mui
 import {
   Card,
   Table,
   Stack,
   Paper,
-  Avatar,
   Popover,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
+  Button
 } from '@mui/material';
 // components
-import Iconify from '../table/iconify';
 import Scrollbar from '../table/scrollbar';
 // sections
-import { UserListHead } from '../table/user';
+import { UniversityListHead } from './university';
+
 import { UniversitiesListToolbar} from "./university";
 // mock
 import { users as USERLIST } from '../../_mock/user';
@@ -67,7 +67,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = () => {
+const UniversityTable = ({universities}) => {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -82,9 +82,6 @@ const UniversityTable = () => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleOpenMenu = event => {
-    setOpen(event.currentTarget);
-  };
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -133,10 +130,9 @@ const UniversityTable = () => {
     setPage(0);
     setFilterName(event.target.value);
   };
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - universities.length) : 0;
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
-
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(universities, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -149,7 +145,7 @@ const UniversityTable = () => {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <UserListHead
+                <UniversityListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -158,28 +154,29 @@ const UniversityTable = () => {
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
+                
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, quota,avatarUrl } = row;
+                    const { id, name, quota } = row;
                     // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell align="center" component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{quota}</TableCell>
+                        <TableCell align="right">{quota}</TableCell>
 
+                
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
+                            <Button variant="contained" color="inherit" size="small">
+                                Go To Details
+                            </Button>
                         </TableCell>
                       </TableRow>
                     );
@@ -247,19 +244,16 @@ const UniversityTable = () => {
             },
           },
         }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
+      ></Popover>
     </>
   );
+};
+UniversityTable.propTypes = {
+  universities: PropTypes.array,
+};
+
+UniversityTable.defaultProps = {
+  universities: [],
 };
 
 export default UniversityTable;
