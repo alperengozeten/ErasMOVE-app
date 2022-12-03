@@ -38,4 +38,8 @@ public class ApplicationController {
         return applicationService.getByOutgoingStudentID(id);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void deleteCourse(@PathVariable("id") Long id) {
+        applicationService.deleteCourse(id);
+    }
 }

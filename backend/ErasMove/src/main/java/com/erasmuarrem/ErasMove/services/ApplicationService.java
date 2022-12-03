@@ -53,4 +53,14 @@ public class ApplicationService {
 
         return applicationOptional.get();
     }
+
+    public void deleteCourse(Long id) {
+        Optional<Application> applicationOptional = applicationRepository.findById(id);
+
+        if ( !applicationOptional.isPresent() ) {
+            throw new IllegalStateException("Application with id: " + id + " doesn't exist!");
+        }
+
+        applicationRepository.deleteById(id);
+    }
 }
