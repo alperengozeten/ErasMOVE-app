@@ -2,6 +2,7 @@ import React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 // @mui
 import {
   Card,
@@ -19,7 +20,10 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Button,
 } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import DescriptionIcon from '@mui/icons-material/Description';
 // components
 import Label from '../label';
 import Iconify from './iconify';
@@ -33,11 +37,9 @@ import { users as USERLIST } from '../../_mock/user';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  { id: 'department', label: 'Department', alignRight: true },
+  { id: 'score', label: 'Score', alignRight: true },
+  { id: 'status', label: 'Status', alignRight: true },
 ];
 
 // ----------------------------------------------------------------------
@@ -71,7 +73,8 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UserTable = () => {
+const WaitingStudentsTable = ({ applications }) => {
+    console.log(applications);
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -84,8 +87,8 @@ const UserTable = () => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleOpenMenu = event => {
-    setOpen(event.currentTarget);
+  const handleOpenApplication = id => {
+    console.log("id: ", id);
   };
 
   const handleCloseMenu = () => {
@@ -112,9 +115,9 @@ const UserTable = () => {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(applications, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -135,7 +138,7 @@ const UserTable = () => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, department, score, status, avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -150,20 +153,24 @@ const UserTable = () => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="right">{department}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="right">{score}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-                        <TableCell align="left">
+                        <TableCell align="right">
                           <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
+                          <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                            <DescriptionIcon />
                           </IconButton>
+                        </TableCell>
+
+                        <TableCell align="right">
+                            <Button variant="contained" color="inherit" size="small" endIcon={<SendIcon />}>
+                                Send Replacement Offer
+                            </Button>
                         </TableCell>
                       </TableRow>
                     );
@@ -246,4 +253,13 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+WaitingStudentsTable.propTypes = {
+    applications: PropTypes.array,
+};
+  
+WaitingStudentsTable.defaultProps = {
+    applications: [],
+};
+
+
+export default WaitingStudentsTable;
