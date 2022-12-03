@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class OutgoingStudent extends Student {
-    private double CGPA;
+    private double cgpa;
     private Boolean isDoubleMajor;
     // private List<String> languages;
     // private Application application;
