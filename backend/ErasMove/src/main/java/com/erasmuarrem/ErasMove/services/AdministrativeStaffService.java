@@ -39,4 +39,14 @@ public class AdministrativeStaffService {
     public void deleteAdministrativeStaff(Long id) {
         administrativeStaffRepository.deleteById(id);
     }
+
+    public AdministrativeStaff getAdministrativeStaffByDepartmentId(Long id) {
+        Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByDepartments_ID(id);
+
+        if ( !administrativeStaffOptional.isPresent() ) {
+            throw new IllegalStateException("Administrative staff with department id:" + id + " doesn't exist!");
+        }
+
+        return administrativeStaffOptional.get();
+    }
 }

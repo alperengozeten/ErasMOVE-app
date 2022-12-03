@@ -18,7 +18,7 @@ public class AdministrativeStaffController {
         this.administrativeStaffService = administrativeStaffService;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public void addAdministrativeStaff(@RequestBody AdministrativeStaff administrativeStaff) {
         administrativeStaffService.addAdministrativeStaff(administrativeStaff);
     }
@@ -33,7 +33,10 @@ public class AdministrativeStaffController {
         return administrativeStaffService.getAdministrativeStaff(id);
     }
 
-    // add here get by department id
+    @GetMapping("/department/{id}")
+    public AdministrativeStaff getAdministrativeStaffByDepartmentId(@PathVariable("id") Long id) {
+        return administrativeStaffService.getAdministrativeStaffByDepartmentId(id);
+    }
 
     @DeleteMapping("/delete/{id}")
     public void deleteAdministrativeStaff(@PathVariable("id") Long id) {
