@@ -152,11 +152,11 @@ const WaitingStudentsTable = ({ applications }) => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="right">{department}</TableCell>
+                        <TableCell align="center">{department}</TableCell>
 
-                        <TableCell align="right">{score}</TableCell>
+                        <TableCell align="center">{score}</TableCell>
 
-                        <TableCell align="right">
+                        <TableCell align="center">
                           <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
