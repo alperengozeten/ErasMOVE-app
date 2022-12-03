@@ -6,6 +6,7 @@ import DashboardContainer from '../containers/DashboardContainer';
 import ApplicationList from '../components/studentLists/ApplicationList';
 import PlacementList from '../components/studentLists/PlacementList';
 import WaitingList from '../components/studentLists/WaitingList';
+import Universities from '../components/Universities';
 
 const MainRoutes = {
     path: '/main',
@@ -26,6 +27,10 @@ const MainRoutes = {
         {
             path: '/main/waitingList',
             element: <WaitingList />
+        },
+        {
+            path: '/main/universities',
+            element: <Universities />
         },
     ]
 };
