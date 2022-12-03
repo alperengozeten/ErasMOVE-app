@@ -1,8 +1,6 @@
 import React from 'react';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 // @mui
 import {
   Card,
@@ -20,26 +18,22 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
-  Button,
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import DescriptionIcon from '@mui/icons-material/Description';
 // components
-import Label from '../label';
-import Iconify from './iconify';
-import Scrollbar from './scrollbar';
+import Iconify from '../table/iconify';
+import Scrollbar from '../table/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from './user';
+import { UserListHead } from '../table/user';
+import { UniversitiesListToolbar} from "./university";
 // mock
 import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'department', label: 'Department', alignRight: true },
-  { id: 'score', label: 'Score', alignRight: true },
-  { id: 'status', label: 'Status', alignRight: true },
+  { id: 'name', label: 'University Name', alignRight: false },
+  { id: 'quota', label: 'Empty Quota', alignRight: false },
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -73,12 +67,14 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications }) => {
+const UniversityTable = () => {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
+
+  const [selected, setSelected] = useState([]);
 
   const [orderBy, setOrderBy] = useState('name');
 
@@ -86,8 +82,8 @@ const WaitingStudentsTable = ({ applications }) => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
+  const handleOpenMenu = event => {
+    setOpen(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
@@ -99,6 +95,30 @@ const WaitingStudentsTable = ({ applications }) => {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
+
+  const handleSelectAllClick = event => {
+    if (event.target.checked) {
+      const newSelecteds = USERLIST.map(n => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  // const handleClick = (event, name) => {
+  //   const selectedIndex = selected.indexOf(name);
+  //   let newSelected = [];
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, name);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -114,9 +134,9 @@ const WaitingStudentsTable = ({ applications }) => {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
 
-  const filteredUsers = applySortFilter(applications, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -124,7 +144,7 @@ const WaitingStudentsTable = ({ applications }) => {
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <UniversitiesListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -133,16 +153,18 @@ const WaitingStudentsTable = ({ applications }) => {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
+                  rowCount={USERLIST.length}
+                  numSelected={selected.length}
                   onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, department, score, status, avatarUrl } = row;
+                    const { id, name, quota,avatarUrl } = row;
+                    // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" >
-                        <TableCell padding="checkbox"></TableCell>
-
+                      <TableRow hover key={id} tabIndex={-1}>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
@@ -152,24 +174,12 @@ const WaitingStudentsTable = ({ applications }) => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{department}</TableCell>
-
-                        <TableCell align="center">{score}</TableCell>
-
-                        <TableCell align="center">
-                          <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        <TableCell align="left">{quota}</TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
-                            <DescriptionIcon />
+                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
+                            <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
-                        </TableCell>
-
-                        <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<SendIcon />}>
-                                Replacement Offer
-                            </Button>
                         </TableCell>
                       </TableRow>
                     );
@@ -252,13 +262,4 @@ const WaitingStudentsTable = ({ applications }) => {
   );
 };
 
-WaitingStudentsTable.propTypes = {
-    applications: PropTypes.array,
-};
-  
-WaitingStudentsTable.defaultProps = {
-    applications: [],
-};
-
-
-export default WaitingStudentsTable;
+export default UniversityTable;

@@ -38,7 +38,8 @@ import { users as USERLIST } from '../../_mock/user';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'department', label: 'Department', alignRight: true },
-  { id: 'score', label: 'Score', alignRight: true },
+  { id: 'semester', label: 'Semester', alignRight: true },
+  { id: 'placedUniversity', label: 'Placed University', alignRight: true },
   { id: 'status', label: 'Status', alignRight: true },
 ];
 
@@ -73,7 +74,8 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications }) => {
+const PlacedStudentsTable = ({ applications }) => {
+  console.log(applications);
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -137,7 +139,7 @@ const WaitingStudentsTable = ({ applications }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, department, score, status, avatarUrl } = row;
+                    const { id, name, department, selectedSemester, admittedUniversity, status, avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -154,7 +156,9 @@ const WaitingStudentsTable = ({ applications }) => {
 
                         <TableCell align="center">{department}</TableCell>
 
-                        <TableCell align="center">{score}</TableCell>
+                        <TableCell align="center">{selectedSemester}</TableCell>
+
+                        <TableCell align="center">{admittedUniversity}</TableCell>
 
                         <TableCell align="center">
                           <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
@@ -164,12 +168,6 @@ const WaitingStudentsTable = ({ applications }) => {
                           <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
                             <DescriptionIcon />
                           </IconButton>
-                        </TableCell>
-
-                        <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<SendIcon />}>
-                                Replacement Offer
-                            </Button>
                         </TableCell>
                       </TableRow>
                     );
@@ -252,13 +250,13 @@ const WaitingStudentsTable = ({ applications }) => {
   );
 };
 
-WaitingStudentsTable.propTypes = {
+PlacedStudentsTable.propTypes = {
     applications: PropTypes.array,
 };
   
-WaitingStudentsTable.defaultProps = {
+PlacedStudentsTable.defaultProps = {
     applications: [],
 };
 
 
-export default WaitingStudentsTable;
+export default PlacedStudentsTable;
