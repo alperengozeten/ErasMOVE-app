@@ -24,6 +24,7 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { useDispatch } from 'react-redux';
 // components
 import Label from '../label';
 import Iconify from './iconify';
@@ -73,7 +74,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications }) => {
+const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -112,6 +113,13 @@ const WaitingStudentsTable = ({ applications }) => {
   const handleFilterByName = event => {
     setPage(0);
     setFilterName(event.target.value);
+  };
+
+  const dispatch = useDispatch();
+
+  const offerReplacement = id => {
+    console.log(1);
+    dispatch(sendReplacementOffer(id));
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
@@ -167,7 +175,7 @@ const WaitingStudentsTable = ({ applications }) => {
                         </TableCell>
 
                         <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<SendIcon />}>
+                            <Button variant="contained" color="inherit" size="small" onClick={() => offerReplacement(id)} endIcon={<SendIcon />}>
                                 Replacement Offer
                             </Button>
                         </TableCell>
@@ -254,10 +262,12 @@ const WaitingStudentsTable = ({ applications }) => {
 
 WaitingStudentsTable.propTypes = {
     applications: PropTypes.array,
+    sendReplacementOffer: PropTypes.func
 };
   
 WaitingStudentsTable.defaultProps = {
     applications: [],
+    sendReplacementOffer: f => f,
 };
 
 
