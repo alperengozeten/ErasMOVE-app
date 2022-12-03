@@ -20,9 +20,7 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
-  Button,
 } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
 import DescriptionIcon from '@mui/icons-material/Description';
 // components
 import Label from '../label';
