@@ -38,6 +38,17 @@ public class MandatoryCourseApprovalRequestController {
         return mandatoryCourseApprovalRequestService.getMandatoryCourseApprovalRequestByOutgoingStudentID(id);
     }
 
+    @GetMapping("/courseCoordinator/{id1}/outgoingStudent/{id2}")
+    public MandatoryCourseApprovalRequest getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(
+            @PathVariable("id1") Long courseCoordinatorID,
+            @PathVariable("id2") Long outgoingStudentID
+    ) {
+        return mandatoryCourseApprovalRequestService.getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(
+                courseCoordinatorID,
+                outgoingStudentID
+        );
+    }
+
     @PostMapping("/add")
     public void addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
         mandatoryCourseApprovalRequestService.addMandatoryCourseApprovalRequest(mandatoryCourseApprovalRequest);

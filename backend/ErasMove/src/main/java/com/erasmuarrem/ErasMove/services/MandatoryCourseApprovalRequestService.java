@@ -35,6 +35,16 @@ public class MandatoryCourseApprovalRequestService {
     }
 
     public void addMandatoryCourseApprovalRequest(MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
+        Long courseCoordinatorID = mandatoryCourseApprovalRequest.getCourseCoordinator().getID();
+        Long outgoingStudentID = mandatoryCourseApprovalRequest.getStudent().getID();
+
+        Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
+                .findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
+
+        if ( mandatoryCourseApprovalRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Mandatory course request for this student and course coordinator pair exists!");
+        }
+
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
     }
 
@@ -55,5 +65,17 @@ public class MandatoryCourseApprovalRequestService {
 
     public List<MandatoryCourseApprovalRequest> getMandatoryCourseApprovalRequestByOutgoingStudentID(Long id) {
         return mandatoryCourseApprovalRequestRepository.findByStudentID(id);
+    }
+
+    public MandatoryCourseApprovalRequest getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(Long courseCoordinatorID, Long outgoingStudentID) {
+        Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
+                .findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
+
+        if ( !mandatoryCourseApprovalRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Mandatory Course Approval Request with ids:" + courseCoordinatorID + ", " +
+                    outgoingStudentID + " doesn't exist!");
+        }
+
+        return mandatoryCourseApprovalRequestOptional.get();
     }
 }
