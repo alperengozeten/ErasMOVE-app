@@ -21,6 +21,7 @@ import {
   TableContainer,
   TablePagination,
   Button,
+  Tooltip,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -169,9 +170,11 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
-                            <DescriptionIcon />
-                          </IconButton>
+                          <Tooltip describeChild title="Open application details">
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                              <DescriptionIcon />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
 
                         <TableCell align="right">
