@@ -1,22 +1,14 @@
 package com.erasmuarrem.ErasMove.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table
 @Getter
 @Setter
-@NoArgsConstructor
+@MappedSuperclass
 public class CourseApprovalRequest extends Request {
 
     private String description;
     private String feedback;
-
-    @OneToOne
-    private CourseCoordinator courseCoordinator;
 }
