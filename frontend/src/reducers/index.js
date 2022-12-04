@@ -6,6 +6,8 @@ import error from './errorReducer';
 import customization from './customizationReducer';
 import applications from './applicationReducer';
 import universities from './universityReducer';
+import requests from './requestsReducer';
+
 
 const reducers = {
   app,
@@ -13,7 +15,8 @@ const reducers = {
   error,
   customization,
   applications,
-  universities
+  universities,
+  requests
 };
 
 export default combineReducers(reducers);
