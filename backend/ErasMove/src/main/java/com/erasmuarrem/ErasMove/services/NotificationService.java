@@ -26,6 +26,14 @@ public class NotificationService {
         notificationRepository.deleteById(id);
     }
 
+    public Notification getNotificationById(Long id) {
+        Optional<Notification> notificationOptional = notificationRepository.findById(id);
+        if ( !notificationOptional.isPresent() ) {
+            throw new IllegalStateException("Notification with id: "+ id+ " doesn't exist!");
+        }
+        return notificationOptional.get();
+    }
+
     //TODO
 
 }

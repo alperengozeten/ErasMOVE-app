@@ -8,12 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class User {
+@MappedSuperclass
+public abstract class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
     private String name;
     private String email;

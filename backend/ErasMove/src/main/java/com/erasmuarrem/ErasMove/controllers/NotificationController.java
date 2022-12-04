@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
@@ -22,8 +23,12 @@ public class NotificationController {
 
 
     @DeleteMapping("/delete/{id}")
-    public void deleteNotification(@PathVariable("id") long id) {
+    public void deleteNotification(@PathVariable("id") Long id) {
         notificationService.deleteNotificationByID(id);
     }
 
+    @GetMapping("/{id}")
+    public Notification getNotificationById(@PathVariable("id") Long id ) {
+        return notificationService.getNotificationById(id);
+    }
 }

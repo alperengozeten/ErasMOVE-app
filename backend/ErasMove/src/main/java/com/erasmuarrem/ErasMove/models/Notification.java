@@ -16,12 +16,11 @@ public class Notification {
     //Auto Generated Id
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     private boolean isRead;
     private String content;
     //This one is to hold when the notification is send.
     //private LocalDate date;
-    @OneToOne
-    private User receiver;
+    private Long receiverID;
 }
