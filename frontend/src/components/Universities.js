@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import UniversityTable from './universityTable';
+import UniversityTable from './table/UniversityTable';
 
 const Universities = ({universities}) => {
     return (

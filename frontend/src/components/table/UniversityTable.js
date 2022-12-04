@@ -9,7 +9,6 @@ import {
   Table,
   Stack,
   Paper,
-  Popover,
   TableRow,
   TableBody,
   TableCell,
@@ -20,13 +19,11 @@ import {
   Button
 } from '@mui/material';
 // components
-import Scrollbar from '../table/scrollbar';
+import Scrollbar from './scrollbar';
 // sections
 import { UniversityListHead } from './university';
 
 import { UniversitiesListToolbar} from "./university";
-// mock
-import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -68,13 +65,10 @@ function applySortFilter(array, comparator, query) {
 }
 
 const UniversityTable = ({universities}) => {
-  const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
 
   const [orderBy, setOrderBy] = useState('name');
 
@@ -82,40 +76,11 @@ const UniversityTable = ({universities}) => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
-  const handleSelectAllClick = event => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map(n => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  // const handleClick = (event, name) => {
-  //   const selectedIndex = selected.indexOf(name);
-  //   let newSelected = [];
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, name);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-  //   }
-  //   setSelected(newSelected);
-  // };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -140,7 +105,7 @@ const UniversityTable = ({universities}) => {
     <>
       <Container>
         <Card>
-          <UniversitiesListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UniversitiesListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -149,19 +114,17 @@ const UniversityTable = ({universities}) => {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
                 />
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
                     const { id, name, quota } = row;
-                    // const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
+                        <TableCell padding="checkbox"></TableCell>
+
                         <TableCell align="center" component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
@@ -170,8 +133,7 @@ const UniversityTable = ({universities}) => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="right">{quota}</TableCell>
-
+                        <TableCell align="center">{quota}</TableCell>
                 
                         <TableCell align="right">
                             <Button variant="contained" color="inherit" size="small">
@@ -218,7 +180,7 @@ const UniversityTable = ({universities}) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={universities.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -226,25 +188,6 @@ const UniversityTable = ({universities}) => {
           />
         </Card>
       </Container>
-
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      ></Popover>
     </>
   );
 };
