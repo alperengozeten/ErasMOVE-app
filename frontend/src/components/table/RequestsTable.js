@@ -21,6 +21,8 @@ import {
 } from '@mui/material';
 // components
 import Scrollbar from './scrollbar';
+import DescriptionIcon from '@mui/icons-material/Description';
+
 // sections
 import { UserListHead, UserListToolbar } from './user';
 
@@ -29,6 +31,7 @@ import { UserListHead, UserListToolbar } from './user';
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
   { id: 'request', label: 'Requested Document', alignRight: true },
+
  
 ];
 
@@ -150,10 +153,11 @@ const RequestsTable = ({ requests }) => {
                         </TableCell>
 
                         <TableCell align="center">{request}</TableCell>
+                        
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Add document">
-                            <Button variant="contained" color="inherit" size="small">
+                            <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
                                 Add Document
                             </Button>
                           </Tooltip>
