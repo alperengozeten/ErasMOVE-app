@@ -2,19 +2,18 @@ package com.erasmuarrem.ErasMove.models;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 
 
 @Getter
 @Setter
-@MappedSuperclass
-public abstract class User {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long ID;
     private String name;
     private String email;
