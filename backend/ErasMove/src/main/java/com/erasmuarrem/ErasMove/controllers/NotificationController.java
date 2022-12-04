@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
-    private NotificationService notificationService;
+    private final NotificationService notificationService;
     @Autowired
     public NotificationController( NotificationService notificationService ) {
         this.notificationService = notificationService;
     }
-    @PostMapping("/send")
+    @PostMapping("/add")
     public void sendNotification(@RequestBody Notification notification) {
         notificationService.saveNotification(notification);
     }
