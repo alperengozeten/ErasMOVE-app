@@ -2,6 +2,7 @@ import React from 'react';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 // @mui
 import {
   Card,
@@ -11,7 +12,6 @@ import {
   Avatar,
   Popover,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
@@ -19,25 +19,24 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Tooltip,
 } from '@mui/material';
+import DescriptionIcon from '@mui/icons-material/Description';
 // components
 import Label from '../label';
-import Iconify from './iconify';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
-// mock
-import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  { id: 'department', label: 'Department', alignRight: true },
+  { id: 'score', label: 'Score', alignRight: true },
+  { id: 'semester', label: 'Selected Semester', alignRight: true },
+  { id: 'placedUniversity', label: 'Selected Universities', alignRight: true },
+  { id: 'status', label: 'Status', alignRight: true },
 ];
 
 // ----------------------------------------------------------------------
@@ -71,8 +70,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UserTable = () => {
-  const [open, setOpen] = useState(null);
+const StudentsTable = ({ applications }) => {
 
   const [page, setPage] = useState(0);
 
@@ -81,15 +79,13 @@ const UserTable = () => {
   const [orderBy, setOrderBy] = useState('name');
 
   const [filterName, setFilterName] = useState('');
-
+  
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleOpenMenu = event => {
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
+  const handleOpenApplication = id => {
+    console.log("id: ", id);
   };
 
   const handleRequestSort = (event, property) => {
@@ -112,9 +108,19 @@ const UserTable = () => {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const handlePopoverOpen = event => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
+
+  const filteredUsers = applySortFilter(applications, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -135,7 +141,7 @@ const UserTable = () => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, department, score, selectedSemester, selectedUniversities, status, avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -150,20 +156,59 @@ const UserTable = () => {
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="center">{department}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        <TableCell align="center">{score}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        <TableCell align="center">{selectedSemester}</TableCell>
 
-                        <TableCell align="left">
+                        <TableCell align="center"> 
+                          <div>
+                            <Typography
+                              aria-owns={openPopover ? 'mouse-over-popover' : undefined}
+                              aria-haspopup="true"
+                              onMouseEnter={handlePopoverOpen}
+                              onMouseLeave={handlePopoverClose}
+                            >
+                              {`1. ${selectedUniversities[0]}`}
+                            </Typography>
+                            <Popover
+                              id="mouse-over-popover"
+                              sx={{
+                                pointerEvents: 'none',
+                              }}
+                              open={openPopover}
+                              anchorEl={anchorEl}
+                              anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                              }}
+                              transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left',
+                              }}
+                              onClose={handlePopoverClose}
+                              disableRestoreFocus
+                            >
+                              {
+                                selectedUniversities.map((university, index) => (
+                                  <Typography key={index} sx={{ p: 2 }}>{index + 1}. {university}</Typography>
+                                ))
+                              }
+                            </Popover>
+                          </div>
+                        </TableCell>
+
+                        <TableCell align="center">
                           <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
+                          <Tooltip describeChild title="Open application details">
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                              <DescriptionIcon />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );
@@ -205,7 +250,7 @@ const UserTable = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={applications.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -213,37 +258,17 @@ const UserTable = () => {
           />
         </Card>
       </Container>
-
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
     </>
   );
 };
 
-export default UserTable;
+StudentsTable.propTypes = {
+    applications: PropTypes.array,
+};
+  
+StudentsTable.defaultProps = {
+    applications: [],
+};
+
+
+export default StudentsTable;

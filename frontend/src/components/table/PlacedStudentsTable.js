@@ -10,9 +10,7 @@ import {
   Stack,
   Paper,
   Avatar,
-  Popover,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
@@ -20,16 +18,14 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Tooltip,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 // components
 import Label from '../label';
-import Iconify from './iconify';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
-// mock
-import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -73,8 +69,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 const PlacedStudentsTable = ({ applications }) => {
-  console.log(applications);
-  const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
 
@@ -88,10 +82,6 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const handleOpenApplication = id => {
     console.log("id: ", id);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
   };
 
   const handleRequestSort = (event, property) => {
@@ -163,9 +153,11 @@ const PlacedStudentsTable = ({ applications }) => {
                         </TableCell>
 
                         <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
-                            <DescriptionIcon />
-                          </IconButton>
+                          <Tooltip describeChild title="Open application details">
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                              <DescriptionIcon />
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );
@@ -207,7 +199,7 @@ const PlacedStudentsTable = ({ applications }) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={applications.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -215,35 +207,6 @@ const PlacedStudentsTable = ({ applications }) => {
           />
         </Card>
       </Container>
-
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
     </>
   );
 };

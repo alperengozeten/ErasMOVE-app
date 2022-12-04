@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Typography, OutlinedInput, InputAdornment,TableCell,Button } from '@mui/material';
+import { Toolbar, Typography, OutlinedInput, InputAdornment, Button } from '@mui/material';
 // component
 import Iconify from '../../table/iconify';
 
@@ -65,12 +65,9 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
           }
         />
       )}
-       <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small">
-                                Add a new university
-                            </Button>
-                        </TableCell>
-
+      <Button variant="contained" color="inherit" size="small">
+        Add a new university
+      </Button>
     </StyledRoot>
   );
 }
