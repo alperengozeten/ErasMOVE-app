@@ -28,8 +28,23 @@ public class ElectiveCourseApprovalRequestController {
         return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByID(id);
     }
 
+    @GetMapping("/departmentCoordinator/{id}")
+    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByDepartmentCoordinatorID(@PathVariable("id") Long id) {
+        return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByDepartmentCoordinatorID(id);
+    }
+
+    @GetMapping("/outgoingStudent/{id}")
+    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByOutgoingStudentID(@PathVariable("id") Long id) {
+        return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByOutgoingStudentID(id);
+    }
+
     @PostMapping("/add")
     public void addElectiveCourseApprovalRequest(@RequestBody ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
         electiveCourseApprovalRequestService.addElectiveCourseApprovalRequest(electiveCourseApprovalRequest);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteElectiveCourseApprovalRequestByID(@PathVariable("id") Long id) {
+        electiveCourseApprovalRequestService.deleteElectiveCourseApprovalRequestByID(id);
     }
 }

@@ -36,4 +36,39 @@ public class ElectiveCourseApprovalRequestService {
     public void addElectiveCourseApprovalRequest(ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
     }
+
+    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByDepartmentCoordinatorID(Long id) {
+        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
+                .findByDepartmentCoordinatorID(id);
+
+        if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course Approval Request with Department Coordinator id:" + id +
+                    " doesn't exist!");
+        }
+
+        return electiveCourseApprovalRequestOptional.get();
+    }
+
+    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByOutgoingStudentID(Long id) {
+        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
+                .findByStudentID(id);
+        
+        if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course Approval Request With Outgoing Student id: " + id + 
+                    " doesn't exist!");
+        }
+        
+        return electiveCourseApprovalRequestOptional.get();
+    }
+
+    public void deleteElectiveCourseApprovalRequestByID(Long id) {
+        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
+                .findById(id);
+
+        if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course Approval Request with id:" + id + " doesn't exist!");
+        }
+
+        electiveCourseApprovalRequestRepository.deleteById(id);
+    }
 }
