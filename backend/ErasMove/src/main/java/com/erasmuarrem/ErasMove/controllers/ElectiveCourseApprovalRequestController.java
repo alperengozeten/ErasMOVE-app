@@ -29,13 +29,24 @@ public class ElectiveCourseApprovalRequestController {
     }
 
     @GetMapping("/departmentCoordinator/{id}")
-    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByDepartmentCoordinatorID(@PathVariable("id") Long id) {
+    public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequestByDepartmentCoordinatorID(@PathVariable("id") Long id) {
         return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByDepartmentCoordinatorID(id);
     }
 
     @GetMapping("/outgoingStudent/{id}")
-    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByOutgoingStudentID(@PathVariable("id") Long id) {
+    public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequestByOutgoingStudentID(@PathVariable("id") Long id) {
         return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByOutgoingStudentID(id);
+    }
+
+    @GetMapping("/departmentCoordinator/{id1}/outgoingStudent/{id2}")
+    public ElectiveCourseApprovalRequest getElectiveCourseApprovalByDepartmentCoordinatorAndOutgoingStudentID(
+            @PathVariable("id1") Long departmentCoordinatorID,
+            @PathVariable("id2") Long outgoingStudentID
+    ) {
+        return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByDepartmentCoordinatorAndOutgoingStudentID(
+                departmentCoordinatorID,
+                outgoingStudentID
+        );
     }
 
     @PostMapping("/add")
