@@ -8,6 +8,7 @@ import PlacementList from '../components/studentLists/PlacementList';
 import WaitingList from '../components/studentLists/WaitingList';
 import Universities from '../components/Universities';
 import RequestsPage from '../components/RequestsPage';
+import CourseRequestPage from '../components/CourseRequestPage';
 
 const MainRoutes = {
     path: '/main',
@@ -36,6 +37,10 @@ const MainRoutes = {
         {
             path: '/main/requests',
             element: <RequestsPage />
+        },
+        {
+            path: '/main/courseRequests',
+            element: <CourseRequestPage />
         },
     ]
 };
