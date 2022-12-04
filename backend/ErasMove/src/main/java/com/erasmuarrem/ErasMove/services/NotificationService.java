@@ -1,16 +1,16 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.Department;
 import com.erasmuarrem.ErasMove.models.Notification;
 import com.erasmuarrem.ErasMove.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class NotificationService {
-    private NotificationRepository notificationRepository;
+    private final NotificationRepository notificationRepository;
     @Autowired
     public NotificationService(NotificationRepository notificationRepository ) {
         this.notificationRepository = notificationRepository;
@@ -34,6 +34,13 @@ public class NotificationService {
         return notificationOptional.get();
     }
 
+    public List<Notification> getNotifications() {
+        return notificationRepository.findAll();
+    }
+
+    public List<Notification> getNotificationsOffUserByUserId( Long id ) {
+        return notificationRepository.findAllByReceiverID(id);
+    }
     //TODO
 
 }

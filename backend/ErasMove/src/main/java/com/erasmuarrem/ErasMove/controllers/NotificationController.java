@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import java.util.List;
 @RestController
 @RequestMapping("/notification")
 public class NotificationController {
@@ -30,5 +30,15 @@ public class NotificationController {
     @GetMapping("/{id}")
     public Notification getNotificationById(@PathVariable("id") Long id ) {
         return notificationService.getNotificationById(id);
+    }
+
+    @GetMapping
+    public List<Notification> getNotifications() {
+        return notificationService.getNotifications();
+    }
+
+    @GetMapping("/user/{id}")
+    public  List<Notification> getNotificationsOfUserByUserId(@PathVariable("id") Long id ) {
+        return notificationService.getNotificationsOffUserByUserId(id);
     }
 }
