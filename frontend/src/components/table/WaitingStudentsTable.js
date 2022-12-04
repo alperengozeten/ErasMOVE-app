@@ -10,9 +10,7 @@ import {
   Stack,
   Paper,
   Avatar,
-  Popover,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
@@ -28,7 +26,6 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { useDispatch } from 'react-redux';
 // components
 import Label from '../label';
-import Iconify from './iconify';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
@@ -76,7 +73,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
-  const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
 
@@ -90,10 +86,6 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
 
   const handleOpenApplication = id => {
     console.log("id: ", id);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
   };
 
   const handleRequestSort = (event, property) => {
@@ -230,35 +222,6 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
           />
         </Card>
       </Container>
-
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
-      </Popover>
     </>
   );
 };
