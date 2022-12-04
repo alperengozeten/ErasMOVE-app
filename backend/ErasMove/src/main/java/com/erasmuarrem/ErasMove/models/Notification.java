@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 public class Notification {
-    //Auto Generated Id
+    //Auto Generated ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
