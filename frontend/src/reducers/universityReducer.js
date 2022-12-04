@@ -4,23 +4,29 @@ const INITIAL_STATE = {
       {
           id: 1,
           name: "Harvard University",
-          quota: 4
+          emptyQuota: 4,
+          totalQuota: 8
+
       },    {
         id: 2,
         name: "Stanford University",
-        quota: 3
+        emptyQuota: 4,
+        totalQuota: 6
     },    {
         id: 3,
         name: "Bridgeton University",
-        quota: 5
+        emptyQuota: 2,
+        totalQuota: 5
     },    {
         id: 4,
         name: "Cambridge University",
-        quota: 2
+        emptyQuota: 0,
+        totalQuota: 3
     },    {
         id: 5,
         name: "Ohio University",
-        quota: 1    },
+        emptyQuota: 2,
+        totalQuota: 4   },
     ]
   };
   
