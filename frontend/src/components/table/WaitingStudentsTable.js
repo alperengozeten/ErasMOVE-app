@@ -29,8 +29,6 @@ import Label from '../label';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
-// mock
-import { users as USERLIST } from '../../_mock/user';
 
 // ----------------------------------------------------------------------
 
@@ -214,7 +212,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={applications.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
