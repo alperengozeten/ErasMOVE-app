@@ -29,7 +29,9 @@ import { UniversitiesListToolbar} from "./university";
 
 const TABLE_HEAD = [
   { id: 'name', label: 'University Name', alignRight: false },
-  { id: 'quota', label: 'Empty Quota', alignRight: false },
+  { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
+  { id: 'totalQuota', label: 'Total Quota', alignRight: false },
+
 ];
 
 // ----------------------------------------------------------------------
@@ -118,7 +120,7 @@ const UniversityTable = ({universities}) => {
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, quota } = row;
+                    const { id, name, emptyQuota, totalQuota } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
@@ -126,13 +128,15 @@ const UniversityTable = ({universities}) => {
 
                         <TableCell align="center" component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography variant="inherit" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{quota}</TableCell>
+                        <TableCell align="center">{emptyQuota}</TableCell>
+                        <TableCell align="center">{totalQuota}</TableCell>
+
                 
                         <TableCell align="right">
                             <Button variant="contained" color="inherit" size="small">
