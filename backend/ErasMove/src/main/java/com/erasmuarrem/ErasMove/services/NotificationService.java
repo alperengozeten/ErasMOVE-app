@@ -38,7 +38,7 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
-    public List<Notification> getNotificationsOffUserByUserId( Long id ) {
+    public List<Notification> getNotificationsOfUserByUserId( Long id ) {
         return notificationRepository.findAllByReceiverID(id);
     }
     //TODO
