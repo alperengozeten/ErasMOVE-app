@@ -19,9 +19,5 @@ public abstract class ContractedUniversity {
     private String country;
 
     @OneToMany
-    private List<Course> approvedCourses;
-
-    @OneToMany
     private List<Course> rejectedCourses;
-
 }

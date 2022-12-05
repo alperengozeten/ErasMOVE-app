@@ -13,5 +13,4 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ErasmusUniversity extends ContractedUniversity {
 
-    private int universityQuota;
 }

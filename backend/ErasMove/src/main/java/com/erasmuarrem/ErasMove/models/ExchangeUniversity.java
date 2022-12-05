@@ -12,5 +12,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ExchangeUniversity extends ContractedUniversity {
-
+    private int universityQuota;
 }
