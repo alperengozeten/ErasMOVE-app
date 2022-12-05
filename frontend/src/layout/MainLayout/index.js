@@ -14,10 +14,11 @@ import Sidebar from './Sidebar';
 import Customization from '../Customization';
 import navigation from '../../menu-items';
 import { drawerWidth } from '../../constants/themeConstant';
-import { SET_MENU } from '../../constants/actionTypes'; 
+import { SET_CHAT, SET_MENU } from '../../constants/actionTypes'; 
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
+import ChatDrawer from './ChatDrawer';
 
 // styles
 const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })(({ theme, open }) => ({
@@ -71,11 +72,14 @@ const MainLayout = () => {
 
     // Handle left drawer
     const leftDrawerOpened = useSelector(state => state.customization?.opened);
+    const rightDrawerOpened = useSelector(state => state.customization?.chatOpened);
     const dispatch = useDispatch();
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_MENU, opened: !leftDrawerOpened });
     };
-
+    const handleRightDrawerToggle = () => {
+        dispatch({ type: SET_CHAT, chatOpened: !rightDrawerOpened });
+    };
     useEffect(() => {
         dispatch({ type: SET_MENU, opened: !matchDownMd });
     }, [matchDownMd]);
@@ -95,7 +99,7 @@ const MainLayout = () => {
                 } }
             >
                 <Toolbar>
-                    <Header handleLeftDrawerToggle={ handleLeftDrawerToggle } />
+                    <Header handleLeftDrawerToggle={ handleLeftDrawerToggle } handleRightDrawerToggle={ handleRightDrawerToggle } rightDrawerOpened={ rightDrawerOpened } />
                 </Toolbar>
             </AppBar>
 
@@ -108,6 +112,7 @@ const MainLayout = () => {
                 <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign />
                 <Outlet style={{ backgroundColor: 'blue' }} />
             </Main>
+            <ChatDrawer drawerOpen={ rightDrawerOpened } drawerToggle={ handleRightDrawerToggle } />
             <Customization />
         </Box>
     );

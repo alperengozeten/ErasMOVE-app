@@ -1,12 +1,13 @@
 // project imports
 import config from '../config';
-import { MENU_OPEN, SET_BORDER_RADIUS, SET_FONT_FAMILY, SET_MENU } from '../constants/actionTypes';
+import { MENU_OPEN, SET_BORDER_RADIUS, SET_CHAT, SET_FONT_FAMILY, SET_MENU } from '../constants/actionTypes';
 
 // action - state management
 
 
 export const initialState = {
     isOpen: [], // for active default menu
+    isChatOpen: [],
     fontFamily: config.fontFamily,
     borderRadius: config.borderRadius,
     opened: true,
@@ -27,6 +28,11 @@ const customizationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 opened: action.opened,
+            };
+        case SET_CHAT:
+            return {
+                ...state,
+                chatOpened: action.chatOpened,
             };
         case SET_FONT_FAMILY:
             return {

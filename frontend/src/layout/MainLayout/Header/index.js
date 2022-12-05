@@ -12,10 +12,11 @@ import NotificationSection from './NotificationSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
+import ChatSection from './ChatSection';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
-const Header = ({ handleLeftDrawerToggle }) => {
+const Header = ({ handleLeftDrawerToggle, handleRightDrawerToggle, rightDrawerOpened }) => {
     const theme = useTheme();
 
     return (
@@ -57,9 +58,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
             {/* header search */}
             <Box sx={ { flexGrow: 1 } } />
-            <Box sx={ { flexGrow: 1 } } />
 
             {/* notification & profile */}
+            <ChatSection handleRightDrawerToggle={handleRightDrawerToggle} rightDrawerOpened={ rightDrawerOpened } />
             <NotificationSection />
             <ProfileSection />
         </>
@@ -68,6 +69,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
 Header.propTypes = {
     handleLeftDrawerToggle: PropTypes.func,
+    handleRightDrawerToggle: PropTypes.func,
+    rightDrawerOpened: PropTypes.bool,
 };
 
 export default Header;

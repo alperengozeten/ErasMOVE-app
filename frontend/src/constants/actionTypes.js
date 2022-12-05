@@ -30,6 +30,8 @@ export const GET_USER = 'GET_USER';
 
 export const SET_MENU = 'SET_MENU';
 
+export const SET_CHAT = 'SET_CHAT';
+
 export const MENU_OPEN = 'MENU_OPEN';
 
 export const SET_FONT_FAMILY = 'SET_FONT_FAMILY';

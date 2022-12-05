@@ -11,9 +11,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OutgoingStudent extends Student {
-    private double cgpa;
-    private Boolean isDoubleMajor;
+public class ErasmusUniversity extends ContractedUniversity {
 
-    // private Application application;
 }

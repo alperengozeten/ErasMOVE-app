@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OutgoingStudent extends Student {
-    private double cgpa;
-    private Boolean isDoubleMajor;
+public class ExchangeUniversityDepartment extends Department {
 
-    // private Application application;
+    @OneToOne
+    private ExchangeUniversity exchangeUniversity;
 }

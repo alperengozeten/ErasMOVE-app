@@ -2,13 +2,13 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
 // @mui
 import {
   Card,
   Table,
   Stack,
   Paper,
+  Avatar,
   TableRow,
   TableBody,
   TableCell,
@@ -16,22 +16,23 @@ import {
   Typography,
   TableContainer,
   TablePagination,
+  Tooltip,
   Button
 } from '@mui/material';
 // components
 import Scrollbar from './scrollbar';
-// sections
-import { UniversityListHead } from './university';
+import DescriptionIcon from '@mui/icons-material/Description';
 
-import { UniversitiesListToolbar} from "./university";
+// sections
+import { UserListHead, UserListToolbar } from './user';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'University Name', alignRight: false },
-  { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
-  { id: 'totalQuota', label: 'Total Quota', alignRight: false },
+  { id: 'name', label: 'Student Name', alignRight: false },
+  { id: 'request', label: 'Requested Document', alignRight: true },
 
+ 
 ];
 
 // ----------------------------------------------------------------------
@@ -65,7 +66,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = ({universities}) => {
+const RequestsTable = ({ requests }) => {
 
   const [page, setPage] = useState(0);
 
@@ -74,8 +75,14 @@ const UniversityTable = ({universities}) => {
   const [orderBy, setOrderBy] = useState('name');
 
   const [filterName, setFilterName] = useState('');
-
+  
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+//   const [anchorEl, setAnchorEl] = React.useState(null);
+
+//   const handleOpenApplication = id => {
+//     console.log("id: ", id);
+//   };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -96,9 +103,20 @@ const UniversityTable = ({universities}) => {
     setPage(0);
     setFilterName(event.target.value);
   };
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - universities.length) : 0;
 
-  const filteredUsers = applySortFilter(universities, getComparator(order, orderBy), filterName);
+//   const handlePopoverOpen = event => {
+//     setAnchorEl(event.currentTarget);
+//   };
+
+//   const handlePopoverClose = () => {
+//     setAnchorEl(null);
+//   };
+
+//   const openPopover = Boolean(anchorEl);
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
+
+  const filteredUsers = applySortFilter(requests, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -106,42 +124,43 @@ const UniversityTable = ({universities}) => {
     <>
       <Container>
         <Card>
-          <UniversitiesListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <UniversityListHead
+                <UserListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   onRequestSort={handleRequestSort}
                 />
-                
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, emptyQuota, totalQuota } = row;
+                    const { id, name, request, avatarUrl } = row;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1}>
+                      <TableRow hover key={id} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
-                        <TableCell align="center" component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="inherit" noWrap>
+                            <Avatar alt={name} src={avatarUrl} />
+                            <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{emptyQuota}</TableCell>
-                        <TableCell align="center">{totalQuota}</TableCell>
+                        <TableCell align="center">{request}</TableCell>
+                        
 
-                
                         <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small">
-                                Go To Details
+                          <Tooltip describeChild title="Add document">
+                            <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
+                                Add Document
                             </Button>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );
@@ -183,7 +202,7 @@ const UniversityTable = ({universities}) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={universities.length}
+            count={requests.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -194,12 +213,14 @@ const UniversityTable = ({universities}) => {
     </>
   );
 };
-UniversityTable.propTypes = {
-  universities: PropTypes.array,
+
+RequestsTable.propTypes = {
+    requests: PropTypes.array,
+};
+  
+RequestsTable.defaultProps = {
+    requests: [],
 };
 
-UniversityTable.defaultProps = {
-  universities: [],
-};
 
-export default UniversityTable;
+export default RequestsTable;
