@@ -20,8 +20,9 @@ public class HostUniversity {
 
     private String universityName;
 
+
     @OneToMany
-    private List<Department> departmentList;
+    private List<OutgoingStudent> waitingQueue;
 
     // no need to hold contracted universities or announcements
 }
