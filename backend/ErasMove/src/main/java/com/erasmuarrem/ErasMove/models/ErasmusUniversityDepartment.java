@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ErasmusUniDepartment extends Department {
+public class ErasmusUniversityDepartment extends Department {
 
     // maybe put here id as well???
     private int quota;
