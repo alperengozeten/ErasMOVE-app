@@ -23,5 +23,8 @@ public class HostUniversity {
     @OneToMany
     private List<Department> departmentList;
 
+    @OneToMany
+    private List<OutgoingStudent> waitingQueue;
+
     // no need to hold contracted universities or announcements
 }
