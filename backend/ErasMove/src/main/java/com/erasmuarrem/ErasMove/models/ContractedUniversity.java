@@ -20,4 +20,7 @@ public abstract class ContractedUniversity {
 
     @OneToMany
     private List<Course> rejectedCourses;
+
+    @OneToMany
+    private List<OutgoingStudent> acceptedStudents;
 }
