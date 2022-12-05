@@ -1,9 +1,6 @@
 package com.erasmuarrem.ErasMove.models;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@MappedSuperclass
 public abstract class ContractedUniversity {
 
     @Id
@@ -26,6 +24,4 @@ public abstract class ContractedUniversity {
     @OneToMany
     private List<Course> rejectedCourses;
 
-    @OneToMany
-    private List<Department> contractedDepartments;
 }
