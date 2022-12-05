@@ -7,12 +7,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { Typography } from "@mui/material";
+import { Typography, Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
 export default function UserProfile() {
-
   const [value, setValue] = React.useState(0);
   const theme = useTheme();
 
@@ -45,66 +44,69 @@ export default function UserProfile() {
                 <Grid container direction={"row"}>
                   <Grid container direction={"column"} xs={4} spacing={5}>
                     <Grid item>
-                      <Typography>Profile Picture</Typography>
+                      <Typography variant="h4">Name:</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>Name</Typography>
+                      <Typography variant="h4">Surname:</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>Surname</Typography>
+                      <Typography variant="h4">ID:</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>ID</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography>E-Mail</Typography>
+                      <Typography variant="h4">E-Mail:</Typography>
                     </Grid>
                   </Grid>
-                  <Grid container direction={"column"} xs={8} spacing={5}>
+                  <Grid container direction={"column"} xs={4} spacing={5}>
                     <Grid item>
-                      <Typography>AVATAR</Typography>
+                      <Typography variant="h4">Kütür Kütürşad</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>Kütür Kütürşad</Typography>
+                      <Typography variant="h4">Güzelkaya</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>Güzelkaya</Typography>
+                      <Typography variant="h4">21901234</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>21901234</Typography>
+                      <Typography variant="h4">
+                        igdirli_serseri@hotmail.com
+                      </Typography>
                     </Grid>
-                    <Grid item>
-                      <Typography>igdirli_serseri@hotmail.com</Typography>
-                    </Grid>
+                  </Grid>
+                  <Grid container direction={"column"} xs={4} spacing={3}>
+                    <Grid
+                      item
+                      justifyContent="center"
+                      alignItems="center"
+                      sx={{ width: "100%", height: "100%" }}
+                    ></Grid>
                   </Grid>
                 </Grid>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Box sx={{ flexGrow: 1 }}>
-                <Grid container direction={"row"}>
+                <Grid
+                  container
+                  direction={"row"}
+                  sx={{ width: "100%", height: "100%" }}
+                >
                   <Grid container direction={"column"} xs={4} spacing={5}>
                     <Grid item>
-                      <Typography>E-Mail</Typography>
+                      <Typography variant="h4" mt={3}>
+                        E-Mail:
+                      </Typography>
                     </Grid>
                     <Grid item>
-                      <Typography>Password</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography></Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography></Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography></Typography>
+                      <Typography variant="h4">Password:</Typography>
                     </Grid>
                   </Grid>
-                  <Grid container direction={"column"} xs={8} spacing={3}>
+                  <Grid container direction={"column"} xs={4} spacing={3}>
                     <Grid item>
                       <TextField
                         fullWidth
+                        disabled
                         defaultValue="igdirli_serseri@hotmail.com"
+                        size="small"
                         InputProps={{
                           readOnly: true,
                         }}
@@ -114,7 +116,9 @@ export default function UserProfile() {
                     <Grid item>
                       <TextField
                         fullWidth
-                        defaultValue="igdirli_serseri@hotmail.com"
+                        type="password"
+                        defaultValue="password"
+                        size="small"
                         InputProps={{
                           readOnly: true,
                         }}
@@ -124,32 +128,21 @@ export default function UserProfile() {
                     <Grid item>
                       <TextField
                         fullWidth
-                        defaultValue="igdirli_serseri@hotmail.com"
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                        size="small"
+                        label="New password"
                         variant="filled"
                       />
                     </Grid>
                     <Grid item>
                       <TextField
                         fullWidth
-                        defaultValue="igdirli_serseri@hotmail.com"
-                        InputProps={{
-                          readOnly: true,
-                        }}
+                        size="small"
+                        label="Retype new password"
                         variant="filled"
                       />
-                    </Grid>  
+                    </Grid>
                     <Grid item>
-                      <TextField
-                        fullWidth
-                        defaultValue="igdirli_serseri@hotmail.com"
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        variant="filled"
-                      />
+                      <Button variant="outlined">Change Password</Button>
                     </Grid>
                   </Grid>
                 </Grid>
