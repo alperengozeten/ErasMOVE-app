@@ -20,8 +20,6 @@ public class HostUniversity {
 
     private String universityName;
 
-    @OneToMany
-    private List<Department> departmentList;
 
     @OneToMany
     private List<OutgoingStudent> waitingQueue;
