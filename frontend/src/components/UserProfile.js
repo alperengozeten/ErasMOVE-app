@@ -11,6 +11,11 @@ import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
+export default function UserProfile() {
+
+  const [value, setValue] = React.useState(0);
+  const theme = useTheme();
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -156,5 +161,3 @@ import TextField from "@mui/material/TextField";
     </Grid>
   );
 }
-
-export default UserProfile;
