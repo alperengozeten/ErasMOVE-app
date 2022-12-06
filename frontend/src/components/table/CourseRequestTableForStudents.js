@@ -62,7 +62,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 const CourseRequestTableForStudents = ({ courseRequests }) => {
-
+    console.log(courseRequests);
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -91,6 +91,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
   };
 
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
+  console.log(filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage));
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
 
@@ -109,13 +110,14 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, status } = row;
+                    console.log(row);
+                    const { id, courseName, status } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">{name}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
 
                         <TableCell align="center">
                           <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>

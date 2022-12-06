@@ -6,9 +6,12 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Typography, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import CourseRequests from "./CourseRequests";
 
-export default function Application() {
+const Application = ({ courseRequests }) => {
   const [value, setValue] = React.useState("0");
 
   const handleChange = (event, newValue) => {
@@ -45,7 +48,7 @@ export default function Application() {
                     </TabPanel>
                     <TabPanel value="2" index={2}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <CourseRequests />
+                            <CourseRequests courseRequests={courseRequests} />
                         </Box>
                     </TabPanel>
                 </TabContext>
@@ -54,4 +57,26 @@ export default function Application() {
     </Stack>
     
   );
-}
+};
+
+const mapStateToProps = state => {
+    const courseRequests = state.requests.courseRequests;
+    return {
+        courseRequests,
+    };
+};
+
+const mapActionsToProps = {
+
+};
+
+Application.propTypes = {
+    courseRequests: PropTypes.array,
+};
+  
+Application.defaultProps = {
+    courseRequests: [],
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Application);
+

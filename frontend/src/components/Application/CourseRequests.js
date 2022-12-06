@@ -1,36 +1,25 @@
 import { Stack } from '@mui/material';
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 
-const CourseRequests = ({ applications }) => {
+const CourseRequests = ({ courseRequests }) => {
     return (
         <Stack spacing={2}>
-            <CourseRequestTableForStudents courseRequests={applications} sendReplacementOffer={sendReplacementOffer}  />
+            <CourseRequestTableForStudents courseRequests={courseRequests} sendReplacementOffer={sendReplacementOffer}  />
         </Stack>
     );
 };
 
-const mapStateToProps = state => {
-    const applications = state.applications.applications;
-    return {
-        applications,
-    };
-};
-
-const mapActionsToProps = {
-    sendReplacementOffer
-};
 
 CourseRequests.propTypes = {
-    applications: PropTypes.array,
+    courseRequests: PropTypes.array,
 };
   
 CourseRequests.defaultProps = {
-    applications: [],
+    courseRequests: [],
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(CourseRequests);
+export default CourseRequests;

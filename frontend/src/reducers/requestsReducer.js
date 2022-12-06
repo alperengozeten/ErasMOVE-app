@@ -10,6 +10,7 @@ const INITIAL_STATE = {
             id: 2,
             name: "Kürşad Güzelkaya",
             courseName: "CS319",
+            status: "waiting",
             documents: [],
         },{
             id: 3,
