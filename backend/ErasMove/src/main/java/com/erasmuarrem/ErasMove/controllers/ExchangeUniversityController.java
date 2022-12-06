@@ -49,6 +49,11 @@ public class ExchangeUniversityController {
         exchangeUniversityService.addExchangeUniversity(exchangeUniversity);
     }
 
+    @PostMapping("/add/{id}/outgoingStudent/{outgoingStudentID}")
+    public void addOutgoingStudentByIDAndOutgoingStudentID(@PathVariable("id") Long id, @PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        exchangeUniversityService.addOutgoingStudentByIDAndOutgoingStudentID(id, outgoingStudentID);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteExchangeUniversityByID(@PathVariable("id") Long id) {
         exchangeUniversityService.deleteExchangeUniversityByID(id);

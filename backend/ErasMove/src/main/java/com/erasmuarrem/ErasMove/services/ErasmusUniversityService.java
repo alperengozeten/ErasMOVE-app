@@ -106,7 +106,7 @@ public class ErasmusUniversityService {
         Optional<Course> courseOptional = courseRepository.findById(courseID);
 
         if ( !courseOptional.isPresent() ) {
-            throw new IllegalStateException("Course with id:" + id + " doesn't exist!");
+            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist!");
         }
 
         ErasmusUniversity erasmusUniversity = erasmusUniversityOptional.get();
@@ -122,7 +122,7 @@ public class ErasmusUniversityService {
         }
 
         if ( !courseExists ) {
-            throw new IllegalStateException("Course with id:" + id + " isn't in rejected courses!");
+            throw new IllegalStateException("Course with id:" + courseID + " isn't in rejected courses!");
         }
 
         rejectedCourses.remove(deleteCourse);
