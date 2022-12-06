@@ -5,15 +5,12 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SwipeableViews from "react-swipeable-views";
-import { useTheme } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import { Typography, Button } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 
 export default function UserProfile() {
   const [value, setValue] = React.useState(0);
-  const theme = useTheme();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -50,10 +47,19 @@ export default function UserProfile() {
                       <Typography variant="h4">Surname:</Typography>
                     </Grid>
                     <Grid item>
+                      <Typography variant="h4">Department:</Typography>
+                    </Grid>
+                    <Grid item>
                       <Typography variant="h4">ID:</Typography>
                     </Grid>
                     <Grid item>
+                      <Typography variant="h4">CGPA:</Typography>
+                    </Grid>
+                    <Grid item>
                       <Typography variant="h4">E-Mail:</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h4">Languages:</Typography>
                     </Grid>
                   </Grid>
                   <Grid container direction={"column"} xs={4} spacing={5}>
@@ -64,12 +70,21 @@ export default function UserProfile() {
                       <Typography variant="h4">Güzelkaya</Typography>
                     </Grid>
                     <Grid item>
+                      <Typography variant="h4">Computer Science</Typography>
+                    </Grid>
+                    <Grid item>
                       <Typography variant="h4">21901234</Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h4">3.31</Typography>
                     </Grid>
                     <Grid item>
                       <Typography variant="h4">
                         igdirli_serseri@hotmail.com
                       </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h4">English, German</Typography>
                     </Grid>
                   </Grid>
                   <Grid container direction={"column"} xs={4} spacing={3}>
