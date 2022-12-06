@@ -15,8 +15,15 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
+import DeleteIcon from '@mui/icons-material/Delete';
 // components
 import Label from '../label';
 import Scrollbar from './scrollbar';
@@ -89,6 +96,16 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
@@ -126,6 +143,32 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
+                          <Tooltip describeChild title="Delete request">
+                            <IconButton size="large" color="error" onClick={() => handleClickOpen() }>
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Remove Request"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                You can not take it back if you remove a request. Do you want to remove?
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleClose}>No</Button>
+                              <Button onClick={handleClose} autoFocus>
+                                Yes
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </TableCell>
                       </TableRow>
                     );
