@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { 
     alpha,
-    Box,
     Divider,
     Drawer,
     Grid,
@@ -20,8 +19,6 @@ import {
     styled,
     Typography,
 } from '@mui/material';
-import MailIcon  from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -98,7 +95,7 @@ const ChatDrawer = ({ drawerOpen, drawerToggle }) => {
           }
         />
         <List>
-            {['Kursad Guzelkaya', 'John Doe', 'Scarlett Johenson'].map((text, index) => (
+            {['Kursad Guzelkaya', 'John Doe', 'Scarlett Johenson'].map(text => (
             <ListItem key={text} disablePadding>
                 <ListItemButton>
                 <ListItemIcon>
