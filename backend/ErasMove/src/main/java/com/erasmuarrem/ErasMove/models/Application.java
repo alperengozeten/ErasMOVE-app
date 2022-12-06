@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table
 @Getter
@@ -20,8 +22,10 @@ public class Application {
     private OutgoingStudent outgoingStudent;
 
     private String selectedSemester;
+    @ElementCollection
+    private List<Long> selectedUniversityIds;
 
     // add some other attributes
-    // acceptedUniversity
+
     // selectedUniversities
 }
