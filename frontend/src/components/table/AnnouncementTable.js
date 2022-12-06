@@ -118,7 +118,8 @@ const AnnouncementTable = ({ announcements }) => {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      const { id, date, announcementPrev, announcementFull } = row;
+                      const { id, date, announcementPrev, announcementFull } =
+                        row;
 
                       return (
                         <TableRow hover key={id} tabIndex={-1}>
@@ -141,7 +142,9 @@ const AnnouncementTable = ({ announcements }) => {
                             </Stack>
                           </TableCell>
 
-                          <TableCell align="center">{announcementPrev}</TableCell>
+                          <TableCell align="center">
+                            {announcementPrev}
+                          </TableCell>
 
                           <TableCell align="right">
                             <Button
