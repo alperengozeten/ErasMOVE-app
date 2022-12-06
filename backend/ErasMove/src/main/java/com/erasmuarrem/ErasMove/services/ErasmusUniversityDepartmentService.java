@@ -1,6 +1,8 @@
 package com.erasmuarrem.ErasMove.services;
 
+import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
+import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityDepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.Optional;
 public class ErasmusUniversityDepartmentService {
 
     private final ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository) {
+    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository) {
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
+        this.courseRepository = courseRepository;
     }
 
     public List<ErasmusUniversityDepartment> getErasmusUniversityDepartments() {
@@ -55,5 +59,54 @@ public class ErasmusUniversityDepartmentService {
         }
 
         erasmusUniversityDepartmentRepository.deleteById(id);
+    }
+
+    public void addCourseByErasmusDepartmentID(Course course, Long id) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University with id:" + id + " doesn't exist!");
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+        List<Course> courseList = erasmusUniversityDepartment.getCourseList();
+
+        for (Course departmentCourse : courseList) {
+            if ( departmentCourse.getCourseName().equals(course.getCourseName()) ) {
+                throw new IllegalStateException("Course with name:" + course.getCourseName() + " already exists in this department!");
+            }
+        }
+
+        courseList.add(course);
+        courseRepository.save(course);
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
+    }
+
+    public void deleteCourseByErasmusDepartmentIDAndCourseID(Long id, Long courseID) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(courseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist!");
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+        List<Course> courseList = erasmusUniversityDepartment.getCourseList();
+        Course course = courseOptional.get();
+
+        if ( !courseList.contains(course) ) {
+            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist in erasmus department!");
+        }
+
+        courseList.remove(course);
+        courseRepository.deleteById(courseID);
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
 }

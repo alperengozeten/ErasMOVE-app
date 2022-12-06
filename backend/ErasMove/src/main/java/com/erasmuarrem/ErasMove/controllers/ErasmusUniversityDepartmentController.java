@@ -1,5 +1,6 @@
 package com.erasmuarrem.ErasMove.controllers;
 
+import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
 import com.erasmuarrem.ErasMove.services.ErasmusUniversityDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,19 @@ public class ErasmusUniversityDepartmentController {
         erasmusUniversityDepartmentService.addErasmusUniversityDepartment(erasmusUniversityDepartment);
     }
 
+    @PostMapping("/addCourse/{id}")
+    public void addCourseByErasmusDepartmentID(@RequestBody Course course, @PathVariable("id") Long id) {
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(course, id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteErasmusUniversityDepartmentByID(@PathVariable("id") Long id) {
         erasmusUniversityDepartmentService.deleteErasmusUniversityDepartmentByID(id);
+    }
+
+    @DeleteMapping("/delete/{id}/course/{courseID}")
+    public void deleteCourseByErasmusDepartmentIDAndCourseID(@PathVariable("id") Long id, @PathVariable("courseID") Long courseID) {
+        erasmusUniversityDepartmentService.deleteCourseByErasmusDepartmentIDAndCourseID(id, courseID);
     }
 
     // add, remove course
