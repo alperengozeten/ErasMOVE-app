@@ -93,4 +93,39 @@ public class ExchangeUniversityService {
 
         exchangeUniversityRepository.save(exchangeUniversity);
     }
+
+    public void deleteRejectedCourseByIDAndCourseID(Long id, Long courseID) {
+        Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findById(id);
+
+        if ( !exchangeUniversityOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange University with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(courseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Course with id:" + id + " doesn't exist!");
+        }
+
+        ExchangeUniversity exchangeUniversity = exchangeUniversityOptional.get();
+        Course deleteCourse = courseOptional.get();
+        List<Course> rejectedCourses = exchangeUniversity.getRejectedCourses();
+        boolean courseExists = false;
+
+        for (Course rejectedCourse : rejectedCourses) {
+            if ( rejectedCourse.getCourseName().equals(deleteCourse.getCourseName()) ) {
+                courseExists = true;
+                break;
+            }
+        }
+
+        if ( !courseExists ) {
+            throw new IllegalStateException("Course with id:" + id + " isn't in rejected courses!");
+        }
+
+        rejectedCourses.remove(deleteCourse);
+
+        courseRepository.deleteById(courseID);
+        exchangeUniversityRepository.save(exchangeUniversity);
+    }
 }

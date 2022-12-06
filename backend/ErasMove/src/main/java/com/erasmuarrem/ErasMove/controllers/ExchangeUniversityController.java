@@ -53,4 +53,9 @@ public class ExchangeUniversityController {
     public void deleteExchangeUniversityByID(@PathVariable("id") Long id) {
         exchangeUniversityService.deleteExchangeUniversityByID(id);
     }
+
+    @DeleteMapping("delete/{id}/rejectedCourses/{courseID}")
+    public void deleteExchangeUniversityByIDAndCourseID(@PathVariable("id") Long id, @PathVariable("courseID") Long courseID) {
+        exchangeUniversityService.deleteRejectedCourseByIDAndCourseID(id, courseID);
+    }
 }
