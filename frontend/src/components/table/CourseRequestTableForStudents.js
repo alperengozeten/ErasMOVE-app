@@ -62,7 +62,6 @@ function applySortFilter(array, comparator, query) {
 }
 
 const CourseRequestTableForStudents = ({ courseRequests }) => {
-    console.log(courseRequests);
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -91,7 +90,6 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
   };
 
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
-  console.log(filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage));
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
 
@@ -110,7 +108,6 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    console.log(row);
                     const { id, courseName, status } = row;
 
                     return (
