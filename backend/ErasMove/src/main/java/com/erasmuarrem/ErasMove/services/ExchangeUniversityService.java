@@ -163,4 +163,30 @@ public class ExchangeUniversityService {
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
         exchangeUniversityRepository.save(exchangeUniversity);
     }
+
+    public void deleteOutgoingStudentByIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
+        Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findById(id);
+
+        if ( !exchangeUniversityOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange University with id:" + id + " doesn't exist!");
+        }
+
+        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
+
+        if ( !outgoingStudentOptional.isPresent() ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        ExchangeUniversity exchangeUniversity = exchangeUniversityOptional.get();
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+        List<OutgoingStudent> acceptedStudents = exchangeUniversity.getAcceptedStudents();
+
+        if ( !acceptedStudents.contains(outgoingStudent) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " isn't accepted!");
+        }
+
+        acceptedStudents.remove(outgoingStudent); // remove the student from the list
+        exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() + 1); // update the quota
+        exchangeUniversityRepository.save(exchangeUniversity);
+    }
 }
