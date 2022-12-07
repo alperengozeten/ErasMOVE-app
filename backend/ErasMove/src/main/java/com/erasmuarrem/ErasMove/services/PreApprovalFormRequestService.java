@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ public class PreApprovalFormRequestService {
     private final PreApprovalFormRequestRepository preApprovalFormRequestRepository;
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
 
+    private final OutgoingStudentRepository outgoingStudentRepository;
+
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
+        this.outgoingStudentRepository = outgoingStudentRepository;
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequests() {
@@ -53,5 +57,17 @@ public class PreApprovalFormRequestService {
         }
 
         preApprovalFormRequestRepository.deleteById(id);
+    }
+
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentCoordinatorIDAndOutgoingStudentID(Long departmentCoordinatorID, Long outgoingStudentID) {
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+        }
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return preApprovalFormRequestRepository.findByDepartmentCoordinatorIDAndStudentID(departmentCoordinatorID, outgoingStudentID);
     }
 }
