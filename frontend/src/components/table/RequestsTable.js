@@ -2,6 +2,9 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+
 // @mui
 import {
   Card,
@@ -27,12 +30,20 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import { UserListHead, UserListToolbar } from './user';
 
 // ----------------------------------------------------------------------
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
   { id: 'request', label: 'Requested Document', alignRight: true },
-
- 
 ];
 
 // ----------------------------------------------------------------------
@@ -78,11 +89,6 @@ const RequestsTable = ({ requests }) => {
   
   const [rowsPerPage, setRowsPerPage] = useState(5);
   
-//   const [anchorEl, setAnchorEl] = React.useState(null);
-
-//   const handleOpenApplication = id => {
-//     console.log("id: ", id);
-//   };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -104,16 +110,15 @@ const RequestsTable = ({ requests }) => {
     setFilterName(event.target.value);
   };
 
-//   const handlePopoverOpen = event => {
-//     setAnchorEl(event.currentTarget);
-//   };
+  const [open, setOpen] = useState(false);
 
-//   const handlePopoverClose = () => {
-//     setAnchorEl(null);
-//   };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
 
-//   const openPopover = Boolean(anchorEl);
-
+  const handleClose = () => {
+    setOpen(false);
+  };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
 
   const filteredUsers = applySortFilter(requests, getComparator(order, orderBy), filterName);
@@ -157,11 +162,27 @@ const RequestsTable = ({ requests }) => {
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Add document">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
+                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen} endIcon={<DescriptionIcon />}>
                                 Add Document
                             </Button>
                           </Tooltip>
                         </TableCell>
+                        <Modal
+                        fullWidth
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2" >
+                              Add Document
+                            </Typography>
+                            <Box alignRight= {true}>
+                            <Button onClick={handleClose}>Close</Button>
+                            </Box>
+                          </Box>
+                        </Modal>
                       </TableRow>
                     );
                   })}

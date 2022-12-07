@@ -34,6 +34,8 @@ const TABLE_HEAD = [
   { id: 'type', label: 'Program Type', alignRight: false },
   { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
   { id: 'totalQuota', label: 'Total Quota', alignRight: false },
+  { id: 'courses', label: 'Courses', alignRight: false },
+
 
 ];
 
@@ -150,7 +152,7 @@ const UniversityTable = ({universities}) => {
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, type, emptyQuota, totalQuota } = row;
+                    const { id, name, type, emptyQuota, totalQuota,courses } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
@@ -167,6 +169,8 @@ const UniversityTable = ({universities}) => {
 
                         <TableCell align="center">{emptyQuota}</TableCell>
                         <TableCell align="center">{totalQuota}</TableCell>
+                        <TableCell align="center">{courses}</TableCell>
+
 
                 
                         <TableCell align="right">
@@ -236,7 +240,7 @@ const UniversityTable = ({universities}) => {
                               id="courses"
                               fullWidth
                               variant="standard"
-                              default={"courses"}
+                              defaultValue={courses}
                               disabled={disabled}
                             />
                             <Box alignRight= {true}>
