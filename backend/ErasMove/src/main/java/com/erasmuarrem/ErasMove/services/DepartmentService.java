@@ -144,4 +144,14 @@ public class DepartmentService {
         courseRepository.deleteById(foundCourse.getID());
         departmentRepository.save(department);
     }
+
+    public Department getDepartmentByDepartmentName(String departmentName) {
+        Optional<Department> departmentOptional = departmentRepository.findByDepartmentName(departmentName);
+
+        if ( !departmentOptional.isPresent() ) {
+            throw new IllegalStateException("Department with department name:" + departmentName + " doesn't exist!");
+        }
+
+        return departmentOptional.get();
+    }
 }
