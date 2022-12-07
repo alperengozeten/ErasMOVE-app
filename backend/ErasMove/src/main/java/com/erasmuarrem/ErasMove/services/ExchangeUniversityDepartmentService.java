@@ -139,4 +139,16 @@ public class ExchangeUniversityDepartmentService {
         courseRepository.deleteById(foundCourse.getID());
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
+
+    public ExchangeUniversityDepartment getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(Long universityID, String departmentName) {
+        Optional<ExchangeUniversityDepartment> exchangeUniversityDepartmentOptional = exchangeUniversityDepartmentRepository
+                .findByExchangeUniversityIDAndDepartmentName(universityID, departmentName);
+
+        if ( !exchangeUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange University Department with departmentName:" + departmentName
+                    + " doesn't exist in University with id:" + universityID);
+        }
+
+        return exchangeUniversityDepartmentOptional.get();
+    }
 }

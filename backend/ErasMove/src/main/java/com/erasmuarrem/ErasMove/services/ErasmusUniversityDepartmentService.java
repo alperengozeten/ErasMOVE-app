@@ -189,4 +189,16 @@ public class ErasmusUniversityDepartmentService {
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
         erasmusUniversityRepository.save(erasmusUniversity);
     }
+
+    public ErasmusUniversityDepartment getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(Long universityID, String departmentName) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findByErasmusUniversityIDAndDepartmentName(universityID, departmentName);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University Department with departmentName:" + departmentName
+            + " doesn't exist in University with id:" + universityID);
+        }
+
+        return erasmusUniversityDepartmentOptional.get();
+    }
 }
