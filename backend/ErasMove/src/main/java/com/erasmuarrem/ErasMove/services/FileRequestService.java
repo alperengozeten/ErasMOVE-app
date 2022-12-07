@@ -60,4 +60,35 @@ public class FileRequestService {
 
         fileRequestRepository.deleteById(id);
     }
+
+    public List<FileRequest> getFileRequestByAdministrativeStaffID(Long administrativeStaffID) {
+
+        if ( !administrativeStaffRepository.existsById(administrativeStaffID) ) {
+            throw new IllegalStateException("Administrative Staff with id:" + " doesn't exist!");
+        }
+
+        return fileRequestRepository.findByAdministrativeStaffID(administrativeStaffID);
+    }
+
+    public List<FileRequest> getFileRequestsByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return fileRequestRepository.findByStudentID(outgoingStudentID);
+    }
+
+    public List<FileRequest> getFileRequestByAdministrativeStaffIDAndOutgoingStudentID(Long administrativeStaffID, Long outgoingStudentID) {
+
+        if ( !administrativeStaffRepository.existsById(administrativeStaffID) ) {
+            throw new IllegalStateException("Administrative Staff with id:" + administrativeStaffID + " doesn't exist!");
+        }
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return fileRequestRepository.findByAdministrativeStaffIDAndStudentID(administrativeStaffID, outgoingStudentID);
+    }
 }

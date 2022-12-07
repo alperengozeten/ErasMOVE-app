@@ -77,6 +77,20 @@ public class PreApprovalFormRequestService {
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentCoordinatorID(Long departmentCoordinatorID) {
+
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+        }
+
         return preApprovalFormRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
+
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return preApprovalFormRequestRepository.findByStudentID(outgoingStudentID);
     }
 }

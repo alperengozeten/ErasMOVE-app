@@ -10,4 +10,5 @@ import java.util.List;
 public interface PreApprovalFormRequestRepository extends JpaRepository<PreApprovalFormRequest, Long> {
     List<PreApprovalFormRequest> findByDepartmentCoordinatorIDAndStudentID(Long departmentCoordinatorID, Long outgoingStudentID);
     List<PreApprovalFormRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
+    List<PreApprovalFormRequest> findByStudentID(Long outgoingStudentID);
 }

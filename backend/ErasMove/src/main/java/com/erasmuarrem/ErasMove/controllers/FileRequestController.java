@@ -28,6 +28,24 @@ public class FileRequestController {
         return fileRequestService.getFileRequestByID(id);
     }
 
+    @GetMapping("/outgoingStudent/{outgoingStudentID}")
+    public List<FileRequest> getFileRequestsByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return fileRequestService.getFileRequestsByOutgoingStudentID(outgoingStudentID);
+    }
+
+    @GetMapping("/administrativeStaff/{administrativeStaffID}")
+    public List<FileRequest> getFileRequestsByAdministrativeStaffID(@PathVariable("administrativeStaffID") Long administrativeStaffID) {
+        return fileRequestService.getFileRequestByAdministrativeStaffID(administrativeStaffID);
+    }
+
+    @GetMapping("/administrativeStaff/{administrativeStaffID}/outgoingStudent/{outgoingStudentID}")
+    public List<FileRequest> getFileRequestsByAdministrativeStaffIDAndOutgoingStudentID(
+            @PathVariable("administrativeStaffID") Long administrativeStaffID,
+            @PathVariable("outgoingStudentID") Long outgoingStudentID
+    ) {
+        return fileRequestService.getFileRequestByAdministrativeStaffIDAndOutgoingStudentID(administrativeStaffID, outgoingStudentID);
+    }
+
     @PostMapping("/add")
     public void addFileRequest(@RequestBody FileRequest fileRequest) {
         fileRequestService.addFileRequest(fileRequest);

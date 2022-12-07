@@ -28,6 +28,11 @@ public class PreApprovalFormRequestController {
         return preApprovalFormRequestService.getPreApprovalFormRequestByID(id);
     }
 
+    @GetMapping("/outgoingStudent/{outgoingStudentID}")
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return preApprovalFormRequestService.getPreApprovalFormRequestsByOutgoingStudentID(outgoingStudentID);
+    }
+
     @GetMapping("/departmentCoordinator/{departmentCoordinatorID}")
     public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDeparmentCoordinatorID(
             @PathVariable("departmentCoordinatorID") Long departmentCoordinatorID) {
