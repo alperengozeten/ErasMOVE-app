@@ -10,8 +10,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import CourseRequests from "./CourseRequests";
+import PreApprovalForms from "./PreAprovalForms";
 
-const Application = ({ courseRequests }) => {
+const Application = ({ courseRequests, preApprovalForms }) => {
   const [value, setValue] = React.useState("0");
 
   const handleChange = (event, newValue) => {
@@ -44,6 +45,7 @@ const Application = ({ courseRequests }) => {
                     </TabPanel>
                     <TabPanel value="1" index={1}>
                         <Box sx={{ flexGrow: 1 }}>
+                            <PreApprovalForms preApprovalForms={preApprovalForms} />
                         </Box>
                     </TabPanel>
                     <TabPanel value="2" index={2}>
@@ -61,8 +63,10 @@ const Application = ({ courseRequests }) => {
 
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
+    const preApprovalForms = state.requests.preApprovalForms;
     return {
         courseRequests,
+        preApprovalForms,
     };
 };
 
@@ -72,10 +76,12 @@ const mapActionsToProps = {
 
 Application.propTypes = {
     courseRequests: PropTypes.array,
+    preApprovalForms: PropTypes.array,
 };
   
 Application.defaultProps = {
     courseRequests: [],
+    preApprovalForms: [],
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Application);

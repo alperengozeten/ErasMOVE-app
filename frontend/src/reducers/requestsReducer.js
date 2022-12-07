@@ -10,13 +10,13 @@ const INITIAL_STATE = {
             id: 2,
             name: "Kürşad Güzelkaya",
             courseName: "CS319",
-            status: "waiting",
+            status: "rejected",
             documents: [],
         },{
             id: 3,
             name: "Jake Paul",
             courseName: "CS115",
-            status: "waiting",
+            status: "accepted",
             documents: [],
         },{
             id: 4,
@@ -28,7 +28,7 @@ const INITIAL_STATE = {
             id: 5,
             name: "Cristiano Ronaldo",
             courseName: "CS315",
-            status: "waiting",
+            status: "rejected",
             documents: [],
         },
     ], 
@@ -59,6 +59,24 @@ const INITIAL_STATE = {
           request: "Acceptance Letter",
           documents: [],
       },
+    ], 
+    preApprovalForms: [
+        {
+            id: 1,
+            type: "Mandatory",
+            status: "rejected",
+            documents: [],
+        },{
+            id: 2,
+            type: "Mandatory",
+            status: "waiting",
+            documents: [],
+        },{
+            id: 3,
+            type: "Elective",
+            status: "accepted",
+            documents: [],
+        }
     ], 
 };
 
