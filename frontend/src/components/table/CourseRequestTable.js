@@ -2,11 +2,15 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { sentenceCase } from 'change-case';
+import Label from '../label';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+
 // @mui
 import {
   Card,
   Table,
-  Stack,
   Paper,
   Avatar,
   TableRow,
@@ -17,8 +21,13 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  IconButton,
+  Grid,
+  FormControl,
+  Stack,
   Button
 } from '@mui/material';
+
 // components
 import Scrollbar from './scrollbar';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -28,6 +37,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+
 // sections
 import { UserListHead, UserListToolbar } from './user';
 
@@ -35,7 +45,7 @@ import { UserListHead, UserListToolbar } from './user';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
-
+  { id: 'status', label: 'Status', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -68,7 +78,17 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const CourseRequestTable = ({ courseRequests }) => {
 
   const [page, setPage] = useState(0);
@@ -140,6 +160,17 @@ const CourseRequestTable = ({ courseRequests }) => {
   const handleAcceptClose = () => {
     setAcceptOpen(false);
   };
+  const [open, setOpen] = useState(false);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    
+  };
 
   return (
     <>
@@ -158,7 +189,7 @@ const CourseRequestTable = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, avatarUrl } = row;
+                    const { id, name, status,avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -172,26 +203,76 @@ const CourseRequestTable = ({ courseRequests }) => {
                             </Typography>
                           </Stack>
                         </TableCell>
+                        <TableCell align="center">
+                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                        </TableCell>
 
-                        <TableCell align="center">
-                          <Tooltip describeChild title="Download document">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
-                                Download Document
-                            </Button>
+                   
+                        <TableCell align="right">
+                          <Tooltip describeChild title="Open details">
+                            <IconButton size="large" color="inherit" onClick={handleClickOpen }>
+                              <DescriptionIcon />
+                            </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <TableCell align="center">
-                          <Tooltip describeChild title="Accept">
-                            <Button variant="contained" color="success" size="small" onClick={handleClickAcceptOpen}>
-                                Accept
-                            </Button>
-                          </Tooltip>
-                          <Tooltip describeChild title="Reject">
-                            <Button variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
-                                Reject
-                            </Button>
-                          </Tooltip>
-                        </TableCell>
+                        <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Stack spacing={6}>
+                                <Typography id="modal-modal-title" textAlign={"center"}
+                                    variant="h2" component="h1">
+                                  Course Request Details
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                    <Grid container spacing={2} width={"80%"} >
+                                        <Grid item xs={6} >
+                                            <Stack spacing={4   }>
+                                                <Box alignItems={"center"}>
+                                                <Typography id="modal-modal-title" textAlign={"center"}
+                                                    variant="h6" component="h2">
+                                                  Student Name: {name}
+                                                </Typography> 
+                                                </Box>
+                                                <Box alignItems={"center"}>
+                                                  <Typography id="modal-modal-title" textAlign={"center"}
+                                                      variant="h6" component="h2">
+                                                    Status: {status}
+                                                  </Typography> 
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Stack spacing={2}>
+                                                <Box>
+                                                    <Button size= "small" variant="contained" component="label">
+                                                        Download File
+                                                        <input hidden accept="image/*" multiple type="file" />
+                                                    </Button>
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                    </Grid>
+                                </Stack>
+                                <Box alignItems={"center"}>
+                                    <Button sx={{margin: 3}} variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} >
+                                        Accept
+                                    </Button>
+                            
+                                    <Button sx={{margin: 2}} variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
+                                        Reject
+                                    </Button>
+                                    <Button sx={{margin: 2}} variant="contained" color="primary" size="small"onClick={handleClose} >
+                                        Close
+                                    </Button>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    </Modal>
+                   
                         <Dialog
                           open={rejectOpen}
                           onClose={handleRejectClose}

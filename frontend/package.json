@@ -21,6 +21,7 @@
     "framer-motion": "7.6.5",
     "immutable": "4.1.0",
     "jquerry": "0.0.1-security",
+    "jspdf": "^2.5.1",
     "node-sass": "8.0.0",
     "popper.js": "1.16.1",
     "react": "18.2.0",

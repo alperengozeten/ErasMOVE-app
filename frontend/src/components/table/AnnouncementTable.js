@@ -2,6 +2,8 @@ import React from "react";
 import { filter } from "lodash";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import TextField from '@mui/material/TextField';
+
 
 // @mui
 import {
@@ -24,6 +26,8 @@ import {
 import Scrollbar from "./scrollbar";
 // sections
 import { AnnouncementHead } from "./announcement";
+import { AnnouncementToolbar} from "./announcement";
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -78,6 +82,15 @@ function applySortFilter(array, comparator, query) {
 }
 
 const AnnouncementTable = ({ announcements }) => {
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
+  const handleAddModalOpen = () => {
+    setAddModalOpen(true);
+  };
+
+  const handleAddModalClose = () => {
+    setAddModalOpen(false);
+  };
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -99,18 +112,6 @@ const AnnouncementTable = ({ announcements }) => {
     setOrderBy(property);
   };
 
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = event => {
-  //   setPage(0);
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  // };
-
-  // const emptyRows =
-  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - announcements.length) : 0;
-
   const filteredUsers = applySortFilter(
     announcements,
     getComparator(order, orderBy),
@@ -123,7 +124,10 @@ const AnnouncementTable = ({ announcements }) => {
     <>
       <Container>
         <Card>
+        <AnnouncementToolbar />
+
           <Scrollbar>
+
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <AnnouncementHead
