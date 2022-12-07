@@ -73,31 +73,15 @@ const CourseRequests = ({ courseRequests }) => {
                                                     </FormControl>
                                                 </Box>
                                                 <Box>
-                                                <FormControl size="small" sx={{ m: 1, minWidth: 160 }}>
-                                                    <InputLabel id="demo-simple-select-label">Course Coordiantor</InputLabel>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        value={value}
-                                                        label="Course Coordinator"
-                                                        onChange={handleChange}
-                                                    >
-                                                        <MenuItem disabled value={0}>Select</MenuItem>
-                                                        <MenuItem value={10}>Can Alkan</MenuItem>
-                                                        <MenuItem value={20}>Eray Hoca</MenuItem>
-                                                        <MenuItem value={30}>Aynur Dayanık</MenuItem>
-                                                    </Select>
-                                                </FormControl>
+                                                    <Button startIcon={<UploadFileIcon />} variant="contained" component="label">
+                                                        Upload Schedule
+                                                        <input hidden accept="image/*" multiple type="file" />
+                                                    </Button>
                                                 </Box>
                                             </Stack>
                                         </Grid>
                                     </Grid>
-                                    <Box>
-                                    <Button startIcon={<UploadFileIcon />} variant="contained" component="label">
-                                        Upload Schedule
-                                        <input hidden accept="image/*" multiple type="file" />
-                                    </Button>
-                                    </Box>
+                                    
                                    
                                     
                                 </Stack>
