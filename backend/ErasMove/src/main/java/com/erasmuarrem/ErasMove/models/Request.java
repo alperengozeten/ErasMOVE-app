@@ -18,7 +18,7 @@ public abstract class Request {
 
     private String info;
 
-    private Boolean isResponded;
+    private String status;
 
     @OneToOne
     private OutgoingStudent student;

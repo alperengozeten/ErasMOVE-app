@@ -1,7 +1,9 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.ElectiveCourseApprovalRequest;
+import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.ElectiveCourseApprovalRequestRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,14 @@ import java.util.Optional;
 public class ElectiveCourseApprovalRequestService {
 
     private final ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository;
+    private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
+    private final OutgoingStudentRepository outgoingStudentRepository;
 
     @Autowired
-    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository) {
+    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository) {
         this.electiveCourseApprovalRequestRepository = electiveCourseApprovalRequestRepository;
+        this.departmentCoordinatorRepository = departmentCoordinatorRepository;
+        this.outgoingStudentRepository = outgoingStudentRepository;
     }
 
     public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequests() {
@@ -37,15 +43,12 @@ public class ElectiveCourseApprovalRequestService {
         Long departmentCoordinatorID = electiveCourseApprovalRequest.getDepartmentCoordinator().getID();
         Long outgoingStudentID = electiveCourseApprovalRequest.getStudent().getID();
 
-        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
-                .findByDepartmentCoordinatorIDAndStudentID(
-                        departmentCoordinatorID,
-                        outgoingStudentID
-                );
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+        }
 
-        if ( electiveCourseApprovalRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Elective Course Approval Request already exists for this pair of outgoing student and" +
-                    " department coordinator!");
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
@@ -70,17 +73,16 @@ public class ElectiveCourseApprovalRequestService {
         electiveCourseApprovalRequestRepository.deleteById(id);
     }
 
-    public ElectiveCourseApprovalRequest getElectiveCourseApprovalRequestByDepartmentCoordinatorAndOutgoingStudentID(Long departmentCoordinatorID, Long outgoingStudentID) {
-        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
-                .findByDepartmentCoordinatorIDAndStudentID(
-                        departmentCoordinatorID,
-                        outgoingStudentID
-                );
+    public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequestsByDepartmentCoordinatorAndOutgoingStudentID(Long departmentCoordinatorID, Long outgoingStudentID) {
 
-        if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Elective Course Approval Request for this pair of outgoing student-department coordinator doesn't exist!");
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
         }
 
-        return electiveCourseApprovalRequestOptional.get();
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return electiveCourseApprovalRequestRepository.findByDepartmentCoordinatorIDAndStudentID(departmentCoordinatorID, outgoingStudentID);
     }
 }

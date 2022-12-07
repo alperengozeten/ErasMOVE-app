@@ -39,11 +39,11 @@ public class MandatoryCourseApprovalRequestController {
     }
 
     @GetMapping("/courseCoordinator/{id1}/outgoingStudent/{id2}")
-    public MandatoryCourseApprovalRequest getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(
+    public List<MandatoryCourseApprovalRequest> getMandatoryCourseApprovalRequestsByCourseCoordinatorAndOutgoingStudentID(
             @PathVariable("id1") Long courseCoordinatorID,
             @PathVariable("id2") Long outgoingStudentID
     ) {
-        return mandatoryCourseApprovalRequestService.getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(
+        return mandatoryCourseApprovalRequestService.getMandatoryCourseApprovalRequestsByCourseCoordinatorAndOutgoingStudentID(
                 courseCoordinatorID,
                 outgoingStudentID
         );
