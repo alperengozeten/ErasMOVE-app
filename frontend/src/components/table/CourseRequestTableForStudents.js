@@ -34,6 +34,8 @@ import { UserListHead } from './user';
 
 const TABLE_HEAD = [
   { id: 'courseName', label: 'Course Name', alignRight: false },
+  { id: 'description', label: 'Description', alignRight: false },
+  { id: 'courseCoordinator', label: 'Course Coordinator', alignRight: false },
   { id: 'status', label: 'Status', alignRight: true },
 ];
 
@@ -125,16 +127,18 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, courseName, status } = row;
+                    const { id, courseName, description, courseCoordinator, status } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
                         <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{description}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{courseCoordinator}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
