@@ -34,7 +34,7 @@ const TABLE_HEAD = [
   { id: 'type', label: 'Program Type', alignRight: false },
   { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
   { id: 'totalQuota', label: 'Total Quota', alignRight: false },
-  { id: 'courses', label: 'Courses', alignRight: false },
+  { id: 'departments', label: 'Departments', alignRight: false },
 
 
 ];
@@ -152,7 +152,7 @@ const UniversityTable = ({universities}) => {
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, type, emptyQuota, totalQuota,courses } = row;
+                    const { id, name, type, emptyQuota, totalQuota,departments } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
@@ -169,7 +169,7 @@ const UniversityTable = ({universities}) => {
 
                         <TableCell align="center">{emptyQuota}</TableCell>
                         <TableCell align="center">{totalQuota}</TableCell>
-                        <TableCell align="center">{courses}</TableCell>
+                        <TableCell align="center">{departments}</TableCell>
 
 
                 
@@ -232,7 +232,7 @@ const UniversityTable = ({universities}) => {
                               defaultValue={type}
                               disabled={disabled}
                             />
-                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Courses</Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Departments</Typography>
                             <TextField
                               required
                               autoFocus
@@ -240,7 +240,7 @@ const UniversityTable = ({universities}) => {
                               id="courses"
                               fullWidth
                               variant="standard"
-                              defaultValue={courses}
+                              defaultValue={departments}
                               disabled={disabled}
                             />
                             <Box alignRight= {true}>

@@ -7,7 +7,7 @@ const INITIAL_STATE = {
           type: "Erasmus",
           emptyQuota: 4,
           totalQuota: 8,
-          courses:[" CS101 "," IE102 "]
+          departments:[" EEE "," IE "]
 
       },    {
         id: 2,
@@ -15,7 +15,7 @@ const INITIAL_STATE = {
         type: "Erasmus",
         emptyQuota: 4,
         totalQuota: 6,
-        courses:[" CS101 "," IE102 "]
+        departments:[" CS "," ME "]
 
     },    {
         id: 3,
@@ -23,7 +23,7 @@ const INITIAL_STATE = {
         type: "Exchange",
         emptyQuota: 2,
         totalQuota: 5,
-        courses:[" CS101 "," IE102 "]
+        departments:[" MBG "," IE "]
 
     },    {
         id: 4,
@@ -31,7 +31,7 @@ const INITIAL_STATE = {
         type: "Erasmus",
         emptyQuota: 0,
         totalQuota: 3,
-        courses:[" CS101 "," IE102 "]
+        departments:[" CS "," IE "]
 
     },    {
         id: 5,
@@ -39,7 +39,7 @@ const INITIAL_STATE = {
         type: "Exchange",
         emptyQuota: 2,
         totalQuota: 4,
-        courses:[" CS101 "," IE102 "]
+        departments:[" CS "," IE "]
 
       },
     ]
