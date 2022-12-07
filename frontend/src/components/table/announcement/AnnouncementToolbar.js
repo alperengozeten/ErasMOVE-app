@@ -19,18 +19,6 @@ const StyledRoot = styled(Toolbar)(({ theme }) => ({
   padding: theme.spacing(0, 1, 0, 3),
 }));
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-
 
 // ----------------------------------------------------------------------
 
@@ -62,6 +50,8 @@ export default function AnnouncementToolbar() {
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.2)"}}}
+
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -103,3 +93,15 @@ export default function AnnouncementToolbar() {
     </StyledRoot>
   );
 }
+const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: '50%',
+    bgcolor: "background.paper",
+    border: "none",
+    borderRadius: "6px",
+    boxShadow: 24,
+    p: 4,
+  };
