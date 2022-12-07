@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Stack, TextField, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import SendIcon from '@mui/icons-material/Send';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -40,35 +41,71 @@ const CourseRequests = ({ courseRequests }) => {
                                     Create Course Request
                                 </Typography>
                                 <Stack alignItems={"center"} spacing={3}>
+                                    <Grid container spacing={2} width={"80%"} >
+                                        <Grid item xs={6} >
+                                            <Stack spacing={4   }>
+                                                <Box alignItems={"center"}>
+                                                    <TextField size='small' id="outlined-basic" label="Course Name" variant="outlined" />   
+                                                </Box>
+                                                <Box alignItems={"center"}>
+                                                    <TextField size="small" id="outlined-basic" label="Description" variant="outlined" />
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Stack spacing={2}>
+                                                <Box>
+                                                    <FormControl  sx={{ m: 1, minWidth: 160 }}>
+                                                        <InputLabel id="demo-simple-select-label">Equivalent Course</InputLabel>
+                                                        <Select
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            value={value}
+                                                            size="small"
+                                                            label="Equivalent Course"
+                                                            onChange={handleChange}
+                                                        >
+                                                            <MenuItem disabled value={0}>Select</MenuItem>
+                                                            <MenuItem value={10}>CS319</MenuItem>
+                                                            <MenuItem value={20}>CS315</MenuItem>
+                                                            <MenuItem value={30}>CS102</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Box>
+                                                <Box>
+                                                <FormControl size="small" sx={{ m: 1, minWidth: 160 }}>
+                                                    <InputLabel id="demo-simple-select-label">Course Coordiantor</InputLabel>
+                                                    <Select
+                                                        labelId="demo-simple-select-label"
+                                                        id="demo-simple-select"
+                                                        value={value}
+                                                        label="Course Coordinator"
+                                                        onChange={handleChange}
+                                                    >
+                                                        <MenuItem disabled value={0}>Select</MenuItem>
+                                                        <MenuItem value={10}>Can Alkan</MenuItem>
+                                                        <MenuItem value={20}>Eray Hoca</MenuItem>
+                                                        <MenuItem value={30}>Aynur Dayanık</MenuItem>
+                                                    </Select>
+                                                </FormControl>
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                    </Grid>
                                     <Box>
-                                        <TextField id="outlined-basic" label="Course Name" variant="outlined" />   
+                                    <Button startIcon={<UploadFileIcon />} variant="contained" component="label">
+                                        Upload Schedule
+                                        <input hidden accept="image/*" multiple type="file" />
+                                    </Button>
                                     </Box>
-                                    <Box>
-                                        <TextField id="outlined-basic" label="Description" variant="outlined" />
-                                    </Box>
-                                    <Box>
-                                    <FormControl variant="standard" sx={{ m: 1, minWidth: 160 }}>
-                                        <InputLabel id="demo-simple-select-label">Course Coordiantor</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={value}
-                                            label="Age"
-                                            onChange={handleChange}
-                                        >
-                                            <MenuItem disabled value={0}>Select</MenuItem>
-                                            <MenuItem value={10}>Can Alkan</MenuItem>
-                                            <MenuItem value={20}>Eray Hoca</MenuItem>
-                                            <MenuItem value={30}>Aynur Dayanık</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    </Box>
+                                   
+                                    
                                 </Stack>
-                                <Box alignItems={"end"}>
+                                <Stack alignItems={"flex-end"}>
                                     <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" startIcon={<SendIcon />} onClick={handleOpen} >
                                         Create New Course Request
                                     </Button>
-                                </Box>
+                                </Stack>
                             </Stack>
                         </Box>
                     </Modal>
@@ -88,7 +125,7 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: '70%',
+    width: '60%',
     bgcolor: "background.paper",
     border: "none",
     borderRadius: "6px",
