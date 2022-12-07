@@ -29,6 +29,7 @@ import Label from '../label';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead } from './user';
+import DeleteModal from '../DeleteModal';
 
 // ----------------------------------------------------------------------
 
@@ -78,6 +79,8 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [openDelete, setOpenDelete] = React.useState(false);
+
   const handleOpenApplication = id => {
     console.log("id: ", id);
   };
@@ -97,15 +100,8 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleOpenDelete = () => setOpenDelete(true);
+  const handleCloseDelete = () => setOpenDelete(false);
 
   const filteredUsers = applySortFilter(preApprovalForms, getComparator(order, orderBy), null);
 
@@ -147,31 +143,11 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
                             </IconButton>
                           </Tooltip>
                           <Tooltip describeChild title="Delete request">
-                            <IconButton size="large" color="error" onClick={() => handleClickOpen() }>
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
-                          <Dialog
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="alert-dialog-title"
-                            aria-describedby="alert-dialog-description"
-                          >
-                            <DialogTitle id="alert-dialog-title">
-                              {"Remove Request"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <DialogContentText id="alert-dialog-description">
-                                You can not take it back if you remove a request. Do you want to remove?
-                              </DialogContentText>
-                            </DialogContent>
-                            <DialogActions>
-                              <Button onClick={handleClose}>No</Button>
-                              <Button onClick={handleClose} autoFocus>
-                                Yes
-                              </Button>
-                            </DialogActions>
-                          </Dialog>
+                          <DeleteModal openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"PreApproval Form"}/>
                         </TableCell>
                       </TableRow>
                     );
