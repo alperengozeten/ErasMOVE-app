@@ -6,11 +6,11 @@ import { sentenceCase } from 'change-case';
 import Label from '../label';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+
 // @mui
 import {
   Card,
   Table,
-  Stack,
   Paper,
   Avatar,
   TableRow,
@@ -22,8 +22,12 @@ import {
   TablePagination,
   Tooltip,
   IconButton,
+  Grid,
+  FormControl,
+  Stack,
   Button
 } from '@mui/material';
+
 // components
 import Scrollbar from './scrollbar';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -212,46 +216,63 @@ const CourseRequestTable = ({ courseRequests }) => {
                           </Tooltip>
                         </TableCell>
                         <Modal
-                          open={open}
-                          onClose={handleClose}
-                          aria-labelledby="modal-modal-title"
-                          aria-describedby="modal-modal-description"
-                        >
-                          <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h4" component="h2">
-                              Course Request Details
-                            </Typography>
-                            <Typography id="modal-modal-description" variant="h5" component="h2">
-                              Student Name:  {name}
-                            </Typography>
-                            <Typography id="modal-modal-description" variant="h5" component="h2">
-                              Status:  {status}
-                            </Typography>
-                            <Box>
-
-
-                              <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
-                                  Download Document
-                              </Button>
-                            </Box>
-                            <Box>
-                            <Button variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} disabled = {status!=='waiting'} >
-                                Accept
-                            </Button>
-                    
-                            <Button variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
-                                Reject
-                            </Button>
-                            </Box>
-      
-                            <Box alignRight= {true}>
-                              <Button onClick={handleClose}>Close</Button>
-                           
-                      
-                
-                            </Box>
-                          </Box>
-                        </Modal>                   
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Stack spacing={6}>
+                                <Typography id="modal-modal-title" textAlign={"center"}
+                                    variant="h2" component="h1">
+                                  Course Request Details
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                    <Grid container spacing={2} width={"80%"} >
+                                        <Grid item xs={6} >
+                                            <Stack spacing={4   }>
+                                                <Box alignItems={"center"}>
+                                                <Typography id="modal-modal-title" textAlign={"center"}
+                                                    variant="h6" component="h2">
+                                                  Student Name: {name}
+                                                </Typography> 
+                                                </Box>
+                                                <Box alignItems={"center"}>
+                                                  <Typography id="modal-modal-title" textAlign={"center"}
+                                                      variant="h6" component="h2">
+                                                    Status: {status}
+                                                  </Typography> 
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <Stack spacing={2}>
+                                                <Box>
+                                                    <Button size= "small" variant="contained" component="label">
+                                                        Download File
+                                                        <input hidden accept="image/*" multiple type="file" />
+                                                    </Button>
+                                                </Box>
+                                            </Stack>
+                                        </Grid>
+                                    </Grid>
+                                </Stack>
+                                <Box alignItems={"center"}>
+                                    <Button sx={{margin: 3}} variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} >
+                                        Accept
+                                    </Button>
+                            
+                                    <Button sx={{margin: 2}} variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
+                                        Reject
+                                    </Button>
+                                    <Button sx={{margin: 2}} variant="contained" color="primary" size="small"onClick={handleClose} >
+                                        Close
+                                    </Button>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    </Modal>
+                   
                         <Dialog
                           open={rejectOpen}
                           onClose={handleRejectClose}

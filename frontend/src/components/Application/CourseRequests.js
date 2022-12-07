@@ -94,11 +94,7 @@ const CourseRequests = ({ courseRequests }) => {
                         </Box>
                     </Modal>
                 </Grid>
-
-
             </Grid>
-
-            
             <CourseRequestTableForStudents courseRequests={courseRequests} sendReplacementOffer={sendReplacementOffer}  />
         </Stack>
     );
