@@ -39,11 +39,11 @@ public class ElectiveCourseApprovalRequestController {
     }
 
     @GetMapping("/departmentCoordinator/{id1}/outgoingStudent/{id2}")
-    public ElectiveCourseApprovalRequest getElectiveCourseApprovalByDepartmentCoordinatorAndOutgoingStudentID(
+    public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequestsByDepartmentCoordinatorAndOutgoingStudentID(
             @PathVariable("id1") Long departmentCoordinatorID,
             @PathVariable("id2") Long outgoingStudentID
     ) {
-        return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestByDepartmentCoordinatorAndOutgoingStudentID(
+        return electiveCourseApprovalRequestService.getElectiveCourseApprovalRequestsByDepartmentCoordinatorAndOutgoingStudentID(
                 departmentCoordinatorID,
                 outgoingStudentID
         );
