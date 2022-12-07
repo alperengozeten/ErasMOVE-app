@@ -15,7 +15,7 @@ const RequestsPage = ({requests}) => {
     );
 };
 const mapStateToProps = state => {
-    const requests = state.requests.requests;
+    const requests = state.requests.acceptanceLetterRequests;
     return {
         requests,
     };

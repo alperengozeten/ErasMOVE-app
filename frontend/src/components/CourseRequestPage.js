@@ -15,7 +15,7 @@ const CourseRequestPage = ({courseRequests}) => {
     );
 };
 const mapStateToProps = state => {
-    const courseRequests = state.courseRequests.courseRequests;
+    const courseRequests = state.requests.courseRequests;
     return {
         courseRequests,
     };

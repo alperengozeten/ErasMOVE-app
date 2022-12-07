@@ -1,7 +1,9 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.MandatoryCourseApprovalRequest;
+import com.erasmuarrem.ErasMove.repositories.CourseCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.MandatoryCourseApprovalRequestRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,14 @@ import java.util.Optional;
 public class MandatoryCourseApprovalRequestService {
 
     private final MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository;
+    private final CourseCoordinatorRepository courseCoordinatorRepository;
+    private final OutgoingStudentRepository outgoingStudentRepository;
 
     @Autowired
-    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository) {
+    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository, CourseCoordinatorRepository courseCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository) {
         this.mandatoryCourseApprovalRequestRepository = mandatoryCourseApprovalRequestRepository;
+        this.courseCoordinatorRepository = courseCoordinatorRepository;
+        this.outgoingStudentRepository = outgoingStudentRepository;
     }
 
 
@@ -38,11 +44,12 @@ public class MandatoryCourseApprovalRequestService {
         Long courseCoordinatorID = mandatoryCourseApprovalRequest.getCourseCoordinator().getID();
         Long outgoingStudentID = mandatoryCourseApprovalRequest.getStudent().getID();
 
-        Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
-                .findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
+        if ( !courseCoordinatorRepository.existsById(courseCoordinatorID) ) {
+            throw new IllegalStateException("Course Coordinator with id:" + courseCoordinatorID + " doesn't exist!");
+        }
 
-        if ( mandatoryCourseApprovalRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Mandatory course request for this student and course coordinator pair exists!");
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
@@ -67,15 +74,15 @@ public class MandatoryCourseApprovalRequestService {
         return mandatoryCourseApprovalRequestRepository.findByStudentID(id);
     }
 
-    public MandatoryCourseApprovalRequest getMandatoryCourseApprovalRequestByCourseCoordinatorAndOutgoingStudentID(Long courseCoordinatorID, Long outgoingStudentID) {
-        Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
-                .findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
-
-        if ( !mandatoryCourseApprovalRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Mandatory Course Approval Request with ids:" + courseCoordinatorID + ", " +
-                    outgoingStudentID + " doesn't exist!");
+    public List<MandatoryCourseApprovalRequest> getMandatoryCourseApprovalRequestsByCourseCoordinatorAndOutgoingStudentID(Long courseCoordinatorID, Long outgoingStudentID) {
+        if ( !courseCoordinatorRepository.existsById(courseCoordinatorID) ) {
+            throw new IllegalStateException("Course Coordinator with id:" + courseCoordinatorID + " doesn't exist!");
         }
 
-        return mandatoryCourseApprovalRequestOptional.get();
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        return mandatoryCourseApprovalRequestRepository.findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
     }
 }

@@ -10,6 +10,8 @@ import Universities from '../components/Universities';
 import RequestsPage from '../components/RequestsPage';
 import CourseRequestPage from '../components/CourseRequestPage';
 import Announcements from '../components/Announcements';
+import UserProfile from '../components/UserProfile';
+import Application from '../components/Application';
 
 const MainRoutes = {
     path: '/main',
@@ -46,6 +48,14 @@ const MainRoutes = {
         {
             path: '/main/announcements',
             element: <Announcements />
+        },
+        {
+            path: '/main/profile',
+            element: <UserProfile />
+        },
+        {
+            path: '/main/application',
+            element: <Application />
         },
     ]
 };

@@ -6,12 +6,13 @@ import universities from './universities';
 import requests from './requests';
 import courseRequests from './courseRequests';
 import announcements from './announcements';
+import student from './student';
 
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-    items: [dashboard, pages, universities, announcements, requests, courseRequests, utilities, other]
+    items: [dashboard, student, pages, universities, announcements, requests, courseRequests, utilities, other]
 };
 
 export default menuItems;

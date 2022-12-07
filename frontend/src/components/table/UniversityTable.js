@@ -2,7 +2,9 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 // @mui
 import {
   Card,
@@ -29,6 +31,7 @@ import { UniversitiesListToolbar} from "./university";
 
 const TABLE_HEAD = [
   { id: 'name', label: 'University Name', alignRight: false },
+  { id: 'type', label: 'Program Type', alignRight: false },
   { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
   { id: 'totalQuota', label: 'Total Quota', alignRight: false },
 
@@ -64,7 +67,17 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const UniversityTable = ({universities}) => {
 
   const [page, setPage] = useState(0);
@@ -101,6 +114,23 @@ const UniversityTable = ({universities}) => {
   const filteredUsers = applySortFilter(universities, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+  const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDisabled(true);
+    
+  };
+
+  const handleEdit = () => {
+    setDisabled(false);
+  };
 
   return (
     <>
@@ -120,7 +150,7 @@ const UniversityTable = ({universities}) => {
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, emptyQuota, totalQuota } = row;
+                    const { id, name, type, emptyQuota, totalQuota } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
@@ -133,16 +163,89 @@ const UniversityTable = ({universities}) => {
                             </Typography>
                           </Stack>
                         </TableCell>
+                        <TableCell align="center">{type}</TableCell>
 
                         <TableCell align="center">{emptyQuota}</TableCell>
                         <TableCell align="center">{totalQuota}</TableCell>
 
                 
                         <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small">
+                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen} >
                                 Go To Details
                             </Button>
                         </TableCell>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                              Add University
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> University Name</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={name}
+                              disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Empty Quota</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="quota"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={emptyQuota}
+                              disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Total Quota</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="type"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={totalQuota}
+                              disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Program Type</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="courses"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={type}
+                              disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Courses</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="courses"
+                              fullWidth
+                              variant="standard"
+                              default={"courses"}
+                              disabled={disabled}
+                            />
+                            <Box alignRight= {true}>
+                              <Button onClick={handleClose}>Close</Button>
+                              <Button onClick={handleEdit}>Edit</Button>
+                              <Button onClick={handleClose}>Delete University</Button>
+                            </Box>
+                          </Box>
+                        </Modal>
                       </TableRow>
                     );
                   })}

@@ -7,7 +7,6 @@ import customization from './customizationReducer';
 import applications from './applicationReducer';
 import universities from './universityReducer';
 import requests from './requestsReducer';
-import courseRequests from './courseRequestsReducer';
 import announcements from './announcementReducer';
 
 
@@ -19,7 +18,6 @@ const reducers = {
   applications,
   universities,
   requests,
-  courseRequests,
   announcements,
 };
 

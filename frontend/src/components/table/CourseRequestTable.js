@@ -193,47 +193,47 @@ const CourseRequestTable = ({ courseRequests }) => {
                           </Tooltip>
                         </TableCell>
                         <Dialog
-                                open={rejectOpen}
-                                onClose={handleRejectClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Reject the course request?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you want to continue reject the course request?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleRejectClose}>Cancel</Button>
-          <Button onClick={handleRejectClose} autoFocus>
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-                                open={acceptOpen}
-                                onClose={handleAcceptClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Accept the course request?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you want to continue accept the course request?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleAcceptClose}>Cancel</Button>
-          <Button onClick={handleAcceptClose} autoFocus>
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
+                          open={rejectOpen}
+                          onClose={handleRejectClose}
+                          aria-labelledby="alert-dialog-title"
+                          aria-describedby="alert-dialog-description"
+                        >
+                        <DialogTitle id="alert-dialog-title">
+                          {"Reject the course request?"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText id="alert-dialog-description">
+                            Do you want to continue reject the course request?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleRejectClose}>Cancel</Button>
+                        <Button onClick={handleRejectClose} autoFocus>
+                          Continue
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                    <Dialog
+                      open={acceptOpen}
+                      onClose={handleAcceptClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Accept the course request?"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Do you want to continue accept the course request?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button onClick={handleAcceptClose}>Cancel</Button>
+                        <Button onClick={handleAcceptClose} autoFocus>
+                          Continue
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
                       </TableRow>
                     );
                   })}

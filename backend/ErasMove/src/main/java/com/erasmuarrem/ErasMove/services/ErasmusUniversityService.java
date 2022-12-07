@@ -95,4 +95,39 @@ public class ErasmusUniversityService {
 
         erasmusUniversityRepository.save(erasmusUniversity);
     }
+
+    public void deleteRejectedCourseByIDAndCourseID(Long id, Long courseID) {
+        Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findById(id);
+
+        if ( !erasmusUniversityOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(courseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist!");
+        }
+
+        ErasmusUniversity erasmusUniversity = erasmusUniversityOptional.get();
+        Course deleteCourse = courseOptional.get();
+        List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
+        boolean courseExists = false;
+
+        for (Course rejectedCourse : rejectedCourses) {
+            if ( rejectedCourse.getCourseName().equals(deleteCourse.getCourseName()) ) {
+                courseExists = true;
+                break;
+            }
+        }
+
+        if ( !courseExists ) {
+            throw new IllegalStateException("Course with id:" + courseID + " isn't in rejected courses!");
+        }
+
+        rejectedCourses.remove(deleteCourse);
+
+        courseRepository.deleteById(courseID);
+        erasmusUniversityRepository.save(erasmusUniversity);
+    }
 }

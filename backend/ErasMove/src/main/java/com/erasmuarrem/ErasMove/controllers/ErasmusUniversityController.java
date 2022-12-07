@@ -53,4 +53,9 @@ public class ErasmusUniversityController {
     public void deleteErasmusUniversityByID(@PathVariable("id") Long id) {
         erasmusUniversityService.deleteErasmusUniversityByID(id);
     }
+
+    @DeleteMapping("/delete/{id}/rejectedCourses/{courseID}")
+    public void deleteRejectedCourseByIDAndCourseID(@PathVariable("id") Long id, @PathVariable("courseID") Long courseID) {
+        erasmusUniversityService.deleteRejectedCourseByIDAndCourseID(id, courseID);
+    }
 }

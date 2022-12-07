@@ -49,8 +49,23 @@ public class ExchangeUniversityController {
         exchangeUniversityService.addExchangeUniversity(exchangeUniversity);
     }
 
+    @PostMapping("/add/{id}/outgoingStudent/{outgoingStudentID}")
+    public void addOutgoingStudentByIDAndOutgoingStudentID(@PathVariable("id") Long id, @PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        exchangeUniversityService.addOutgoingStudentByIDAndOutgoingStudentID(id, outgoingStudentID);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteExchangeUniversityByID(@PathVariable("id") Long id) {
         exchangeUniversityService.deleteExchangeUniversityByID(id);
+    }
+
+    @DeleteMapping("delete/{id}/rejectedCourses/{courseID}")
+    public void deleteExchangeUniversityByIDAndCourseID(@PathVariable("id") Long id, @PathVariable("courseID") Long courseID) {
+        exchangeUniversityService.deleteRejectedCourseByIDAndCourseID(id, courseID);
+    }
+
+    @DeleteMapping("/delete/{id}/outgoingStudent/{outgoingStudentID}")
+    public void deleteOutgoingStudentByIDAndOutgoingStudentID(@PathVariable("id") Long id, @PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        exchangeUniversityService.deleteOutgoingStudentByIDAndOutgoingStudentID(id, outgoingStudentID);
     }
 }
