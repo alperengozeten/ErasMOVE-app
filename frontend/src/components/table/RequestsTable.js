@@ -4,6 +4,10 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import { sentenceCase } from 'change-case';
+import Label from '../label';
+
+
 
 // @mui
 import {
@@ -24,7 +28,6 @@ import {
 } from '@mui/material';
 // components
 import Scrollbar from './scrollbar';
-import DescriptionIcon from '@mui/icons-material/Description';
 
 // sections
 import { UserListHead, UserListToolbar } from './user';
@@ -44,6 +47,8 @@ const style = {
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
   { id: 'request', label: 'Requested Document', alignRight: true },
+  { id: 'status', label: 'Status', alignRight: true },
+
 ];
 
 // ----------------------------------------------------------------------
@@ -142,7 +147,7 @@ const RequestsTable = ({ requests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, request, avatarUrl } = row;
+                    const { id, name, request, status,avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -158,11 +163,13 @@ const RequestsTable = ({ requests }) => {
                         </TableCell>
 
                         <TableCell align="center">{request}</TableCell>
-                        
+                        <TableCell align="center">
+                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                        </TableCell>
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Add document">
-                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen} endIcon={<DescriptionIcon />}>
+                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen}>
                                 Add Document
                             </Button>
                           </Tooltip>

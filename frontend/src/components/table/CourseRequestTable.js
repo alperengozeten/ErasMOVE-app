@@ -2,6 +2,10 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { sentenceCase } from 'change-case';
+import Label from '../label';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 // @mui
 import {
   Card,
@@ -17,6 +21,7 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  IconButton,
   Button
 } from '@mui/material';
 // components
@@ -28,6 +33,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+
 // sections
 import { UserListHead, UserListToolbar } from './user';
 
@@ -35,7 +41,7 @@ import { UserListHead, UserListToolbar } from './user';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
-
+  { id: 'status', label: 'Status', alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -68,7 +74,17 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const CourseRequestTable = ({ courseRequests }) => {
 
   const [page, setPage] = useState(0);
@@ -140,6 +156,17 @@ const CourseRequestTable = ({ courseRequests }) => {
   const handleAcceptClose = () => {
     setAcceptOpen(false);
   };
+  const [open, setOpen] = useState(false);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    
+  };
 
   return (
     <>
@@ -158,7 +185,7 @@ const CourseRequestTable = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, avatarUrl } = row;
+                    const { id, name, status,avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -172,26 +199,59 @@ const CourseRequestTable = ({ courseRequests }) => {
                             </Typography>
                           </Stack>
                         </TableCell>
-
                         <TableCell align="center">
-                          <Tooltip describeChild title="Download document">
-                            <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
-                                Download Document
-                            </Button>
+                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                        </TableCell>
+
+                   
+                        <TableCell align="right">
+                          <Tooltip describeChild title="Open details">
+                            <IconButton size="large" color="inherit" onClick={handleClickOpen }>
+                              <DescriptionIcon />
+                            </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <TableCell align="center">
-                          <Tooltip describeChild title="Accept">
-                            <Button variant="contained" color="success" size="small" onClick={handleClickAcceptOpen}>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h4" component="h2">
+                              Course Request Details
+                            </Typography>
+                            <Typography id="modal-modal-description" variant="h5" component="h2">
+                              Student Name:  {name}
+                            </Typography>
+                            <Typography id="modal-modal-description" variant="h5" component="h2">
+                              Status:  {status}
+                            </Typography>
+                            <Box>
+
+
+                              <Button variant="contained" color="inherit" size="small" endIcon={<DescriptionIcon />}>
+                                  Download Document
+                              </Button>
+                            </Box>
+                            <Box>
+                            <Button variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} disabled = {status!=='waiting'} >
                                 Accept
                             </Button>
-                          </Tooltip>
-                          <Tooltip describeChild title="Reject">
+                    
                             <Button variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
                                 Reject
                             </Button>
-                          </Tooltip>
-                        </TableCell>
+                            </Box>
+      
+                            <Box alignRight= {true}>
+                              <Button onClick={handleClose}>Close</Button>
+                           
+                      
+                
+                            </Box>
+                          </Box>
+                        </Modal>                   
                         <Dialog
                           open={rejectOpen}
                           onClose={handleRejectClose}
