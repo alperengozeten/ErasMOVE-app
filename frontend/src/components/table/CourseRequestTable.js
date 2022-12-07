@@ -78,17 +78,6 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
 const CourseRequestTable = ({ courseRequests }) => {
 
   const [page, setPage] = useState(0);
@@ -257,15 +246,15 @@ const CourseRequestTable = ({ courseRequests }) => {
                                         </Grid>
                                     </Grid>
                                 </Stack>
-                                <Box alignItems={"center"}>
-                                    <Button sx={{margin: 3}} variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} >
+                                <Box style={{ display: "flex", justifyContent: 'flex-end' }}>
+                                    <Button style={{ marginLeft: 5 }}  variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} >
                                         Accept
                                     </Button>
                             
-                                    <Button sx={{margin: 2}} variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
+                                    <Button style={{ marginLeft: 5 }} variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
                                         Reject
                                     </Button>
-                                    <Button sx={{margin: 2}} variant="contained" color="primary" size="small"onClick={handleClose} >
+                                    <Button  style={{ marginLeft: 5 }}  variant="contained" color="primary" size="small"onClick={handleClose} >
                                         Close
                                     </Button>
                                 </Box>
@@ -367,6 +356,18 @@ const CourseRequestTable = ({ courseRequests }) => {
   );
 };
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: '50%',
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "6px",
+  boxShadow: 24,
+  p: 4,
+};
 CourseRequestTable.propTypes = {
     courseRequests: PropTypes.array,
 };
