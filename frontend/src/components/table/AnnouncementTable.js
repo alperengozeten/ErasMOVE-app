@@ -17,6 +17,8 @@ import {
   TableContainer,
   TablePagination,
   Button,
+  Modal,
+  Box
 } from "@mui/material";
 // components
 import Scrollbar from "./scrollbar";
@@ -25,11 +27,23 @@ import { AnnouncementHead } from "./announcement";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
+  { id: "from", label: "From", alignRight: false },
   { id: "date", label: "Date", alignRight: false },
   { id: "announcementPrev", label: "Announcement", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  p: 5,
+};
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -64,6 +78,11 @@ function applySortFilter(array, comparator, query) {
 }
 
 const AnnouncementTable = ({ announcements }) => {
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -72,7 +91,7 @@ const AnnouncementTable = ({ announcements }) => {
 
   const [filterName, setFilterName] = useState("");
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  // const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -80,17 +99,17 @@ const AnnouncementTable = ({ announcements }) => {
     setOrderBy(property);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = event => {
-    setPage(0);
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
+  // const handleChangeRowsPerPage = event => {
+  //   setPage(0);
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  // };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - announcements.length) : 0;
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - announcements.length) : 0;
 
   const filteredUsers = applySortFilter(
     announcements,
@@ -115,54 +134,75 @@ const AnnouncementTable = ({ announcements }) => {
                 />
 
                 <TableBody>
-                  {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(row => {
-                      const { id, date, announcementPrev, announcementFull } =
-                        row;
+                  {filteredUsers.map(row => {
+                    const { id, date, from, announcement } =
+                      row;
 
-                      return (
-                        <TableRow hover key={id} tabIndex={-1}>
-                          <TableCell padding="checkbox"></TableCell>
+                    return (
+                      <TableRow hover key={id} tabIndex={-1}>
+                        <TableCell padding="checkbox"></TableCell>
 
-                          <TableCell
-                            align="center"
-                            component="th"
-                            scope="row"
-                            padding="none"
+                        <TableCell
+                          align="center"
+                          component="th"
+                          scope="row"
+                          padding="none"
+                        >
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={2}
                           >
-                            <Stack
-                              direction="row"
-                              alignItems="center"
-                              spacing={2}
-                            >
-                              <Typography variant="inherit" noWrap>
-                                {date}
+                            <Typography variant="inherit" noWrap>
+                              {from}
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+
+                        <TableCell align="center">{date}</TableCell>
+
+                        <TableCell align="center">{announcement}</TableCell>
+
+                        <TableCell align="right">
+                          <Button
+                            variant="contained"
+                            color="inherit"
+                            size="small"
+                            onClick={handleOpen}
+                          >
+                            Show Announcement Details
+                          </Button>
+                          <Modal
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <Typography
+                                id="modal-modal-title"
+                                variant="h6"
+                                component="h2"
+                              >
+                                {from}
                               </Typography>
-                            </Stack>
-                          </TableCell>
-
-                          <TableCell align="center">
-                            {announcementPrev}
-                          </TableCell>
-
-                          <TableCell align="right">
-                            <Button
-                              variant="contained"
-                              color="inherit"
-                              size="small"
-                            >
-                              Go To Details
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  {emptyRows > 0 && (
+                              <Typography
+                                id="modal-modal-description"
+                                sx={{ mt: 2 }}
+                              >
+                                {announcement}
+                              </Typography>
+                            </Box>
+                          </Modal>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {/* {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
-                  )}
+                  )} */}
                 </TableBody>
 
                 {isNotFound && (
@@ -193,7 +233,7 @@ const AnnouncementTable = ({ announcements }) => {
             </TableContainer>
           </Scrollbar>
 
-          <TablePagination
+          {/* <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
             count={announcements.length}
@@ -201,7 +241,7 @@ const AnnouncementTable = ({ announcements }) => {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          /> */}
         </Card>
       </Container>
     </>
