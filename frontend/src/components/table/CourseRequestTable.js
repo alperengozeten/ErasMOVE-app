@@ -209,7 +209,7 @@ const CourseRequestTable = ({ courseRequests }) => {
                         onClose={handleClose}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
-                        BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.2)"}}}
+                        BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.04)"}}}
 
                     >
                         <Box sx={style}>
