@@ -2,11 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Toolbar, Typography, OutlinedInput, InputAdornment, Button } from '@mui/material';
@@ -21,6 +18,18 @@ const StyledRoot = styled(Toolbar)(({ theme }) => ({
   justifyContent: 'space-between',
   padding: theme.spacing(0, 1, 0, 3),
 }));
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
   width: 240,
@@ -86,51 +95,58 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
       <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen}>
         Add a new university
       </Button>
-      <Dialog    fullWidth open={open} onClose={handleClose}>
-        <DialogTitle>Add University</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            University Name
-          </DialogContentText>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Add University
+          </Typography>
           <TextField
             required
             autoFocus
             margin="dense"
             id="name"
-            label="University Name"
+            label=" University Name"
             fullWidth
             variant="standard"
           />
-          <DialogContentText>
-            University Quota
-          </DialogContentText>
           <TextField
             required
             autoFocus
             margin="dense"
             id="quota"
-            label="University Quota(only numbers)"
+            label=" University Quota"
             fullWidth
             variant="standard"
           />
-          <DialogContentText>
-            University Program Type
-          </DialogContentText>
           <TextField
             required
             autoFocus
             margin="dense"
             id="type"
-            label="University Program Type"
+            label=" University Program(Erasmus, Exchange)"
             fullWidth
             variant="standard"
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Add</Button>
-        </DialogActions>
-      </Dialog>
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="courses"
+            label=" University Courses"
+            fullWidth
+            variant="standard"
+          />
+          <Box alignRight= {true}>
+           <Button onClick={handleClose}>Cancel</Button>
+           <Button onClick={handleClose}>Add</Button>
+          </Box>
+        </Box>
+      </Modal>
     </StyledRoot>
   );
 }

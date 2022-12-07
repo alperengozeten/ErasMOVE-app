@@ -3,11 +3,8 @@ import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
 // @mui
 import {
   Card,
@@ -70,7 +67,17 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 const UniversityTable = ({universities}) => {
 
   const [page, setPage] = useState(0);
@@ -167,65 +174,78 @@ const UniversityTable = ({universities}) => {
                                 Go To Details
                             </Button>
                         </TableCell>
-                        <Dialog fullWidth open={open} onClose={handleClose}>
-                          <DialogTitle> University Details </DialogTitle>
-                          <DialogContent>
-                            <DialogContentText>
-                              University Name
-                            </DialogContentText>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                              Add University
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> University Name</Typography>
                             <TextField
-                              disabled={disabled}
+                              required
                               autoFocus
                               margin="dense"
                               id="name"
                               fullWidth
                               variant="standard"
                               defaultValue={name}
-                            />
-                            <DialogContentText>
-                               Total Quota
-                            </DialogContentText>
-                            <TextField
                               disabled={disabled}
-                              autoFocus
-                              margin="dense"
-                              id="quota"
-                              fullWidth
-                              variant="standard"
-                              defaultValue={totalQuota}
                             />
-                              <DialogContentText>
-                               Empty Quota
-                            </DialogContentText>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Empty Quota</Typography>
                             <TextField
-                              disabled={disabled}
+                              required
                               autoFocus
                               margin="dense"
                               id="quota"
                               fullWidth
                               variant="standard"
                               defaultValue={emptyQuota}
-                            />
-                            <DialogContentText>
-                               Program Type
-                            </DialogContentText>
-                            <TextField
                               disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Total Quota</Typography>
+                            <TextField
+                              required
                               autoFocus
                               margin="dense"
                               id="type"
                               fullWidth
                               variant="standard"
-                              defaultValue={type}
-
+                              defaultValue={totalQuota}
+                              disabled={disabled}
                             />
-                          </DialogContent>
-                          <DialogActions>
-                            <Button onClick={handleClose}>Close</Button>
-                            <Button onClick={handleClose}>Delete</Button>
-                            <Button onClick={handleEdit}>Edit</Button>
-                          </DialogActions>
-                        </Dialog>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}> Program Type</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="courses"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={type}
+                              disabled={disabled}
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Courses</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="courses"
+                              fullWidth
+                              variant="standard"
+                              default={"courses"}
+                              disabled={disabled}
+                            />
+                            <Box alignRight= {true}>
+                              <Button onClick={handleClose}>Close</Button>
+                              <Button onClick={handleEdit}>Edit</Button>
+                              <Button onClick={handleClose}>Delete University</Button>
+                            </Box>
+                          </Box>
+                        </Modal>
                       </TableRow>
                     );
                   })}
