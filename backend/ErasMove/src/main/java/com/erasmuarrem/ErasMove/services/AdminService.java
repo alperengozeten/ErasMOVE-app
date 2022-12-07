@@ -27,7 +27,7 @@ public class AdminService {
     }
 
     public void addAdmin( Admin admin ) {
-        Optional<Admin> adminOptional = adminRepository.findById( admin.getID() );
+        Optional<Admin> adminOptional = adminRepository.findByEmail( admin.getEmail() );
         if ( adminOptional.isPresent() ) {
             throw new IllegalStateException("Admin exists!" );
         }
