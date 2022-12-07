@@ -155,4 +155,38 @@ public class ErasmusUniversityDepartmentService {
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
         erasmusUniversityRepository.save(erasmusUniversity);
     }
+
+    public void deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University Department with id:" + id + " doesn't exist!");
+        }
+
+        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
+
+        if ( !outgoingStudentOptional.isPresent() ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+        ErasmusUniversity erasmusUniversity = erasmusUniversityDepartment.getErasmusUniversity();
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+        List<OutgoingStudent> acceptedStudents = erasmusUniversity.getAcceptedStudents();
+
+        // CHECK IF DEPARTMENT NAMES MATCH
+        if ( !outgoingStudent.getDepartment().getDepartmentName().equals(erasmusUniversityDepartment.getDepartmentName()) ) {
+            throw new IllegalStateException("Outgoing student has unmatching deparment:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
+        }
+
+        if ( !acceptedStudents.contains(outgoingStudent) ) {
+            throw new IllegalStateException("The Outgoing Student with id:" + outgoingStudentID + " is not accepted to this university!");
+        }
+
+        acceptedStudents.remove(outgoingStudent);
+        erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() + 1);
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
+        erasmusUniversityRepository.save(erasmusUniversity);
+    }
 }
