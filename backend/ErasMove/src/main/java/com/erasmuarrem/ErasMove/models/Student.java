@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.models;
 
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import lombok.Setter;
 public abstract class Student extends User {
 
     private int semester;
-    private String departmentName;
 
-
+    @OneToOne
+    private Department department;
 }
