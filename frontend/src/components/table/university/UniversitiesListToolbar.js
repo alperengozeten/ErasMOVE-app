@@ -1,5 +1,12 @@
 import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Toolbar, Typography, OutlinedInput, InputAdornment, Button } from '@mui/material';
@@ -39,7 +46,18 @@ UniversitiesListToolbar.propTypes = {
   onFilterName: PropTypes.func,
 };
 
+
+
 export default function UniversitiesListToolbar({ numSelected, filterName, onFilterName }) {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <StyledRoot
       sx={{
@@ -65,9 +83,51 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
           }
         />
       )}
-      <Button variant="contained" color="inherit" size="small">
+      <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen}>
         Add a new university
       </Button>
+      <Dialog    fullWidth open={open} onClose={handleClose}>
+        <DialogTitle>Add University</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            University Name
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="University Name"
+            fullWidth
+            variant="standard"
+          />
+          <DialogContentText>
+            University Quota
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="quota"
+            label="University Quota(only numbers)"
+            fullWidth
+            variant="standard"
+          />
+          <DialogContentText>
+            University Program Type
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="type"
+            label="University Program Type"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Add</Button>
+        </DialogActions>
+      </Dialog>
     </StyledRoot>
   );
 }

@@ -2,7 +2,12 @@ import React from 'react';
 import { filter } from 'lodash';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 // @mui
 import {
   Card,
@@ -29,6 +34,7 @@ import { UniversitiesListToolbar} from "./university";
 
 const TABLE_HEAD = [
   { id: 'name', label: 'University Name', alignRight: false },
+  { id: 'type', label: 'Program Type', alignRight: false },
   { id: 'emptyQuota', label: 'Empty Quota', alignRight: false },
   { id: 'totalQuota', label: 'Total Quota', alignRight: false },
 
@@ -101,6 +107,23 @@ const UniversityTable = ({universities}) => {
   const filteredUsers = applySortFilter(universities, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+  const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDisabled(true);
+    
+  };
+
+  const handleEdit = () => {
+    setDisabled(false);
+  };
 
   return (
     <>
@@ -120,7 +143,7 @@ const UniversityTable = ({universities}) => {
                 
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, emptyQuota, totalQuota } = row;
+                    const { id, name, type, emptyQuota, totalQuota } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
@@ -133,16 +156,76 @@ const UniversityTable = ({universities}) => {
                             </Typography>
                           </Stack>
                         </TableCell>
+                        <TableCell align="center">{type}</TableCell>
 
                         <TableCell align="center">{emptyQuota}</TableCell>
                         <TableCell align="center">{totalQuota}</TableCell>
 
                 
                         <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small">
+                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen} >
                                 Go To Details
                             </Button>
                         </TableCell>
+                        <Dialog fullWidth open={open} onClose={handleClose}>
+                          <DialogTitle> University Details </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText>
+                              University Name
+                            </DialogContentText>
+                            <TextField
+                              disabled={disabled}
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={name}
+                            />
+                            <DialogContentText>
+                               Total Quota
+                            </DialogContentText>
+                            <TextField
+                              disabled={disabled}
+                              autoFocus
+                              margin="dense"
+                              id="quota"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={totalQuota}
+                            />
+                              <DialogContentText>
+                               Empty Quota
+                            </DialogContentText>
+                            <TextField
+                              disabled={disabled}
+                              autoFocus
+                              margin="dense"
+                              id="quota"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={emptyQuota}
+                            />
+                            <DialogContentText>
+                               Program Type
+                            </DialogContentText>
+                            <TextField
+                              disabled={disabled}
+                              autoFocus
+                              margin="dense"
+                              id="type"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={type}
+
+                            />
+                          </DialogContent>
+                          <DialogActions>
+                            <Button onClick={handleClose}>Close</Button>
+                            <Button onClick={handleClose}>Delete</Button>
+                            <Button onClick={handleEdit}>Edit</Button>
+                          </DialogActions>
+                        </Dialog>
                       </TableRow>
                     );
                   })}
