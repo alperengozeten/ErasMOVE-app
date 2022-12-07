@@ -5,9 +5,11 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import SwipeableViews from "react-swipeable-views";
-import { Typography, Button } from "@mui/material";
+import { Typography, Button, Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import { AccountProfile } from "./table/user/AccountProfile";
+import { AccountProfileDetails } from "./table/user/AccountProfileDetails";
 
 export default function UserProfile() {
   const [value, setValue] = React.useState(0);
@@ -27,7 +29,7 @@ export default function UserProfile() {
       alignItems="center"
       sx={{ width: "100%", height: "100%" }}
     >
-      <Box sx={{ width: "80%", height: "80%" }}>
+      <Box sx={{ width: "80%", height: "95%" }} justifyContent={"center"} alignItems={"center"}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange}>
@@ -37,65 +39,23 @@ export default function UserProfile() {
           </Box>
           <SwipeableViews index={value} onChangeIndex={handleChangeIndex}>
             <TabPanel value={value} index={0}>
-              <Box sx={{ flexGrow: 1 }}>
-                <Grid container direction={"row"}>
-                  <Grid container direction={"column"} xs={4} spacing={5}>
-                    <Grid item>
-                      <Typography variant="h4">Name:</Typography>
+              <Box
+                component="main"
+                sx={{
+                  flexGrow: 1,
+                  py: 3,
+                }}
+              >
+                <Container maxWidth="lg">
+                  <Grid container spacing={3}>
+                    <Grid item lg={4} md={6} xs={12}>
+                      <AccountProfile />
                     </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Surname:</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Department:</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">ID:</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">CGPA:</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">E-Mail:</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Languages:</Typography>
+                    <Grid item lg={8} md={6} xs={12}>
+                      <AccountProfileDetails />
                     </Grid>
                   </Grid>
-                  <Grid container direction={"column"} xs={4} spacing={5}>
-                    <Grid item>
-                      <Typography variant="h4">Kütür Kütürşad</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Güzelkaya</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Computer Science</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">21901234</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">3.31</Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">
-                        igdirli_serseri@hotmail.com
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">English, German</Typography>
-                    </Grid>
-                  </Grid>
-                  <Grid container direction={"column"} xs={4} spacing={3}>
-                    <Grid
-                      item
-                      justifyContent="center"
-                      alignItems="center"
-                      sx={{ width: "100%", height: "100%" }}
-                    ></Grid>
-                  </Grid>
-                </Grid>
+                </Container>
               </Box>
             </TabPanel>
             <TabPanel value={value} index={1}>

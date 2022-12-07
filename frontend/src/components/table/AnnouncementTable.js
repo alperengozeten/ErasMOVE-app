@@ -161,7 +161,7 @@ const AnnouncementTable = ({ announcements }) => {
 
                         <TableCell align="center">{date}</TableCell>
 
-                        <TableCell align="center">{announcement}</TableCell>
+                        <TableCell align="center">{announcement.substring(0, 30) + "..."}</TableCell>
 
                         <TableCell align="right">
                           <Button
@@ -181,7 +181,7 @@ const AnnouncementTable = ({ announcements }) => {
                             <Box sx={style}>
                               <Typography
                                 id="modal-modal-title"
-                                variant="h6"
+                                variant="h4"
                                 component="h2"
                               >
                                 {from}

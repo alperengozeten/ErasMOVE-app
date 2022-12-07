@@ -67,7 +67,7 @@ const NotificationList = () => {
         <List
             sx={{
                 width: '100%',
-                maxWidth: 330,
+                maxWidth: 350,
                 py: 0,
                 borderRadius: '10px',
                 [theme.breakpoints.down('md')]: {
