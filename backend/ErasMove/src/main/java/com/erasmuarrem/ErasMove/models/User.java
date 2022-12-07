@@ -19,6 +19,9 @@ public abstract class User {
     private String email;
     private String hashedPassword;
 
+    @OneToOne
+    private Token token;
+
     //@OneToMany
     //private List<CourseApprovalRequest> courseApprovalRequestList;
 
