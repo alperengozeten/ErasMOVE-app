@@ -75,4 +75,8 @@ public class PreApprovalFormRequestService {
 
         return preApprovalFormRequestRepository.findByDepartmentCoordinatorIDAndStudentID(departmentCoordinatorID, outgoingStudentID);
     }
+
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentCoordinatorID(Long departmentCoordinatorID) {
+        return preApprovalFormRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
 }
