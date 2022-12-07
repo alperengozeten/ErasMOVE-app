@@ -209,6 +209,8 @@ const CourseRequestTable = ({ courseRequests }) => {
                         onClose={handleClose}
                         aria-labelledby="modal-modal-title"
                         aria-describedby="modal-modal-description"
+                        BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.2)"}}}
+
                     >
                         <Box sx={style}>
                             <Stack spacing={6}>
@@ -239,7 +241,6 @@ const CourseRequestTable = ({ courseRequests }) => {
                                                 <Box>
                                                     <Button size= "small" variant="contained" component="label">
                                                         Download File
-                                                        <input hidden accept="image/*" multiple type="file" />
                                                     </Button>
                                                 </Box>
                                             </Stack>
