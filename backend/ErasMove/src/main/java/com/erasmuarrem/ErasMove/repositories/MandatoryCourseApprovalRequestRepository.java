@@ -5,12 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface MandatoryCourseApprovalRequestRepository extends JpaRepository<MandatoryCourseApprovalRequest, Long> {
     List<MandatoryCourseApprovalRequest> findByCourseCoordinatorID(Long courseCoordinatorID);
     List<MandatoryCourseApprovalRequest> findByStudentID(Long outgoingStudentID);
 
-    Optional<MandatoryCourseApprovalRequest> findByCourseCoordinatorIDAndStudentID(Long courseCoordinatorID, Long outgoingStudentID);
+    List<MandatoryCourseApprovalRequest> findByCourseCoordinatorIDAndStudentID(Long courseCoordinatorID, Long outgoingStudentID);
 }

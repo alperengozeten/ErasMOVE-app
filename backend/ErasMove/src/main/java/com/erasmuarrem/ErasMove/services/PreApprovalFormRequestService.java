@@ -41,9 +41,14 @@ public class PreApprovalFormRequestService {
 
     public void addPreApprovalFormRequest(PreApprovalFormRequest preApprovalFormRequest) {
         Long departmentCoordinatorID = preApprovalFormRequest.getDepartmentCoordinator().getID();
+        Long outgoingStudentID = preApprovalFormRequest.getStudent().getID();
 
         if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
             throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+        }
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
