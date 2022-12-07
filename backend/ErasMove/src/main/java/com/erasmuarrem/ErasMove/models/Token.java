@@ -15,7 +15,7 @@ import java.util.Random;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Token {
-    @Column( name = "token", columnDefinition = "LONGTEXT")
+    //@Column( name = "token", columnDefinition = "LONGTEXT")
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
