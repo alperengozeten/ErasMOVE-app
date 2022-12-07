@@ -33,7 +33,7 @@ import { UserListHead } from './user';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'courseName', label: 'Course Name', alignRight: false },
+  { id: 'preApprovalForm', label: 'PreApproval Form', alignRight: false },
   { id: 'type', label: 'Type', alignRight: false },
   { id: 'status', label: 'Status', alignRight: true },
 ];
