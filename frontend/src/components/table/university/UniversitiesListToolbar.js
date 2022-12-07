@@ -93,6 +93,7 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
             University Name
           </DialogContentText>
           <TextField
+            required
             autoFocus
             margin="dense"
             id="name"
@@ -104,6 +105,7 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
             University Quota
           </DialogContentText>
           <TextField
+            required
             autoFocus
             margin="dense"
             id="quota"
@@ -115,6 +117,7 @@ export default function UniversitiesListToolbar({ numSelected, filterName, onFil
             University Program Type
           </DialogContentText>
           <TextField
+            required
             autoFocus
             margin="dense"
             id="type"
