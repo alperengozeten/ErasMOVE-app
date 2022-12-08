@@ -1,4 +1,4 @@
-package com.erasmuarrem.ErasMove.Helpers;
+package com.erasmuarrem.ErasMove.helpers;
 
 import lombok.Getter;
 import lombok.Setter;

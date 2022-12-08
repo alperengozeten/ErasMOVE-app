@@ -1,6 +1,6 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.Helpers.HashingPasswordHelper;
+import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
 import com.erasmuarrem.ErasMove.models.Admin;
 import com.erasmuarrem.ErasMove.models.Token;
 import com.erasmuarrem.ErasMove.repositories.AdminRepository;
