@@ -18,10 +18,10 @@ public class MobilityCourse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ID;
 
-    @OneToMany
+    @ManyToMany
     List<Course> mergedCourses;
 
-    @OneToOne
+    @ManyToOne
     Course correspondingCourse;
 
     @OneToOne
