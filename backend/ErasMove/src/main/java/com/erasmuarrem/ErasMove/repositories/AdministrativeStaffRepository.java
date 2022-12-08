@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AdministrativeStaffRepository extends JpaRepository<AdministrativeStaff, Long> {
     Optional<AdministrativeStaff> findByDepartments_ID(Long departmentID);
+    Optional<AdministrativeStaff> findByDepartments_DepartmentName(String departmentName);
 }

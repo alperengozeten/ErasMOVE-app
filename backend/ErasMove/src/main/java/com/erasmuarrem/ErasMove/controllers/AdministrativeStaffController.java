@@ -38,6 +38,11 @@ public class AdministrativeStaffController {
         return administrativeStaffService.getAdministrativeStaffByDepartmentId(id);
     }
 
+    @GetMapping("/departmentName/{departmentName}")
+    public AdministrativeStaff getAdministrativeStaffByDepartmentName(@PathVariable("departmentName") String departmentName) {
+        return administrativeStaffService.getAdministrativeStaffByDepartmentName(departmentName);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteAdministrativeStaff(@PathVariable("id") Long id) {
         administrativeStaffService.deleteAdministrativeStaff(id);

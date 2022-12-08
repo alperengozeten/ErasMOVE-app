@@ -49,4 +49,15 @@ public class AdministrativeStaffService {
 
         return administrativeStaffOptional.get();
     }
+
+    public AdministrativeStaff getAdministrativeStaffByDepartmentName(String departmentName) {
+        Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository
+                .findByDepartments_DepartmentName(departmentName);
+
+        if ( !administrativeStaffOptional.isPresent() ) {
+            throw new IllegalStateException("Administrative Staff with department:" + departmentName + " doesn't exist!");
+        }
+
+        return administrativeStaffOptional.get();
+    }
 }
