@@ -25,7 +25,7 @@ public class IncomingStudentController {
         incomingStudentService.deleteIncomingStudentById(id);
     }
 
-    @GetMapping()
+    @GetMapping
     public List<IncomingStudent> getIncomingStudents() {
         return incomingStudentService.getIncomingStudents();
     }
@@ -35,13 +35,13 @@ public class IncomingStudentController {
         return incomingStudentService.getIncomingStudentById(id);
     }
 
-    @PostMapping("/{id1}/preferredCourses/add/{id2}")
-    public  void addCourseToPreferredCoursesById( @PathVariable("id1") Long id1, @PathVariable("id2") Long id2 ) {
+    @PostMapping("/{incomingStudentID}/preferredCourses/add/{courseID}")
+    public  void addCourseToPreferredCoursesById( @PathVariable("incomingStudentID") Long id1, @PathVariable("courseID") Long id2 ) {
         incomingStudentService.addCourseToPreferredCoursesById( id1, id2);
     }
 
-    @DeleteMapping("{id1}/preferredCourses/delete/{id2}")
-    public void deleteCourseFromPreferredCoursesById( @PathVariable("id1") Long id1, @PathVariable("id2") Long id2 ) {
+    @DeleteMapping("{incomingStudentID}/preferredCourses/delete/{courseID}")
+    public void deleteCourseFromPreferredCoursesById( @PathVariable("incomingStudentID") Long id1, @PathVariable("courseID") Long id2 ) {
         incomingStudentService.deleteCourseFromPreferredCoursesById(id1,id2);
     }
 }
