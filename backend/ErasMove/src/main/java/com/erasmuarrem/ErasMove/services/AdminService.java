@@ -14,13 +14,13 @@ import java.util.Optional;
 
 @Service
 public class AdminService {
-    @Autowired
+
     private final AdminRepository adminRepository;
-    @Autowired
     private final TokenRepository tokenRepository;
 
     private HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
+    @Autowired
     public AdminService( AdminRepository adminRepository, TokenRepository tokenRepository ) {
         this.adminRepository = adminRepository;
         this.tokenRepository = tokenRepository;
