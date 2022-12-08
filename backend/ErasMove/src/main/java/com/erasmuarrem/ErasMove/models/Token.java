@@ -30,7 +30,7 @@ public class Token {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-*!";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
-        while (salt.length() < 400) { // length of the token.
+        while (salt.length() < 250) { // length of the token.
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
