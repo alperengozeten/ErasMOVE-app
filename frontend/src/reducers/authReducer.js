@@ -1,7 +1,7 @@
 import { CHOOSE_AUTH_TYPE, LOG_IN_SUCCESS, LOG_OUT_SUCCESS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
-  authType: '',
+  authType: localStorage.getItem('authType'),
   status: localStorage.getItem('key') ? 'authenticated' : 'not-authenticated',
   key: localStorage.getItem('key'),
 };
@@ -17,6 +17,7 @@ const loginReducer = (state = INITIAL_STATE, action) => {
       return { ...state, status: 'not-authenticated', key: null };
     }
     case CHOOSE_AUTH_TYPE: {
+      localStorage.setItem('authType', action.authType);
       return { ...state, authType: action.authType};
     }
     default:
