@@ -28,6 +28,16 @@ public class ExchangeReplacementRequestController {
         return exchangeReplacementRequestService.getExchangeReplacementRequestByID(id);
     }
 
+    @GetMapping("/outgoingStudent/{id}")
+    public ExchangeReplacementRequest getExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentId) {
+        return exchangeReplacementRequestService.getExchangeReplacementRequestByOutgoingStudentID(outgoingStudentId);
+    }
+
+    @GetMapping("/departmentCoordinator/{id}")
+    public List<ExchangeReplacementRequest> getExchangeReplacementRequestsByDepartmentCoordinatorID(@PathVariable("id") Long departmentCoordinatorID) {
+        return exchangeReplacementRequestService.getExchangeReplacementRequestsByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
+
     @PostMapping("/add")
     public void addExchangeReplacementRequest(@RequestBody ExchangeReplacementRequest exchangeReplacementRequest) {
         exchangeReplacementRequestService.addExchangeReplacementRequest(exchangeReplacementRequest);

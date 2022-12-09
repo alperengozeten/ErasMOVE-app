@@ -72,4 +72,25 @@ public class ExchangeReplacementRequestService {
 
         exchangeReplacementRequestRepository.deleteById(id);
     }
+
+    public ExchangeReplacementRequest getExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentId) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentId) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentId + " doesn't exist!");
+        }
+
+        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+                .findByStudentID(outgoingStudentId);
+
+        return exchangeReplacementRequestOptional.get();
+    }
+
+    public List<ExchangeReplacementRequest> getExchangeReplacementRequestsByDepartmentCoordinatorID(Long departmentCoordinatorID) {
+
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+        }
+
+        return exchangeReplacementRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
 }
