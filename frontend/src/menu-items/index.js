@@ -1,7 +1,5 @@
 import dashboard from './dashboard';
 import pages from './pages';
-import utilities from './utilities';
-import other from './other';
 import universities from './universities';
 import requests from './requests';
 import courseRequests from './courseRequests';
@@ -11,8 +9,22 @@ import student from './student';
 
 // ==============================|| MENU ITEMS ||============================== //
 
-const menuItems = {
-    items: [dashboard, student, pages, universities, announcements, requests, courseRequests, utilities, other]
+const menuItems = authType => {
+    let list = [];
+
+    if (authType === 'Outgoing Student') {
+        list = [dashboard, student, announcements];
+    } else if (authType === 'Incoming Student') {
+        list = [dashboard, student, announcements];
+    }  else if (authType === 'Department Coordinator') {
+        list = [dashboard, pages, announcements];
+    }  else if (authType === 'Course Coordinator') {
+        list = [dashboard, pages, announcements, courseRequests];
+    } else if (authType === 'Administrative Staff') {
+        // TODO: update this list
+        list = [dashboard, student, pages, universities, announcements, requests, courseRequests];
+    }
+    return list;
 };
 
 export default menuItems;

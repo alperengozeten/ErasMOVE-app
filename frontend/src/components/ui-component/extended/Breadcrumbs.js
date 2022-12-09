@@ -60,7 +60,7 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
     };
 
     useEffect(() => {
-        navigation?.items?.map(menu => {
+        navigation?.map(menu => {
             if (menu.type && menu.type === 'group') {
                 getCollapse(menu);
             }
@@ -178,7 +178,7 @@ Breadcrumbs.propTypes = {
     icon: PropTypes.bool,
     icons: PropTypes.bool,
     maxItems: PropTypes.number,
-    navigation: PropTypes.object,
+    navigation: PropTypes.array,
     rightAlign: PropTypes.bool,
     separator: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
     title: PropTypes.bool,

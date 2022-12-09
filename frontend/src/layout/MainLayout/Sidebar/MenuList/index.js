@@ -1,6 +1,9 @@
 // material-ui
 import React from 'react';
 import { Typography } from '@mui/material';
+import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+
 
 // project imports
 import NavGroup from './NavGroup';
@@ -8,8 +11,8 @@ import menuItem from '../../../../menu-items';
 
 // ==============================|| SIDEBAR MENU LIST ||============================== //
 
-const MenuList = () => {
-    const navItems = menuItem.items.map(item => {
+const MenuList = ({ authType }) => {
+    const navItems = menuItem(authType).map(item => {
         switch (item.type) {
             case 'group':
                 return <NavGroup key={item.id} item={item} />;
@@ -25,4 +28,15 @@ const MenuList = () => {
     return <>{navItems}</>;
 };
 
-export default MenuList;
+const mapStateToProps = state =>{
+    const authType = state.auth.authType;
+    return {
+        authType,
+    };
+};
+
+MenuList.propTypes = {
+    authType: PropTypes.string,
+};
+
+export default connect(mapStateToProps, {})(MenuList);

@@ -1,11 +1,12 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
+import PropTypes from "prop-types";
 
 // project imports
 import Breadcrumbs from '../../components/ui-component/extended/Breadcrumbs';
@@ -66,7 +67,7 @@ const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })(({ t
 
 // ==============================|| MAIN LAYOUT ||============================== //
 
-const MainLayout = () => {
+const MainLayout = ({ authType }) => {
     const theme = useTheme();
     const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
 
@@ -83,6 +84,8 @@ const MainLayout = () => {
     useEffect(() => {
         dispatch({ type: SET_MENU, opened: !matchDownMd });
     }, [matchDownMd]);
+
+    const navigationList = navigation(authType);
 
     return (
         <Box sx={ { display: 'flex' } }>
@@ -109,7 +112,7 @@ const MainLayout = () => {
             {/* main content */}
             <Main theme={ theme } open={ leftDrawerOpened }>
                 {/* breadcrumb */}
-                <Breadcrumbs separator={ IconChevronRight } navigation={ navigation } icon title rightAlign />
+                <Breadcrumbs separator={ IconChevronRight } navigation={ navigationList } icon title rightAlign />
                 <Outlet style={{ backgroundColor: 'blue' }} />
             </Main>
             <ChatDrawer drawerOpen={ rightDrawerOpened } drawerToggle={ handleRightDrawerToggle } />
@@ -118,4 +121,15 @@ const MainLayout = () => {
     );
 };
 
-export default MainLayout;
+const mapStateToProps = state =>{
+    const authType = state.auth.authType;
+    return {
+        authType,
+    };
+};
+
+MainLayout.propTypes = {
+    authType: PropTypes.string,
+};
+
+export default connect(mapStateToProps, {})(MainLayout);
