@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -10,7 +10,11 @@ const CourseRequestPage = ({courseRequests}) => {
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
                 Course Requests
             </Typography>
-            <CourseRequestTable courseRequests = {courseRequests} />
+            <Grid container justifyContent={'center'}>
+                <Grid item xs={12}>
+                    <CourseRequestTable courseRequests = {courseRequests} />
+                </Grid>
+            </Grid>
         </Stack>
     );
 };

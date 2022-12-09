@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -11,7 +11,11 @@ const PlacementList = ({ applications }) => {
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
                 Placement List
             </Typography>
-            <PlacedStudentTable applications={ applications } />
+            <Grid container justifyContent={'center'}>
+                <Grid item xs={12}>
+                    <PlacedStudentTable applications={ applications } />
+                </Grid>
+            </Grid>
         </Stack>
     );
 };
