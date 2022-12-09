@@ -1,22 +1,34 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { connect, useDispatch } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Grid, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Button, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 
 // project imports
 import AuthWrapper1 from './AuthWrapper1';
 import AuthCardWrapper from './AuthCardWrapper';
 import AuthLoginForm from './AuthLoginForm';
 import AuthFooter from '../ui-component/cards/AuthFooter';
+import { CHOOSE_AUTH_TYPE } from '../../constants/actionTypes';
+import logo from '../../assets/images/logo.png';
 
 // assets
 
-const Login = ({ logInRequest }) => {
+const Login = ({ logInRequest, authType }) => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+
+    const backToLanding = () => {
+        dispatch({ type: CHOOSE_AUTH_TYPE, authType: ''});
+        navigate('/');
+    };
 
     return (
         <AuthWrapper1>
@@ -28,7 +40,7 @@ const Login = ({ logInRequest }) => {
                                 <Grid container spacing={ 2 } alignItems="center" justifyContent="center">
                                     <Grid item sx={ { mb: 3 } }>
                                         <Link to="#">
-                                          Logo
+                                            <img src={logo} alt="Paper Plane" style={{ height: '130px', width: '130px'}} />
                                         </Link>
                                     </Grid>
                                     <Grid item xs={ 12 }>
@@ -45,7 +57,7 @@ const Login = ({ logInRequest }) => {
                                                         gutterBottom
                                                         variant={ matchDownSM ? 'h3' : 'h2' }
                                                     >
-                                                        Hi, Welcome Back
+                                                        Login as {authType}
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
@@ -61,6 +73,11 @@ const Login = ({ logInRequest }) => {
                                     <Grid item xs={ 12 }>
                                         <AuthLoginForm logInRequest={ logInRequest } />
                                     </Grid>
+                                    <Grid item xs={ 12 }>
+                                        <Button fullWidth variant="contained" color="primary" size="medium" onClick={() => backToLanding()} >
+                                            Back
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             </AuthCardWrapper>
                         </Grid>
@@ -74,12 +91,20 @@ const Login = ({ logInRequest }) => {
     );
 };
 
+const mapStateToProps = state => {
+    const authType = state.auth.authType;
+    return {
+        authType,
+    };
+};
+
 
 
 
 Login.propTypes = {
   logInRequest: PropTypes.func.isRequired,
+  authType: PropTypes.string,
 };
 
 
-export default Login;
+export default connect(mapStateToProps, {})(Login);
