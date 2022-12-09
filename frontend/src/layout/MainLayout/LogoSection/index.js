@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { ButtonBase, Grid, Typography } from '@mui/material';
 
 // project imports
-import config from '../../../config';
 import logo from '../../../assets/images/logo.png';
 
 // ==============================|| MAIN LOGO ||============================== //

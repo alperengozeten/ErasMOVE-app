@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -12,14 +11,13 @@ import { Button, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 // project imports
 import AuthWrapper1 from './Auth/AuthWrapper1';
 import AuthCardWrapper from './Auth/AuthCardWrapper';
-import AuthLoginForm from './Auth/AuthLoginForm';
 import AuthFooter from './ui-component/cards/AuthFooter';
 import { CHOOSE_AUTH_TYPE } from '../constants/actionTypes';
 import logo from '../assets/images/logo.png';
 
 // assets
 
-const LandingPage = ({ logInRequest }) => {
+const LandingPage = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -112,13 +110,5 @@ const LandingPage = ({ logInRequest }) => {
         </AuthWrapper1>
     );
 };
-
-
-
-
-LandingPage.propTypes = {
-  logInRequest: PropTypes.func.isRequired,
-};
-
 
 export default LandingPage;
