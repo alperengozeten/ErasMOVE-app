@@ -116,6 +116,10 @@ public class ErasmusReplacementRequestService {
 
         ErasmusReplacementRequest erasmusReplacementRequest = erasmusReplacementRequestOptional.get();
 
+        if ( erasmusReplacementRequest.getStatus().equals("ACCEPTED") || erasmusReplacementRequest.getStatus().equals("DECLINED") ) {
+            throw new IllegalStateException("Replacement Request has already been responded!");
+        }
+
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get(); // get the student
         String outgoingStudentDepartmentName = outgoingStudent.getDepartment().getDepartmentName(); // get the department name
         ErasmusUniversity erasmusUniversity = erasmusReplacementRequest.getErasmusUniversity(); // get the university
@@ -131,6 +135,26 @@ public class ErasmusReplacementRequestService {
         ); // add the student to the department
 
         erasmusReplacementRequest.setStatus("ACCEPTED"); // change the status if succesful
+        erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
+    }
+
+    public void declineErasmusReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        Optional<ErasmusReplacementRequest> erasmusReplacementRequestOptional = erasmusReplacementRequestRepository
+                .findByStudentID(outgoingStudentID);
+
+        if ( !erasmusReplacementRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus Replacement Request for Outgoing Student with id:" + outgoingStudentID
+                    + " doesn't exist!");
+        }
+
+        ErasmusReplacementRequest erasmusReplacementRequest = erasmusReplacementRequestOptional.get();
+
+        erasmusReplacementRequest.setStatus("DECLINED");
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
     }
 }

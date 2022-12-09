@@ -49,6 +49,11 @@ public class ErasmusReplacementRequestController {
         erasmusReplacementRequestService.acceptErasmusReplacementRequestByOutgoingStudentID(outgoingStudentID);
     }
 
+    @PostMapping("/outgoingStudent/{id}/decline")
+    public void declineErasmusReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
+        erasmusReplacementRequestService.declineErasmusReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteErasmusReplacementRequestByID(@PathVariable("id") Long id) {
         erasmusReplacementRequestService.deleteErasmusReplacementRequestByID(id);
