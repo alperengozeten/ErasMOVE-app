@@ -41,6 +41,18 @@ public class NotificationService {
     public List<Notification> getNotificationsOfUserByUserId( Long id ) {
         return notificationRepository.findAllByReceiverID(id);
     }
-    //TODO
 
+    public void markNotificationAsReadByID(Long id) {
+
+        Optional<Notification> notificationOptional = notificationRepository.findById(id);
+
+        if ( !notificationOptional.isPresent() ) {
+            throw new IllegalStateException("Notification with id:" + id + " doesn't exist!");
+        }
+
+        Notification notification = notificationOptional.get();
+
+        notification.setRead(true); // set the isRead as true
+        notificationRepository.save(notification); // save the object back
+    }
 }

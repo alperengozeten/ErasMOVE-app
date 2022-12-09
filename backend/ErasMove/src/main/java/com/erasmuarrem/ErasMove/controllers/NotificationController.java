@@ -21,6 +21,11 @@ public class NotificationController {
         notificationService.saveNotification(notification);
     }
 
+    @PostMapping("/markRead/{id}")
+    public void markNotificationAsReadByID(@PathVariable("id") Long id) {
+        notificationService.markNotificationAsReadByID(id);
+    }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteNotification(@PathVariable("id") Long id) {

@@ -30,7 +30,7 @@ public class DepartmentController {
     }
 
     @GetMapping("/departmentName/{departmentName}")
-    public Department getDepartmentByDeparmentName(@PathVariable("departmentName") String departmentName) {
+    public Department getDepartmentByDepartmentName(@PathVariable("departmentName") String departmentName) {
         return departmentService.getDepartmentByDepartmentName(departmentName);
     }
 
