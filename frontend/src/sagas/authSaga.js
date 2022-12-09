@@ -8,6 +8,7 @@ import {
   CHANGE_PASSWORD_FAIL,
   CHANGE_PASSWORD_REQUEST,
   CHANGE_PASSWORD_SUCCESS,
+  CHOOSE_AUTH_TYPE,
   CLEAR_ERRORS,
   GET_USER,
   LOG_IN_FAIL,
@@ -69,6 +70,7 @@ function* logOutRequest({ payload: navigate }) {
     type: SEND_CODE_SUCCESS,
     payload: {},
   });
+  yield put({ type: CHOOSE_AUTH_TYPE, authType: ''});
   navigate('/');
 }
 
