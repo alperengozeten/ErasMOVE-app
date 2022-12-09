@@ -8,6 +8,7 @@ import applications from './applicationReducer';
 import universities from './universityReducer';
 import requests from './requestsReducer';
 import announcements from './announcementReducer';
+import courses from './courseReducer';
 
 
 const reducers = {
@@ -19,6 +20,7 @@ const reducers = {
   universities,
   requests,
   announcements,
+  courses,
 };
 
 export default combineReducers(reducers);

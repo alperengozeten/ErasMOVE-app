@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 
-const Application = ({ courseRequests, preApprovalForms }) => {
+const Application = ({ courseRequests, preApprovalForms, hostCourses, approvedCourses }) => {
   const [value, setValue] = React.useState("0");
 
   const handleChange = (event, newValue) => {
@@ -45,7 +45,7 @@ const Application = ({ courseRequests, preApprovalForms }) => {
                     </TabPanel>
                     <TabPanel value="1" index={1}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <PreApprovalForms preApprovalForms={preApprovalForms} />
+                            <PreApprovalForms preApprovalForms={preApprovalForms} hostCourses={hostCourses} approvedCourses={approvedCourses} />
                         </Box>
                     </TabPanel>
                     <TabPanel value="2" index={2}>
@@ -64,9 +64,13 @@ const Application = ({ courseRequests, preApprovalForms }) => {
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
     const preApprovalForms = state.requests.preApprovalForms;
+    const hostCourses = state.courses.hostCourses;
+    const approvedCourses = state.courses.approvedCourses;
     return {
         courseRequests,
         preApprovalForms,
+        hostCourses,
+        approvedCourses,
     };
 };
 
@@ -77,6 +81,8 @@ const mapActionsToProps = {
 Application.propTypes = {
     courseRequests: PropTypes.array,
     preApprovalForms: PropTypes.array,
+    hostCourses: PropTypes.array,
+    approvedCourses: PropTypes.array,
 };
   
 Application.defaultProps = {
