@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table
 @Getter
@@ -18,6 +20,7 @@ public class Announcement {
 
     private String title;
     private String description;
+    private LocalDate announcedDate;
 
     @OneToOne
     private DepartmentCoordinator departmentCoordinator;

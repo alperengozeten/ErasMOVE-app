@@ -29,7 +29,7 @@ public class AnnouncementController {
     }
 
     @GetMapping("/departmentCoordinator/{id}")
-    public Announcement getAnnouncementByDepartmentCoordinatorId(@PathVariable("id") Long id) {
+    public List<Announcement> getAnnouncementByDepartmentCoordinatorId(@PathVariable("id") Long id) {
         return announcementService.getAnnouncementByDepartmentCoordinatorId(id);
     }
 
