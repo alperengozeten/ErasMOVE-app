@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack, Grid } from "@mui/material";
 import AnnouncementTable from "./table/AnnouncementTable";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -15,7 +15,11 @@ const Announcements = ({ announcements }) => {
       >
         Announcements
       </Typography>
-      <AnnouncementTable announcements={announcements} />
+      <Grid container justifyContent={'center'}>
+        <Grid item xs={12}>
+          <AnnouncementTable announcements={announcements} />
+        </Grid>
+      </Grid>
     </Stack>
   );
 };
