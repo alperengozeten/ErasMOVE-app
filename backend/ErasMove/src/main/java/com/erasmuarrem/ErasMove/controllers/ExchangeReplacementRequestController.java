@@ -43,6 +43,16 @@ public class ExchangeReplacementRequestController {
         exchangeReplacementRequestService.addExchangeReplacementRequest(exchangeReplacementRequest);
     }
 
+    @PostMapping("/outgoingStudent/{id}/accept")
+    public void acceptExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
+        exchangeReplacementRequestService.acceptExchangeReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    }
+
+    @PostMapping("/outgoingStudent/{id}/decline")
+    public void declineExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
+        exchangeReplacementRequestService.declineExchangeReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteExchangeReplacementRequestByID(@PathVariable("id") Long id) {
         exchangeReplacementRequestService.deleteExchangeReplacementRequestByID(id);

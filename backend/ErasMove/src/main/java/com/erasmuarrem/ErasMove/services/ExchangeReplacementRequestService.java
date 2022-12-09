@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.ExchangeReplacementRequest;
+import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.ExchangeReplacementRequestRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
@@ -16,12 +17,14 @@ public class ExchangeReplacementRequestService {
     private final ExchangeReplacementRequestRepository exchangeReplacementRequestRepository;
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ExchangeUniversityService exchangeUniversityService;
 
     @Autowired
-    public ExchangeReplacementRequestService(ExchangeReplacementRequestRepository exchangeReplacementRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository) {
+    public ExchangeReplacementRequestService(ExchangeReplacementRequestRepository exchangeReplacementRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, ExchangeUniversityService exchangeUniversityService) {
         this.exchangeReplacementRequestRepository = exchangeReplacementRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
+        this.exchangeUniversityService = exchangeUniversityService;
     }
 
     public List<ExchangeReplacementRequest> getExchangeReplacementRequests() {
@@ -92,5 +95,55 @@ public class ExchangeReplacementRequestService {
         }
 
         return exchangeReplacementRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
+
+    public void acceptExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+                .findByStudentID(outgoingStudentID);
+
+        if ( !exchangeReplacementRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus Replacement Request for Outgoing Student with id:" + outgoingStudentID
+                    + " doesn't exist!");
+        }
+
+        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+
+        if ( exchangeReplacementRequest.getStatus().equals("DECLINED") || exchangeReplacementRequest.getStatus().equals("ACCEPTED") ) {
+            throw new IllegalStateException("Replacement Request has already been responded!");
+        }
+
+        ExchangeUniversity exchangeUniversity = exchangeReplacementRequest.getExchangeUniversity(); // get the exchange university
+
+        exchangeUniversityService.addOutgoingStudentByIDAndOutgoingStudentID(
+                exchangeUniversity.getID(),
+                outgoingStudentID
+        ); // add the student using the ExchangeUniversityService class
+
+        exchangeReplacementRequest.setStatus("ACCEPTED"); // set the status
+        exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save back to the repository
+    }
+
+    public void declineExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+        }
+
+        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+                .findByStudentID(outgoingStudentID);
+
+        if ( !exchangeReplacementRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange Replacement Request doesn't exist for Outgoing Student with id:" + outgoingStudentID + "!");
+        }
+
+        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+
+        exchangeReplacementRequest.setStatus("DECLINED");
+        exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
     }
 }
