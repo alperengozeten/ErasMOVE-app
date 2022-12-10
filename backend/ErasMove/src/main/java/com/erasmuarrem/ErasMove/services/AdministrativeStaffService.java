@@ -127,7 +127,7 @@ public class AdministrativeStaffService {
     public String logOut(Long id ) {
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findById(id);
         if ( !administrativeStaffOptional.isPresent() ){
-            return "The administrative staff with email  "+ id + " doesn't exist.";
+            return "The administrative staff with id  "+ id + " doesn't exist.";
         }
         AdministrativeStaff currStaff = administrativeStaffOptional.get();
         Token currToken = currStaff.getUserToken();
