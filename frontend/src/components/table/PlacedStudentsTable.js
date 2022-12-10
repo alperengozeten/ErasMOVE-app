@@ -80,6 +80,8 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  const [department, setDepartment] = useState('');
+
   const handleOpenApplication = id => {
     console.log("id: ", id);
   };
@@ -106,7 +108,9 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
-  const filteredUsers = applySortFilter(applications, getComparator(order, orderBy), filterName);
+  const filterDepartments = department === '' ? applications : applications.filter(application => application.department === department);
+
+  const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -114,7 +118,7 @@ const PlacedStudentsTable = ({ applications }) => {
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>

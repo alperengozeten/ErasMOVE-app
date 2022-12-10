@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
-import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
+import { Toolbar, OutlinedInput, InputAdornment, FormControl, InputLabel, Select, MenuItem, Grid } from '@mui/material';
 // component
 import Iconify from '../iconify';
+import { connect } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -33,13 +34,10 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {
-  numSelected: PropTypes.number,
-  filterName: PropTypes.string,
-  onFilterName: PropTypes.func,
-};
+const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setDepartment, department }) => {
 
-export default function UserListToolbar({ numSelected, filterName, onFilterName }) {
+  const handleChange = e => setDepartment(e.target.value);
+
   return (
     <StyledRoot
       sx={{
@@ -49,36 +47,65 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName 
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <StyledSearch
-          value={filterName}
-          onChange={onFilterName}
-          placeholder="Search student..."
-          startAdornment={
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
-            </InputAdornment>
-          }
-        />
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <Iconify icon="ic:round-filter-list" />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Grid container >
+        <Grid item xs={4} >
+          <StyledSearch
+            value={filterName}
+            onChange={onFilterName}
+            placeholder="Search student..."
+            startAdornment={
+              <InputAdornment position="start">
+                <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+              </InputAdornment>
+            }
+          />
+        </Grid>
+        <Grid item xs={5}></Grid>
+        <Grid item xs={3}>
+            {
+              authType === 'Administrative Staff' ? (
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Department</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={department}
+                    label="Department"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value={''}>None</MenuItem>
+                    <MenuItem value={'Computer Science'}>Computer Science</MenuItem>
+                    <MenuItem value={'Mechanical Engineering'}>Mechanical Engineering</MenuItem>
+                    <MenuItem value={'Electrical Engineering'}>Electrical Engineering</MenuItem>
+                  </Select>
+                </FormControl>
+              ) : null
+            }
+        </Grid>
+      </Grid>
     </StyledRoot>
   );
-}
+};
+
+const mapStateToProps = state => {
+  const authType = state.auth.authType;
+  return {
+    authType,
+  };
+};
+
+UserListToolbar.propTypes = {
+  numSelected: PropTypes.number,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
+  setDepartment: PropTypes.func,
+  department: PropTypes.string,
+  authType: PropTypes.string,
+};
+
+UserListToolbar.defaultProps = {
+  setDepartment: f => f,
+  department: '',
+};
+
+export default connect(mapStateToProps, {})(UserListToolbar);
