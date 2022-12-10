@@ -151,4 +151,53 @@ public class ExchangeUniversityDepartmentService {
 
         return exchangeUniversityDepartmentOptional.get();
     }
+
+    public void addElectiveCourseByExchangeDepartmentID(Course course, Long id) {
+        Optional<ExchangeUniversityDepartment> exchangeUniversityDepartmentOptional = exchangeUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !exchangeUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange University Department with id:" + id + " doesn't exist!");
+        }
+
+        ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentOptional.get();
+        List<Course> electiveCourseList = exchangeUniversityDepartment.getElectiveCourseList();
+
+        for (Course electiveCourse : electiveCourseList) {
+            if ( electiveCourse.getCourseName().equals(course.getCourseName()) ) {
+                throw new IllegalStateException("Elective Course with name:" + course.getCourseName() + " already exists in this department!");
+            }
+        }
+
+        electiveCourseList.add(course);
+        courseRepository.save(course);
+        exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
+    }
+
+    public void deleteElectiveCourseByExchangeDepartmentIDAndCourseID(Long id, Long electiveCourseID) {
+        Optional<ExchangeUniversityDepartment> exchangeUniversityDepartmentOptional = exchangeUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !exchangeUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange University Department with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(electiveCourseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course with id:" + electiveCourseID + " doesn't exist!");
+        }
+
+        ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentOptional.get();
+        List<Course> electiveCourseList = exchangeUniversityDepartment.getElectiveCourseList();
+        Course electiveCourse = courseOptional.get();
+
+        if ( !electiveCourseList.contains(electiveCourse) ) {
+            throw new IllegalStateException("Course with id:" + electiveCourseID + " doesn't exist in erasmus department!");
+        }
+
+        electiveCourseList.remove(electiveCourse);
+        courseRepository.deleteById(electiveCourseID);
+        exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
+    }
 }

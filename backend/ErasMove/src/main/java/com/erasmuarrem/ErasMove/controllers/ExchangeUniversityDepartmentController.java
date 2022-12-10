@@ -47,6 +47,11 @@ public class ExchangeUniversityDepartmentController {
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(course, id);
     }
 
+    @PostMapping("/addElectiveCourse/{id}")
+    public void addElectiveCourseByExchangeDepartmentID(@RequestBody Course course, @PathVariable("id") Long id) {
+        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(course, id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteExchangeUniversityDepartmentByID(@PathVariable("id") Long id) {
         exchangeUniversityDepartmentService.deleteExchangeUniversityDepartmentByID(id);
@@ -60,5 +65,10 @@ public class ExchangeUniversityDepartmentController {
     @DeleteMapping("/delete/{id}/courseName/{courseName}")
     public void deleteCourseByExchangeDepartmentIDAndCourseName(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) {
         exchangeUniversityDepartmentService.deleteCourseByExchangeDepartmentIDAndCourseName(id, courseName);
+    }
+
+    @DeleteMapping("/delete/{id}/electiveCourse/{electiveCourseID}")
+    public void deleteElectiveCourseByExchangeDepartmentIDAndCourseID(@PathVariable("id") Long id, @PathVariable("electiveCourseID") Long electiveCourseID) {
+        exchangeUniversityDepartmentService.deleteElectiveCourseByExchangeDepartmentIDAndCourseID(id, electiveCourseID);
     }
 }
