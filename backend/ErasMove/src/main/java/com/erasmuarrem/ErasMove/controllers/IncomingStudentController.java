@@ -16,8 +16,8 @@ public class IncomingStudentController {
         this.incomingStudentService = incomingStudentService;
     }
     @PostMapping("/add")
-    public void addIncomingStudent(@RequestParam String token,@RequestBody IncomingStudent incomingStudent ) {
-        incomingStudentService.addIncomingStudent(token, incomingStudent);
+    public void addIncomingStudent(@RequestParam String adminToken,@RequestBody IncomingStudent incomingStudent ) {
+        incomingStudentService.addIncomingStudent(adminToken, incomingStudent);
     }
 
     @DeleteMapping("delete/{id}")
