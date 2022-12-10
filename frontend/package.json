@@ -22,6 +22,7 @@
     "immutable": "4.1.0",
     "jquerry": "0.0.1-security",
     "jspdf": "^2.5.1",
+    "mdb-react-ui-kit": "^5.0.0",
     "node-sass": "8.0.0",
     "popper.js": "1.16.1",
     "react": "18.2.0",

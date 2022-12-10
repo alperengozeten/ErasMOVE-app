@@ -29,7 +29,7 @@ import {
           }}
         >
           <Avatar
-            src={user.avatar}
+            src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
             sx={{
               height: 64,
               mb: 2,
