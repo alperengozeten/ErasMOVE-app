@@ -32,8 +32,23 @@ public class OutgoingStudentController {
     }
 
     @PostMapping("/add")
-    public void addOutgoingStudent(@RequestBody OutgoingStudent outgoingStudent) {
-        outgoingStudentService.addOutgoingStudent(outgoingStudent);
+    public void addOutgoingStudent(@RequestParam String adminToken,@RequestBody OutgoingStudent outgoingStudent) {
+        outgoingStudentService.addOutgoingStudent(adminToken,outgoingStudent);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam String email, @RequestParam String password ) {
+        return outgoingStudentService.login(email,password);
+    }
+
+    @PostMapping("/logout/{id}")
+    public String logOut(@PathVariable("id") Long id) {
+        return outgoingStudentService.logOut(id);
+    }
+
+    @PatchMapping("/changePassword")
+    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        outgoingStudentService.changePasswordByEmail(email,newPass, oldPass);
     }
 
 }
