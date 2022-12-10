@@ -16,8 +16,8 @@ public class IncomingStudentController {
         this.incomingStudentService = incomingStudentService;
     }
     @PostMapping("/add")
-    public void addIncomingStudent(@RequestBody IncomingStudent incomingStudent ) {
-        incomingStudentService.addIncomingStudent(incomingStudent);
+    public void addIncomingStudent(@RequestParam String token,@RequestBody IncomingStudent incomingStudent ) {
+        incomingStudentService.addIncomingStudent(token, incomingStudent);
     }
 
     @DeleteMapping("delete/{id}")
@@ -43,5 +43,20 @@ public class IncomingStudentController {
     @DeleteMapping("{incomingStudentID}/preferredCourses/delete/{courseID}")
     public void deleteCourseFromPreferredCoursesById( @PathVariable("incomingStudentID") Long id1, @PathVariable("courseID") Long id2 ) {
         incomingStudentService.deleteCourseFromPreferredCoursesById(id1,id2);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam String email, @RequestParam String password ) {
+        return incomingStudentService.login(email,password);
+    }
+
+    @PostMapping("/logout/{id}")
+    public String logOut(@PathVariable("id") Long id) {
+        return incomingStudentService.logOut(id);
+    }
+
+    @PatchMapping("/changePassword")
+    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        incomingStudentService.changePasswordByEmail(email,newPass, oldPass);
     }
 }
