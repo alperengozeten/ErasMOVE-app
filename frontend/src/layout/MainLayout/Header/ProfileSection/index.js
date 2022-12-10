@@ -1,8 +1,9 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -39,7 +40,7 @@ import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
 
 // ==============================|| PROFILE MENU ||============================== //
 
-const ProfileSection = () => {
+const ProfileSection = ({ authType }) => {
     const theme = useTheme();
     const customization = useSelector(state => state.customization);
     const navigate = useNavigate();
@@ -156,12 +157,12 @@ const ProfileSection = () => {
                                     <Box sx={{ p: 2 }}>
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h4">Good Morning,</Typography>
-                                                <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
+                                                <Typography variant="h3">Good Morning,</Typography>
+                                                <Typography component="span" variant="h3" sx={{ fontWeight: 400 }}>
                                                     Johne Doe
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2">Outgoing Student</Typography>
+                                            <Typography color={'secondary'} variant="h4">{authType}</Typography>
                                         </Stack>
                                     </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
@@ -287,4 +288,15 @@ const ProfileSection = () => {
     );
 };
 
-export default ProfileSection;
+const mapStateToProps = state => {
+    const authType = state.auth.authType;
+    return {
+        authType,
+    };
+};
+
+ProfileSection.propTypes = {
+    authType: PropTypes.string,
+};
+
+export default connect(mapStateToProps, {})(ProfileSection);
