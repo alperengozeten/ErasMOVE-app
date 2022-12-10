@@ -46,7 +46,7 @@ public class IncomingStudentService {
             if ( tokenMatches ) {
                 Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail( incomingStudent.getEmail() );
                 if ( incomingStudentOptional.isPresent() ) {
-                    throw new IllegalStateException("The incoming student with " +incomingStudent.getEmail()+  " already exists.");
+                    throw new IllegalStateException("The incoming student with email " +incomingStudent.getEmail()+  " already exists.");
                 }
                 hashingPasswordHelper.setPassword(incomingStudent.getHashedPassword());
                 incomingStudent.setHashedPassword(hashingPasswordHelper.Hash());
@@ -157,7 +157,7 @@ public class IncomingStudentService {
     public String logOut(Long id ) {
         Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findById(id);
         if ( !incomingStudentOptional.isPresent() ){
-            return "The incoming student with email  "+ id + " doesn't exist.";
+            return "The incoming student with id  "+ id + " doesn't exist.";
         }
         IncomingStudent currStu = incomingStudentOptional.get();
         Token currToken = currStu.getUserToken();

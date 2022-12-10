@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface DepartmentCoordinatorRepository extends JpaRepository<DepartmentCoordinator, Long> {
     Optional<DepartmentCoordinator> findByDepartmentID(Long departmentID);
+
+    Optional<DepartmentCoordinator> findByEmail(String email);
 }
