@@ -51,6 +51,19 @@ public class PreApprovalFormRequestService {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
+        List<PreApprovalFormRequest> preApprovalFormRequests = preApprovalFormRequestRepository.findByStudentID(outgoingStudentID);
+
+        // the student shouldn't have a waiting or accepted request
+        for(PreApprovalFormRequest approvalFormRequest: preApprovalFormRequests) {
+            if ( approvalFormRequest.getStatus().equals("ACCEPTED") ) {
+                throw new IllegalStateException("Student with id:" + outgoingStudentID + " already has an accepted Pre-Approval Form!");
+            }
+            else if ( approvalFormRequest.getStatus().equals("WAITING") ) {
+                throw new IllegalStateException("Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!");
+            }
+        }
+
+        preApprovalFormRequest.setStatus("WAITING");
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
     }
 
@@ -92,5 +105,35 @@ public class PreApprovalFormRequestService {
         }
 
         return preApprovalFormRequestRepository.findByStudentID(outgoingStudentID);
+    }
+
+    public void declinePreApprovalFormRequest(Long id, String feedback) {
+        Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
+
+        if ( !preApprovalFormRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Pre-Approval Form with id:" + id + " doesn't exist!");
+        }
+
+        PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+
+        preApprovalFormRequest.setFeedback(feedback);
+        preApprovalFormRequest.setStatus("DECLINED");
+
+        preApprovalFormRequestRepository.save(preApprovalFormRequest);
+    }
+
+    public void acceptPreApprovalFormRequestByID(Long id, String feedback) {
+        Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
+
+        if ( !preApprovalFormRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Pre-Approval Form with id:" + id + " doesn't exist!");
+        }
+
+        PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+
+        preApprovalFormRequest.setFeedback(feedback);
+        preApprovalFormRequest.setStatus("ACCEPTED");
+
+        preApprovalFormRequestRepository.save(preApprovalFormRequest);
     }
 }
