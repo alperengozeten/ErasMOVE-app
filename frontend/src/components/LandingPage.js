@@ -97,6 +97,11 @@ const LandingPage = () => {
                                                 Login as Administrative Staff
                                             </Button>
                                         </Grid>
+                                        <Grid item container xs={8} justifyContent={"center"}>
+                                            <Button fullWidth variant="contained" color="primary" size="medium" onClick={() => directToLogin('Admin')} >
+                                                Login as Admin
+                                            </Button>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </AuthCardWrapper>

@@ -21,6 +21,8 @@ const menuItems = authType => {
     }  else if (authType === 'Course Coordinator') {
         list = [dashboard, pages, announcements, courseRequests];
     } else if (authType === 'Administrative Staff') {
+        list = [dashboard, pages, universities, announcements, requests];
+    } else if (authType === 'Admin') {
         // TODO: update this list
         list = [dashboard, student, pages, universities, announcements, requests, courseRequests];
     }
