@@ -56,8 +56,9 @@ const Login = ({ logInRequest, authType }) => {
                                                         color={ theme.palette.secondary.main }
                                                         gutterBottom
                                                         variant={ matchDownSM ? 'h3' : 'h2' }
+                                                        textAlign={'center'}
                                                     >
-                                                        Login as {authType}
+                                                        You are logging as {authType}
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
