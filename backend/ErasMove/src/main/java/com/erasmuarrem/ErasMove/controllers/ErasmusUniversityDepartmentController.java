@@ -45,6 +45,11 @@ public class ErasmusUniversityDepartmentController {
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(course, id);
     }
 
+    @PostMapping("/addElectiveCourse/{id}")
+    public void addElectiveCourseByErasmusDepartmentID(@RequestBody Course course, @PathVariable("id") Long id) {
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID(course, id);
+    }
+
     @PostMapping("/add/{id}/outgoingStudent/{outgoingStudentID}")
     public void addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(@PathVariable("id") Long id, @PathVariable("outgoingStudentID") Long outgoingStudentID) {
         erasmusUniversityDepartmentService.addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(id, outgoingStudentID);
@@ -63,6 +68,11 @@ public class ErasmusUniversityDepartmentController {
     @DeleteMapping("/delete/{id}/outgoingStudent/{outgoingStudentID}")
     public void deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(@PathVariable("id") Long id, @PathVariable("outgoingStudentID") Long outgoingStudentID) {
         erasmusUniversityDepartmentService.deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(id, outgoingStudentID);
+    }
+
+    @DeleteMapping("/delete/{id}/electiveCourse/{electiveCourseID}")
+    public void deleteElectiveCourseByErasmusDepartmentIDAndCourseID(@PathVariable("id") Long id, @PathVariable("electiveCourseID") Long electiveCourseID) {
+        erasmusUniversityDepartmentService.deleteElectiveCourseByErasmusDepartmentIDAndCourseID(id, electiveCourseID);
     }
 
     // add, remove course

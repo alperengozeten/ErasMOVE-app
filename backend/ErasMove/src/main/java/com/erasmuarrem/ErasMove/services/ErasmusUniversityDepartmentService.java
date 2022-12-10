@@ -52,7 +52,7 @@ public class ErasmusUniversityDepartmentService {
 
         if ( erasmusUniversityDepartmentOptional.isPresent() ) {
             throw new IllegalStateException("Department with name:" + erasmusUniversityDepartment.getDepartmentName() +
-                    " alredy exists in university with id:" + erasmusUniversityDepartment.getErasmusUniversity().getID());
+                    " already exists in university with id:" + erasmusUniversityDepartment.getErasmusUniversity().getID());
         }
 
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
@@ -139,7 +139,7 @@ public class ErasmusUniversityDepartmentService {
 
         // CHECK IF DEPARTMENT NAMES MATCH
         if ( !outgoingStudent.getDepartment().getDepartmentName().equals(erasmusUniversityDepartment.getDepartmentName()) ) {
-            throw new IllegalStateException("Outgoing student has unmatching deparment:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
+            throw new IllegalStateException("Outgoing student has unmatching department:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
         }
 
         if ( erasmusUniversityDepartment.getQuota() <= 0 ) {
@@ -177,7 +177,7 @@ public class ErasmusUniversityDepartmentService {
 
         // CHECK IF DEPARTMENT NAMES MATCH
         if ( !outgoingStudent.getDepartment().getDepartmentName().equals(erasmusUniversityDepartment.getDepartmentName()) ) {
-            throw new IllegalStateException("Outgoing student has unmatching deparment:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
+            throw new IllegalStateException("Outgoing student has unmatching department:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
         }
 
         if ( !acceptedStudents.contains(outgoingStudent) ) {
@@ -200,5 +200,54 @@ public class ErasmusUniversityDepartmentService {
         }
 
         return erasmusUniversityDepartmentOptional.get();
+    }
+
+    public void addElectiveCourseByErasmusDepartmentID(Course course, Long id) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University Department with id:" + id + " doesn't exist!");
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+        List<Course> electiveCourseList = erasmusUniversityDepartment.getElectiveCourseList();
+
+        for (Course electiveCourse : electiveCourseList) {
+            if ( electiveCourse.getCourseName().equals(course.getCourseName()) ) {
+                throw new IllegalStateException("Elective Course with name:" + course.getCourseName() + " already exists in this department!");
+            }
+        }
+
+        electiveCourseList.add(course);
+        courseRepository.save(course);
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
+    }
+
+    public void deleteElectiveCourseByErasmusDepartmentIDAndCourseID(Long id, Long electiveCourseID) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            throw new IllegalStateException("Erasmus University with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(electiveCourseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course with id:" + electiveCourseID + " doesn't exist!");
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+        List<Course> electiveCourseList = erasmusUniversityDepartment.getElectiveCourseList();
+        Course electiveCourse = courseOptional.get();
+
+        if ( !electiveCourseList.contains(electiveCourse) ) {
+            throw new IllegalStateException("Elective Course with id:" + electiveCourse + " doesn't exist in erasmus department!");
+        }
+
+        electiveCourseList.remove(electiveCourse); //  remove from the list
+        courseRepository.deleteById(electiveCourseID); // delete the course
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment); // save the department back
     }
 }
