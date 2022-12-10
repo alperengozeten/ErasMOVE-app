@@ -2,10 +2,7 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
 import com.erasmuarrem.ErasMove.models.*;
-import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
-import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
-import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
-import com.erasmuarrem.ErasMove.repositories.TokenRepository;
+import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,13 +16,15 @@ public class UserManagementService {
     private HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
+    private final IncomingStudentRepository incomingStudentRepository;
     private final AdministrativeStaffRepository administrativeStaffRepository;
     private final AdminService adminService;
 
-    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, AdministrativeStaffRepository administrativeStaffRepository, AdminService adminService) {
+    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, IncomingStudentRepository incomingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdminService adminService) {
         this.tokenRepository = tokenRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
+        this.incomingStudentRepository = incomingStudentRepository;
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.adminService = adminService;
     }
@@ -306,6 +305,99 @@ public class UserManagementService {
         if ( currStaff.getHashedPassword().equals(oldHashedPassword) ) {
             currStaff.setHashedPassword(newHashedPassword);
             administrativeStaffRepository.save(currStaff);
+        }
+        else {
+            throw new IllegalStateException("Incorrect old password!");
+        }
+    }
+
+    // INCOMING STUDENT
+
+    public void addIncomingStudent(String token ,IncomingStudent incomingStudent) {
+        List<Admin> admins = adminService.getAllAdmins();
+        if (admins!=null ) {
+            boolean tokenMatches = false;
+            for (Admin admin : admins) {
+                if (admin.getToken() != null) {
+                    if (admin.getToken().getToken().equals(token) && admin.getToken().getIsActivelyUsed()) {
+                        tokenMatches = true;
+                        break;
+                    }
+                }
+            }
+            if ( tokenMatches ) {
+                Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail( incomingStudent.getEmail() );
+                if ( incomingStudentOptional.isPresent() ) {
+                    throw new IllegalStateException("The incoming student with email " +incomingStudent.getEmail()+  " already exists.");
+                }
+                hashingPasswordHelper.setPassword(incomingStudent.getHashedPassword());
+                incomingStudent.setHashedPassword(hashingPasswordHelper.Hash());
+                incomingStudentRepository.save(incomingStudent);
+            }
+            else {
+                throw new IllegalStateException("Unauthorized Request!");
+            }
+        }
+        else {
+            throw new IllegalStateException("Unauthorized Request!");
+        }
+    }
+
+    public String loginIncomingStudent( String email, String password) {
+        hashingPasswordHelper = HashingPasswordHelper.getInstance();
+        hashingPasswordHelper.setPassword(password);
+        String hashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail(email);
+        if ( !incomingStudentOptional.isPresent() ){
+            return "The incoming student with email  "+ email + " doesn't exist.";
+        }
+        else {
+            IncomingStudent currStu = incomingStudentOptional.get();
+            if ( hashedPassword.equals(currStu.getHashedPassword()) ) {
+
+                Token token = new Token();
+                token.setIsActivelyUsed(true);
+                token.setLastActive(LocalDateTime.now());
+
+                String strToken = token.generateToken();
+                tokenRepository.save(token);
+                currStu.setUserToken(token);
+                incomingStudentRepository.save(currStu);
+                return "IS"+strToken;
+            }
+            return "Incorrect login credentials.";
+        }
+    }
+    public String logOutIncomingStudent(Long id ) {
+        Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findById(id);
+        if ( !incomingStudentOptional.isPresent() ){
+            return "The incoming student with id  "+ id + " doesn't exist.";
+        }
+        IncomingStudent currStu = incomingStudentOptional.get();
+        Token currToken = currStu.getUserToken();
+        currToken.setLastActive(LocalDateTime.now());
+        currToken.setIsActivelyUsed(false);
+        tokenRepository.save(currToken);
+
+        incomingStudentRepository.save(currStu);
+        return "Log out successful";
+    }
+    public void changePasswordByEmailIncomingStudent( String email, String newPassword, String oldPassword ) {
+        hashingPasswordHelper.setPassword(newPassword);
+        String newHashedPassword = hashingPasswordHelper.Hash();
+
+        hashingPasswordHelper.setPassword(oldPassword);
+        String oldHashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail(email);
+        if ( !incomingStudentOptional.isPresent() ){
+            throw new IllegalStateException("The incoming student with email  "+ email + " doesn't exist.");
+        }
+        IncomingStudent currStu = incomingStudentOptional.get();
+        if ( currStu.getHashedPassword().equals(oldHashedPassword) ) {
+            currStu.setHashedPassword(newHashedPassword);
+            incomingStudentRepository.save(currStu);
         }
         else {
             throw new IllegalStateException("Incorrect old password!");

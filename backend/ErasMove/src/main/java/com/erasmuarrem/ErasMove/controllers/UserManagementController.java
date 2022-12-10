@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.DepartmentCoordinator;
+import com.erasmuarrem.ErasMove.models.IncomingStudent;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.UserManagementService;
 import org.springframework.web.bind.annotation.*;
@@ -80,5 +81,27 @@ public class UserManagementController {
     @PatchMapping("/changePassword/administrativeStaff")
     public void changePasswordAdministrativeStaff( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
         userManagementService.changePasswordByEmailAdministrativeStaff(email,newPass, oldPass);
+    }
+
+    // INCOMING STUDENT
+
+    @PostMapping("/add/incomingStudent")
+    public void addIncomingStudent(@RequestParam String adminToken,@RequestBody IncomingStudent incomingStudent ) {
+        userManagementService.addIncomingStudent(adminToken, incomingStudent);
+    }
+
+    @PostMapping("/login/incomingStudent")
+    public String loginIncomingStudent(@RequestParam String email, @RequestParam String password ) {
+        return userManagementService.loginIncomingStudent(email,password);
+    }
+
+    @PostMapping("/logout/incomingStudent/{id}")
+    public String logOutIncomingStudent(@PathVariable("id") Long id) {
+        return userManagementService.logOutIncomingStudent(id);
+    }
+
+    @PatchMapping("/changePassword/incomingStudent")
+    public void changePasswordIncomingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        userManagementService.changePasswordByEmailIncomingStudent(email,newPass, oldPass);
     }
 }
