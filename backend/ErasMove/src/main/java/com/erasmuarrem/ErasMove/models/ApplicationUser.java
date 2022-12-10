@@ -6,11 +6,12 @@ import lombok.Setter;
 
 
 
+@Entity
+@Table
 @Getter
 @Setter
-@Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User {
+public class ApplicationUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +21,7 @@ public abstract class User {
     private String hashedPassword;
 
     @OneToOne
-    private Token token;
+    private Token userToken;
 
     //@OneToMany
     //private List<CourseApprovalRequest> courseApprovalRequestList;

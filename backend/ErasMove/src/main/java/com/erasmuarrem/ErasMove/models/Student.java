@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class Student extends User {
+public abstract class Student extends ApplicationUser {
 
     private int semester;
 

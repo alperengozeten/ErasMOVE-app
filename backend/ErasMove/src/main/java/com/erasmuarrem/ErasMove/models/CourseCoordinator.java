@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class CourseCoordinator extends User {
+public class CourseCoordinator extends ApplicationUser {
 
     @OneToMany
     private List<Course> courseList;

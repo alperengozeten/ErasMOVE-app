@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DepartmentCoordinator extends User {
+public class DepartmentCoordinator extends ApplicationUser {
 
     @OneToOne
     private Department department;

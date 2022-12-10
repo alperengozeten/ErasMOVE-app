@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdministrativeStaff extends User {
+public class AdministrativeStaff extends ApplicationUser {
 
     @OneToMany
     private List<Department> departments;
