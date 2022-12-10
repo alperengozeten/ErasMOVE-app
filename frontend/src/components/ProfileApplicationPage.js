@@ -23,18 +23,6 @@ export default function ProfileApplicationPage({applications}) {
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
-        <MDBCardText className="mb-1" style={{ fontSize: '.77rem' }}>Application Progress</MDBCardText>
-          <MDBRow>
-            <MDBCol md="4">
-              <MDBCard className="mb-4 mb-md-0">
-                  <MDBCardBody>
-                    <MDBProgress className="rounded" >
-                      <MDBProgressBar width={80} valuemin={0} valuemax={100} />
-                    </MDBProgress>
-                  </MDBCardBody>
-                </MDBCard>
-              </MDBCol>
-            </MDBRow>
         <MDBRow>
           <MDBCol lg="12">
             <MDBCard className="mb-4">
@@ -91,7 +79,7 @@ export default function ProfileApplicationPage({applications}) {
                 <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
                     <MDBCardText className="mb-4">Documents</MDBCardText>
-                    <MDBBtn>Add Document</MDBBtn>
+                    <Button variant="contained">Add Document</Button>
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>

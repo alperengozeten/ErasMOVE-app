@@ -11,6 +11,8 @@ import PropTypes from 'prop-types';
 
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
+import ProfileApplicationPage from "../ProfileApplicationPage";
+
 
 const Application = ({ courseRequests, preApprovalForms, hostCourses, approvedCourses }) => {
   const [value, setValue] = React.useState("0");
@@ -41,6 +43,7 @@ const Application = ({ courseRequests, preApprovalForms, hostCourses, approvedCo
                 </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
+                            <ProfileApplicationPage/>
                         </Box>
                     </TabPanel>
                     <TabPanel value="1" index={1}>
