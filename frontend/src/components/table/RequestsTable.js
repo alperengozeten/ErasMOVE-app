@@ -82,7 +82,8 @@ const RequestsTable = ({ requests }) => {
   const [filterName, setFilterName] = useState('');
   
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  
+
+  const [department, setDepartment] = useState('');
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -115,7 +116,9 @@ const RequestsTable = ({ requests }) => {
   };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
 
-  const filteredUsers = applySortFilter(requests, getComparator(order, orderBy), filterName);
+  const filterDepartments = department === '' ? requests : requests.filter(application => application.department === department);
+
+  const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -123,7 +126,7 @@ const RequestsTable = ({ requests }) => {
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
