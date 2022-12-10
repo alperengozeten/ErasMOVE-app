@@ -39,7 +39,7 @@ public class NotificationService {
     }
 
     public List<Notification> getNotificationsOfUserByUserId( Long id ) {
-        return notificationRepository.findAllByReceiverID(id);
+        return notificationRepository.findAllByApplicationUserID(id);
     }
 
     public void markNotificationAsReadByID(Long id) {

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface AdministrativeStaffRepository extends JpaRepository<AdministrativeStaff, Long> {
     Optional<AdministrativeStaff> findByDepartments_ID(Long departmentID);
     Optional<AdministrativeStaff> findByDepartments_DepartmentName(String departmentName);
+    Optional<AdministrativeStaff> findByEmail(String email);
+
 }

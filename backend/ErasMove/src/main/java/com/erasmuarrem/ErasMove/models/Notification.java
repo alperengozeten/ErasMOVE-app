@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Entity
 @Table
 @Getter
@@ -22,5 +20,7 @@ public class Notification {
     private String content;
     //This one is to hold when the notification is send.
     //private LocalDate date;
-    private Long receiverID;
+
+    @OneToOne
+    private ApplicationUser applicationUser;
 }
