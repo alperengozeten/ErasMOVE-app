@@ -34,27 +34,13 @@ public class DepartmentCoordinatorController {
     }
 
     @PostMapping("/add")
-    public void addDepartmentCoordinator(@RequestParam String adminToken,@RequestBody DepartmentCoordinator departmentCoordinator) {
-        departmentCoordinatorService.addDepartmentCoordinator(adminToken,departmentCoordinator);
+    public void addDepartmentCoordinator(@RequestBody DepartmentCoordinator departmentCoordinator) {
+        departmentCoordinatorService.addDepartmentCoordinator(departmentCoordinator);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteDepartmentCoordinatorById(@PathVariable("id") Long id) {
         departmentCoordinatorService.deleteDepartmentCoordinatorById(id);
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password ) {
-        return departmentCoordinatorService.login(email,password);
-    }
-
-    @PostMapping("/logout/{id}")
-    public String logOut(@PathVariable("id") Long id) {
-        return departmentCoordinatorService.logOut(id);
-    }
-
-    @PatchMapping("/changePassword")
-    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        departmentCoordinatorService.changePasswordByEmail(email,newPass, oldPass);
     }
 }
