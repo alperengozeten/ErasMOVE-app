@@ -14,6 +14,6 @@ import lombok.Setter;
 public class OutgoingStudent extends Student {
     private double cgpa;
     private Boolean isDoubleMajor;
-
+    private Boolean isErasmus;
     // private Application application;
 }

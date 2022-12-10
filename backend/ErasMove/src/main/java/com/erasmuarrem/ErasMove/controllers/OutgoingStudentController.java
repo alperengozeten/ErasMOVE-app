@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/outgoingStudent")
@@ -26,29 +25,11 @@ public class OutgoingStudentController {
 
     @GetMapping("/{id}")
     public OutgoingStudent getStudent(@PathVariable("id") Long id) {
-        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentService.getStudentByID(id);
-
-        return outgoingStudentOptional.get();
+        return outgoingStudentService.getStudentByID(id).orElse(null);
     }
 
     @PostMapping("/add")
-    public void addOutgoingStudent(@RequestParam String adminToken,@RequestBody OutgoingStudent outgoingStudent) {
-        outgoingStudentService.addOutgoingStudent(adminToken,outgoingStudent);
+    public void addOutgoingStudent(@RequestBody OutgoingStudent outgoingStudent) {
+        outgoingStudentService.addOutgoingStudent(outgoingStudent);
     }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password ) {
-        return outgoingStudentService.login(email,password);
-    }
-
-    @PostMapping("/logout/{id}")
-    public String logOut(@PathVariable("id") Long id) {
-        return outgoingStudentService.logOut(id);
-    }
-
-    @PatchMapping("/changePassword")
-    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        outgoingStudentService.changePasswordByEmail(email,newPass, oldPass);
-    }
-
 }
