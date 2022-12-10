@@ -39,6 +39,11 @@ public class ErasmusUniversityController {
         return erasmusUniversityService.getErasmusUniversitiesByCountryName(countryName);
     }
 
+    @GetMapping("/acceptedStudent/{acceptedStudentID}")
+    public ErasmusUniversity getErasmusUniversityByAcceptedStudentID(@PathVariable("acceptedStudentID") Long acceptedStudentID) {
+        return erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(acceptedStudentID);
+    }
+
     @PostMapping("/rejectedCourses/{id}")
     public void addRejectedCourseByID(@RequestBody Course course, @PathVariable("id") Long erasmusUniversityID) {
         erasmusUniversityService.addRejectedCourse(course, erasmusUniversityID);

@@ -4,6 +4,7 @@ import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ public class ErasmusUniversityService {
 
     private final ErasmusUniversityRepository erasmusUniversityRepository;
     private final CourseRepository courseRepository;
+    private final OutgoingStudentRepository outgoingStudentRepository;
 
     @Autowired
-    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository) {
+    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository) {
         this.erasmusUniversityRepository = erasmusUniversityRepository;
         this.courseRepository = courseRepository;
+        this.outgoingStudentRepository = outgoingStudentRepository;
     }
 
     public List<ErasmusUniversity> getErasmusUniversities() {
@@ -129,5 +132,17 @@ public class ErasmusUniversityService {
 
         courseRepository.deleteById(courseID);
         erasmusUniversityRepository.save(erasmusUniversity);
+    }
+
+    public ErasmusUniversity getErasmusUniversityByAcceptedStudentID(Long acceptedStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(acceptedStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + acceptedStudentID + " doesn't exist!");
+        }
+
+        Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findByAcceptedStudents_ID(acceptedStudentID);
+
+        return erasmusUniversityOptional.orElse(null);
+
     }
 }

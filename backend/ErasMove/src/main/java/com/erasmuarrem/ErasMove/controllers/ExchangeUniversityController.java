@@ -39,6 +39,11 @@ public class ExchangeUniversityController {
         return exchangeUniversityService.getExchangeUniversitiesByCountryName(countryName);
     }
 
+    @GetMapping("/acceptedStudent/{acceptedStudentID}")
+    public ExchangeUniversity getExchangeUniversityByAcceptedStudentID(@PathVariable("acceptedStudentID") Long acceptedStudentID) {
+        return exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(acceptedStudentID);
+    }
+
     @PostMapping("/rejectedCourses/{id}")
     public void addRejectedCourseByID(@RequestBody Course course, @PathVariable("id") Long exchangeUniversityID) {
         exchangeUniversityService.addRejectedCourseByID(course, exchangeUniversityID);

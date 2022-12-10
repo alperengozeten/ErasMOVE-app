@@ -189,4 +189,15 @@ public class ExchangeUniversityService {
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() + 1); // update the quota
         exchangeUniversityRepository.save(exchangeUniversity);
     }
+
+    public ExchangeUniversity getExchangeUniversityByAcceptedStudentID(Long acceptedStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(acceptedStudentID) ) {
+            throw new IllegalStateException("Outgoing Student with id:" + acceptedStudentID + " doesn't exist!");
+        }
+
+        Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findByAcceptedStudents_ID(acceptedStudentID);
+
+        return exchangeUniversityOptional.orElse(null);
+    }
 }

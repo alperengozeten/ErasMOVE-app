@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ExchangeUniversityRepository extends JpaRepository<ExchangeUniversity, Long> {
     Optional<ExchangeUniversity> findByUniversityName(String universityName);
     List<ExchangeUniversity> findByCountry(String countryName);
+    Optional<ExchangeUniversity> findByAcceptedStudents_ID(Long outgoingStudentID);
 }
