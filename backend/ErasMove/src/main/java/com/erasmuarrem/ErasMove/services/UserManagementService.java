@@ -1,10 +1,8 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
-import com.erasmuarrem.ErasMove.models.Admin;
-import com.erasmuarrem.ErasMove.models.DepartmentCoordinator;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
-import com.erasmuarrem.ErasMove.models.Token;
+import com.erasmuarrem.ErasMove.models.*;
+import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.repositories.TokenRepository;
@@ -21,12 +19,14 @@ public class UserManagementService {
     private HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
+    private final AdministrativeStaffRepository administrativeStaffRepository;
     private final AdminService adminService;
 
-    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, AdminService adminService) {
+    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, AdministrativeStaffRepository administrativeStaffRepository, AdminService adminService) {
         this.tokenRepository = tokenRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
+        this.administrativeStaffRepository = administrativeStaffRepository;
         this.adminService = adminService;
     }
 
@@ -213,6 +213,99 @@ public class UserManagementService {
         if ( currDepCord.getHashedPassword().equals(oldHashedPassword) ) {
             currDepCord.setHashedPassword(newHashedPassword);
             departmentCoordinatorRepository.save(currDepCord);
+        }
+        else {
+            throw new IllegalStateException("Incorrect old password!");
+        }
+    }
+
+    // ADMINISTRATIVE STAFF
+
+    public void addAdministrativeStaff(String token, AdministrativeStaff administrativeStaff) {
+        List<Admin> admins = adminService.getAllAdmins();
+        if (admins!=null ) {
+            boolean tokenMatches = false;
+            for (Admin admin : admins) {
+                if (admin.getToken() != null) {
+                    if (admin.getToken().getToken().equals(token) && admin.getToken().getIsActivelyUsed()) {
+                        tokenMatches = true;
+                        break;
+                    }
+                }
+            }
+            if ( tokenMatches ) {
+                Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findById( administrativeStaff.getID() );
+                if ( administrativeStaffOptional.isPresent() ) {
+                    throw new IllegalStateException("The Administrative Staff with ID " +administrativeStaff.getID()+  " already exists.");
+                }
+                hashingPasswordHelper.setPassword(administrativeStaff.getHashedPassword());
+                administrativeStaff.setHashedPassword(hashingPasswordHelper.Hash());
+                administrativeStaffRepository.save(administrativeStaff);
+            }
+            else {
+                throw new IllegalStateException("Unauthorized Request!");
+            }
+        }
+        else {
+            throw new IllegalStateException("Unauthorized Request!");
+        }
+    }
+
+    public String loginAdministrativeStaff( String email, String password) {
+        hashingPasswordHelper = HashingPasswordHelper.getInstance();
+        hashingPasswordHelper.setPassword(password);
+        String hashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail(email);
+        if ( !administrativeStaffOptional.isPresent() ){
+            return "The administrative staff with email  "+ email + " doesn't exist.";
+        }
+        else {
+            AdministrativeStaff currStaff = administrativeStaffOptional.get();
+            if ( hashedPassword.equals(currStaff.getHashedPassword()) ) {
+
+                Token token = new Token();
+                token.setIsActivelyUsed(true);
+                token.setLastActive(LocalDateTime.now());
+
+                String strToken = token.generateToken();
+                tokenRepository.save(token);
+                currStaff.setUserToken(token);
+                administrativeStaffRepository.save(currStaff);
+                return "AS"+strToken;
+            }
+            return "Incorrect login credentials.";
+        }
+    }
+    public String logOutAdministrativeStaff(Long id ) {
+        Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findById(id);
+        if ( !administrativeStaffOptional.isPresent() ){
+            return "The administrative staff with id  "+ id + " doesn't exist.";
+        }
+        AdministrativeStaff currStaff = administrativeStaffOptional.get();
+        Token currToken = currStaff.getUserToken();
+        currToken.setLastActive(LocalDateTime.now());
+        currToken.setIsActivelyUsed(false);
+        tokenRepository.save(currToken);
+
+        administrativeStaffRepository.save(currStaff);
+        return "Log out successful";
+    }
+    public void changePasswordByEmailAdministrativeStaff( String email, String newPassword, String oldPassword ) {
+        hashingPasswordHelper.setPassword(newPassword);
+        String newHashedPassword = hashingPasswordHelper.Hash();
+
+        hashingPasswordHelper.setPassword(oldPassword);
+        String oldHashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail(email);
+        if ( !administrativeStaffOptional.isPresent() ){
+            throw new IllegalStateException("The administrative staff with email  "+ email + " doesn't exist.");
+        }
+        AdministrativeStaff currStaff = administrativeStaffOptional.get();
+        if ( currStaff.getHashedPassword().equals(oldHashedPassword) ) {
+            currStaff.setHashedPassword(newHashedPassword);
+            administrativeStaffRepository.save(currStaff);
         }
         else {
             throw new IllegalStateException("Incorrect old password!");

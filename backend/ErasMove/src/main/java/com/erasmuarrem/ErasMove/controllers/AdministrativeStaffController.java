@@ -18,11 +18,6 @@ public class AdministrativeStaffController {
         this.administrativeStaffService = administrativeStaffService;
     }
 
-    @PostMapping("/add")
-    public void addAdministrativeStaff(@RequestParam String adminToken, @RequestBody AdministrativeStaff administrativeStaff) {
-        administrativeStaffService.addAdministrativeStaff(adminToken, administrativeStaff);
-    }
-
     @GetMapping()
     public List<AdministrativeStaff> getAdministrativeStaffs() {
         return administrativeStaffService.getAdministrativeStaffs();
@@ -43,22 +38,13 @@ public class AdministrativeStaffController {
         return administrativeStaffService.getAdministrativeStaffByDepartmentName(departmentName);
     }
 
+    @PostMapping("/add")
+    public void addAdministrativeStaff(@RequestBody AdministrativeStaff administrativeStaff) {
+        administrativeStaffService.addAdministrativeStaff(administrativeStaff);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteAdministrativeStaff(@PathVariable("id") Long id) {
         administrativeStaffService.deleteAdministrativeStaff(id);
-    }
-    @PostMapping("/login")
-    public String login(@RequestParam String email, @RequestParam String password ) {
-        return administrativeStaffService.login(email,password);
-    }
-
-    @PostMapping("/logout/{id}")
-    public String logOut(@PathVariable("id") Long id) {
-        return administrativeStaffService.logOut(id);
-    }
-
-    @PatchMapping("/changePassword")
-    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        administrativeStaffService.changePasswordByEmail(email,newPass, oldPass);
     }
 }

@@ -1,5 +1,6 @@
 package com.erasmuarrem.ErasMove.controllers;
 
+import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.DepartmentCoordinator;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.UserManagementService;
@@ -57,5 +58,27 @@ public class UserManagementController {
     @PatchMapping("/changePassword/departmentCoordinator")
     public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
         userManagementService.changePasswordByEmailDepartmentCoordinator(email,newPass, oldPass);
+    }
+
+    // ADMINISTRATIVE STAFF
+
+    @PostMapping("/add/administrativeStaff")
+    public void addAdministrativeStaff(@RequestParam String adminToken, @RequestBody AdministrativeStaff administrativeStaff) {
+        userManagementService.addAdministrativeStaff(adminToken, administrativeStaff);
+    }
+
+    @PostMapping("/login/administrativeStaff")
+    public String loginAdministrativeStaff(@RequestParam String email, @RequestParam String password ) {
+        return userManagementService.loginAdministrativeStaff(email,password);
+    }
+
+    @PostMapping("/logout/administrativeStaff/{id}")
+    public String logOutAdministrativeStaff(@PathVariable("id") Long id) {
+        return userManagementService.logOutAdministrativeStaff(id);
+    }
+
+    @PatchMapping("/changePassword/administrativeStaff")
+    public void changePasswordAdministrativeStaff( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        userManagementService.changePasswordByEmailAdministrativeStaff(email,newPass, oldPass);
     }
 }
