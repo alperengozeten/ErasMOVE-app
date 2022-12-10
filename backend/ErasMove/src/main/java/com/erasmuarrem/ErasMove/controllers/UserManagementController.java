@@ -1,9 +1,6 @@
 package com.erasmuarrem.ErasMove.controllers;
 
-import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
-import com.erasmuarrem.ErasMove.models.DepartmentCoordinator;
-import com.erasmuarrem.ErasMove.models.IncomingStudent;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.services.UserManagementService;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,5 +100,26 @@ public class UserManagementController {
     @PatchMapping("/changePassword/incomingStudent")
     public void changePasswordIncomingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
         userManagementService.changePasswordByEmailIncomingStudent(email,newPass, oldPass);
+    }
+
+    //Course Coordinator
+    @PostMapping("/add/courseCoordinator")
+    public void addCourseCoordinator(@RequestParam String adminToken,@RequestBody CourseCoordinator courseCoordinator ) {
+        userManagementService.addCourseCoordinator(adminToken, courseCoordinator);
+    }
+
+    @PostMapping("/login/courseCoordinator")
+    public String loginCourseCoordinator(@RequestParam String email, @RequestParam String password ) {
+        return userManagementService.loginCourseCoordinator(email,password);
+    }
+
+    @PostMapping("/logout/courseCoordinator/{id}")
+    public String logoutCourseCoordinator(@PathVariable("id") Long id) {
+        return userManagementService.logoutCourseCoordinator(id);
+    }
+
+    @PatchMapping("/changePassword/courseCoordinator")
+    public void changePasswordCourseCoordinator( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        userManagementService.changePasswordByCourseCoordinator(email,newPass, oldPass);
     }
 }

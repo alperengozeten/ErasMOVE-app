@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CourseCoordinatorRepository extends JpaRepository<CourseCoordinator, Long> {
     Optional<CourseCoordinator> findByCourseList_ID(Long courseID);
+    Optional<CourseCoordinator> findByEmail(String email);
 }

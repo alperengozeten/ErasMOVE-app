@@ -18,15 +18,19 @@ public class UserManagementService {
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
     private final IncomingStudentRepository incomingStudentRepository;
     private final AdministrativeStaffRepository administrativeStaffRepository;
+    private final CourseCoordinatorRepository courseCoordinatorRepository;
     private final AdminService adminService;
 
-    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, IncomingStudentRepository incomingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdminService adminService) {
+    public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository,
+                                 IncomingStudentRepository incomingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository,
+                                 AdminService adminService, CourseCoordinatorRepository courseCoordinatorRepository) {
         this.tokenRepository = tokenRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.incomingStudentRepository = incomingStudentRepository;
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.adminService = adminService;
+        this.courseCoordinatorRepository = courseCoordinatorRepository;
     }
 
     public void addOutgoingStudent(String adminToken, OutgoingStudent outgoingStudent) {
@@ -233,9 +237,9 @@ public class UserManagementService {
                 }
             }
             if ( tokenMatches ) {
-                Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findById( administrativeStaff.getID() );
+                Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail( administrativeStaff.getEmail() );
                 if ( administrativeStaffOptional.isPresent() ) {
-                    throw new IllegalStateException("The Administrative Staff with ID " +administrativeStaff.getID()+  " already exists.");
+                    throw new IllegalStateException("The Administrative Staff with email " +administrativeStaff.getEmail()+  " already exists.");
                 }
                 hashingPasswordHelper.setPassword(administrativeStaff.getHashedPassword());
                 administrativeStaff.setHashedPassword(hashingPasswordHelper.Hash());
@@ -403,4 +407,96 @@ public class UserManagementService {
             throw new IllegalStateException("Incorrect old password!");
         }
     }
+
+    //COURSE COORDINATOR
+    public void addCourseCoordinator(String token ,CourseCoordinator courseCoordinator) {
+        List<Admin> admins = adminService.getAllAdmins();
+        if (admins!=null ) {
+            boolean tokenMatches = false;
+            for (Admin admin : admins) {
+                if (admin.getToken() != null) {
+                    if (admin.getToken().getToken().equals(token) && admin.getToken().getIsActivelyUsed()) {
+                        tokenMatches = true;
+                        break;
+                    }
+                }
+            }
+            if ( tokenMatches ) {
+                Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail( courseCoordinator.getEmail() );
+                if ( courseCoordinatorOptional.isPresent() ) {
+                    throw new IllegalStateException("The course coordinator with email " +courseCoordinator.getEmail()+  " already exists.");
+                }
+                hashingPasswordHelper.setPassword(courseCoordinator.getHashedPassword());
+                courseCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+                courseCoordinatorRepository.save(courseCoordinator);
+            }
+            else {
+                throw new IllegalStateException("Unauthorized Request!");
+            }
+        }
+        else {
+            throw new IllegalStateException("Unauthorized Request!");
+        }
+    }
+    public String loginCourseCoordinator( String email, String password) {
+        hashingPasswordHelper = HashingPasswordHelper.getInstance();
+        hashingPasswordHelper.setPassword(password);
+        String hashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail(email);
+        if ( !courseCoordinatorOptional.isPresent() ){
+            return "The course coordinator with email  "+ email + " doesn't exist.";
+        }
+        else {
+            CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
+            if ( hashedPassword.equals(currCourseCord.getHashedPassword()) ) {
+
+                Token token = new Token();
+                token.setIsActivelyUsed(true);
+                token.setLastActive(LocalDateTime.now());
+
+                String strToken = token.generateToken();
+                tokenRepository.save(token);
+                currCourseCord.setUserToken(token);
+                courseCoordinatorRepository.save(currCourseCord);
+                return "CC"+strToken;
+            }
+            return "Incorrect login credentials.";
+        }
+    }
+    public String logoutCourseCoordinator(Long id ) {
+        Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findById(id);
+        if ( !courseCoordinatorOptional.isPresent() ){
+            return "The course coordinator with id  "+ id + " doesn't exist.";
+        }
+        CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
+        Token currToken = currCourseCord.getUserToken();
+        currToken.setLastActive(LocalDateTime.now());
+        currToken.setIsActivelyUsed(false);
+        tokenRepository.save(currToken);
+
+        courseCoordinatorRepository.save(currCourseCord);
+        return "Log out successful";
+    }
+    public void changePasswordByCourseCoordinator( String email, String newPassword, String oldPassword ) {
+        hashingPasswordHelper.setPassword(newPassword);
+        String newHashedPassword = hashingPasswordHelper.Hash();
+
+        hashingPasswordHelper.setPassword(oldPassword);
+        String oldHashedPassword = hashingPasswordHelper.Hash();
+
+        Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail(email);
+        if ( !courseCoordinatorOptional.isPresent() ){
+            throw new IllegalStateException("The course coordinator with email  "+ email + " doesn't exist.");
+        }
+        CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
+        if ( currCourseCord.getHashedPassword().equals(oldHashedPassword) ) {
+            currCourseCord.setHashedPassword(newHashedPassword);
+            courseCoordinatorRepository.save(currCourseCord);
+        }
+        else {
+            throw new IllegalStateException("Incorrect old password!");
+        }
+    }
+
 }
