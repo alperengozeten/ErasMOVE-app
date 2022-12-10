@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MandatoryCourseApprovalRequest extends CourseApprovalRequest{
+public class MandatoryCourseApprovalRequest extends CourseApprovalRequest {
 
     @OneToOne
     private CourseCoordinator courseCoordinator;
