@@ -23,4 +23,7 @@ public class Department {
 
     @OneToMany
     private List<Course> courseList;
+
+    @OneToMany
+    private List<Course> electiveCourseList;
 }

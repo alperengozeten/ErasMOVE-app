@@ -154,4 +154,51 @@ public class DepartmentService {
 
         return departmentOptional.get();
     }
+
+    public void addElectiveCourseByDepartmentID(Course course, Long id) {
+        Optional<Department> departmentOptional = departmentRepository.findById(id);
+
+        if ( !departmentOptional.isPresent() ) {
+            throw new IllegalStateException("Department with id:" + id + " doesn't exist!");
+        }
+
+        Department department = departmentOptional.get();
+        List<Course> electiveCourseList = department.getElectiveCourseList();
+
+        for (Course electiveCourse : electiveCourseList) {
+            if ( electiveCourse.getCourseName().equals(course.getCourseName()) ) {
+                throw new IllegalStateException("Elective Course with name:" + course.getCourseName() + " already exists in this department!");
+            }
+        }
+
+        electiveCourseList.add(course);
+        courseRepository.save(course);
+        departmentRepository.save(department);
+    }
+
+    public void deleteElectiveCourseByDepartmentIDAndCourseID(Long id, Long electiveCourseID) {
+        Optional<Department> departmentOptional = departmentRepository.findById(id);
+
+        if ( !departmentOptional.isPresent() ) {
+            throw new IllegalStateException("Department with id:" + id + " doesn't exist!");
+        }
+
+        Optional<Course> courseOptional = courseRepository.findById(electiveCourseID);
+
+        if ( !courseOptional.isPresent() ) {
+            throw new IllegalStateException("Elective Course with id:" + electiveCourseID + " doesn't exist!");
+        }
+
+        Department department = departmentOptional.get();
+        List<Course> electiveCourseList = department.getElectiveCourseList();
+        Course electiveCourse = courseOptional.get();
+
+        if ( !electiveCourseList.contains(electiveCourse) ) {
+            throw new IllegalStateException("Course with id:" + electiveCourseID + " isn't in the department!");
+        }
+
+        electiveCourseList.remove(electiveCourse); // update the list
+        courseRepository.deleteById(electiveCourseID); // delete the course from the repository
+        departmentRepository.save(department); // save the department
+    }
 }

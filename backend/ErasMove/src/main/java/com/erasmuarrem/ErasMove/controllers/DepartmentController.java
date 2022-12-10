@@ -49,6 +49,11 @@ public class DepartmentController {
         departmentService.addCourseByDepartmentID(course, id);
     }
 
+    @PostMapping("/addElectiveCourse/{id}")
+    public void addElectiveCourseByDepartmentID(@RequestBody Course course, @PathVariable("id") Long id) {
+        departmentService.addElectiveCourseByDepartmentID(course, id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteDepartment(@PathVariable("id") Long id) {
         departmentService.deleteDepartmentById(id);
@@ -62,5 +67,10 @@ public class DepartmentController {
     @DeleteMapping("/delete/{id}/courseName/{courseName}")
     public void deleteCourseByDepartmentIDAndCourseName(@PathVariable("id") Long id, @PathVariable("courseName") String courseName) {
         departmentService.deleteCourseByDepartmentIDAndCourseName(id, courseName);
+    }
+
+    @DeleteMapping("/delete/{id}/electiveCourse/{electiveCourseID}")
+    public void deleteElectiveCourseByDepartmentIDAndCourseID(@PathVariable("id") Long id, @PathVariable("electiveCourseID") Long electiveCourseID) {
+        departmentService.deleteElectiveCourseByDepartmentIDAndCourseID(id, electiveCourseID);
     }
 }
