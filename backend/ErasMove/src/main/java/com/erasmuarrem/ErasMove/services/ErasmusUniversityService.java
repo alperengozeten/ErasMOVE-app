@@ -2,13 +2,16 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
+import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -144,5 +147,22 @@ public class ErasmusUniversityService {
 
         return erasmusUniversityOptional.orElse(null);
 
+    }
+
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudentsByDepartmentID(Long departmentID) {
+        List<ErasmusUniversity> erasmusUniversityList = erasmusUniversityRepository.findAll();
+        List<OutgoingStudent> acceptedStudents = new ArrayList<>();
+
+        for(ErasmusUniversity erasmusUniversity : erasmusUniversityList) {
+            List<OutgoingStudent> studentList = erasmusUniversity.getAcceptedStudents();
+
+            for (OutgoingStudent outgoingStudent: studentList) {
+                if ( Objects.equals(outgoingStudent.getDepartment().getID(), departmentID) ) {
+                    acceptedStudents.add(outgoingStudent);
+                }
+            }
+        }
+
+        return acceptedStudents;
     }
 }
