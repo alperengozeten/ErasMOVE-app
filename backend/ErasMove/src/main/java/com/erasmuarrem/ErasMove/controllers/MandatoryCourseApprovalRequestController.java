@@ -50,8 +50,18 @@ public class MandatoryCourseApprovalRequestController {
     }
 
     @PostMapping("/add")
-    public void addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
-        mandatoryCourseApprovalRequestService.addMandatoryCourseApprovalRequest(mandatoryCourseApprovalRequest);
+    public String addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
+        return mandatoryCourseApprovalRequestService.addMandatoryCourseApprovalRequest(mandatoryCourseApprovalRequest);
+    }
+
+    @PostMapping("/decline/{id}")
+    public String declineMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return mandatoryCourseApprovalRequestService.declineMandatoryCourseApprovalRequestByID(id, feedback);
+    }
+
+    @PostMapping("/accept/{id}")
+    public String acceptMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return mandatoryCourseApprovalRequestService.acceptMandatoryCourseApprovalRequestByID(id, feedback);
     }
 
     @DeleteMapping("/delete/{id}")

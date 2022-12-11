@@ -6,7 +6,9 @@ import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -31,6 +33,29 @@ public class UserManagementService {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.adminService = adminService;
         this.courseCoordinatorRepository = courseCoordinatorRepository;
+    }
+    public List<ApplicationUser> getAllUsers() {
+
+        List<ApplicationUser> users = new ArrayList<>();
+
+        users.addAll( outgoingStudentRepository.findAll());
+        users.addAll( incomingStudentRepository.findAll());
+        users.addAll( courseCoordinatorRepository.findAll());
+        users.addAll( departmentCoordinatorRepository.findAll() );
+        users.addAll( administrativeStaffRepository.findAll() );
+        return users;
+    }
+
+
+    public ApplicationUser getUserById( Long userID ) {
+
+        List<ApplicationUser> users = getAllUsers();
+        for ( ApplicationUser user : users ) {
+            if (Objects.equals(user.getID(), userID)) {
+                return user;
+            }
+        }
+        throw  new IllegalStateException("There isn't a user with id "+ userID +" !" );
     }
 
     public void addOutgoingStudent(String adminToken, OutgoingStudent outgoingStudent) {

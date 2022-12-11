@@ -39,40 +39,41 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-const [notificationInfo, setNotificationInfo] = React.useState([
-  {
     notification:
-      "Notification Notification Notification Notification Notification Notification...",
-    from: "Bilmemne Bilmemne Hoca",
-    isUnread: true,
-    date: "12.12.2022",
-    isNew: true,
-  },
-  {
-    notification:
-      "Notification Notification Notification Notification Notification Notification...",
-    from: "Bilmemne Bilmemne Hoca",
-    isUnread: true,
-    date: "12.12.2022",
-    isNew: true,
-  },
-  {
-    notification:
-      "Notification Notification Notification Notification Notification Notification...",
-    from: "Bilmemne Bilmemne Hoca",
-    isUnread: true,
-    date: "12.12.2022",
-    isNew: true,
-  },
-  {
-    notification:
-      "Notification Notification Notification Notification Notification Notification...",
-    from: "Bilmemne Bilmemne Hoca",
-    isUnread: true,
-    date: "12.12.2022",
-    isNew: true,
-  },
-]);
+// const [notificationInfo, setNotificationInfo] = React.useState([
+//   {
+//     notification:
+//       "Notification Notification Notification Notification Notification Notification...",
+//     from: "Bilmemne Bilmemne Hoca",
+//     isUnread: true,
+//     date: "12.12.2022",
+//     isNew: true,
+//   },
+//   {
+//     notification:
+//       "Notification Notification Notification Notification Notification Notification...",
+//     from: "Bilmemne Bilmemne Hoca",
+//     isUnread: true,
+//     date: "12.12.2022",
+//     isNew: true,
+//   },
+//   {
+//     notification:
+//       "Notification Notification Notification Notification Notification Notification...",
+//     from: "Bilmemne Bilmemne Hoca",
+//     isUnread: true,
+//     date: "12.12.2022",
+//     isNew: true,
+//   },
+//   {
+//     notification:
+//       "Notification Notification Notification Notification Notification Notification...",
+//     from: "Bilmemne Bilmemne Hoca",
+//     isUnread: true,
+//     date: "12.12.2022",
+//     isNew: true,
+//   },
+// ]);
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
 

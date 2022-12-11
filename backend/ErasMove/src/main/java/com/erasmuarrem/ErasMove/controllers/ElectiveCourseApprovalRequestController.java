@@ -50,8 +50,18 @@ public class ElectiveCourseApprovalRequestController {
     }
 
     @PostMapping("/add")
-    public void addElectiveCourseApprovalRequest(@RequestBody ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
-        electiveCourseApprovalRequestService.addElectiveCourseApprovalRequest(electiveCourseApprovalRequest);
+    public String addElectiveCourseApprovalRequest(@RequestBody ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
+        return electiveCourseApprovalRequestService.addElectiveCourseApprovalRequest(electiveCourseApprovalRequest);
+    }
+
+    @PostMapping("/decline/{id}")
+    public String declineElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return electiveCourseApprovalRequestService.declineElectiveCourseApprovalRequestByID(id, feedback);
+    }
+
+    @PostMapping("/accept/{id}")
+    public String acceptElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return electiveCourseApprovalRequestService.acceptElectiveCourseApprovalRequestByID(id, feedback);
     }
 
     @DeleteMapping("/delete/{id}")

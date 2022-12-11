@@ -28,17 +28,10 @@ export const AccountProfilePasswordCard = props => {
     languages: ["English", "German", "Iğdırish"],
   });
 
-  const [details, setDetails] = React.useState({
-    showPassword: false,
-    newPassword: "",
-    newPasswordAgain: "",
-  });
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => {
-    setValues({
-      ...details,
-      showPassword: !details.showPassword,
-    });
+      setShowPassword(!showPassword);
   };
 
   return (
@@ -69,7 +62,7 @@ export const AccountProfilePasswordCard = props => {
                 fullWidth
                 disabled
                 id="outlined-adornment-password"
-                type={values.showPassword ? "text" : "password"}
+                type={showPassword ? "text" : "password"}
                 value={values.password}
                 endAdornment={
                   <InputAdornment position="end">
@@ -78,7 +71,7 @@ export const AccountProfilePasswordCard = props => {
                       onClick={handleClickShowPassword}
                       edge="end"
                     >
-                      {details.showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
