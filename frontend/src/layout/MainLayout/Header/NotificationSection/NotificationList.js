@@ -38,8 +38,6 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
     padding: 0,
   },
 }));
-
-    notification:
 // const [notificationInfo, setNotificationInfo] = React.useState([
 //   {
 //     notification:
