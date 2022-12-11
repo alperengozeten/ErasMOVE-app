@@ -7,7 +7,6 @@ import { sentenceCase } from 'change-case';
 
 import Label from '../../label';
 import { connect } from "react-redux";
-import CourseCard from "./CourseCard";
 import MobilityCourseCard from "./MobilityCourseCard";
 
 

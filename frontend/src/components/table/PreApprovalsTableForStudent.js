@@ -15,12 +15,6 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -85,10 +79,6 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
   const [openDetails, setOpenDetails] = React.useState(false);
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -135,7 +125,7 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                    const { id, type, status } = row;
+                    const { id, status } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
