@@ -9,6 +9,8 @@ import universities from './universityReducer';
 import requests from './requestsReducer';
 import announcements from './announcementReducer';
 import courses from './courseReducer';
+import toDoLists from './toDoListReducer';
+
 
 
 const reducers = {
@@ -21,6 +23,7 @@ const reducers = {
   requests,
   announcements,
   courses,
+  toDoLists
 };
 
 export default combineReducers(reducers);
