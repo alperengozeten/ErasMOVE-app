@@ -47,9 +47,9 @@ public class PreApprovalFormRequestController {
         return preApprovalFormRequestService.getPreApprovalFormRequestsByDepartmentCoordinatorIDAndOutgoingStudentID(departmentCoordinatorID, outgoingStudentID);
     }
 
-    @PostMapping("/add")
-    public void addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
-        preApprovalFormRequestService.addPreApprovalFormRequest(preApprovalFormRequest);
+    @PostMapping("/add") // the student must be admitted to be able to call this!
+    public String addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
+        return preApprovalFormRequestService.addPreApprovalFormRequest(preApprovalFormRequest);
     }
 
     @PostMapping("/accept/{id}")
@@ -65,5 +65,10 @@ public class PreApprovalFormRequestController {
     @DeleteMapping("/delete/{id}")
     public void deletePreApprovalFormRequestByID(@PathVariable("id") Long id) {
         preApprovalFormRequestService.deletePreApprovalFormRequestByID(id);
+    }
+
+    @DeleteMapping("/delete/outgoingStudent/{outgoingStudentID}")
+    public String deletePreApprovalFormRequestsByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return preApprovalFormRequestService.deletePreApprovalFormRequestByOutgoingStudentID(outgoingStudentID);
     }
 }
