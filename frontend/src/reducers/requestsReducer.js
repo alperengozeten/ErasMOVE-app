@@ -9,6 +9,7 @@ const INITIAL_STATE = {
             courseCoordinator: "Altay Güvenir",
             status: "waiting",
             documents: [],
+            feedback: ""
         },{
             id: 2,
             name: "Kürşad Güzelkaya",
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
             courseCoordinator: "Eray Hoca",
             status: "rejected",
             documents: [],
+            feedback: "Please fix the issues!!"
         },{
             id: 3,
             name: "Jake Paul",
@@ -27,6 +29,7 @@ const INITIAL_STATE = {
             courseCoordinator: "Aynur Dayanık",
             status: "accepted",
             documents: [],
+            feedback: "LGTM Thanks!"
         },{
             id: 4,
             name: "Lionel Messi",
@@ -36,6 +39,7 @@ const INITIAL_STATE = {
             courseCoordinator: "Altay Güvenir",
             status: "waiting",
             documents: [],
+            feedback: ""
         },{
             id: 5,
             name: "Cristiano Ronaldo",
@@ -45,6 +49,7 @@ const INITIAL_STATE = {
             courseCoordinator: "Altay Güvenir",
             status: "rejected",
             documents: [],
+            feedback: "This is terrible mann :/"
         },
     ], 
     acceptanceLetterRequests: [

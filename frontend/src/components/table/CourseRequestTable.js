@@ -4,8 +4,6 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { sentenceCase } from 'change-case';
 import Label from '../label';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
 
 // @mui
 import {
@@ -22,21 +20,12 @@ import {
   TablePagination,
   Tooltip,
   IconButton,
-  Grid,
-  FormControl,
   Stack,
-  Button
 } from '@mui/material';
 
 // components
 import Scrollbar from './scrollbar';
 import DescriptionIcon from '@mui/icons-material/Description';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
 
 // sections
 import { UserListHead, UserListToolbar } from './user';
@@ -90,12 +79,8 @@ const CourseRequestTable = ({ courseRequests }) => {
   const [filterName, setFilterName] = useState('');
   
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  
-//   const [anchorEl, setAnchorEl] = React.useState(null);
 
-//   const handleOpenApplication = id => {
-//     console.log("id: ", id);
-//   };
+  const [requesDetailsID, setRequesDetailsID] = React.useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -117,55 +102,23 @@ const CourseRequestTable = ({ courseRequests }) => {
     setFilterName(event.target.value);
   };
 
-//   const handlePopoverOpen = event => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handlePopoverClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const openPopover = Boolean(anchorEl);
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
 
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
-  const [rejectOpen, setRejectOpen] = React.useState(false);
 
   const [openDetails, setOpenDetails] = React.useState(false);
 
-  const handleClickRejectOpen = () => {
-    setRejectOpen(true);
+  const handleOpenDetails = id => { 
+    setRequesDetailsID(id);
+    setOpenDetails(true);
   };
 
-  const handleRejectClose = () => {
-    setRejectOpen(false);
+  const handleCloseDetails = () => { 
+    setRequesDetailsID(0);
+    setOpenDetails(false);
   };
-  const [acceptOpen, setAcceptOpen] = React.useState(false);
-
-  const handleClickAcceptOpen = () => {
-    setAcceptOpen(true);
-  };
-
-  const handleAcceptClose = () => {
-    setAcceptOpen(false);
-  };
-  const [open, setOpen] = useState(false);
-
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    
-  };
-
-  const handleOpenDetails = () => setOpenDetails(true);
-  const handleCloseDetails = () => setOpenDetails(false);
 
   return (
     <>
@@ -205,55 +158,11 @@ const CourseRequestTable = ({ courseRequests }) => {
                    
                         <TableCell align="right">
                           <Tooltip describeChild title="Open details">
-                            <IconButton size="large" color="inherit" onClick={handleOpenDetails }>
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <CourseRequestDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} />
-                        {/*
-                        <Dialog
-                          open={rejectOpen}
-                          onClose={handleRejectClose}
-                          aria-labelledby="alert-dialog-title"
-                          aria-describedby="alert-dialog-description"
-                        >
-                        <DialogTitle id="alert-dialog-title">
-                          {"Reject the course request?"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <DialogContentText id="alert-dialog-description">
-                            Do you want to continue reject the course request?
-                          </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                          <Button onClick={handleRejectClose}>Cancel</Button>
-                        <Button onClick={handleRejectClose} autoFocus>
-                          Continue
-                        </Button>
-                      </DialogActions>
-                    </Dialog>
-                    <Dialog
-                      open={acceptOpen}
-                      onClose={handleAcceptClose}
-                      aria-labelledby="alert-dialog-title"
-                      aria-describedby="alert-dialog-description"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"Accept the course request?"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                          Do you want to continue accept the course request?
-                        </DialogContentText>
-                      </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleAcceptClose}>Cancel</Button>
-                        <Button onClick={handleAcceptClose} autoFocus>
-                          Continue
-                        </Button>
-                      </DialogActions>
-                    </Dialog>*/}
                       </TableRow>
                     );
                   })}
@@ -301,23 +210,12 @@ const CourseRequestTable = ({ courseRequests }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        {requesDetailsID ? <CourseRequestDetail courseRequest={courseRequests.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
       </Container>
     </>
   );
 };
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: '50%',
-  bgcolor: "background.paper",
-  border: "none",
-  borderRadius: "6px",
-  boxShadow: 24,
-  p: 4,
-};
 CourseRequestTable.propTypes = {
     courseRequests: PropTypes.array,
 };

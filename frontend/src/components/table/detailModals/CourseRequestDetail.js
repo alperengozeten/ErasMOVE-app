@@ -9,13 +9,13 @@ import Label from '../../label';
 import { connect } from "react-redux";
 
 
-const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
+const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, courseRequest }) => {
 
     const [feedback, setFeedback] = useState('');
 
     const handleChangeFeedback = e => setFeedback(e.target.value);
 
-    const status = 'waiting';
+    const status = courseRequest.status;
 
     return (
         <Modal
@@ -43,11 +43,20 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                     <MDBCard className="mb-4">
                                     <MDBCardBody>
                                         <MDBRow>
+                                            <MDBCol sm="3">
+                                                <MDBCardText>Student</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                                <MDBCardText className="text-muted">{courseRequest.name}</MDBCardText>
+                                            </MDBCol>
+                                        </MDBRow>
+                                        <hr />
+                                        <MDBRow>
                                         <MDBCol sm="3">
                                             <MDBCardText>Course Name</MDBCardText>
                                         </MDBCol>
                                         <MDBCol sm="9">
-                                            <MDBCardText className="text-muted">ACS319</MDBCardText>
+                                            <MDBCardText className="text-muted">{courseRequest.courseName}</MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -56,7 +65,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                             <MDBCardText>Description</MDBCardText>
                                         </MDBCol>
                                         <MDBCol sm="9">
-                                            <MDBCardText className="text-muted">Object Oriented Software Engineering</MDBCardText>
+                                            <MDBCardText className="text-muted">{courseRequest.description}</MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -74,7 +83,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                             <MDBCardText>Equivalent Course</MDBCardText>
                                         </MDBCol>
                                         <MDBCol sm="9">
-                                            <MDBCardText className="text-muted">CS319</MDBCardText>
+                                            <MDBCardText className="text-muted">{courseRequest.equivalentCourse}</MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -103,7 +112,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                                 <MDBCardBody>
                                                     <MDBRow>
                                                         <MDBCol sm="3">
-                                                            <MDBCardText>{status}</MDBCardText>
+                                                            <MDBCardText>Status</MDBCardText>
                                                         </MDBCol>
                                                         <MDBCol sm="9">
                                                             <MDBCardText className="text-muted">
@@ -117,16 +126,14 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                                             <MDBCardText>Feedback</MDBCardText>
                                                         </MDBCol>
                                                         <MDBCol sm="9">
-                                                            <MDBCardText className="text-muted">
-                                                                <TextField
-                                                                    id="outlined-multiline-flexible"
-                                                                    multiline
-                                                                    fullWidth
-                                                                    maxRows={4}
-                                                                    value={feedback}
-                                                                    onChange={handleChangeFeedback}
-                                                                />
-                                                            </MDBCardText>
+                                                            <TextField
+                                                                id="outlined-multiline-flexible"
+                                                                multiline
+                                                                fullWidth
+                                                                maxRows={4}
+                                                                value={feedback}
+                                                                onChange={handleChangeFeedback}
+                                                            />
                                                         </MDBCol>
                                                     </MDBRow>
                                                     <hr />
@@ -163,7 +170,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                                             </MDBCol>
                                                             <MDBCol sm="9">
                                                                 <MDBCardText className="text-muted">
-                                                                    Can Alkan
+                                                                    {courseRequest.courseCoordinator}
                                                                 </MDBCardText>
                                                             </MDBCol>
                                                         </MDBRow>
@@ -171,7 +178,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                                     { (authType !== 'Course Coordinator') ? <hr /> : null }
                                                     <MDBRow>
                                                         <MDBCol sm="3">
-                                                            <MDBCardText>{status}</MDBCardText>
+                                                            <MDBCardText>Status</MDBCardText>
                                                         </MDBCol>
                                                         <MDBCol sm="9">
                                                             <MDBCardText className="text-muted">
@@ -179,15 +186,15 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType }) => {
                                                             </MDBCardText>
                                                         </MDBCol>
                                                     </MDBRow>
-                                                    <hr />
-                                                    <MDBRow>
+                                                    {status !== 'waiting' ? <hr /> : null}
+                                                    {status !== 'waiting' ? (<MDBRow>
                                                         <MDBCol sm="3">
                                                             <MDBCardText>Feedback</MDBCardText>
                                                         </MDBCol>
                                                         <MDBCol sm="9">
-                                                            <MDBCardText className="text-muted">LGTM Thanks!</MDBCardText>
+                                                            <MDBCardText className="text-muted">{courseRequest.feedback}</MDBCardText>
                                                         </MDBCol>
-                                                    </MDBRow>
+                                                    </MDBRow>): null}
                                                 </MDBCardBody>
                                                 </MDBCard>
                                             </MDBCol>
@@ -241,12 +248,15 @@ const mapStateToProps = state => {
 CourseRequestDetail.propTypes = {
     openDetails: PropTypes.bool,
     handleCloseDetails: PropTypes.func,
-    authType: PropTypes.string
+    authType: PropTypes.string,
+    id: PropTypes.number,
+    courseRequest: PropTypes.object,
 };
   
 CourseRequestDetail.defaultProps = {
     openDetails: false,
     handleCloseDetails: f => f,
+    courseRequest: {},
 };
 
 export default connect(mapStateToProps, {})(CourseRequestDetail);

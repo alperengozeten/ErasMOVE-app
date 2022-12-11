@@ -79,9 +79,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
   const [openDetails, setOpenDetails] = React.useState(false);
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
+  const [requesDetailsID, setRequesDetailsID] = React.useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -101,9 +99,14 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
-  const handleOpenDetails = () => setOpenDetails(true);
-  const handleCloseDetails = () => setOpenDetails(false);
-
+  const handleOpenDetails = id => {
+    setRequesDetailsID(id);
+    setOpenDetails(true);
+  };
+  const handleCloseDetails = () => { 
+    setRequesDetailsID(0);
+    setOpenDetails(false);
+  };
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
@@ -139,17 +142,15 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Open request details">
-                            <IconButton size="large" color="inherit" onClick={() => setOpenDetails(true) }>
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
-                          <CourseRequestDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} />
                           <Tooltip describeChild title="Delete request">
                             <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
-                          <DeleteModal openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
                         </TableCell>
                       </TableRow>
                     );
@@ -174,6 +175,8 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        {requesDetailsID ? <CourseRequestDetail courseRequest={courseRequests.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
+        <DeleteModal openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
       </Container>
     </>
   );
