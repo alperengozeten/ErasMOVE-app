@@ -49,7 +49,7 @@ const [notificationInfo, setNotificationInfo] = React.useState({
     isNew: true,
   });
 
-const NotificationCard = () => {
+const NotificationCard = props => {
   const theme = useTheme();
 
   const chipSX = {
