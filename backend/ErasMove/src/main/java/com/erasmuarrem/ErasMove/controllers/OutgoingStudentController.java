@@ -32,4 +32,9 @@ public class OutgoingStudentController {
     public void addOutgoingStudent(@RequestBody OutgoingStudent outgoingStudent) {
         outgoingStudentService.addOutgoingStudent(outgoingStudent);
     }
+
+    @DeleteMapping("/cancelPlacement/{outgoingStudentID}")
+    public String cancelPlacementByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return outgoingStudentService.cancelPlacementByOutgoingStudentID(outgoingStudentID);
+    }
 }

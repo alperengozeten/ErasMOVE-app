@@ -21,16 +21,14 @@ public class PreApprovalFormRequestService {
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
 
     private final OutgoingStudentRepository outgoingStudentRepository;
-    private final OutgoingStudentService outgoingStudentService;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
-        this.outgoingStudentService = outgoingStudentService;
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
     }
@@ -61,7 +59,7 @@ public class PreApprovalFormRequestService {
             return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
         }
 
-        OutgoingStudent outgoingStudent = outgoingStudentService.getStudentByID(outgoingStudentID).get();
+        OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);

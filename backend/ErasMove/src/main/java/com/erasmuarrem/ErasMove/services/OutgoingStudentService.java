@@ -1,5 +1,8 @@
 package com.erasmuarrem.ErasMove.services;
 
+import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
+import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
+import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,18 @@ import java.util.Optional;
 public class OutgoingStudentService {
 
     private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ErasmusUniversityService erasmusUniversityService;
+    private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
+    private final ExchangeUniversityService exchangeUniversityService;
+    private final PreApprovalFormRequestService preApprovalFormRequestService;
 
     @Autowired
-    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository) {
+    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, PreApprovalFormRequestService preApprovalFormRequestService) {
         this.outgoingStudentRepository = outgoingStudentRepository;
+        this.erasmusUniversityService = erasmusUniversityService;
+        this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
+        this.exchangeUniversityService = exchangeUniversityService;
+        this.preApprovalFormRequestService = preApprovalFormRequestService;
     }
 
     public List<OutgoingStudent> getStudents() {
@@ -34,5 +45,47 @@ public class OutgoingStudentService {
         }
 
         outgoingStudentRepository.save(outgoingStudent);
+    }
+
+    public String cancelPlacementByOutgoingStudentID(Long outgoingStudentID) {
+        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
+
+        if ( !outgoingStudentOptional.isPresent() ) {
+            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( erasmusUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+            }
+
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            erasmusUniversityDepartmentService.deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(
+                    erasmusUniversityDepartment.getID(), outgoingStudentID
+            );
+        }
+        else {
+            ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( exchangeUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+            }
+
+            exchangeUniversityService.deleteOutgoingStudentByIDAndOutgoingStudentID(
+                    exchangeUniversity.getID(), outgoingStudentID
+            );
+        }
+
+        // delete the Pre-Approval forms of the student!
+        String output = preApprovalFormRequestService.deletePreApprovalFormRequestByOutgoingStudentID(outgoingStudentID);
+        return output + "\nPlacement of the Outgoing Student with id:" + outgoingStudentID + " has been cancelled!";
     }
 }
