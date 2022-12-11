@@ -4,14 +4,25 @@ import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.services.UserManagementService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserManagementController {
 
     private final UserManagementService userManagementService;
-
     public UserManagementController(UserManagementService userManagementService) {
         this.userManagementService = userManagementService;
+    }
+
+    @GetMapping
+    public List<ApplicationUser> getAllUsers() {
+        return userManagementService.getAllUsers();
+    }
+
+    @GetMapping("/{id}")
+    public ApplicationUser getUserById(@PathVariable("id") Long id) {
+        return userManagementService.getUserById(id);
     }
 
     // OUTGOING STUDENT
@@ -122,4 +133,6 @@ public class UserManagementController {
     public void changePasswordCourseCoordinator( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
         userManagementService.changePasswordByCourseCoordinator(email,newPass, oldPass);
     }
+
+
 }
