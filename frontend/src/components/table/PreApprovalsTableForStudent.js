@@ -30,12 +30,12 @@ import Scrollbar from './scrollbar';
 // sections
 import { UserListHead } from './user';
 import DeleteModal from '../DeleteModal';
+import PreApprovalRequestDetail from './detailModals/PreApprovalRequestDetail';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'preApprovalForm', label: 'PreApproval Form', alignRight: false },
-  { id: 'type', label: 'Type', alignRight: false },
   { id: 'status', label: 'Status', alignRight: true },
 ];
 
@@ -81,6 +81,10 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
   const [openDelete, setOpenDelete] = React.useState(false);
 
+  const [requesDetailsID, setRequesDetailsID] = React.useState(0);
+
+  const [openDetails, setOpenDetails] = React.useState(false);
+
   const handleOpenApplication = id => {
     console.log("id: ", id);
   };
@@ -102,6 +106,15 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
+
+  const handleOpenDetails = id => {
+    setRequesDetailsID(id);
+    setOpenDetails(true);
+  };
+  const handleCloseDetails = () => { 
+    setRequesDetailsID(0);
+    setOpenDetails(false);
+  };
 
   const filteredUsers = applySortFilter(preApprovalForms, getComparator(order, orderBy), null);
 
@@ -130,15 +143,13 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
                         <TableCell align='center' component="th" scope="row" padding="none">{`PreApproval Form ${index+1}`}</TableCell>
 
-                        <TableCell align='center' component="th" scope="row" padding="none">{type}</TableCell>
-
                         <TableCell align="center">
                           <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Open request details">
-                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
@@ -172,6 +183,7 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        {requesDetailsID ? <PreApprovalRequestDetail preApprovalForm={preApprovalForms.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
       </Container>
     </>
   );

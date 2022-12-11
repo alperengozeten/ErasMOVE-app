@@ -8,6 +8,7 @@ const INITIAL_STATE = {
             description: "Programming Languages",
             courseCoordinator: "Altay Güvenir",
             status: "waiting",
+            type: "Must",
             documents: [],
             feedback: ""
         },{
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
             description: "Objec Oriented SE",
             courseCoordinator: "Eray Hoca",
             status: "rejected",
+            type: "Elective",
             documents: [],
             feedback: "Please fix the issues!!"
         },{
@@ -28,6 +30,7 @@ const INITIAL_STATE = {
             description: "Python",
             courseCoordinator: "Aynur Dayanık",
             status: "accepted",
+            type: "Must",
             documents: [],
             feedback: "LGTM Thanks!"
         },{
@@ -38,6 +41,7 @@ const INITIAL_STATE = {
             description: "Programming Languages",
             courseCoordinator: "Altay Güvenir",
             status: "waiting",
+            type: "Must",
             documents: [],
             feedback: ""
         },{
@@ -48,6 +52,7 @@ const INITIAL_STATE = {
             description: "Programming Languages",
             courseCoordinator: "Altay Güvenir",
             status: "rejected",
+            type: "Elective",
             documents: [],
             feedback: "This is terrible mann :/"
         },
@@ -93,20 +98,111 @@ const INITIAL_STATE = {
     preApprovalForms: [
         {
             id: 1,
-            type: "Mandatory",
             status: "rejected",
-            documents: [],
+            departmentCoordinator: "Altay Güvenir",
+            mobilityCourses: [
+                {
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        },{
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                },
+                {
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                }
+            ],
+            feedback: "Man this is terrible.. Are you serious??",
         },{
             id: 2,
-            type: "Mandatory",
             status: "waiting",
-            documents: [],
+            departmentCoordinator: "Aynur Dayanik",
+            mobilityCourses: [
+                {
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        },{
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                }
+            ],
+            feedback: "Man this is terrible.. Are you serious??",
         },{
             id: 3,
-            type: "Elective",
             status: "accepted",
-            documents: [],
-        }
+            departmentCoordinator: "Eray Hoca",
+            mobilityCourses: [
+                {
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        },{
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                },
+                {
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        },{
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        },{
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                },{
+                    courses: [
+                        {
+                            courseName: 'CS219',
+                            description: 'Proggraming Life',
+                            ECTS: 3,
+                        }
+                    ],
+                    type: "Must",
+                    equivalentCourse: 'CS340',
+                }
+            ],
+            feedback: "LGTM. You are perfect :))",
+        },
     ], 
 };
 
