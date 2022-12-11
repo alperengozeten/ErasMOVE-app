@@ -153,6 +153,10 @@ public class ElectiveCourseApprovalRequestService {
         OutgoingStudent outgoingStudent = electiveCourseApprovalRequest.getStudent();
         Long outgoingStudentID = outgoingStudent.getID();
 
+        if ( electiveCourseApprovalRequest.getStatus().equals("ACCEPTED") || electiveCourseApprovalRequest.getStatus().equals("DECLINED") ) {
+            return "Mandatory Course Approval Request has already been responded!";
+        }
+
         // add the course to the list of rejected courses!
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
@@ -214,6 +218,10 @@ public class ElectiveCourseApprovalRequestService {
         ElectiveCourseApprovalRequest electiveCourseApprovalRequest = electiveCourseApprovalRequestOptional.get();
         OutgoingStudent outgoingStudent = electiveCourseApprovalRequest.getStudent();
         Long outgoingStudentID = outgoingStudent.getID();
+
+        if ( electiveCourseApprovalRequest.getStatus().equals("ACCEPTED") || electiveCourseApprovalRequest.getStatus().equals("DECLINED") ) {
+            return "Mandatory Course Approval Request has already been responded!";
+        }
 
         // add the course to the department elective course list!
         if ( outgoingStudent.getIsErasmus() ) {
