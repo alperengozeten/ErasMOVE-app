@@ -6,20 +6,8 @@ import {
   MDBCard,
   MDBCardText,
   MDBCardBody,
-  MDBCardImage,
-  MDBBtn,
-  MDBBreadcrumb,
-  MDBBreadcrumbItem,
-  MDBProgress,
-  MDBProgressBar,
-  MDBIcon,
-  MDBListGroup,
-  MDBListGroupItem
 } from 'mdb-react-ui-kit';
-import {Button} from '@mui/material';
-import PropTypes from 'prop-types';
-
-export default function ProfileApplicationPage({applications}) {
+export default function ProfileApplicationPage() {
   return (
     <section style={{ backgroundColor: '#eee' }}>
       <MDBContainer className="py-5">
@@ -79,7 +67,6 @@ export default function ProfileApplicationPage({applications}) {
                 <MDBCard className="mb-4 mb-md-0">
                   <MDBCardBody>
                     <MDBCardText className="mb-4">Documents</MDBCardText>
-                    <Button variant="contained">Add Document</Button>
                   </MDBCardBody>
                 </MDBCard>
               </MDBCol>
@@ -92,10 +79,3 @@ export default function ProfileApplicationPage({applications}) {
     </section>
   );
 }
-ProfileApplicationPage.propTypes = {
-    applications: PropTypes.array,
-};
-  
-ProfileApplicationPage.defaultProps = {
-    applications: [],
-};
