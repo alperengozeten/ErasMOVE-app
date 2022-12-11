@@ -52,7 +52,7 @@ import {
         </Box>
       </CardContent>
       <Divider />
-      <CardActions>
+      {/* <CardActions>
         <Button
           color="primary"
           fullWidth
@@ -60,6 +60,6 @@ import {
         >
           Change Profile Picture
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
