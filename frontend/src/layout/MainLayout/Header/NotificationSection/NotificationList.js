@@ -39,7 +39,7 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-const [notificationInfo, setNotificationInfo] = React.useState([
+const [notificationInfo, setNotificationInfo] = [
   {
     notification:
       "Notification Notification Notification Notification Notification Notification...",
@@ -72,7 +72,7 @@ const [notificationInfo, setNotificationInfo] = React.useState([
     date: "12.12.2022",
     isNew: true,
   },
-]);
+];
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
 
