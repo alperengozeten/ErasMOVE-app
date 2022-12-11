@@ -59,6 +59,11 @@ public class MandatoryCourseApprovalRequestController {
         return mandatoryCourseApprovalRequestService.declineMandatoryCourseApprovalRequestByID(id, feedback);
     }
 
+    @PostMapping("/accept/{id}")
+    public String acceptMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return mandatoryCourseApprovalRequestService.acceptMandatoryCourseApprovalRequestByID(id, feedback);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id) {
         mandatoryCourseApprovalRequestService.deleteMandatoryCourseApprovalRequestByID(id);

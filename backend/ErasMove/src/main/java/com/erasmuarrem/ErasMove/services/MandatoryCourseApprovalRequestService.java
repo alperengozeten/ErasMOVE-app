@@ -18,12 +18,14 @@ public class MandatoryCourseApprovalRequestService {
     private final OutgoingStudentService outgoingStudentService;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ErasmusUniversityRepository erasmusUniversityRepository;
+    private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final ExchangeUniversityService exchangeUniversityService;
     private final ExchangeUniversityRepository exchangeUniversityRepository;
+    private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final CourseRepository courseRepository;
 
     @Autowired
-    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository, CourseCoordinatorRepository courseCoordinatorRepository, CourseCoordinatorService courseCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository) {
+    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository, CourseCoordinatorRepository courseCoordinatorRepository, CourseCoordinatorService courseCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository) {
         this.mandatoryCourseApprovalRequestRepository = mandatoryCourseApprovalRequestRepository;
         this.courseCoordinatorRepository = courseCoordinatorRepository;
         this.courseCoordinatorService = courseCoordinatorService;
@@ -31,8 +33,10 @@ public class MandatoryCourseApprovalRequestService {
         this.outgoingStudentService = outgoingStudentService;
         this.erasmusUniversityService = erasmusUniversityService;
         this.erasmusUniversityRepository = erasmusUniversityRepository;
+        this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.exchangeUniversityService = exchangeUniversityService;
         this.exchangeUniversityRepository = exchangeUniversityRepository;
+        this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
         this.courseRepository = courseRepository;
     }
 
@@ -149,6 +153,10 @@ public class MandatoryCourseApprovalRequestService {
         OutgoingStudent outgoingStudent = mandatoryCourseApprovalRequest.getStudent();
         Long outgoingStudentID = outgoingStudent.getID();
 
+        if ( mandatoryCourseApprovalRequest.getStatus().equals("ACCEPTED") || mandatoryCourseApprovalRequest.getStatus().equals("DECLINED") ) {
+            return "Mandatory Course Approval Request has already been responded!";
+        }
+
         // add the course to the list of rejected courses!
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
@@ -196,5 +204,74 @@ public class MandatoryCourseApprovalRequestService {
 
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
         return "Mandatory Course Approval Request has been rejected!";
+    }
+
+    public String acceptMandatoryCourseApprovalRequestByID(Long id, String feedback) {
+
+        Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
+                .findById(id);
+
+        if ( !mandatoryCourseApprovalRequestOptional.isPresent() ) {
+            return "Mandatory Course Approval Request with id:" + id + " doesn't exist!";
+        }
+
+        MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest = mandatoryCourseApprovalRequestOptional.get();
+        OutgoingStudent outgoingStudent = mandatoryCourseApprovalRequest.getStudent();
+        Long outgoingStudentID = outgoingStudent.getID();
+
+        if ( mandatoryCourseApprovalRequest.getStatus().equals("ACCEPTED") || mandatoryCourseApprovalRequest.getStatus().equals("DECLINED") ) {
+            return "Mandatory Course Approval Request has already been responded!";
+        }
+
+        // add the course to the department elective course list!
+        if ( outgoingStudent.getIsErasmus() ) {
+
+            ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( erasmusUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+            }
+
+            // get the related department!
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            Course newAcceptedCourse = new Course();
+            newAcceptedCourse.setCourseName(mandatoryCourseApprovalRequest.getCourseName());
+            newAcceptedCourse.setDescription(mandatoryCourseApprovalRequest.getDescription());
+            newAcceptedCourse.setEcts(mandatoryCourseApprovalRequest.getEcts()); // set the attributes
+
+            // this method saves the course as well!
+            // add the course to the accepted mandatory course list
+            erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(newAcceptedCourse, erasmusUniversityDepartment.getID());
+        }
+        else {
+            ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( exchangeUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+            }
+
+            ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
+                    .getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(
+                            exchangeUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            Course newAcceptedCourse = new Course();
+            newAcceptedCourse.setCourseName(mandatoryCourseApprovalRequest.getCourseName());
+            newAcceptedCourse.setDescription(mandatoryCourseApprovalRequest.getDescription());
+            newAcceptedCourse.setEcts(mandatoryCourseApprovalRequest.getEcts()); // set the attributes
+
+            // add mandatory course to the department
+            exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(newAcceptedCourse, exchangeUniversityDepartment.getID());
+        }
+
+        mandatoryCourseApprovalRequest.setStatus("ACCEPTED");
+        mandatoryCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
+
+        mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
+        return "Mandatory Course Approval Request has been accepted!";
     }
 }
