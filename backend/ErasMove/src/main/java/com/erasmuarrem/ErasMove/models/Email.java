@@ -2,8 +2,7 @@ package com.erasmuarrem.ErasMove.models;
 
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Random;
 
 @Data
@@ -15,8 +14,7 @@ public class Email {
     private String mail;
     private String subject;
 
-    private static List<String> activationCodes = new ArrayList<>();
-    private static List<ApplicationUser> users = new ArrayList<>();
+    public static HashMap<Long, String> activationCodes = new HashMap<>();
 
     public String generateActivationCode() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-*!";
@@ -29,10 +27,7 @@ public class Email {
         return salt.toString();
     }
 
-    public void addActivationCode( String activationCode ) {
-        activationCodes.add(activationCode);
-    }
-    public void addUserGotCode( ApplicationUser user ) {
-        users.add(user);
+    public void addActivationCode( String activationCode, Long userId ) {
+        activationCodes.put(userId,activationCode);
     }
 }

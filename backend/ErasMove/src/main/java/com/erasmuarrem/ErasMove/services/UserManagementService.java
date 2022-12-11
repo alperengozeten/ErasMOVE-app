@@ -544,13 +544,58 @@ public class UserManagementService {
         String activationCode = email.generateActivationCode();
         ApplicationUser receiver = getUserByEmail(emailAdress);
         if ( receiver != null) {
-            email.addActivationCode(activationCode);
-            email.addUserGotCode(receiver);
+            Long userId = receiver.getID();
+            email.addActivationCode(activationCode,userId);
         }
-        email.setMail("Dear Erasmove User,\nYou can use the following activation code:\n" + activationCode+"\nHARDER,BETTER,BILKENTER");
+        email.setMail("Dear Erasmove User,\n\nYou can use the following activation code: " + activationCode+"\n\nHARDER, BETTER, BILKENTER");
         return emailService.sendSimpleMail(email);
 
     }
 
-   // public void forgotPassword
+   public void forgotPassword( String email, String activationCode, String newPassword ) {
+        //As IDs are definitely unique, first we should find ID.
+       ApplicationUser receiver = getUserByEmail(email);
+       Long ID = receiver.getID();
+       //Hashing
+       hashingPasswordHelper.setPassword(newPassword);
+       String newHashedPassword = hashingPasswordHelper.Hash();
+       if ( Email.activationCodes.get(ID).isEmpty() ) {
+           throw new IllegalStateException("There isn't a activation code corresponding to the user with email " + email);
+       }
+       else {
+           if ( Email.activationCodes.get(ID).equals(activationCode) ) {
+               if (courseCoordinatorRepository.findById(ID).isPresent()) {
+                   CourseCoordinator courseCoordinator = courseCoordinatorRepository.findById(ID).get();
+                   courseCoordinator.setHashedPassword(newHashedPassword);
+                   courseCoordinatorRepository.save(courseCoordinator);
+               }
+               else if (departmentCoordinatorRepository.findById(ID).isPresent()) {
+                   DepartmentCoordinator departmentCoordinator = departmentCoordinatorRepository.findById(ID).get();
+                   departmentCoordinator.setHashedPassword(newHashedPassword);
+                   departmentCoordinatorRepository.save(departmentCoordinator);
+               }
+               else if ( outgoingStudentRepository.findById(ID).isPresent() ) {
+                   OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(ID).get();
+                   outgoingStudent.setHashedPassword(newHashedPassword);
+                   outgoingStudentRepository.save(outgoingStudent);
+
+               }
+               else if ( incomingStudentRepository.findById(ID).isPresent() ) {
+                   IncomingStudent incomingStudent = incomingStudentRepository.findById(ID).get();
+                   incomingStudent.setHashedPassword(newHashedPassword);
+                   incomingStudentRepository.save(incomingStudent);
+               } else if ( administrativeStaffRepository.findById(ID).isPresent()) {
+                   AdministrativeStaff administrativeStaff = administrativeStaffRepository.findById(ID).get();
+                   administrativeStaff.setHashedPassword(newHashedPassword);
+                   administrativeStaffRepository.save(administrativeStaff);
+               }
+
+               Email.activationCodes.remove(ID);
+           }
+           else {
+               throw new IllegalStateException("Incorrect Activation Code!");
+           }
+       }
+
+   }
 }

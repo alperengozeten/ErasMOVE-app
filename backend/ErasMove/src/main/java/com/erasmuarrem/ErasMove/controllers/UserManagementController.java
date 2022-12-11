@@ -139,6 +139,9 @@ public class UserManagementController {
     public String sendActivationCode(@RequestParam String email) {
         return userManagementService.sendActivationCode(email);
     }
-
+    @PostMapping("/forgotPassword")
+    public void forgotPassword(@RequestParam String email, @RequestParam String activationCode, @RequestParam String newPassword) {
+        userManagementService.forgotPassword(email, activationCode, newPassword);
+    }
 
 }
