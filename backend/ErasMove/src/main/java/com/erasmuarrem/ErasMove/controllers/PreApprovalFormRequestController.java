@@ -53,13 +53,13 @@ public class PreApprovalFormRequestController {
     }
 
     @PostMapping("/accept/{id}")
-    public void acceptPreApprovalFormRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
-        preApprovalFormRequestService.acceptPreApprovalFormRequestByID(id, feedback);
+    public String acceptPreApprovalFormRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return preApprovalFormRequestService.acceptPreApprovalFormRequestByID(id, feedback);
     }
 
     @PostMapping("/decline/{id}")
-    public void declinePreApprovalFormRequest(@PathVariable("id") Long id, @RequestParam String feedback) {
-        preApprovalFormRequestService.declinePreApprovalFormRequest(id, feedback);
+    public String declinePreApprovalFormRequest(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return preApprovalFormRequestService.declinePreApprovalFormRequest(id, feedback);
     }
 
     @DeleteMapping("/delete/{id}")

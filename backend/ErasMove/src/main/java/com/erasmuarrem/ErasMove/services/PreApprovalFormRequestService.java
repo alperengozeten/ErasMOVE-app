@@ -135,34 +135,44 @@ public class PreApprovalFormRequestService {
         return preApprovalFormRequestRepository.findByStudentID(outgoingStudentID);
     }
 
-    public void declinePreApprovalFormRequest(Long id, String feedback) {
+    public String declinePreApprovalFormRequest(Long id, String feedback) {
         Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
 
         if ( !preApprovalFormRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Pre-Approval Form with id:" + id + " doesn't exist!");
+            return "Pre-Approval Form with id:" + id + " doesn't exist!";
         }
 
         PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+
+        if ( preApprovalFormRequest.getStatus().equals("ACCEPTED") || preApprovalFormRequest.getStatus().equals("DECLINED") ) {
+            return "Pre-Approval Form with id:" + id + " has already been responded!";
+        }
 
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("DECLINED");
 
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
+        return "Pre-Approval Form with id:" + id + " has been declined!";
     }
 
-    public void acceptPreApprovalFormRequestByID(Long id, String feedback) {
+    public String acceptPreApprovalFormRequestByID(Long id, String feedback) {
         Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
 
         if ( !preApprovalFormRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Pre-Approval Form with id:" + id + " doesn't exist!");
+            return "Pre-Approval Form with id:" + id + " doesn't exist!";
         }
 
         PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+
+        if ( preApprovalFormRequest.getStatus().equals("ACCEPTED") || preApprovalFormRequest.getStatus().equals("DECLINED") ) {
+            return "Pre-Approval Form with id:" + id + " has already been responded!";
+        }
 
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("ACCEPTED");
 
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
+        return "Pre-Approval Form with id:" + id + " has been accepted!";
     }
 
     @Transactional
