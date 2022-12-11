@@ -1,6 +1,5 @@
 import * as React from "react";
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -9,11 +8,6 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import InputAdornment from '@mui/material/InputAdornment';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -114,7 +108,7 @@ export const AccountProfilePasswordCard = props => {
               justifyContent={"center"}
               alignItems={"center"}
             >
-              <Button disabled={true} variant="outlined">Change Password</Button>
+              <Button disabled={false} variant="outlined">Change Password</Button>
             </Grid>
           </Grid>
         </CardContent>

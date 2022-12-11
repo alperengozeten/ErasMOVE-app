@@ -204,11 +204,6 @@ const NotificationSection = () => {
                                         </Grid>
                                     </Grid>
                                     <Divider />
-                                    <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
-                                        <Button size="small" disableElevation>
-                                            View All
-                                        </Button>
-                                    </CardActions>
                                 </MainCard>
                             </ClickAwayListener>
                         </Paper>
