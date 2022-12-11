@@ -5,6 +5,7 @@ import requests from './requests';
 import courseRequests from './courseRequests';
 import announcements from './announcements';
 import student from './student';
+import preApprovalRequests from './preApprovalRequests.js';
 
 
 // ==============================|| MENU ITEMS ||============================== //
@@ -17,7 +18,7 @@ const menuItems = authType => {
     } else if (authType === 'Incoming Student') {
         list = [dashboard, student, announcements];
     }  else if (authType === 'Department Coordinator') {
-        list = [dashboard, pages, announcements];
+        list = [dashboard, pages, preApprovalRequests, announcements];
     }  else if (authType === 'Course Coordinator') {
         list = [dashboard, pages, announcements, courseRequests];
     } else if (authType === 'Administrative Staff') {

@@ -13,6 +13,7 @@ import Announcements from '../components/Announcements';
 import UserProfile from '../components/UserProfile';
 import Application from '../components/Application';
 import HostUniversity from '../components/HostUniversity';
+import PreApprovalsPage from '../components/PreApprovalsPage';
 
 const MainRoutes = {
     path: '/main',
@@ -61,6 +62,9 @@ const MainRoutes = {
         {
             path: '/main/hostUniversity',
             element: <HostUniversity />
+        },{
+            path: '/main/preApprovalForms',
+            element: <PreApprovalsPage />
         },
     ]
 };

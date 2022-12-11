@@ -98,6 +98,7 @@ const INITIAL_STATE = {
     preApprovalForms: [
         {
             id: 1,
+            name: 'Kürşad Güzelkaya',
             status: "rejected",
             departmentCoordinator: "Altay Güvenir",
             mobilityCourses: [
@@ -131,6 +132,7 @@ const INITIAL_STATE = {
             feedback: "Man this is terrible.. Are you serious??",
         },{
             id: 2,
+            name: 'John Doe',
             status: "waiting",
             departmentCoordinator: "Aynur Dayanik",
             mobilityCourses: [
@@ -153,6 +155,7 @@ const INITIAL_STATE = {
             feedback: "Man this is terrible.. Are you serious??",
         },{
             id: 3,
+            name: 'Namık Kemal',
             status: "accepted",
             departmentCoordinator: "Eray Hoca",
             mobilityCourses: [

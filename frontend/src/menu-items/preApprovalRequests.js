@@ -15,9 +15,9 @@ const requests = {
     children: [
         {
             id: 'requests',
-            title: 'Document Requests',
+            title: 'Pre-Approval Forms',
             type: 'item',
-            url: '/main/requests',
+            url: '/main/preApprovalForms',
             icon: icons.IconDashboard,
             breadcrumbs: false
         },

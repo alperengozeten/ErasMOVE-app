@@ -37,6 +37,24 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                     <Stack alignItems={"center"} spacing={3}>
                         <section style={{ width: '100%', backgroundColor: '#eee' }}>
                             <MDBContainer className="py-5">
+                            <Typography id="modal-modal-title"
+                                variant="h2" component="h1">
+                                Details
+                            </Typography>
+                                <MDBCard style={{marginBottom: '20px', marginTop: '10px'}} className="mb-10">
+                                    <MDBCardBody>
+                                        <MDBRow>
+                                            <MDBCol sm="3">
+                                                <MDBCardText>Student</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                                <MDBCardText className="text-muted">
+                                                    {preApprovalForm.name}
+                                                </MDBCardText>
+                                            </MDBCol>
+                                        </MDBRow>
+                                    </MDBCardBody>
+                                </MDBCard>
                                 {preApprovalForm?.mobilityCourses?.map((mobilityCourse, index) => (
                                     <MobilityCourseCard key={index} mobilityCourse={mobilityCourse} mobilityIndex={index} />
                                 ))}
@@ -45,7 +63,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                     variant="h3" component="h1">
                                     Response
                                 </Typography>
-                                {(status == 'waiting') && (authType == 'Course Coordinator') 
+                                {(status == 'waiting') && (authType == 'Department Coordinator') 
                                 ? (
                                     <MDBRow>
                                         <MDBCol md="12">
@@ -103,7 +121,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                         <MDBCol md="12">
                                             <MDBCard className="mb-4 mb-md-0">
                                             <MDBCardBody>
-                                                { (authType !== 'Course Coordinator') 
+                                                { (authType !== 'Department Coordinator') 
                                                 ? (
                                                     <MDBRow>
                                                         <MDBCol sm="3">
@@ -116,7 +134,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                         </MDBCol>
                                                     </MDBRow>
                                                 ) : null }
-                                                { (authType !== 'Course Coordinator') ? <hr /> : null }
+                                                { (authType !== 'Department Coordinator') ? <hr /> : null }
                                                 <MDBRow>
                                                     <MDBCol sm="3">
                                                         <MDBCardText>Status</MDBCardText>

@@ -9,8 +9,8 @@ const icons = {
 // ==============================|| EXTRA PAGES MENU ITEMS ||============================== //
 
 const courseRequests = {
-    id: 'courseRequests',
-    title: 'Course Requests',
+    id: 'requests',
+    title: 'Requests',
     type: 'group',
     children: [
         {
