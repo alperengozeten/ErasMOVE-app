@@ -40,6 +40,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 // sections
 import { UserListHead, UserListToolbar } from './user';
+import CourseRequestDetail from './detailModals/CourseRequestDetail';
 
 // ----------------------------------------------------------------------
 
@@ -133,6 +134,8 @@ const CourseRequestTable = ({ courseRequests }) => {
   const isNotFound = !filteredUsers.length && !!filterName;
   const [rejectOpen, setRejectOpen] = React.useState(false);
 
+  const [openDetails, setOpenDetails] = React.useState(false);
+
   const handleClickRejectOpen = () => {
     setRejectOpen(true);
   };
@@ -160,6 +163,9 @@ const CourseRequestTable = ({ courseRequests }) => {
     setOpen(false);
     
   };
+
+  const handleOpenDetails = () => setOpenDetails(true);
+  const handleCloseDetails = () => setOpenDetails(false);
 
   return (
     <>
@@ -199,70 +205,13 @@ const CourseRequestTable = ({ courseRequests }) => {
                    
                         <TableCell align="right">
                           <Tooltip describeChild title="Open details">
-                            <IconButton size="large" color="inherit" onClick={handleClickOpen }>
+                            <IconButton size="large" color="inherit" onClick={handleOpenDetails }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <Modal
-                        open={open}
-                        onClose={handleClose}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                        BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.04)"}}}
-
-                    >
-                        <Box sx={style}>
-                            <Stack spacing={6}>
-                                <Typography id="modal-modal-title" textAlign={"center"}
-                                    variant="h2" component="h1">
-                                  Course Request Details
-                                </Typography>
-                                <Stack alignItems={"center"} spacing={3}>
-                                    <Grid container spacing={2} width={"80%"} >
-                                        <Grid item xs={6} >
-                                            <Stack spacing={4   }>
-                                                <Box alignItems={"center"}>
-                                                <Typography id="modal-modal-title" textAlign={"center"}
-                                                    variant="h6" component="h2">
-                                                  Student Name: {name}
-                                                </Typography> 
-                                                </Box>
-                                                <Box alignItems={"center"}>
-                                                  <Typography id="modal-modal-title" textAlign={"center"}
-                                                      variant="h6" component="h2">
-                                                    Status: {status}
-                                                  </Typography> 
-                                                </Box>
-                                            </Stack>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                            <Stack spacing={2}>
-                                                <Box>
-                                                    <Button size= "small" variant="contained" component="label">
-                                                        Download File
-                                                    </Button>
-                                                </Box>
-                                            </Stack>
-                                        </Grid>
-                                    </Grid>
-                                </Stack>
-                                <Box style={{ display: "flex", justifyContent: 'flex-end' }}>
-                                    <Button style={{ marginLeft: 5 }}  variant="contained" color="success" size="small" onClick={handleClickAcceptOpen} >
-                                        Accept
-                                    </Button>
-                            
-                                    <Button style={{ marginLeft: 5 }} variant="contained" color="error" size="small"onClick={handleClickRejectOpen} >
-                                        Reject
-                                    </Button>
-                                    <Button  style={{ marginLeft: 5 }}  variant="contained" color="primary" size="small"onClick={handleClose} >
-                                        Close
-                                    </Button>
-                                </Box>
-                            </Stack>
-                        </Box>
-                    </Modal>
-                   
+                        <CourseRequestDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} />
+                        {/*
                         <Dialog
                           open={rejectOpen}
                           onClose={handleRejectClose}
@@ -304,7 +253,7 @@ const CourseRequestTable = ({ courseRequests }) => {
                           Continue
                         </Button>
                       </DialogActions>
-                    </Dialog>
+                    </Dialog>*/}
                       </TableRow>
                     );
                   })}

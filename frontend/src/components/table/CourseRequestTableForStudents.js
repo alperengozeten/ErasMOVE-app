@@ -24,6 +24,7 @@ import Scrollbar from './scrollbar';
 // sections
 import { UserListHead } from './user';
 import DeleteModal from '../DeleteModal';
+import CourseRequestDetail from './detailModals/CourseRequestDetail';
 
 // ----------------------------------------------------------------------
 
@@ -76,6 +77,8 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
   const [openDelete, setOpenDelete] = React.useState(false);
 
+  const [openDetails, setOpenDetails] = React.useState(false);
+
   const handleOpenApplication = id => {
     console.log("id: ", id);
   };
@@ -97,6 +100,9 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
+
+  const handleOpenDetails = () => setOpenDetails(true);
+  const handleCloseDetails = () => setOpenDetails(false);
 
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
 
@@ -133,10 +139,11 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Open request details">
-                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                            <IconButton size="large" color="inherit" onClick={() => setOpenDetails(true) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
+                          <CourseRequestDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} />
                           <Tooltip describeChild title="Delete request">
                             <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
                               <DeleteIcon />
