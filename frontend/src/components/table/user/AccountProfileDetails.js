@@ -21,6 +21,7 @@ export const AccountProfileDetails = props => {
     firstName: "Kütür Kütür Şad",
     lastName: "BeautifulRock",
     email: "igdirli76serserii@hotmail.com",
+    password: "0123456789",
     phone: "05313113131",
     department: "Computer Science",
     cgpa: "3.31",

@@ -14,6 +14,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 export const AccountProfilePasswordCard = props => {
 
@@ -28,10 +34,26 @@ export const AccountProfilePasswordCard = props => {
     languages: ["English", "German", "Iğdırish"],
   });
 
+  const [details, setDetails] = React.useState({
+    showPassword: false,
+    newPassword: "",
+    newPasswordAgain: "",
+  });
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...details,
+      showPassword: !details.showPassword,
+    });
+  };
+
   return (
     <form autoComplete="off" noValidate {...props}>
       <Card>
-        <CardHeader subheader="You can change your password from here." title="Account Management" />
+        <CardHeader
+          subheader="You can change your password from here."
+          title="Account Management"
+        />
         <Divider />
         <CardContent>
           <Grid container spacing={3}>
@@ -46,13 +68,27 @@ export const AccountProfilePasswordCard = props => {
               />
             </Grid>
             <Grid item md={12} xs={12}>
-              <TextField
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
                 fullWidth
                 disabled
-                label="Password"
-                name="lastName"
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
                 value={values.password}
-                variant="outlined"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {details.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
               />
             </Grid>
             <Grid item md={12} xs={12}>
@@ -70,6 +106,15 @@ export const AccountProfilePasswordCard = props => {
                 name="new password again"
                 variant="outlined"
               />
+            </Grid>
+            <Grid
+              item
+              md={12}
+              xs={12}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Button disabled={true} variant="outlined">Change Password</Button>
             </Grid>
           </Grid>
         </CardContent>
