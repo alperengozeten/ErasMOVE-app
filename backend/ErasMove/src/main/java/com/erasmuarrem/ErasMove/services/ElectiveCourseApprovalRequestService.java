@@ -21,10 +21,11 @@ public class ElectiveCourseApprovalRequestService {
     private final ExchangeUniversityService exchangeUniversityService;
     private final ExchangeUniversityRepository exchangeUniversityRepository;
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
+    private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final CourseRepository courseRepository;
 
     @Autowired
-    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, CourseRepository courseRepository) {
+    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository) {
         this.electiveCourseApprovalRequestRepository = electiveCourseApprovalRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
@@ -35,6 +36,7 @@ public class ElectiveCourseApprovalRequestService {
         this.exchangeUniversityService = exchangeUniversityService;
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
+        this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
         this.courseRepository = courseRepository;
     }
 
@@ -198,5 +200,69 @@ public class ElectiveCourseApprovalRequestService {
 
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
         return "Elective Course Approval Request has been rejected!";
+    }
+
+    public String acceptElectiveCourseApprovalRequestByID(Long id, String feedback) {
+
+        Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
+                .findById(id);
+
+        if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
+            return "Elective Course Approval Request with id:" + id + " doesn't exist!";
+        }
+
+        ElectiveCourseApprovalRequest electiveCourseApprovalRequest = electiveCourseApprovalRequestOptional.get();
+        OutgoingStudent outgoingStudent = electiveCourseApprovalRequest.getStudent();
+        Long outgoingStudentID = outgoingStudent.getID();
+
+        // add the course to the department elective course list!
+        if ( outgoingStudent.getIsErasmus() ) {
+
+            ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( erasmusUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+            }
+
+            // get the related department!
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            Course newAcceptedCourse = new Course();
+            newAcceptedCourse.setCourseName(electiveCourseApprovalRequest.getCourseName());
+            newAcceptedCourse.setDescription(electiveCourseApprovalRequest.getDescription());
+            newAcceptedCourse.setEcts(electiveCourseApprovalRequest.getEcts()); // set the attributes
+
+            // this method saves the course as well!
+            // add the course to the accepted elective course list
+            erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID(newAcceptedCourse, erasmusUniversityDepartment.getID());
+        }
+        else {
+            ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( exchangeUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+            }
+
+            ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
+                    .getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(
+                            exchangeUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            Course newAcceptedCourse = new Course();
+            newAcceptedCourse.setCourseName(electiveCourseApprovalRequest.getCourseName());
+            newAcceptedCourse.setDescription(electiveCourseApprovalRequest.getDescription());
+            newAcceptedCourse.setEcts(electiveCourseApprovalRequest.getEcts()); // set the attributes
+
+            exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(newAcceptedCourse, exchangeUniversityDepartment.getID());
+        }
+
+        electiveCourseApprovalRequest.setStatus("ACCEPTED");
+        electiveCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
+
+        electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
+        return "Elective Course Approval Request has been accepted!";
     }
 }

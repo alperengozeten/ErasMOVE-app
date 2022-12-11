@@ -59,6 +59,11 @@ public class ElectiveCourseApprovalRequestController {
         return electiveCourseApprovalRequestService.declineElectiveCourseApprovalRequestByID(id, feedback);
     }
 
+    @PostMapping("/accept/{id}")
+    public String acceptElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+        return electiveCourseApprovalRequestService.acceptElectiveCourseApprovalRequestByID(id, feedback);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteElectiveCourseApprovalRequestByID(@PathVariable("id") Long id) {
         electiveCourseApprovalRequestService.deleteElectiveCourseApprovalRequestByID(id);
