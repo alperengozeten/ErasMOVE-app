@@ -3,28 +3,14 @@ import React from "react";
 import { useTheme, styled } from "@mui/material/styles";
 import {
   Avatar,
-  Button,
-  Card,
-  CardContent,
   Chip,
-  Divider,
   Grid,
-  List,
   ListItem,
   ListItemAvatar,
   ListItemSecondaryAction,
   ListItemText,
-  Stack,
   Typography,
 } from "@mui/material";
-
-// assets
-import {
-  IconBrandTelegram,
-  IconBuildingStore,
-  IconMailbox,
-  IconPhoto,
-} from "@tabler/icons";
 import User1 from "../../../../assets/images/users/user-round.svg";
 
 // styles
@@ -55,12 +41,6 @@ const NotificationCard = props => {
   const chipSX = {
     height: 24,
     padding: "0 6px",
-  };
-  const chipErrorSX = {
-    ...chipSX,
-    color: theme.palette.orange.dark,
-    backgroundColor: theme.palette.orange.light,
-    marginRight: "5px",
   };
 
   const chipWarningSX = {
