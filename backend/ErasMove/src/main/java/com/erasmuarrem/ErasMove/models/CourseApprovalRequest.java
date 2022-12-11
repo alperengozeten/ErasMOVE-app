@@ -9,6 +9,8 @@ import lombok.Setter;
 @MappedSuperclass
 public class CourseApprovalRequest extends Request {
 
+    private String courseName;
     private String description;
+    private double ects;
     private String feedback;
 }
