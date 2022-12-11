@@ -10,6 +10,7 @@ import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import { AccountProfile } from "./table/user/AccountProfile";
 import { AccountProfileDetails } from "./table/user/AccountProfileDetails";
+import { AccountProfilePasswordCard } from "./table/user/AccountProfilePasswordCard";
 
 export default function UserProfile() {
   const [value, setValue] = React.useState(0);
@@ -29,7 +30,11 @@ export default function UserProfile() {
       alignItems="center"
       sx={{ width: "100%", height: "100%" }}
     >
-      <Box sx={{ width: "80%", height: "95%" }} justifyContent={"center"} alignItems={"center"}>
+      <Box
+        sx={{ width: "80%", height: "95%" }}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange}>
@@ -58,69 +63,21 @@ export default function UserProfile() {
                 </Container>
               </Box>
             </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Box sx={{ flexGrow: 1 }}>
-                <Grid
-                  container
-                  direction={"row"}
-                  sx={{ width: "100%", height: "100%" }}
-                >
-                  <Grid container direction={"column"} xs={4} spacing={5}>
-                    <Grid item>
-                      <Typography variant="h4" mt={3}>
-                        E-Mail:
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography variant="h4">Password:</Typography>
+            <TabPanel value={value} index={0}>
+              <Box
+                component="main"
+                sx={{
+                  flexGrow: 1,
+                  py: 3,
+                }}
+              >
+                <Container maxWidth="lg">
+                  <Grid container spacing={3}>
+                    <Grid item lg={12} md={6} xs={12}>
+                      <AccountProfilePasswordCard />
                     </Grid>
                   </Grid>
-                  <Grid container direction={"column"} xs={4} spacing={3}>
-                    <Grid item>
-                      <TextField
-                        fullWidth
-                        disabled
-                        defaultValue="igdirli_serseri@hotmail.com"
-                        size="small"
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        variant="filled"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <TextField
-                        fullWidth
-                        type="password"
-                        defaultValue="password"
-                        size="small"
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        variant="filled"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <TextField
-                        fullWidth
-                        size="small"
-                        label="New password"
-                        variant="filled"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <TextField
-                        fullWidth
-                        size="small"
-                        label="Retype new password"
-                        variant="filled"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <Button variant="outlined">Change Password</Button>
-                    </Grid>
-                  </Grid>
-                </Grid>
+                </Container>
               </Box>
             </TabPanel>
           </SwipeableViews>
