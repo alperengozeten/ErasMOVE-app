@@ -22,10 +22,11 @@ public class UserManagementService {
     private final AdministrativeStaffRepository administrativeStaffRepository;
     private final CourseCoordinatorRepository courseCoordinatorRepository;
     private final AdminService adminService;
+    private final EmailService emailService;
 
     public UserManagementService(TokenRepository tokenRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository,
                                  IncomingStudentRepository incomingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository,
-                                 AdminService adminService, CourseCoordinatorRepository courseCoordinatorRepository) {
+                                 AdminService adminService, CourseCoordinatorRepository courseCoordinatorRepository, EmailService emailService ) {
         this.tokenRepository = tokenRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
@@ -33,6 +34,7 @@ public class UserManagementService {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.adminService = adminService;
         this.courseCoordinatorRepository = courseCoordinatorRepository;
+        this.emailService = emailService;
     }
     public List<ApplicationUser> getAllUsers() {
 
@@ -56,6 +58,17 @@ public class UserManagementService {
             }
         }
         throw  new IllegalStateException("There isn't a user with id "+ userID +" !" );
+    }
+
+    public ApplicationUser getUserByEmail( String email ) {
+
+        List<ApplicationUser> users = getAllUsers();
+        for ( ApplicationUser user : users ) {
+            if (Objects.equals(user.getEmail(), email)) {
+                return user;
+            }
+        }
+        throw  new IllegalStateException("There isn't a user with email "+ email +" !" );
     }
 
     public void addOutgoingStudent(String adminToken, OutgoingStudent outgoingStudent) {
@@ -524,4 +537,20 @@ public class UserManagementService {
         }
     }
 
+    public String sendActivationCode( String emailAdress ) {
+        Email email = new Email();
+        email.setRecipient(emailAdress);
+        email.setSubject("Forgotten Password: Activation Code");
+        String activationCode = email.generateActivationCode();
+        ApplicationUser receiver = getUserByEmail(emailAdress);
+        if ( receiver != null) {
+            email.addActivationCode(activationCode);
+            email.addUserGotCode(receiver);
+        }
+        email.setMail("Dear Erasmove User,\nYou can use the following activation code:\n" + activationCode+"\nHARDER,BETTER,BILKENTER");
+        return emailService.sendSimpleMail(email);
+
+    }
+
+   // public void forgotPassword
 }

@@ -134,5 +134,11 @@ public class UserManagementController {
         userManagementService.changePasswordByCourseCoordinator(email,newPass, oldPass);
     }
 
+    //FORGOT PASSWORD IMPLEMENTATION
+    @PostMapping("/sendCode")
+    public String sendActivationCode(@RequestParam String email) {
+        return userManagementService.sendActivationCode(email);
+    }
+
 
 }
