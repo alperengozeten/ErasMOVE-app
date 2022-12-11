@@ -8,8 +8,8 @@ function sendReplacementOffer({ payload: { id } }) {
   console.log(`Replacement offerd to student with id ${id}`);
 }
 
-const appSagas = [
+const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
 ];
 
-export default appSagas;
+export default requestSaga;

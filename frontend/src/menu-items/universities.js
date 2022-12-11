@@ -15,9 +15,16 @@ const universities = {
     children: [
         {
             id: 'universities',
-            title: 'Universities',
+            title: 'Contracted Universities',
             type: 'item',
             url: '/main/universities',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        }, {
+            id: 'hostUniversity',
+            title: 'Host University',
+            type: 'item',
+            url: '/main/hostUniversity',
             icon: icons.IconDashboard,
             breadcrumbs: false
         },
