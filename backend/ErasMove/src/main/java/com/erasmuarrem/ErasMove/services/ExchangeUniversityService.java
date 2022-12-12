@@ -135,35 +135,41 @@ public class ExchangeUniversityService {
         exchangeUniversityRepository.save(exchangeUniversity);
     }
 
-    public void addOutgoingStudentByIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
+    public String addOutgoingStudentByIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
         Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findById(id);
 
         if ( !exchangeUniversityOptional.isPresent() ) {
-            throw new IllegalStateException("Exchange University with id:" + id + " doesn't exist!");
+            return "Exchange University with id:" + id + " doesn't exist!";
         }
 
         Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
 
         if ( !outgoingStudentOptional.isPresent() ) {
-            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            return "The student is an Erasmus Applicant, cannot be added to an Exchange University!";
         }
 
         ExchangeUniversity exchangeUniversity = exchangeUniversityOptional.get();
 
         if ( exchangeUniversity.getUniversityQuota() == 0 ) {
-            throw new IllegalStateException("The university quota is full!");
+            return "The university quota is full!";
         }
 
-        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
         List<OutgoingStudent> acceptedStudents = exchangeUniversity.getAcceptedStudents();
 
         if ( acceptedStudents.contains(outgoingStudent) ) {
-            throw new IllegalStateException("Student with id:" + outgoingStudentID + " is already accepted!");
+            return "Student with id:" + outgoingStudentID + " is already accepted!";
         }
 
         acceptedStudents.add(outgoingStudent);
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
         exchangeUniversityRepository.save(exchangeUniversity);
+        return "Student with id:" + outgoingStudentID + " has been added to the Exchange University!";
     }
 
     public void deleteOutgoingStudentByIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {

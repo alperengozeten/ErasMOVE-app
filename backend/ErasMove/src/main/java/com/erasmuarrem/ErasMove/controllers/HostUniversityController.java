@@ -1,9 +1,12 @@
 package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.HostUniversity;
+import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.HostUniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("hostUniversity")
 @RestController
@@ -16,6 +19,16 @@ public class HostUniversityController {
 
     @GetMapping("/{id}")
     public HostUniversity getHostUniversityById(@PathVariable("id") Long id) { return hostUniversityService.getHostUniversityById(id); }
+
+    @GetMapping("/allAcceptedStudents")
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudents() {
+        return hostUniversityService.getAllAcceptedOutgoingStudents();
+    }
+
+    @GetMapping("/allAcceptedStudents/departmentID/{departmentID}")
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudentsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return hostUniversityService.getAllAcceptedOutgoingStudentsByDepartmentID(departmentID);
+    }
 
     @PostMapping("/add")
     public void addHostUniversity(@RequestBody HostUniversity hostUniversity ) {
