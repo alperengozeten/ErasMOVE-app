@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.FileRequest;
 import com.erasmuarrem.ErasMove.services.FileRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,8 +48,13 @@ public class FileRequestController {
     }
 
     @PostMapping("/add")
-    public void addFileRequest(@RequestBody FileRequest fileRequest) {
-        fileRequestService.addFileRequest(fileRequest);
+    public ResponseEntity<String> addFileRequest(@RequestBody FileRequest fileRequest) {
+        return fileRequestService.addFileRequest(fileRequest);
+    }
+
+    @PostMapping("/respond/{id}")
+    public ResponseEntity<String> respondToFileRequestByFileRequestID(@PathVariable("id") Long id) {
+        return fileRequestService.respondToFileRequestByFileRequestID(id);
     }
 
     @DeleteMapping("/delete/{id}")

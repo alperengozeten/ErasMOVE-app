@@ -1,10 +1,14 @@
 package com.erasmuarrem.ErasMove.services;
 
+import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.FileRequest;
+import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
 import com.erasmuarrem.ErasMove.repositories.FileRequestRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,12 +20,14 @@ public class FileRequestService {
     private final FileRequestRepository fileRequestRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final AdministrativeStaffRepository administrativeStaffRepository;
+    private final AdministrativeStaffService administrativeStaffService;
 
     @Autowired
-    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository) {
+    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdministrativeStaffService administrativeStaffService) {
         this.fileRequestRepository = fileRequestRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.administrativeStaffRepository = administrativeStaffRepository;
+        this.administrativeStaffService = administrativeStaffService;
     }
 
     public List<FileRequest> getFileRequests() {
@@ -38,19 +44,26 @@ public class FileRequestService {
         return fileRequestOptional.get();
     }
 
-    public void addFileRequest(FileRequest fileRequest) {
-        Long administrativeStaffID = fileRequest.getAdministrativeStaff().getID();
+    public ResponseEntity<String> addFileRequest(FileRequest fileRequest) {
         Long outgoingStudentID = fileRequest.getStudent().getID();
 
-        if ( !administrativeStaffRepository.existsById(administrativeStaffID) ) {
-            throw new IllegalStateException("Administrative Staff with id:" + administrativeStaffID + " doesn't exist!");
-        }
-
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
+        OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+
+        AdministrativeStaff administrativeStaff = administrativeStaffService.getAdministrativeStaffByDepartmentId(outgoingStudent.getDepartment().getID());
+
+        if ( administrativeStaff == null ) {
+            return new ResponseEntity<>("There is no Administrative Staff for Department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        fileRequest.setStatus("WAITING");
+        fileRequest.setAdministrativeStaff(administrativeStaff);
         fileRequestRepository.save(fileRequest);
+        return new ResponseEntity<>("File Request has been sent!", HttpStatus.OK);
     }
 
     public void deleteFileRequestByID(Long id) {
@@ -90,5 +103,24 @@ public class FileRequestService {
         }
 
         return fileRequestRepository.findByAdministrativeStaffIDAndStudentID(administrativeStaffID, outgoingStudentID);
+    }
+
+    public ResponseEntity<String> respondToFileRequestByFileRequestID(Long id) {
+        Optional<FileRequest> fileRequestOptional = fileRequestRepository.findById(id);
+
+        if ( !fileRequestOptional.isPresent() ) {
+            return new ResponseEntity<>("File Request with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        FileRequest fileRequest = fileRequestOptional.get();
+
+        if ( fileRequest.getStatus().equals("RESPONDED") ) {
+            return new ResponseEntity<>("File Request with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
+        }
+
+        fileRequest.setStatus("RESPONDED");
+        fileRequestRepository.save(fileRequest);
+
+        return new ResponseEntity<>("Succesfully responded to the File Request!", HttpStatus.OK);
     }
 }
