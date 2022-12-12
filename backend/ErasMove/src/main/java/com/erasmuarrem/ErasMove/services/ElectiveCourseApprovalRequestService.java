@@ -145,13 +145,13 @@ public class ElectiveCourseApprovalRequestService {
         return electiveCourseApprovalRequestRepository.findByDepartmentCoordinatorIDAndStudentID(departmentCoordinatorID, outgoingStudentID);
     }
 
-    public String declineElectiveCourseApprovalRequestByID(Long id, String feedback) {
+    public ResponseEntity<String> declineElectiveCourseApprovalRequestByID(Long id, String feedback) {
 
         Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
                 .findById(id);
 
         if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
-            return "Elective Course Approval Request with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Elective Course Approval Request with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         ElectiveCourseApprovalRequest electiveCourseApprovalRequest = electiveCourseApprovalRequestOptional.get();
@@ -159,7 +159,7 @@ public class ElectiveCourseApprovalRequestService {
         Long outgoingStudentID = outgoingStudent.getID();
 
         if ( electiveCourseApprovalRequest.getStatus().equals("ACCEPTED") || electiveCourseApprovalRequest.getStatus().equals("DECLINED") ) {
-            return "Mandatory Course Approval Request has already been responded!";
+            return new ResponseEntity<>("Elective Course Approval Request has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         // add the course to the list of rejected courses!
@@ -167,7 +167,7 @@ public class ElectiveCourseApprovalRequestService {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
@@ -187,7 +187,7 @@ public class ElectiveCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = exchangeUniversity.getRejectedCourses();
@@ -208,16 +208,16 @@ public class ElectiveCourseApprovalRequestService {
         electiveCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
-        return "Elective Course Approval Request has been rejected!";
+        return new ResponseEntity<>("Elective Course Approval Request has been rejected!", HttpStatus.OK);
     }
 
-    public String acceptElectiveCourseApprovalRequestByID(Long id, String feedback) {
+    public ResponseEntity<String> acceptElectiveCourseApprovalRequestByID(Long id, String feedback) {
 
         Optional<ElectiveCourseApprovalRequest> electiveCourseApprovalRequestOptional = electiveCourseApprovalRequestRepository
                 .findById(id);
 
         if ( !electiveCourseApprovalRequestOptional.isPresent() ) {
-            return "Elective Course Approval Request with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Elective Course Approval Request with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         ElectiveCourseApprovalRequest electiveCourseApprovalRequest = electiveCourseApprovalRequestOptional.get();
@@ -225,7 +225,7 @@ public class ElectiveCourseApprovalRequestService {
         Long outgoingStudentID = outgoingStudent.getID();
 
         if ( electiveCourseApprovalRequest.getStatus().equals("ACCEPTED") || electiveCourseApprovalRequest.getStatus().equals("DECLINED") ) {
-            return "Mandatory Course Approval Request has already been responded!";
+            return new ResponseEntity<>("Elective Course Approval Request has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         // add the course to the department elective course list!
@@ -234,7 +234,7 @@ public class ElectiveCourseApprovalRequestService {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             // get the related department!
@@ -256,7 +256,7 @@ public class ElectiveCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
@@ -276,6 +276,6 @@ public class ElectiveCourseApprovalRequestService {
         electiveCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
-        return "Elective Course Approval Request has been accepted!";
+        return new ResponseEntity<>("Elective Course Approval Request has been accepted!", HttpStatus.OK);
     }
 }

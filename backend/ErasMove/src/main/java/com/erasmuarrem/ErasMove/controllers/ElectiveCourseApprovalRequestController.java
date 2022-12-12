@@ -56,12 +56,12 @@ public class ElectiveCourseApprovalRequestController {
     }
 
     @PostMapping("/decline/{id}")
-    public String declineElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> declineElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
         return electiveCourseApprovalRequestService.declineElectiveCourseApprovalRequestByID(id, feedback);
     }
 
     @PostMapping("/accept/{id}")
-    public String acceptElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> acceptElectiveCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
         return electiveCourseApprovalRequestService.acceptElectiveCourseApprovalRequestByID(id, feedback);
     }
 
