@@ -159,9 +159,6 @@ const UniversityTable = ({universities}) => {
 
                         <TableCell align="center">{emptyQuota}</TableCell>
                         <TableCell align="center">{totalQuota}</TableCell>
-                        <TableCell align="center">{departments}</TableCell>
-
-
                 
                         <TableCell align="right">
                             <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen} >
