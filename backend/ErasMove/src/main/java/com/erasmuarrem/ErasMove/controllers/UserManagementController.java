@@ -73,8 +73,8 @@ public class UserManagementController {
     // ADMINISTRATIVE STAFF
 
     @PostMapping("/add/administrativeStaff")
-    public void addAdministrativeStaff(@RequestParam String adminToken, @RequestBody AdministrativeStaff administrativeStaff) {
-        userManagementService.addAdministrativeStaff(adminToken, administrativeStaff);
+    public ResponseEntity<String> addAdministrativeStaff(@RequestParam String adminToken, @RequestBody AdministrativeStaff administrativeStaff) {
+        return userManagementService.addAdministrativeStaff(adminToken, administrativeStaff);
     }
 
     @PostMapping("/login/administrativeStaff")

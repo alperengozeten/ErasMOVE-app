@@ -1,8 +1,11 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
+import com.erasmuarrem.ErasMove.models.Department;
 import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,11 +42,7 @@ public class AdministrativeStaffService {
     public AdministrativeStaff getAdministrativeStaffByDepartmentId(Long id) {
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByDepartments_ID(id);
 
-        if ( !administrativeStaffOptional.isPresent() ) {
-            throw new IllegalStateException("Administrative staff with department id:" + id + " doesn't exist!");
-        }
-
-        return administrativeStaffOptional.get();
+        return administrativeStaffOptional.orElse(null);
     }
 
     public AdministrativeStaff getAdministrativeStaffByDepartmentName(String departmentName) {
@@ -57,13 +56,25 @@ public class AdministrativeStaffService {
         return administrativeStaffOptional.get();
     }
 
-    public void addAdministrativeStaff(AdministrativeStaff administrativeStaff) {
+    public ResponseEntity<String> addAdministrativeStaff(AdministrativeStaff administrativeStaff) {
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail(administrativeStaff.getEmail());
 
         if ( administrativeStaffOptional.isPresent() ) {
-            throw new IllegalStateException("The Administrative Staff with email " + administrativeStaff.getEmail() + " already exists!");
+            return new ResponseEntity<>("The Administrative Staff with email " + administrativeStaff.getEmail() + " already exists!", HttpStatus.BAD_REQUEST);
+        }
+
+        List<Department> departmentList = administrativeStaff.getDepartments();
+
+        for (Department department : departmentList) {
+            Optional<AdministrativeStaff> optionalAdministrativeStaff = administrativeStaffRepository
+                    .findByDepartments_ID(department.getID());
+
+            if ( optionalAdministrativeStaff.isPresent() ) {
+                return new ResponseEntity<>("There is already an Administrative Staff for Department with id:" + department.getID() + "!", HttpStatus.BAD_REQUEST);
+            }
         }
 
         administrativeStaffRepository.save(administrativeStaff);
+        return new ResponseEntity<>("Administrative Staff created!", HttpStatus.OK);
     }
 }

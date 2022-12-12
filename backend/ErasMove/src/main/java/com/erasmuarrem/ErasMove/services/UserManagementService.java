@@ -275,7 +275,7 @@ public class UserManagementService {
 
     // ADMINISTRATIVE STAFF
 
-    public void addAdministrativeStaff(String token, AdministrativeStaff administrativeStaff) {
+    public ResponseEntity<String> addAdministrativeStaff(String token, AdministrativeStaff administrativeStaff) {
         List<Admin> admins = adminService.getAllAdmins();
         if (admins!=null ) {
             boolean tokenMatches = false;
@@ -289,19 +289,34 @@ public class UserManagementService {
             }
             if ( tokenMatches ) {
                 Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail( administrativeStaff.getEmail() );
+
                 if ( administrativeStaffOptional.isPresent() ) {
-                    throw new IllegalStateException("The Administrative Staff with email " +administrativeStaff.getEmail()+  " already exists.");
+                    return new ResponseEntity<>("The Administrative Staff with email " + administrativeStaff.getEmail() + " already exists!", HttpStatus.BAD_REQUEST);
                 }
+
+                List<Department> departmentList = administrativeStaff.getDepartments();
+
+                for (Department department : departmentList) {
+                    Optional<AdministrativeStaff> optionalAdministrativeStaff = administrativeStaffRepository
+                            .findByDepartments_ID(department.getID());
+
+                    if ( optionalAdministrativeStaff.isPresent() ) {
+                        return new ResponseEntity<>("There is already an Administrative Staff for Department with id:" + department.getID() + "!", HttpStatus.BAD_REQUEST);
+                    }
+                }
+
                 hashingPasswordHelper.setPassword(administrativeStaff.getHashedPassword());
                 administrativeStaff.setHashedPassword(hashingPasswordHelper.Hash());
                 administrativeStaffRepository.save(administrativeStaff);
+
+                return new ResponseEntity<>("Administrative Staff created!", HttpStatus.OK);
             }
             else {
-                throw new IllegalStateException("Unauthorized Request!");
+                return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
             }
         }
         else {
-            throw new IllegalStateException("Unauthorized Request!");
+            return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.services.AdministrativeStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,8 +40,8 @@ public class AdministrativeStaffController {
     }
 
     @PostMapping("/add")
-    public void addAdministrativeStaff(@RequestBody AdministrativeStaff administrativeStaff) {
-        administrativeStaffService.addAdministrativeStaff(administrativeStaff);
+    public ResponseEntity<String> addAdministrativeStaff(@RequestBody AdministrativeStaff administrativeStaff) {
+        return administrativeStaffService.addAdministrativeStaff(administrativeStaff);
     }
 
     @DeleteMapping("/delete/{id}")
