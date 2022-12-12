@@ -1,14 +1,13 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
-import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
-import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,15 +18,16 @@ public class PreApprovalFormRequestService {
 
     private final PreApprovalFormRequestRepository preApprovalFormRequestRepository;
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
-
+    private final DepartmentCoordinatorService departmentCoordinatorService;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
+        this.departmentCoordinatorService = departmentCoordinatorService;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
@@ -47,32 +47,34 @@ public class PreApprovalFormRequestService {
         return preApprovalFormRequestOptional.get();
     }
 
-    public String addPreApprovalFormRequest(PreApprovalFormRequest preApprovalFormRequest) {
-        Long departmentCoordinatorID = preApprovalFormRequest.getDepartmentCoordinator().getID();
+    public ResponseEntity<String> addPreApprovalFormRequest(PreApprovalFormRequest preApprovalFormRequest) {
         Long outgoingStudentID = preApprovalFormRequest.getStudent().getID();
 
-        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
-            return "Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!";
-        }
-
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+
+        DepartmentCoordinator departmentCoordinator = departmentCoordinatorService
+                .getDepartmentCoordinatorByDepartmentId(outgoingStudent.getDepartment().getID());
+
+        if ( departmentCoordinator == null ) {
+            return new ResponseEntity<>("There is no Department Coordinator for department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!", HttpStatus.BAD_REQUEST);
+        }
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", HttpStatus.BAD_REQUEST);
             }
         }
         else {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -81,16 +83,16 @@ public class PreApprovalFormRequestService {
         // the student shouldn't have a waiting or accepted request
         for (PreApprovalFormRequest approvalFormRequest: preApprovalFormRequests) {
             if ( approvalFormRequest.getStatus().equals("ACCEPTED") ) {
-                return "Student with id:" + outgoingStudentID + " already has an accepted Pre-Approval Form!";
+                return new ResponseEntity<>("Student with id:" + outgoingStudentID + " already has an accepted Pre-Approval Form!", HttpStatus.BAD_REQUEST);
             }
             else if ( approvalFormRequest.getStatus().equals("WAITING") ) {
-                return "Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!";
+                return new ResponseEntity<>("Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!", HttpStatus.BAD_REQUEST);
             }
         }
 
         preApprovalFormRequest.setStatus("WAITING");
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
-        return "Pre-Approval Form is submitted!";
+        return new ResponseEntity<>("Pre-Approval Form is submitted!", HttpStatus.OK);
     }
 
     public void deletePreApprovalFormRequestByID(Long id) {
@@ -133,44 +135,44 @@ public class PreApprovalFormRequestService {
         return preApprovalFormRequestRepository.findByStudentID(outgoingStudentID);
     }
 
-    public String declinePreApprovalFormRequest(Long id, String feedback) {
+    public ResponseEntity<String> declinePreApprovalFormRequest(Long id, String feedback) {
         Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
 
         if ( !preApprovalFormRequestOptional.isPresent() ) {
-            return "Pre-Approval Form with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Pre-Approval Form with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
 
         if ( preApprovalFormRequest.getStatus().equals("ACCEPTED") || preApprovalFormRequest.getStatus().equals("DECLINED") ) {
-            return "Pre-Approval Form with id:" + id + " has already been responded!";
+            return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("DECLINED");
 
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
-        return "Pre-Approval Form with id:" + id + " has been declined!";
+        return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has been declined!", HttpStatus.OK);
     }
 
-    public String acceptPreApprovalFormRequestByID(Long id, String feedback) {
+    public ResponseEntity<String> acceptPreApprovalFormRequestByID(Long id, String feedback) {
         Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
 
         if ( !preApprovalFormRequestOptional.isPresent() ) {
-            return "Pre-Approval Form with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Pre-Approval Form with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
 
         if ( preApprovalFormRequest.getStatus().equals("ACCEPTED") || preApprovalFormRequest.getStatus().equals("DECLINED") ) {
-            return "Pre-Approval Form with id:" + id + " has already been responded!";
+            return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("ACCEPTED");
 
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
-        return "Pre-Approval Form with id:" + id + " has been accepted!";
+        return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has been accepted!", HttpStatus.OK);
     }
 
     @Transactional

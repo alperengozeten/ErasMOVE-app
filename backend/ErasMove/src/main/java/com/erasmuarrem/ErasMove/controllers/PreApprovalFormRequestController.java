@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
 import com.erasmuarrem.ErasMove.services.PreApprovalFormRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,17 +49,17 @@ public class PreApprovalFormRequestController {
     }
 
     @PostMapping("/add") // the student must be admitted to be able to call this!
-    public String addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
+    public ResponseEntity<String> addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
         return preApprovalFormRequestService.addPreApprovalFormRequest(preApprovalFormRequest);
     }
 
     @PostMapping("/accept/{id}")
-    public String acceptPreApprovalFormRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> acceptPreApprovalFormRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
         return preApprovalFormRequestService.acceptPreApprovalFormRequestByID(id, feedback);
     }
 
     @PostMapping("/decline/{id}")
-    public String declinePreApprovalFormRequest(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> declinePreApprovalFormRequest(@PathVariable("id") Long id, @RequestParam String feedback) {
         return preApprovalFormRequestService.declinePreApprovalFormRequest(id, feedback);
     }
 
