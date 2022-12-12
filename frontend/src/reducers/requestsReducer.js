@@ -1,3 +1,5 @@
+import { GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
+
 const INITIAL_STATE = {
     courseRequests: [
         {
@@ -95,124 +97,15 @@ const INITIAL_STATE = {
           documents: [],
       },
     ], 
-    preApprovalForms: [
-        {
-            id: 1,
-            name: 'Kürşad Güzelkaya',
-            status: "rejected",
-            departmentCoordinator: "Altay Güvenir",
-            mobilityCourses: [
-                {
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        },{
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                },
-                {
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                }
-            ],
-            feedback: "Man this is terrible.. Are you serious??",
-        },{
-            id: 2,
-            name: 'John Doe',
-            status: "waiting",
-            departmentCoordinator: "Aynur Dayanik",
-            mobilityCourses: [
-                {
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        },{
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                }
-            ],
-            feedback: "Man this is terrible.. Are you serious??",
-        },{
-            id: 3,
-            name: 'Namık Kemal',
-            status: "accepted",
-            departmentCoordinator: "Eray Hoca",
-            mobilityCourses: [
-                {
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        },{
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                },
-                {
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        },{
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        },{
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                },{
-                    courses: [
-                        {
-                            courseName: 'CS219',
-                            description: 'Proggraming Life',
-                            ECTS: 3,
-                        }
-                    ],
-                    type: "Must",
-                    equivalentCourse: 'CS340',
-                }
-            ],
-            feedback: "LGTM. You are perfect :))",
-        },
-    ], 
+    preApprovalForms: [],
 };
 
 const requestsReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-      default:
-        return state;
+        default:
+            return state;
+        case GET_PREAPPROVAL_FORMS_SUCCESS:
+            return { ...state, preApprovalForms: action.payload };
     }
   };
   
