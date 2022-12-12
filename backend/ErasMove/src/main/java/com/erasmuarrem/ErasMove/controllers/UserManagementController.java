@@ -34,12 +34,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/login/outgoingStudent")
-    public String loginOutgoingStudent(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<String> loginOutgoingStudent(@RequestParam String email, @RequestParam String password ) {
         return userManagementService.loginOutgoingStudent(email,password);
     }
 
     @PostMapping("/logout/outgoingStudent/{id}")
-    public String logOutOutgoingStudent(@PathVariable("id") Long id) {
+    public ResponseEntity<String> logOutOutgoingStudent(@PathVariable("id") Long id) {
         return userManagementService.logOutOutgoingStudent(id);
     }
 
@@ -56,12 +56,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/login/departmentCoordinator")
-    public String loginDepartmentCoordinator(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<String> loginDepartmentCoordinator(@RequestParam String email, @RequestParam String password ) {
         return userManagementService.loginDepartmentCoordinator(email,password);
     }
 
     @PostMapping("/logout/departmentCoordinator/{id}")
-    public String logOut(@PathVariable("id") Long id) {
+    public ResponseEntity<String> logOut(@PathVariable("id") Long id) {
         return userManagementService.logOutDepartmentCoordinator(id);
     }
 
@@ -78,12 +78,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/login/administrativeStaff")
-    public String loginAdministrativeStaff(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<String> loginAdministrativeStaff(@RequestParam String email, @RequestParam String password ) {
         return userManagementService.loginAdministrativeStaff(email,password);
     }
 
     @PostMapping("/logout/administrativeStaff/{id}")
-    public String logOutAdministrativeStaff(@PathVariable("id") Long id) {
+    public ResponseEntity<String> logOutAdministrativeStaff(@PathVariable("id") Long id) {
         return userManagementService.logOutAdministrativeStaff(id);
     }
 
@@ -100,12 +100,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/login/incomingStudent")
-    public String loginIncomingStudent(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<String> loginIncomingStudent(@RequestParam String email, @RequestParam String password ) {
         return userManagementService.loginIncomingStudent(email,password);
     }
 
     @PostMapping("/logout/incomingStudent/{id}")
-    public String logOutIncomingStudent(@PathVariable("id") Long id) {
+    public ResponseEntity<String> logOutIncomingStudent(@PathVariable("id") Long id) {
         return userManagementService.logOutIncomingStudent(id);
     }
 
@@ -121,12 +121,12 @@ public class UserManagementController {
     }
 
     @PostMapping("/login/courseCoordinator")
-    public String loginCourseCoordinator(@RequestParam String email, @RequestParam String password ) {
+    public ResponseEntity<String> loginCourseCoordinator(@RequestParam String email, @RequestParam String password ) {
         return userManagementService.loginCourseCoordinator(email,password);
     }
 
     @PostMapping("/logout/courseCoordinator/{id}")
-    public String logoutCourseCoordinator(@PathVariable("id") Long id) {
+    public ResponseEntity<String> logoutCourseCoordinator(@PathVariable("id") Long id) {
         return userManagementService.logoutCourseCoordinator(id);
     }
 

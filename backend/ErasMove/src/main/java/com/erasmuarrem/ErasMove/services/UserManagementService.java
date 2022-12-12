@@ -105,10 +105,10 @@ public class UserManagementService {
         }
     }
 
-    public String logOutOutgoingStudent(Long id) {
+    public ResponseEntity<String> logOutOutgoingStudent(Long id) {
         Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(id);
         if ( !outgoingStudentOptional.isPresent() ){
-            return "The outgoing student with id  "+ id + " doesn't exist.";
+            return  new ResponseEntity<>("The outgoing student with id  "+ id + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         OutgoingStudent currStu = outgoingStudentOptional.get();
         Token currToken = currStu.getUserToken();
@@ -117,17 +117,17 @@ public class UserManagementService {
         tokenRepository.save(currToken);
 
         outgoingStudentRepository.save(currStu);
-        return "Log out successful";
+        return new ResponseEntity<>("Log out successful", HttpStatus.OK);
     }
 
-    public String loginOutgoingStudent(String email, String password) {
+    public ResponseEntity<String> loginOutgoingStudent(String email, String password) {
         hashingPasswordHelper = HashingPasswordHelper.getInstance();
         hashingPasswordHelper.setPassword(password);
         String hashedPassword = hashingPasswordHelper.Hash();
 
         Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findByEmail(email);
         if ( !outgoingStudentOptional.isPresent() ){
-            return "The outgoing student with email "+ email + " doesn't exist.";
+            return new ResponseEntity<>("The outgoing student with email "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         else {
             OutgoingStudent currStu = outgoingStudentOptional.get();
@@ -141,9 +141,9 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStu.setUserToken(token);
                 outgoingStudentRepository.save(currStu);
-                return "OS"+strToken;
+                return new ResponseEntity<>("Successful login", HttpStatus.OK);
             }
-            return "Incorrect login credentials.";
+            return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -213,14 +213,14 @@ public class UserManagementService {
         }
     }
 
-    public String loginDepartmentCoordinator(String email, String password) {
+    public ResponseEntity<String> loginDepartmentCoordinator(String email, String password) {
         hashingPasswordHelper = HashingPasswordHelper.getInstance();
         hashingPasswordHelper.setPassword(password);
         String hashedPassword = hashingPasswordHelper.Hash();
 
         Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository.findByEmail(email);
         if ( !departmentCoordinatorOptional.isPresent() ){
-            return "The department coordinator with email  "+ email + " doesn't exist.";
+            return  new ResponseEntity<>("The department coordinator with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         else {
             DepartmentCoordinator currDepCord = departmentCoordinatorOptional.get();
@@ -234,16 +234,17 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currDepCord.setUserToken(token);
                 departmentCoordinatorRepository.save(currDepCord);
-                return "DC"+strToken;
+                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
+
             }
-            return "Incorrect login credentials.";
+            return new ResponseEntity<>( "Incorrect login credentials.", HttpStatus.BAD_REQUEST );
         }
     }
 
-    public String logOutDepartmentCoordinator(Long id) {
+    public ResponseEntity<String> logOutDepartmentCoordinator(Long id) {
         Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository.findById(id);
         if ( !departmentCoordinatorOptional.isPresent() ){
-            return "The department coordinator with id  "+ id + " doesn't exist.";
+            return new ResponseEntity<>("The department coordinator with id  "+ id + " doesn't exist.", HttpStatus.BAD_REQUEST );
         }
         DepartmentCoordinator currDepCord = departmentCoordinatorOptional.get();
         Token currToken = currDepCord.getUserToken();
@@ -252,7 +253,7 @@ public class UserManagementService {
         tokenRepository.save(currToken);
 
         departmentCoordinatorRepository.save(currDepCord);
-        return "Log out successful";
+        return new ResponseEntity<>("Log out successful", HttpStatus.OK);
     }
 
     public ResponseEntity<String> changePasswordByEmailDepartmentCoordinator(String email, String newPass, String oldPass) {
@@ -325,14 +326,14 @@ public class UserManagementService {
         }
     }
 
-    public String loginAdministrativeStaff( String email, String password) {
+    public ResponseEntity<String> loginAdministrativeStaff( String email, String password) {
         hashingPasswordHelper = HashingPasswordHelper.getInstance();
         hashingPasswordHelper.setPassword(password);
         String hashedPassword = hashingPasswordHelper.Hash();
 
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail(email);
         if ( !administrativeStaffOptional.isPresent() ){
-            return "The administrative staff with email  "+ email + " doesn't exist.";
+            return new ResponseEntity<>("The administrative staff with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         else {
             AdministrativeStaff currStaff = administrativeStaffOptional.get();
@@ -346,15 +347,15 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStaff.setUserToken(token);
                 administrativeStaffRepository.save(currStaff);
-                return "AS"+strToken;
+                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
             }
-            return "Incorrect login credentials.";
+            return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
     }
-    public String logOutAdministrativeStaff(Long id ) {
+    public ResponseEntity<String> logOutAdministrativeStaff(Long id ) {
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findById(id);
         if ( !administrativeStaffOptional.isPresent() ){
-            return "The administrative staff with id  "+ id + " doesn't exist.";
+            return new ResponseEntity<>("The administrative staff with id  "+ id + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         AdministrativeStaff currStaff = administrativeStaffOptional.get();
         Token currToken = currStaff.getUserToken();
@@ -363,7 +364,8 @@ public class UserManagementService {
         tokenRepository.save(currToken);
 
         administrativeStaffRepository.save(currStaff);
-        return "Log out successful";
+        return new ResponseEntity<>("Log out successful", HttpStatus.OK);
+
     }
     public ResponseEntity<String> changePasswordByEmailAdministrativeStaff( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
@@ -421,14 +423,14 @@ public class UserManagementService {
         }
     }
 
-    public String loginIncomingStudent( String email, String password) {
+    public ResponseEntity<String> loginIncomingStudent( String email, String password) {
         hashingPasswordHelper = HashingPasswordHelper.getInstance();
         hashingPasswordHelper.setPassword(password);
         String hashedPassword = hashingPasswordHelper.Hash();
 
         Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail(email);
         if ( !incomingStudentOptional.isPresent() ){
-            return "The incoming student with email  "+ email + " doesn't exist.";
+            return new ResponseEntity<>("The incoming student with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         else {
             IncomingStudent currStu = incomingStudentOptional.get();
@@ -442,15 +444,15 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStu.setUserToken(token);
                 incomingStudentRepository.save(currStu);
-                return "IS"+strToken;
+                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
             }
-            return "Incorrect login credentials.";
+            return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
     }
-    public String logOutIncomingStudent(Long id ) {
+    public ResponseEntity<String> logOutIncomingStudent(Long id ) {
         Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findById(id);
         if ( !incomingStudentOptional.isPresent() ){
-            return "The incoming student with id  "+ id + " doesn't exist.";
+            return new ResponseEntity<>("The incoming student with id  "+ id + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         IncomingStudent currStu = incomingStudentOptional.get();
         Token currToken = currStu.getUserToken();
@@ -459,7 +461,7 @@ public class UserManagementService {
         tokenRepository.save(currToken);
 
         incomingStudentRepository.save(currStu);
-        return "Log out successful";
+        return new ResponseEntity<>("Log out successful", HttpStatus.OK);
     }
     public ResponseEntity<String> changePasswordByEmailIncomingStudent( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
@@ -528,14 +530,14 @@ public class UserManagementService {
             return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
         }
     }
-    public String loginCourseCoordinator( String email, String password) {
+    public ResponseEntity<String> loginCourseCoordinator( String email, String password) {
         hashingPasswordHelper = HashingPasswordHelper.getInstance();
         hashingPasswordHelper.setPassword(password);
         String hashedPassword = hashingPasswordHelper.Hash();
 
         Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail(email);
         if ( !courseCoordinatorOptional.isPresent() ){
-            return "The course coordinator with email  "+ email + " doesn't exist.";
+            return new ResponseEntity<>("The course coordinator with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         else {
             CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
@@ -549,15 +551,15 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currCourseCord.setUserToken(token);
                 courseCoordinatorRepository.save(currCourseCord);
-                return "CC"+strToken;
+                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
             }
-            return "Incorrect login credentials.";
+            return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
     }
-    public String logoutCourseCoordinator(Long id ) {
+    public ResponseEntity<String> logoutCourseCoordinator(Long id ) {
         Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findById(id);
         if ( !courseCoordinatorOptional.isPresent() ){
-            return "The course coordinator with id  "+ id + " doesn't exist.";
+            return new ResponseEntity<>("The course coordinator with id  "+ id + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
         Token currToken = currCourseCord.getUserToken();
@@ -566,7 +568,7 @@ public class UserManagementService {
         tokenRepository.save(currToken);
 
         courseCoordinatorRepository.save(currCourseCord);
-        return "Log out successful";
+        return new ResponseEntity<>("Log out successful", HttpStatus.OK);
     }
     public ResponseEntity<String> changePasswordByCourseCoordinator( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
