@@ -115,7 +115,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                         variant="h3" component="h1">
                                         Response
                                     </Typography>
-                                    {(status == 'waiting') && (authType == 'Course Coordinator') 
+                                    {(status == 'waiting') && (authType !== 'Outgoing Student') 
                                     ? (
                                         <MDBRow>
                                             <MDBCol md="12">
@@ -173,20 +173,22 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                             <MDBCol md="12">
                                                 <MDBCard className="mb-4 mb-md-0">
                                                 <MDBCardBody>
-                                                    { (authType !== 'Course Coordinator') 
+                                                    { (authType === 'Outgoing Student') 
                                                     ? (
-                                                        <MDBRow>
-                                                            <MDBCol sm="3">
-                                                                <MDBCardText>Course Coordinator</MDBCardText>
-                                                            </MDBCol>
-                                                            <MDBCol sm="9">
-                                                                <MDBCardText className="text-muted">
-                                                                    {courseRequest.courseCoordinator}
-                                                                </MDBCardText>
-                                                            </MDBCol>
-                                                        </MDBRow>
+                                                        <>
+                                                            <MDBRow>
+                                                                <MDBCol sm="3">
+                                                                    <MDBCardText>Coordinator</MDBCardText>
+                                                                </MDBCol>
+                                                                <MDBCol sm="9">
+                                                                    <MDBCardText className="text-muted">
+                                                                        {courseRequest.courseCoordinator}
+                                                                    </MDBCardText>
+                                                                </MDBCol>
+                                                            </MDBRow>
+                                                            <hr />
+                                                        </>
                                                     ) : null }
-                                                    { (authType !== 'Course Coordinator') ? <hr /> : null }
                                                     <MDBRow>
                                                         <MDBCol sm="3">
                                                             <MDBCardText>Status</MDBCardText>
