@@ -70,6 +70,11 @@ public class ExchangeReplacementRequestService {
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            return new ResponseEntity<>("The Outgoing Student with id:" + outgoingStudentID + " is an Erasmus Applicant, request failed!", HttpStatus.BAD_REQUEST);
+        }
+
         DepartmentCoordinator departmentCoordinator = departmentCoordinatorRepository.findById(departmentCoordinatorID).get();
         ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByID(exchangeReplacementRequest.getExchangeUniversity().getID());
 

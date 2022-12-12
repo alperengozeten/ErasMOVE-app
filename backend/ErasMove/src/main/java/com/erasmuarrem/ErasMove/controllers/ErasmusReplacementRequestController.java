@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.ErasmusReplacementRequest;
 import com.erasmuarrem.ErasMove.services.ErasmusReplacementRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,8 +41,8 @@ public class ErasmusReplacementRequestController {
     }
 
     @PostMapping("/add")
-    public void addErasmusReplacementRequest(@RequestBody ErasmusReplacementRequest erasmusReplacementRequest) {
-        erasmusReplacementRequestService.addErasmusReplacementRequest(erasmusReplacementRequest);
+    public ResponseEntity<String> addErasmusReplacementRequest(@RequestBody ErasmusReplacementRequest erasmusReplacementRequest) {
+        return erasmusReplacementRequestService.addErasmusReplacementRequest(erasmusReplacementRequest);
     }
 
     @PostMapping("/outgoingStudent/{id}/accept")
