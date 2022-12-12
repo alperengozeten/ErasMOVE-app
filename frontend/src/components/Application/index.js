@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -12,10 +12,15 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 import ProfileApplicationPage from "../ProfileApplicationPage";
+import { getPreApprovalFormsRequest } from "../../actions";
 
 
-const Application = ({ courseRequests, preApprovalForms, hostCourses, approvedCourses }) => {
-  const [value, setValue] = React.useState("0");
+const Application = ({ getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
+  useEffect(() => {
+    getPreApprovalFormsRequest(userId);
+  }, [getPreApprovalFormsRequest]);
+
+  const [value, setValue] = useState("0");
 
   const handleChange = (event, newValue) => {
     setValue(`${newValue}`);
@@ -69,16 +74,18 @@ const mapStateToProps = state => {
     const preApprovalForms = state.requests.preApprovalForms;
     const hostCourses = state.courses.hostCourses;
     const approvedCourses = state.courses.approvedCourses;
+    const userId = state.user.user.id;
     return {
         courseRequests,
         preApprovalForms,
         hostCourses,
         approvedCourses,
+        userId,
     };
 };
 
 const mapActionsToProps = {
-
+    getPreApprovalFormsRequest,
 };
 
 Application.propTypes = {
@@ -86,6 +93,8 @@ Application.propTypes = {
     preApprovalForms: PropTypes.array,
     hostCourses: PropTypes.array,
     approvedCourses: PropTypes.array,
+    getPreApprovalFormsRequest: PropTypes.func,
+    userId: PropTypes.number,
 };
   
 Application.defaultProps = {

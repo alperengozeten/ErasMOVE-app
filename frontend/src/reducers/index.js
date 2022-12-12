@@ -10,6 +10,7 @@ import requests from './requestsReducer';
 import announcements from './announcementReducer';
 import courses from './courseReducer';
 import toDoLists from './toDoListReducer';
+import user from './userReducer';
 
 
 
@@ -23,7 +24,8 @@ const reducers = {
   requests,
   announcements,
   courses,
-  toDoLists
+  toDoLists,
+  user,
 };
 
 export default combineReducers(reducers);

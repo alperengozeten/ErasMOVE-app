@@ -3,7 +3,7 @@ import { GET_USER } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
   user: {
-    /*
+    id: 32,
     type: 'Outgoing Student',
     name: 'John Doe',
     email: 'john@bilkent.edu.tr',
@@ -11,16 +11,8 @@ const INITIAL_STATE = {
       studentID: '21902131',
       semesterNo: 7,
       departmentName: 'Computer Science',
-    },*/
+    },
   },
-  application: {
-    type: 'Erasmus',
-    selectedUniversities: [],
-    selectedSemester: 'fall',
-    admittedUniversity: null,
-    documents: [],
-  },
-  requests: [],
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
