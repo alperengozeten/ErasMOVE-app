@@ -118,42 +118,49 @@ public class ErasmusUniversityDepartmentService {
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
 
-    public void addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
+    public String addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
         Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
                 .findById(id);
 
         if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
-            throw new IllegalStateException("Erasmus University Department with id:" + id + " doesn't exist!");
+            return "Erasmus University Department with id:" + id + " doesn't exist!";
         }
 
         Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
 
         if ( !outgoingStudentOptional.isPresent() ) {
-            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+
+        if ( !outgoingStudent.getIsErasmus() ) {
+            return "The student is an Exchange Applicant, cannot be added to an Erasmus University!";
         }
 
         ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
         ErasmusUniversity erasmusUniversity = erasmusUniversityDepartment.getErasmusUniversity();
-        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
         List<OutgoingStudent> acceptedStudents = erasmusUniversity.getAcceptedStudents();
 
         // CHECK IF DEPARTMENT NAMES MATCH
         if ( !outgoingStudent.getDepartment().getDepartmentName().equals(erasmusUniversityDepartment.getDepartmentName()) ) {
-            throw new IllegalStateException("Outgoing student has unmatching department:" + outgoingStudent.getDepartment().getDepartmentName() + "!");
+            return "Outgoing student has unmatching department:" + outgoingStudent.getDepartment().getDepartmentName() + "!";
         }
 
         if ( erasmusUniversityDepartment.getQuota() <= 0 ) {
-            throw new IllegalStateException("The Erasmus Department quota is full!");
+            return "The Erasmus Department quota is full!";
         }
 
         if ( acceptedStudents.contains(outgoingStudent) ) {
-            throw new IllegalStateException("Outgoing student with id:" + id + " is already accepted to this university!");
+            return "Outgoing student with id:" + id + " is already accepted to this university!";
         }
 
         acceptedStudents.add(outgoingStudent);
         erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
         erasmusUniversityRepository.save(erasmusUniversity);
+
+        return "Student with id:" + outgoingStudentID + " has been added to the Erasmus University!";
     }
 
     public void deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(Long id, Long outgoingStudentID) {
