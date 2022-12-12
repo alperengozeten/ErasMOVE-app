@@ -158,6 +158,19 @@ public class ErasmusReplacementRequestService {
                 outgoingStudentID
         ); // add the student to the department
 
+        DepartmentCoordinator departmentCoordinator = erasmusReplacementRequest.getDepartmentCoordinator();
+
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("The replacement offer for Erasmus University: " +
+                erasmusUniversity.getUniversityName() + " has been accepted by the Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
+
         erasmusReplacementRequest.setStatus("ACCEPTED"); // change the status if succesful
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
 
@@ -179,6 +192,21 @@ public class ErasmusReplacementRequestService {
         }
 
         ErasmusReplacementRequest erasmusReplacementRequest = erasmusReplacementRequestOptional.get();
+
+        ErasmusUniversity erasmusUniversity = erasmusReplacementRequest.getErasmusUniversity();
+        OutgoingStudent outgoingStudent = erasmusReplacementRequest.getStudent();
+        DepartmentCoordinator departmentCoordinator = erasmusReplacementRequest.getDepartmentCoordinator();
+
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("The replacement offer for Erasmus University: " +
+                erasmusUniversity.getUniversityName() + " has been accepted by the Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
 
         erasmusReplacementRequest.setStatus("DECLINED");
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);

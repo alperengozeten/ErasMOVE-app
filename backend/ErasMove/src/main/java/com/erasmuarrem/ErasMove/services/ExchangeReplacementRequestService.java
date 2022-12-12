@@ -131,7 +131,7 @@ public class ExchangeReplacementRequestService {
                 .findByStudentID(outgoingStudentID);
 
         if ( !exchangeReplacementRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Erasmus Replacement Request for Outgoing Student with id:" + outgoingStudentID
+            throw new IllegalStateException("Exchange Replacement Request for Outgoing Student with id:" + outgoingStudentID
                     + " doesn't exist!");
         }
 
@@ -147,6 +147,20 @@ public class ExchangeReplacementRequestService {
                 exchangeUniversity.getID(),
                 outgoingStudentID
         ); // add the student using the ExchangeUniversityService class
+
+        OutgoingStudent outgoingStudent = exchangeReplacementRequest.getStudent();
+        DepartmentCoordinator departmentCoordinator = exchangeReplacementRequest.getDepartmentCoordinator();
+
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("The replacement offer for Exchange University: " +
+                exchangeUniversity.getUniversityName() + " has been accepted by the Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         exchangeReplacementRequest.setStatus("ACCEPTED"); // set the status
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save back to the repository
@@ -168,6 +182,21 @@ public class ExchangeReplacementRequestService {
         }
 
         ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+
+        ExchangeUniversity exchangeUniversity = exchangeReplacementRequest.getExchangeUniversity();
+        OutgoingStudent outgoingStudent = exchangeReplacementRequest.getStudent();
+        DepartmentCoordinator departmentCoordinator = exchangeReplacementRequest.getDepartmentCoordinator();
+
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("The replacement offer for Exchange University: " +
+                exchangeUniversity.getUniversityName() + " has been rejected by the Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         exchangeReplacementRequest.setStatus("DECLINED");
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
