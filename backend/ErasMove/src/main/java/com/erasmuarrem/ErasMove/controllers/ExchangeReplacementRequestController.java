@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.ExchangeReplacementRequest;
 import com.erasmuarrem.ErasMove.services.ExchangeReplacementRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,8 +40,8 @@ public class ExchangeReplacementRequestController {
     }
 
     @PostMapping("/add")
-    public void addExchangeReplacementRequest(@RequestBody ExchangeReplacementRequest exchangeReplacementRequest) {
-        exchangeReplacementRequestService.addExchangeReplacementRequest(exchangeReplacementRequest);
+    public ResponseEntity<String> addExchangeReplacementRequest(@RequestBody ExchangeReplacementRequest exchangeReplacementRequest) {
+        return exchangeReplacementRequestService.addExchangeReplacementRequest(exchangeReplacementRequest);
     }
 
     @PostMapping("/outgoingStudent/{id}/accept")

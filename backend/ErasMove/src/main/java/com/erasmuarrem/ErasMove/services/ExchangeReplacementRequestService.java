@@ -1,13 +1,15 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.ExchangeReplacementRequest;
-import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.ExchangeReplacementRequestRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,13 +20,15 @@ public class ExchangeReplacementRequestService {
     private final DepartmentCoordinatorRepository departmentCoordinatorRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ExchangeUniversityService exchangeUniversityService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public ExchangeReplacementRequestService(ExchangeReplacementRequestRepository exchangeReplacementRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, ExchangeUniversityService exchangeUniversityService) {
+    public ExchangeReplacementRequestService(ExchangeReplacementRequestRepository exchangeReplacementRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService) {
         this.exchangeReplacementRequestRepository = exchangeReplacementRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.exchangeUniversityService = exchangeUniversityService;
+        this.notificationService = notificationService;
     }
 
     public List<ExchangeReplacementRequest> getExchangeReplacementRequests() {
@@ -42,18 +46,18 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequestOptional.get();
     }
 
-    public void addExchangeReplacementRequest(ExchangeReplacementRequest exchangeReplacementRequest) {
+    public ResponseEntity<String> addExchangeReplacementRequest(ExchangeReplacementRequest exchangeReplacementRequest) {
 
         Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID(); // get the ID of the student
         Long departmentCoordinatorID = exchangeReplacementRequest.getDepartmentCoordinator().getID(); // get the id of
                                                                                                     // the department coordinator
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
-            throw new IllegalStateException("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!");
+            return new ResponseEntity<>("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         // allow max of 1 active requests for a student at a time!
@@ -61,11 +65,26 @@ public class ExchangeReplacementRequestService {
                 .findByStudentID(outgoingStudentID);
 
         if ( exchangeReplacementRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID +
-                    " already has replacement request!");
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID +
+                    " already has replacement request!", HttpStatus.BAD_REQUEST);
         }
 
-        exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
+        OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+        DepartmentCoordinator departmentCoordinator = departmentCoordinatorRepository.findById(departmentCoordinatorID).get();
+        ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByID(exchangeReplacementRequest.getExchangeUniversity().getID());
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("A new replacement offer for Exchange University: " +
+                exchangeUniversity.getUniversityName() + " by Department Coordinator: " +
+                departmentCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
+        exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save to the database
+        return new ResponseEntity<>("Replacement Request has been sent!", HttpStatus.OK);
     }
 
     public void deleteExchangeReplacementRequestByID(Long id) {
