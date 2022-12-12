@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.MandatoryCourseApprovalRequest;
 import com.erasmuarrem.ErasMove.services.MandatoryCourseApprovalRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,17 +51,17 @@ public class MandatoryCourseApprovalRequestController {
     }
 
     @PostMapping("/add")
-    public String addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
+    public ResponseEntity<String> addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
         return mandatoryCourseApprovalRequestService.addMandatoryCourseApprovalRequest(mandatoryCourseApprovalRequest);
     }
 
     @PostMapping("/decline/{id}")
-    public String declineMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> declineMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
         return mandatoryCourseApprovalRequestService.declineMandatoryCourseApprovalRequestByID(id, feedback);
     }
 
     @PostMapping("/accept/{id}")
-    public String acceptMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
+    public ResponseEntity<String> acceptMandatoryCourseApprovalRequestByID(@PathVariable("id") Long id, @RequestParam String feedback) {
         return mandatoryCourseApprovalRequestService.acceptMandatoryCourseApprovalRequestByID(id, feedback);
     }
 

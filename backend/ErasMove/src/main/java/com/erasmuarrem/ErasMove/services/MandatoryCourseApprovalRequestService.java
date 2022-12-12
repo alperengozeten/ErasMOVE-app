@@ -3,6 +3,8 @@ package com.erasmuarrem.ErasMove.services;
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,35 +58,46 @@ public class MandatoryCourseApprovalRequestService {
         return mandatoryCourseApprovalRequestOptional.get();
     }
 
-    public String addMandatoryCourseApprovalRequest(MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
-        Long courseCoordinatorID = mandatoryCourseApprovalRequest.getCourseCoordinator().getID();
+    public ResponseEntity<String> addMandatoryCourseApprovalRequest(MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
         Long outgoingStudentID = mandatoryCourseApprovalRequest.getStudent().getID();
-
-        if ( !courseCoordinatorRepository.existsById(courseCoordinatorID) ) {
-            return "Course Coordinator with id:" + courseCoordinatorID + " doesn't exist!";
-        }
+        Long correspondingCourseID = mandatoryCourseApprovalRequest.getCorrespondingCourse().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
+
+        if ( !courseRepository.existsById(correspondingCourseID) ) {
+            return new ResponseEntity<>("Corresponding course with id: " + correspondingCourseID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        Course correspondingCourse = courseRepository.findById(correspondingCourseID).get();
 
         // get the student and the department coordinator
         // since they are not automatically pulled, because the request isn't pulled from the database
         OutgoingStudent outgoingStudent = outgoingStudentService.getStudentByID(outgoingStudentID).get();
-        CourseCoordinator courseCoordinator = courseCoordinatorService.getCourseCoordinatorByID(courseCoordinatorID);
+
+        // search for the existence of the course-coordinator
+        CourseCoordinator courseCoordinator = courseCoordinatorService.getCourseCoordinatorByCourseID(
+                mandatoryCourseApprovalRequest.getCorrespondingCourse().getID()
+        );
+
+        if ( courseCoordinator == null ) {
+            return new ResponseEntity<>("There is no Course Coordinator for the course: " + correspondingCourse.getCourseName() + " to respond",
+                    HttpStatus.BAD_REQUEST);
+        }
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
 
             for (Course rejectedCourse: rejectedCourses) {
                 if ( rejectedCourse.getCourseName().equals(mandatoryCourseApprovalRequest.getCourseName()) ) {
-                    return "Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!";
+                    return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
         }
@@ -92,21 +105,22 @@ public class MandatoryCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = exchangeUniversity.getRejectedCourses();
 
             for (Course rejectedCourse: rejectedCourses) {
                 if ( rejectedCourse.getCourseName().equals(mandatoryCourseApprovalRequest.getCourseName()) ) {
-                    return "Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!";
+                    return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
         }
 
+        mandatoryCourseApprovalRequest.setCourseCoordinator(courseCoordinator);
         mandatoryCourseApprovalRequest.setStatus("WAITING"); // set status before saving
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
-        return "Mandatory Course Request has been sent!";
+        return new ResponseEntity<>("Mandatory Course Request has been sent!", HttpStatus.OK);
     }
 
     public void deleteMandatoryCourseApprovalRequestByID(Long id) {
@@ -140,13 +154,13 @@ public class MandatoryCourseApprovalRequestService {
         return mandatoryCourseApprovalRequestRepository.findByCourseCoordinatorIDAndStudentID(courseCoordinatorID, outgoingStudentID);
     }
 
-    public String declineMandatoryCourseApprovalRequestByID(Long id, String feedback) {
+    public ResponseEntity<String> declineMandatoryCourseApprovalRequestByID(Long id, String feedback) {
 
         Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
                 .findById(id);
 
         if ( !mandatoryCourseApprovalRequestOptional.isPresent() ) {
-            return "Mandatory Course Approval Request with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Mandatory Course Approval Request with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest = mandatoryCourseApprovalRequestOptional.get();
@@ -154,7 +168,7 @@ public class MandatoryCourseApprovalRequestService {
         Long outgoingStudentID = outgoingStudent.getID();
 
         if ( mandatoryCourseApprovalRequest.getStatus().equals("ACCEPTED") || mandatoryCourseApprovalRequest.getStatus().equals("DECLINED") ) {
-            return "Mandatory Course Approval Request has already been responded!";
+            return new ResponseEntity<>("Mandatory Course Approval Request has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         // add the course to the list of rejected courses!
@@ -162,7 +176,7 @@ public class MandatoryCourseApprovalRequestService {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
@@ -182,7 +196,7 @@ public class MandatoryCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = exchangeUniversity.getRejectedCourses();
@@ -203,16 +217,16 @@ public class MandatoryCourseApprovalRequestService {
         mandatoryCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
-        return "Mandatory Course Approval Request has been rejected!";
+        return new ResponseEntity<>("Mandatory Course Approval Request has been rejected!", HttpStatus.OK);
     }
 
-    public String acceptMandatoryCourseApprovalRequestByID(Long id, String feedback) {
+    public ResponseEntity<String> acceptMandatoryCourseApprovalRequestByID(Long id, String feedback) {
 
         Optional<MandatoryCourseApprovalRequest> mandatoryCourseApprovalRequestOptional = mandatoryCourseApprovalRequestRepository
                 .findById(id);
 
         if ( !mandatoryCourseApprovalRequestOptional.isPresent() ) {
-            return "Mandatory Course Approval Request with id:" + id + " doesn't exist!";
+            return new ResponseEntity<>("Mandatory Course Approval Request with id:" + id + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest = mandatoryCourseApprovalRequestOptional.get();
@@ -220,7 +234,7 @@ public class MandatoryCourseApprovalRequestService {
         Long outgoingStudentID = outgoingStudent.getID();
 
         if ( mandatoryCourseApprovalRequest.getStatus().equals("ACCEPTED") || mandatoryCourseApprovalRequest.getStatus().equals("DECLINED") ) {
-            return "Mandatory Course Approval Request has already been responded!";
+            return new ResponseEntity<>("Mandatory Course Approval Request has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
         // add the course to the department elective course list!
@@ -229,7 +243,7 @@ public class MandatoryCourseApprovalRequestService {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             // get the related department!
@@ -251,7 +265,7 @@ public class MandatoryCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
@@ -272,6 +286,6 @@ public class MandatoryCourseApprovalRequestService {
         mandatoryCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
         mandatoryCourseApprovalRequestRepository.save(mandatoryCourseApprovalRequest);
-        return "Mandatory Course Approval Request has been accepted!";
+        return new ResponseEntity<>("Mandatory Course Approval Request has been accepted!", HttpStatus.OK);
     }
 }

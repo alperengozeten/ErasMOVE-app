@@ -49,10 +49,6 @@ public class CourseCoordinatorService {
     public CourseCoordinator getCourseCoordinatorByCourseID(Long id) {
         Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByCourseList_ID(id);
 
-        if ( !courseCoordinatorOptional.isPresent() ) {
-            throw new IllegalStateException("Course Coordinator with id:" + id + " doesn't exist!");
-        }
-
-        return courseCoordinatorOptional.get();
+        return courseCoordinatorOptional.orElse(null);
     }
 }
