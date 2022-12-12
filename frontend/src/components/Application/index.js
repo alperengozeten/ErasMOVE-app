@@ -12,13 +12,14 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 import ProfileApplicationPage from "../ProfileApplicationPage";
-import { getPreApprovalFormsRequest } from "../../actions";
+import { getPreApprovalFormsRequest, getCourseApprovalRequestsRequest } from "../../actions";
 
 
-const Application = ({ getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
+const Application = ({ getCourseApprovalRequestsRequest, getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
   useEffect(() => {
     getPreApprovalFormsRequest(userId);
-  }, [getPreApprovalFormsRequest]);
+    getCourseApprovalRequestsRequest(userId);
+  }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
 
   const [value, setValue] = useState("0");
 
@@ -86,6 +87,7 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
     getPreApprovalFormsRequest,
+    getCourseApprovalRequestsRequest,
 };
 
 Application.propTypes = {
@@ -94,6 +96,7 @@ Application.propTypes = {
     hostCourses: PropTypes.array,
     approvedCourses: PropTypes.array,
     getPreApprovalFormsRequest: PropTypes.func,
+    getCourseApprovalRequestsRequest: PropTypes.func,
     userId: PropTypes.number,
 };
   

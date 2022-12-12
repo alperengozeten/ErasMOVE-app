@@ -1,7 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects';
 
-
-import { GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+import { GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -9,7 +8,7 @@ function sendReplacementOffer({ payload: { id } }) {
 }
 
 function* getPreApprovalFormsRequest({ payload: { id } }) {
-  console.log(`Replacement offerd to student with id ${id}`);
+  console.log(`PreApprovals requested with id ${id}`);
 
   try {
 
@@ -32,9 +31,34 @@ function* getPreApprovalFormsRequest({ payload: { id } }) {
   }
 }
 
+function* getCourseApprovalRequestsRequest({ payload: { id } }) {
+  console.log(`Course Approvals requested with id ${id}`);
+
+  try {
+
+    // Send API request here
+    const status = 200;
+    const courseApprovalRequests = dummyCourseApprovals;
+    if (status !== 200) {
+      throw Error('Request failed for preApproval forms');
+    }
+
+    yield put({
+      type: GET_COURSE_APPROVAL_REQUESTS_SUCCESS,
+      payload: courseApprovalRequests,
+    });
+  } catch (error) {
+    yield put({
+      type: GET_COURSE_APPROVAL_REQUESTS_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
+  takeEvery(GET_COURSE_APPROVAL_REQUESTS_REQUEST, getCourseApprovalRequestsRequest),
 ];
 
 const dummyForms = [
@@ -147,6 +171,65 @@ const dummyForms = [
           }
       ],
       feedback: "LGTM. You are perfect :))",
+  },
+];
+
+const dummyCourseApprovals = [
+  {
+      id: 1,
+      name: "John Doe",
+      courseName: "CS315",
+      equivalentCourse: "CS316",
+      description: "Programming Languages",
+      courseCoordinator: "Altay Güvenir",
+      status: "waiting",
+      type: "Must",
+      documents: [],
+      feedback: ""
+  },{
+      id: 2,
+      name: "Kürşad Güzelkaya",
+      courseName: "CS319",
+      equivalentCourse: "CS316",
+      description: "Objec Oriented SE",
+      courseCoordinator: "Eray Hoca",
+      status: "rejected",
+      type: "Elective",
+      documents: [],
+      feedback: "Please fix the issues!!"
+  },{
+      id: 3,
+      name: "Jake Paul",
+      courseName: "CS115",
+      equivalentCourse: "CS316",
+      description: "Python",
+      courseCoordinator: "Aynur Dayanık",
+      status: "accepted",
+      type: "Must",
+      documents: [],
+      feedback: "LGTM Thanks!"
+  },{
+      id: 4,
+      name: "Lionel Messi",
+      courseName: "MATH230",
+      equivalentCourse: "CS316",
+      description: "Programming Languages",
+      courseCoordinator: "Altay Güvenir",
+      status: "waiting",
+      type: "Must",
+      documents: [],
+      feedback: ""
+  },{
+      id: 5,
+      name: "Cristiano Ronaldo",
+      courseName: "CS315",
+      equivalentCourse: "CS316",
+      description: "Programming Languages",
+      courseCoordinator: "Altay Güvenir",
+      status: "rejected",
+      type: "Elective",
+      documents: [],
+      feedback: "This is terrible mann :/"
   },
 ];
 

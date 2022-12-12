@@ -1,10 +1,16 @@
 import { Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CourseRequestTable from './table/CourseRequestTable';
 
-const CourseRequestPage = ({courseRequests}) => {
+import CourseRequestTable from './table/CourseRequestTable';
+import { getCourseApprovalRequestsRequest } from "../actions";
+
+
+const CourseRequestPage = ({ getCourseApprovalRequestsRequest, courseRequests, userId}) => {
+    useEffect(() => {
+        getCourseApprovalRequestsRequest(userId);
+    }, [getCourseApprovalRequestsRequest, userId]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -20,17 +26,25 @@ const CourseRequestPage = ({courseRequests}) => {
 };
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
+    const userId = state.user.user.id;
     return {
         courseRequests,
+        userId,
     };
+};
+
+const mapActionsToProps = {
+    getCourseApprovalRequestsRequest,
 };
 
 CourseRequestPage.propTypes = {
     courseRequests: PropTypes.array,
+    userId: PropTypes.number,
+    getCourseApprovalRequestsRequest: PropTypes.func,
 };
   
 CourseRequestPage.defaultProps = {
     courseRequests: [],
 };
 
-export default connect(mapStateToProps, {})(CourseRequestPage);
+export default connect(mapStateToProps, mapActionsToProps)(CourseRequestPage);

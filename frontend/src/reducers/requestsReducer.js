@@ -1,64 +1,7 @@
-import { GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
+import { GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
-    courseRequests: [
-        {
-            id: 1,
-            name: "John Doe",
-            courseName: "CS315",
-            equivalentCourse: "CS316",
-            description: "Programming Languages",
-            courseCoordinator: "Altay Güvenir",
-            status: "waiting",
-            type: "Must",
-            documents: [],
-            feedback: ""
-        },{
-            id: 2,
-            name: "Kürşad Güzelkaya",
-            courseName: "CS319",
-            equivalentCourse: "CS316",
-            description: "Objec Oriented SE",
-            courseCoordinator: "Eray Hoca",
-            status: "rejected",
-            type: "Elective",
-            documents: [],
-            feedback: "Please fix the issues!!"
-        },{
-            id: 3,
-            name: "Jake Paul",
-            courseName: "CS115",
-            equivalentCourse: "CS316",
-            description: "Python",
-            courseCoordinator: "Aynur Dayanık",
-            status: "accepted",
-            type: "Must",
-            documents: [],
-            feedback: "LGTM Thanks!"
-        },{
-            id: 4,
-            name: "Lionel Messi",
-            courseName: "MATH230",
-            equivalentCourse: "CS316",
-            description: "Programming Languages",
-            courseCoordinator: "Altay Güvenir",
-            status: "waiting",
-            type: "Must",
-            documents: [],
-            feedback: ""
-        },{
-            id: 5,
-            name: "Cristiano Ronaldo",
-            courseName: "CS315",
-            equivalentCourse: "CS316",
-            description: "Programming Languages",
-            courseCoordinator: "Altay Güvenir",
-            status: "rejected",
-            type: "Elective",
-            documents: [],
-            feedback: "This is terrible mann :/"
-        },
-    ], 
+    courseRequests: [], 
     acceptanceLetterRequests: [
       {
           id: 1,
@@ -106,6 +49,9 @@ const requestsReducer = (state = INITIAL_STATE, action) => {
             return state;
         case GET_PREAPPROVAL_FORMS_SUCCESS:
             return { ...state, preApprovalForms: action.payload };
+        case GET_COURSE_APPROVAL_REQUESTS_SUCCESS:
+            return { ...state, courseRequests: action.payload };
+
     }
   };
   
