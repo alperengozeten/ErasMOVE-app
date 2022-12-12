@@ -1,6 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects';
 
-import { DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+import { ACCEPT_PREAPPROVAL_FORM_FAIL, ACCEPT_PREAPPROVAL_FORM_REQUEST, ACCEPT_PREAPPROVAL_FORM_SUCCESS, DECLINE_PREAPPROVAL_FORM_REQUEST, DECLINE_PREAPPROVAL_FORM_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -107,6 +107,52 @@ function* deleteCourseApprovalRequestRequest({ payload: { id, type } }) {
     }
 }
 
+function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
+    console.log(`PreApproval form accepted with id ${id} with msg: ${feedback}`);
+  
+    try {
+        // Send POST API request here
+  
+        const status = 200;
+        if (status !== 200) {
+            throw Error('Accept request failed for  preApproval form ');
+        }
+  
+        yield put({
+            type: ACCEPT_PREAPPROVAL_FORM_SUCCESS,
+            payload: id,
+        });
+    } catch (error) {
+      yield put({
+        type: ACCEPT_PREAPPROVAL_FORM_FAIL,
+        payload: error.message,
+      });
+    }
+}
+
+function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
+    console.log(`PreApproval form declined with id ${id} with msg: ${feedback}`);
+  
+    try {
+        // Send POST API request here
+  
+        const status = 200;
+        if (status !== 200) {
+            throw Error('Accept request failed for  preApproval form ');
+        }
+  
+        yield put({
+            type: DECLINE_PREAPPROVAL_FORM_SUCCESS,
+            payload: id,
+        });
+    } catch (error) {
+      yield put({
+        type: DECLINE_PREAPPROVAL_FORM_SUCCESS,
+        payload: error.message,
+      });
+    }
+}
+
 
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
@@ -114,6 +160,9 @@ const requestSaga = [
   takeEvery(GET_COURSE_APPROVAL_REQUESTS_REQUEST, getCourseApprovalRequestsRequest),
   takeEvery(DELETE_PREAPPROVAL_FORM_REQUEST, deletePreApprovalFormRequest),
   takeEvery(DELETE_COURSE_APPROVAL_REQUEST_REQUEST, deleteCourseApprovalRequestRequest),
+  takeEvery(ACCEPT_PREAPPROVAL_FORM_REQUEST, acceptPreApprovalFormRequest),
+  takeEvery(DECLINE_PREAPPROVAL_FORM_REQUEST, declinePreApprovalFormRequest),
+  
 ];
 
 const dummyForms = [

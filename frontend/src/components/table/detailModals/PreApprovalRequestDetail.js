@@ -8,17 +8,26 @@ import { sentenceCase } from 'change-case';
 import Label from '../../label';
 import { connect } from "react-redux";
 import MobilityCourseCard from "./MobilityCourseCard";
+import { acceptPreApprovalFormRequest, declinePreApprovalFormRequest } from '../../../actions';
 
 
-const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, preApprovalForm }) => {
+const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, preApprovalForm, acceptPreApprovalFormRequest, declinePreApprovalFormRequest }) => {
 
     const [feedback, setFeedback] = useState('');
 
     const handleChangeFeedback = e => setFeedback(e.target.value);
 
-    console.log(preApprovalForm);
-
     const status = preApprovalForm.status;
+
+    const handleAccept = () => {
+        acceptPreApprovalFormRequest(preApprovalForm.id, feedback);
+        handleCloseDetails();
+    };
+
+    const handleDecline = () => {
+        declinePreApprovalFormRequest(preApprovalForm.id, feedback);
+        handleCloseDetails();
+    };
 
     return (
         <Modal
@@ -99,13 +108,13 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                 <Grid container >
                                                     
                                                     <Grid item xs={2} >
-                                                        <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" onClick={handleCloseDetails} >
+                                                        <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" onClick={handleAccept} >
                                                             Accept
                                                         </Button>
                                                     </Grid>
                                                     
                                                     <Grid item xs={2} >
-                                                        <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleCloseDetails} >
+                                                        <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleDecline} >
                                                             Reject
                                                         </Button>
                                                     </Grid>
@@ -203,12 +212,19 @@ const mapStateToProps = state => {
     };
 };
 
+const mapActionsToProps = {
+    acceptPreApprovalFormRequest,
+    declinePreApprovalFormRequest,
+};
+
 PreApprovalRequestDetail.propTypes = {
     openDetails: PropTypes.bool,
     handleCloseDetails: PropTypes.func,
     authType: PropTypes.string,
     id: PropTypes.number,
     preApprovalForm: PropTypes.object,
+    acceptPreApprovalFormRequest: PropTypes.func,
+    declinePreApprovalFormRequest: PropTypes.func,
 };
   
 PreApprovalRequestDetail.defaultProps = {
@@ -217,4 +233,4 @@ PreApprovalRequestDetail.defaultProps = {
     preApprovalForm: {},
 };
 
-export default connect(mapStateToProps, {})(PreApprovalRequestDetail);
+export default connect(mapStateToProps, mapActionsToProps)(PreApprovalRequestDetail);
