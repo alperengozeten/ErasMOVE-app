@@ -30,6 +30,7 @@ import CourseRequestDetail from './detailModals/CourseRequestDetail';
 
 const TABLE_HEAD = [
   { id: 'courseName', label: 'Course Name', alignRight: false },
+  { id: 'type', label: 'Type', alignRight: false },
   { id: 'description', label: 'Description', alignRight: false },
   { id: 'courseCoordinator', label: 'Course Coordinator', alignRight: false },
   { id: 'status', label: 'Status', alignRight: true },
@@ -150,6 +151,7 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                         <TableCell padding="checkbox"></TableCell>
 
                         <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{type}</TableCell>
                         <TableCell align='center' component="th" scope="row" padding="none">{description}</TableCell>
                         <TableCell align='center' component="th" scope="row" padding="none">{courseCoordinator}</TableCell>
 

@@ -37,6 +37,8 @@ import DeleteModal from '../DeleteModal';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
+  { id: 'courseName', label: 'Course Name', alignRight: false },
+  { id: 'type', label: 'Type', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
 ];
 
@@ -162,7 +164,7 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, status, avatarUrl, type } = row;
+                    const { id, name, status, avatarUrl, type, courseName } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -176,6 +178,11 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                             </Typography>
                           </Stack>
                         </TableCell>
+
+                        <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{type}</TableCell>
+
+
                         <TableCell align="center">
                           <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
