@@ -84,7 +84,7 @@ public class ErasmusReplacementRequestService {
         newNotification.setRead(false);
         newNotification.setApplicationUser(outgoingStudent);
         newNotification.setDate(LocalDate.now());
-        newNotification.setContent("A new replacement offer for Exchange University: " +
+        newNotification.setContent("A new replacement offer for Erasmus University: " +
                 erasmusUniversity.getUniversityName() + " by Department Coordinator: " +
                 departmentCoordinator.getName() + "!");
 

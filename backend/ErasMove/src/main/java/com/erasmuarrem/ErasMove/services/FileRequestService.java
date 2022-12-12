@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.FileRequest;
+import com.erasmuarrem.ErasMove.models.Notification;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
 import com.erasmuarrem.ErasMove.repositories.FileRequestRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +23,15 @@ public class FileRequestService {
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final AdministrativeStaffRepository administrativeStaffRepository;
     private final AdministrativeStaffService administrativeStaffService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdministrativeStaffService administrativeStaffService) {
+    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdministrativeStaffService administrativeStaffService, NotificationService notificationService) {
         this.fileRequestRepository = fileRequestRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.administrativeStaffService = administrativeStaffService;
+        this.notificationService = notificationService;
     }
 
     public List<FileRequest> getFileRequests() {
@@ -59,6 +63,16 @@ public class FileRequestService {
             return new ResponseEntity<>("There is no Administrative Staff for Department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!",
                     HttpStatus.BAD_REQUEST);
         }
+
+        // send notification to the administrative staff
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(administrativeStaff);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have a new file request by Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
 
         fileRequest.setStatus("WAITING");
         fileRequest.setAdministrativeStaff(administrativeStaff);
@@ -117,6 +131,19 @@ public class FileRequestService {
         if ( fileRequest.getStatus().equals("RESPONDED") ) {
             return new ResponseEntity<>("File Request with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
+
+        OutgoingStudent outgoingStudent = fileRequest.getStudent();
+        AdministrativeStaff administrativeStaff = fileRequest.getAdministrativeStaff();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have a new file uploaded by the Administrative Staff: " +
+                administrativeStaff.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         fileRequest.setStatus("RESPONDED");
         fileRequestRepository.save(fileRequest);
