@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,10 +22,10 @@ public class Chat {
     private ApplicationUser user1;
     @ManyToOne
     private ApplicationUser user2;
-    @OneToMany
-    private List<Message> user1Msgs;
-    @OneToMany
-    private  List<Message> user2Msgs;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Message> user1Msgs = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private  List<Message> user2Msgs = new ArrayList<>();
 
 
 }

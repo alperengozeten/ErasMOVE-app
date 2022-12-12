@@ -4,7 +4,6 @@ import com.erasmuarrem.ErasMove.models.Chat;
 import com.erasmuarrem.ErasMove.models.Message;
 import com.erasmuarrem.ErasMove.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,7 +52,7 @@ public class ChatController {
         return chatService.getMessagesOfAUserInAChat(chatid,userid);
     }
 
-    @MessageMapping("send/sender/{senderid}/receiver/{receiverid}")
+    @PostMapping("/send/sender/{senderid}/receiver/{receiverid}")
     public void sendMessage( @RequestBody Message message, @PathVariable("senderid") Long senderId, @PathVariable("receiverid") Long receiverId ) {
         chatService.sendMessage(message,senderId,receiverId);
     }
