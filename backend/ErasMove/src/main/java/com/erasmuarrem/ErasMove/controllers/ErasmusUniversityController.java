@@ -50,6 +50,11 @@ public class ErasmusUniversityController {
         return erasmusUniversityService.getAllAcceptedOutgoingStudentsByDepartmentID(departmentID);
     }
 
+    @GetMapping("/allAccepted")
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudents() {
+        return erasmusUniversityService.getAllAcceptedOutgoingStudents();
+    }
+
     @PostMapping("/rejectedCourses/{id}")
     public void addRejectedCourseByID(@RequestBody Course course, @PathVariable("id") Long erasmusUniversityID) {
         erasmusUniversityService.addRejectedCourse(course, erasmusUniversityID);

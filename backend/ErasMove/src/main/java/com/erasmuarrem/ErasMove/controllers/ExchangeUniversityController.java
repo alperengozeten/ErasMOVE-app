@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
+import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.ExchangeUniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,16 @@ public class ExchangeUniversityController {
     @GetMapping("/acceptedStudent/{acceptedStudentID}")
     public ExchangeUniversity getExchangeUniversityByAcceptedStudentID(@PathVariable("acceptedStudentID") Long acceptedStudentID) {
         return exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(acceptedStudentID);
+    }
+
+    @GetMapping("/allAccepted/departmentID/{departmentID}")
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudentsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return exchangeUniversityService.getAllAcceptedOutgoingStudentsByDepartmentID(departmentID);
+    }
+
+    @GetMapping("/allAccepted")
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudents() {
+        return exchangeUniversityService.getAllAcceptedOutgoingStudents();
     }
 
     @PostMapping("/rejectedCourses/{id}")

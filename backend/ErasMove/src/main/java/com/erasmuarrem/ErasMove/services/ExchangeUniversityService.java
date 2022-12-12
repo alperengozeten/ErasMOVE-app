@@ -9,7 +9,9 @@ import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -199,5 +201,33 @@ public class ExchangeUniversityService {
         Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findByAcceptedStudents_ID(acceptedStudentID);
 
         return exchangeUniversityOptional.orElse(null);
+    }
+
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudentsByDepartmentID(Long departmentID) {
+        List<OutgoingStudent> acceptedStudents = new ArrayList<>();
+        List<ExchangeUniversity> exchangeUniversityList = exchangeUniversityRepository.findAll();
+
+        for (ExchangeUniversity exchangeUniversity : exchangeUniversityList) {
+            List<OutgoingStudent> studentList = exchangeUniversity.getAcceptedStudents();
+
+            for (OutgoingStudent outgoingStudent : studentList) {
+                if ( Objects.equals(outgoingStudent.getDepartment().getID(), departmentID) ) {
+                    acceptedStudents.add(outgoingStudent);
+                }
+            }
+        }
+
+        return acceptedStudents;
+    }
+
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudents() {
+        List<OutgoingStudent> acceptedStudents = new ArrayList<>();
+        List<ExchangeUniversity> exchangeUniversityList = exchangeUniversityRepository.findAll();
+
+        for (ExchangeUniversity exchangeUniversity : exchangeUniversityList) {
+            acceptedStudents.addAll(exchangeUniversity.getAcceptedStudents());
+        }
+
+        return acceptedStudents;
     }
 }

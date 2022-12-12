@@ -165,4 +165,15 @@ public class ErasmusUniversityService {
 
         return acceptedStudents;
     }
+
+    public List<OutgoingStudent> getAllAcceptedOutgoingStudents() {
+        List<OutgoingStudent> acceptedStudents = new ArrayList<>();
+        List<ErasmusUniversity> erasmusUniversityList = erasmusUniversityRepository.findAll();
+
+        for (ErasmusUniversity erasmusUniversity : erasmusUniversityList) {
+            acceptedStudents.addAll(erasmusUniversity.getAcceptedStudents());
+        }
+
+        return acceptedStudents;
+    }
 }
