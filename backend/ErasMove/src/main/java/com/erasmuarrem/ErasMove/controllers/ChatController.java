@@ -53,7 +53,7 @@ public class ChatController {
     }
 
     @PostMapping("/send/sender/{senderid}/receiver/{receiverid}")
-    public void sendMessage( @RequestBody Message message, @PathVariable("senderid") Long senderId, @PathVariable("receiverid") Long receiverId ) {
+    public void sendMessage( @RequestParam String message, @PathVariable("senderid") Long senderId, @PathVariable("receiverid") Long receiverId ) {
         chatService.sendMessage(message,senderId,receiverId);
     }
 }

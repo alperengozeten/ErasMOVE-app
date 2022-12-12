@@ -7,6 +7,7 @@ import com.erasmuarrem.ErasMove.models.Chat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+ import java.time.LocalDateTime;
  import java.util.ArrayList;
  import java.util.List;
  import java.util.Objects;
@@ -88,13 +89,16 @@ public class ChatService {
         }
     }
 
-    public void sendMessage( Message message, Long senderId, Long receiverId ) {
+    public void sendMessage( String message, Long senderId, Long receiverId ) {
         Chat chat = getChatByUserIds(senderId, receiverId);
+        Message message1 = new Message();
+        message1.setMessage(message);
+        message1.setLocalDateTime(LocalDateTime.now());
         if (Objects.equals(chat.getUser1().getID(), senderId)) {
-             chat.getUser1Msgs().add(message);
+             chat.getUser1Msgs().add(message1);
              chatRepository.save(chat);
         } else if (Objects.equals(chat.getUser2().getID(), senderId)) {
-             chat.getUser2Msgs().add(message);
+             chat.getUser2Msgs().add(message1);
             chatRepository.save(chat);
         }
     }
