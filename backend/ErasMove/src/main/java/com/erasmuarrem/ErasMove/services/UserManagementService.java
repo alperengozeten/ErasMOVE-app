@@ -59,7 +59,7 @@ public class UserManagementService {
                 return user;
             }
         }
-        throw  new IllegalStateException("There isn't a user with id "+ userID +" !" );
+            throw  new IllegalStateException("There isn't a user with id "+ userID +" !" );
     }
 
     public ApplicationUser getUserByEmail( String email ) {
@@ -73,7 +73,7 @@ public class UserManagementService {
         throw  new IllegalStateException("There isn't a user with email "+ email +" !" );
     }
 
-    public void addOutgoingStudent(String adminToken, OutgoingStudent outgoingStudent) {
+    public ResponseEntity<String> addOutgoingStudent(String adminToken, OutgoingStudent outgoingStudent) {
         List<Admin> admins = adminService.getAllAdmins();
         if (admins!=null ) {
             boolean tokenMatches = false;
@@ -88,18 +88,20 @@ public class UserManagementService {
             if ( tokenMatches ) {
                 Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findByEmail( outgoingStudent.getEmail() );
                 if ( outgoingStudentOptional.isPresent() ) {
-                    throw new IllegalStateException("The outgoing student with email " +outgoingStudent.getEmail()+  " already exists.");
+                    return new ResponseEntity<>("The outgoing student with email " +outgoingStudent.getEmail()+  " already exists.", HttpStatus.BAD_REQUEST);
                 }
                 hashingPasswordHelper.setPassword(outgoingStudent.getHashedPassword());
                 outgoingStudent.setHashedPassword(hashingPasswordHelper.Hash());
                 outgoingStudentRepository.save(outgoingStudent);
+                return new ResponseEntity<>("Outgoing Student added!", HttpStatus.OK);
+
             }
             else {
-                throw new IllegalStateException("Unauthorized Request!");
+                return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST );
             }
         }
         else {
-            throw new IllegalStateException("Unauthorized Request!");
+            return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST );
         }
     }
 
@@ -145,7 +147,7 @@ public class UserManagementService {
         }
     }
 
-    public void changePasswordByEmailOutgoingStudent(String email, String newPass, String oldPass) {
+    public ResponseEntity<String> changePasswordByEmailOutgoingStudent(String email, String newPass, String oldPass) {
 
         hashingPasswordHelper.setPassword(newPass);
         String newHashedPassword = hashingPasswordHelper.Hash();
@@ -155,15 +157,16 @@ public class UserManagementService {
 
         Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findByEmail(email);
         if ( !outgoingStudentOptional.isPresent() ){
-            throw new IllegalStateException("The outgoing student with email  "+ email + " doesn't exist.");
+            return new ResponseEntity<>("The outgoing student with email  "+ email + " doesn't exist.",HttpStatus.BAD_REQUEST);
         }
         OutgoingStudent currStu = outgoingStudentOptional.get();
         if ( currStu.getHashedPassword().equals(oldHashedPassword) ) {
             currStu.setHashedPassword(newHashedPassword);
             outgoingStudentRepository.save(currStu);
+            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
         }
         else {
-            throw new IllegalStateException("Incorrect old password!");
+            return new ResponseEntity<>("Incorrect old password!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -252,7 +255,7 @@ public class UserManagementService {
         return "Log out successful";
     }
 
-    public void changePasswordByEmailDepartmentCoordinator(String email, String newPass, String oldPass) {
+    public ResponseEntity<String> changePasswordByEmailDepartmentCoordinator(String email, String newPass, String oldPass) {
         hashingPasswordHelper.setPassword(newPass);
         String newHashedPassword = hashingPasswordHelper.Hash();
 
@@ -261,15 +264,17 @@ public class UserManagementService {
 
         Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository.findByEmail(email);
         if ( !departmentCoordinatorOptional.isPresent() ){
-            throw new IllegalStateException("The department coordinator with email  "+ email  + " doesn't exist.");
+            return new ResponseEntity<>("The department coordinator with email  "+ email  + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         DepartmentCoordinator currDepCord = departmentCoordinatorOptional.get();
         if ( currDepCord.getHashedPassword().equals(oldHashedPassword) ) {
             currDepCord.setHashedPassword(newHashedPassword);
             departmentCoordinatorRepository.save(currDepCord);
+            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
+
         }
         else {
-            throw new IllegalStateException("Incorrect old password!");
+            return new ResponseEntity<>("Incorrect old password!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -360,7 +365,7 @@ public class UserManagementService {
         administrativeStaffRepository.save(currStaff);
         return "Log out successful";
     }
-    public void changePasswordByEmailAdministrativeStaff( String email, String newPassword, String oldPassword ) {
+    public ResponseEntity<String> changePasswordByEmailAdministrativeStaff( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
         String newHashedPassword = hashingPasswordHelper.Hash();
 
@@ -369,21 +374,22 @@ public class UserManagementService {
 
         Optional<AdministrativeStaff> administrativeStaffOptional = administrativeStaffRepository.findByEmail(email);
         if ( !administrativeStaffOptional.isPresent() ){
-            throw new IllegalStateException("The administrative staff with email  "+ email + " doesn't exist.");
+            return new ResponseEntity<>("The administrative staff with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         AdministrativeStaff currStaff = administrativeStaffOptional.get();
         if ( currStaff.getHashedPassword().equals(oldHashedPassword) ) {
             currStaff.setHashedPassword(newHashedPassword);
             administrativeStaffRepository.save(currStaff);
+            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
         }
         else {
-            throw new IllegalStateException("Incorrect old password!");
+            return new ResponseEntity<>("Incorrect old password!", HttpStatus.BAD_REQUEST);
         }
     }
 
     // INCOMING STUDENT
 
-    public void addIncomingStudent(String token ,IncomingStudent incomingStudent) {
+    public ResponseEntity<String> addIncomingStudent(String token ,IncomingStudent incomingStudent) {
         List<Admin> admins = adminService.getAllAdmins();
         if (admins!=null ) {
             boolean tokenMatches = false;
@@ -398,18 +404,20 @@ public class UserManagementService {
             if ( tokenMatches ) {
                 Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail( incomingStudent.getEmail() );
                 if ( incomingStudentOptional.isPresent() ) {
-                    throw new IllegalStateException("The incoming student with email " +incomingStudent.getEmail()+  " already exists.");
+                    return new ResponseEntity<>("The incoming student with email " +incomingStudent.getEmail()+  " already exists.", HttpStatus.BAD_REQUEST);
                 }
                 hashingPasswordHelper.setPassword(incomingStudent.getHashedPassword());
                 incomingStudent.setHashedPassword(hashingPasswordHelper.Hash());
                 incomingStudentRepository.save(incomingStudent);
+                return new ResponseEntity<>("Incoming Student successfully added!", HttpStatus.OK);
+
             }
             else {
-                throw new IllegalStateException("Unauthorized Request!");
+                return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
             }
         }
         else {
-            throw new IllegalStateException("Unauthorized Request!");
+            return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST );
         }
     }
 
@@ -453,7 +461,7 @@ public class UserManagementService {
         incomingStudentRepository.save(currStu);
         return "Log out successful";
     }
-    public void changePasswordByEmailIncomingStudent( String email, String newPassword, String oldPassword ) {
+    public ResponseEntity<String> changePasswordByEmailIncomingStudent( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
         String newHashedPassword = hashingPasswordHelper.Hash();
 
@@ -462,15 +470,17 @@ public class UserManagementService {
 
         Optional<IncomingStudent> incomingStudentOptional = incomingStudentRepository.findByEmail(email);
         if ( !incomingStudentOptional.isPresent() ){
-            throw new IllegalStateException("The incoming student with email  "+ email + " doesn't exist.");
+            return new ResponseEntity<>("The incoming student with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         IncomingStudent currStu = incomingStudentOptional.get();
         if ( currStu.getHashedPassword().equals(oldHashedPassword) ) {
             currStu.setHashedPassword(newHashedPassword);
             incomingStudentRepository.save(currStu);
+            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
+
         }
         else {
-            throw new IllegalStateException("Incorrect old password!");
+            return new ResponseEntity<>("Incorrect old password!", HttpStatus.BAD_REQUEST );
         }
     }
 
@@ -558,7 +568,7 @@ public class UserManagementService {
         courseCoordinatorRepository.save(currCourseCord);
         return "Log out successful";
     }
-    public void changePasswordByCourseCoordinator( String email, String newPassword, String oldPassword ) {
+    public ResponseEntity<String> changePasswordByCourseCoordinator( String email, String newPassword, String oldPassword ) {
         hashingPasswordHelper.setPassword(newPassword);
         String newHashedPassword = hashingPasswordHelper.Hash();
 
@@ -567,15 +577,17 @@ public class UserManagementService {
 
         Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail(email);
         if ( !courseCoordinatorOptional.isPresent() ){
-            throw new IllegalStateException("The course coordinator with email  "+ email + " doesn't exist.");
+            return new ResponseEntity<>("The course coordinator with email  "+ email + " doesn't exist.", HttpStatus.BAD_REQUEST);
         }
         CourseCoordinator currCourseCord = courseCoordinatorOptional.get();
         if ( currCourseCord.getHashedPassword().equals(oldHashedPassword) ) {
             currCourseCord.setHashedPassword(newHashedPassword);
             courseCoordinatorRepository.save(currCourseCord);
+            return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
+
         }
         else {
-            throw new IllegalStateException("Incorrect old password!");
+            return new ResponseEntity<>("Incorrect old password!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -594,7 +606,7 @@ public class UserManagementService {
 
     }
 
-   public void forgotPassword( String email, String activationCode, String newPassword ) {
+   public ResponseEntity<String> forgotPassword( String email, String activationCode, String newPassword ) {
         //As IDs are definitely unique, first we should find ID.
        ApplicationUser receiver = getUserByEmail(email);
        Long ID = receiver.getID();
@@ -602,7 +614,7 @@ public class UserManagementService {
        hashingPasswordHelper.setPassword(newPassword);
        String newHashedPassword = hashingPasswordHelper.Hash();
        if ( Email.activationCodes.get(ID).isEmpty() ) {
-           throw new IllegalStateException("There isn't a activation code corresponding to the user with email " + email);
+           return new ResponseEntity<>("There isn't a activation code corresponding to the user with email " + email, HttpStatus.BAD_REQUEST);
        }
        else {
            if ( Email.activationCodes.get(ID).equals(activationCode) ) {
@@ -633,9 +645,11 @@ public class UserManagementService {
                }
 
                Email.activationCodes.remove(ID);
+               return new ResponseEntity<>("Password successfully changed!", HttpStatus.OK);
+
            }
            else {
-               throw new IllegalStateException("Incorrect Activation Code!");
+               return new ResponseEntity<>("Incorrect Activation Code!", HttpStatus.BAD_REQUEST);
            }
        }
 

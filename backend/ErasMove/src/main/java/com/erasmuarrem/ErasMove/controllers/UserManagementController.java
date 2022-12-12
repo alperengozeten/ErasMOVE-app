@@ -29,8 +29,8 @@ public class UserManagementController {
     // OUTGOING STUDENT
 
     @PostMapping("/add/outgoingStudent")
-    public void addOutgoingStudent(@RequestParam String adminToken, @RequestBody OutgoingStudent outgoingStudent) {
-        userManagementService.addOutgoingStudent(adminToken,outgoingStudent);
+    public ResponseEntity<String> addOutgoingStudent(@RequestParam String adminToken, @RequestBody OutgoingStudent outgoingStudent) {
+        return userManagementService.addOutgoingStudent(adminToken,outgoingStudent);
     }
 
     @PostMapping("/login/outgoingStudent")
@@ -44,8 +44,8 @@ public class UserManagementController {
     }
 
     @PatchMapping("/changePassword/outgoingStudent")
-    public void changePasswordOutgoingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        userManagementService.changePasswordByEmailOutgoingStudent(email,newPass, oldPass);
+    public ResponseEntity<String> changePasswordOutgoingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return userManagementService.changePasswordByEmailOutgoingStudent(email,newPass, oldPass);
     }
 
     // DEPARTMENT COORDINATOR
@@ -66,8 +66,8 @@ public class UserManagementController {
     }
 
     @PatchMapping("/changePassword/departmentCoordinator")
-    public void changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        userManagementService.changePasswordByEmailDepartmentCoordinator(email,newPass, oldPass);
+    public ResponseEntity<String> changePassword( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return userManagementService.changePasswordByEmailDepartmentCoordinator(email,newPass, oldPass);
     }
 
     // ADMINISTRATIVE STAFF
@@ -88,15 +88,15 @@ public class UserManagementController {
     }
 
     @PatchMapping("/changePassword/administrativeStaff")
-    public void changePasswordAdministrativeStaff( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        userManagementService.changePasswordByEmailAdministrativeStaff(email,newPass, oldPass);
+    public ResponseEntity<String> changePasswordAdministrativeStaff( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return userManagementService.changePasswordByEmailAdministrativeStaff(email,newPass, oldPass);
     }
 
     // INCOMING STUDENT
 
     @PostMapping("/add/incomingStudent")
-    public void addIncomingStudent(@RequestParam String adminToken,@RequestBody IncomingStudent incomingStudent ) {
-        userManagementService.addIncomingStudent(adminToken, incomingStudent);
+    public ResponseEntity<String> addIncomingStudent(@RequestParam String adminToken,@RequestBody IncomingStudent incomingStudent ) {
+       return userManagementService.addIncomingStudent(adminToken, incomingStudent);
     }
 
     @PostMapping("/login/incomingStudent")
@@ -110,8 +110,8 @@ public class UserManagementController {
     }
 
     @PatchMapping("/changePassword/incomingStudent")
-    public void changePasswordIncomingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        userManagementService.changePasswordByEmailIncomingStudent(email,newPass, oldPass);
+    public ResponseEntity<String> changePasswordIncomingStudent( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return userManagementService.changePasswordByEmailIncomingStudent(email,newPass, oldPass);
     }
 
     //Course Coordinator
@@ -131,8 +131,8 @@ public class UserManagementController {
     }
 
     @PatchMapping("/changePassword/courseCoordinator")
-    public void changePasswordCourseCoordinator( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
-        userManagementService.changePasswordByCourseCoordinator(email,newPass, oldPass);
+    public ResponseEntity<String> changePasswordCourseCoordinator( @RequestParam String email, @RequestParam String newPass, @RequestParam String oldPass) {
+        return userManagementService.changePasswordByCourseCoordinator(email,newPass, oldPass);
     }
 
     //FORGOT PASSWORD IMPLEMENTATION
@@ -141,8 +141,8 @@ public class UserManagementController {
         return userManagementService.sendActivationCode(email);
     }
     @PostMapping("/forgotPassword")
-    public void forgotPassword(@RequestParam String email, @RequestParam String activationCode, @RequestParam String newPassword) {
-        userManagementService.forgotPassword(email, activationCode, newPassword);
+    public ResponseEntity<String> forgotPassword(@RequestParam String email, @RequestParam String activationCode, @RequestParam String newPassword) {
+        return userManagementService.forgotPassword(email, activationCode, newPassword);
     }
 
 }
