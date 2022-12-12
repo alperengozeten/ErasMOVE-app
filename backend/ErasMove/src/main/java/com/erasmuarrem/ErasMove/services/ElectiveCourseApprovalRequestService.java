@@ -3,6 +3,8 @@ package com.erasmuarrem.ErasMove.services;
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,35 +57,37 @@ public class ElectiveCourseApprovalRequestService {
         return electiveCourseApprovalRequestOptional.get();
     }
 
-    public String addElectiveCourseApprovalRequest(ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
-        Long departmentCoordinatorID = electiveCourseApprovalRequest.getDepartmentCoordinator().getID();
+    public ResponseEntity<String> addElectiveCourseApprovalRequest(ElectiveCourseApprovalRequest electiveCourseApprovalRequest) {
         Long outgoingStudentID = electiveCourseApprovalRequest.getStudent().getID();
 
-        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
-            return "Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!";
-        }
-
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         // get the student and the department coordinator
         // since they are not automatically pulled, because the request isn't pulled from the database
         OutgoingStudent outgoingStudent = outgoingStudentService.getStudentByID(outgoingStudentID).get();
-        DepartmentCoordinator departmentCoordinator = departmentCoordinatorService.getDepartmentCoordinatorById(departmentCoordinatorID);
+
+        // search for a department coordinator to respond
+        DepartmentCoordinator departmentCoordinator = departmentCoordinatorService.getDepartmentCoordinatorByDepartmentId(outgoingStudent.getDepartment().getID());
+
+        // if there is no coordinator to respond
+        if ( departmentCoordinator == null ) {
+            return new ResponseEntity<>("There is no Department Coordinator for department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!", HttpStatus.BAD_REQUEST);
+        }
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
 
             for (Course rejectedCourse: rejectedCourses) {
                 if ( rejectedCourse.getCourseName().equals(electiveCourseApprovalRequest.getCourseName()) ) {
-                    return "Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!";
+                    return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
         }
@@ -91,21 +95,22 @@ public class ElectiveCourseApprovalRequestService {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return "Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!";
+                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
             List<Course> rejectedCourses = exchangeUniversity.getRejectedCourses();
 
             for (Course rejectedCourse: rejectedCourses) {
                 if ( rejectedCourse.getCourseName().equals(electiveCourseApprovalRequest.getCourseName()) ) {
-                    return "Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!";
+                    return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
         }
 
+        electiveCourseApprovalRequest.setDepartmentCoordinator(departmentCoordinator);
         electiveCourseApprovalRequest.setStatus("WAITING"); // set status before saving
         electiveCourseApprovalRequestRepository.save(electiveCourseApprovalRequest);
-        return "Elective Course Request has been sent!";
+        return new ResponseEntity<>("Elective Course Request has been sent!", HttpStatus.OK);
     }
 
     public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequestByDepartmentCoordinatorID(Long id) {

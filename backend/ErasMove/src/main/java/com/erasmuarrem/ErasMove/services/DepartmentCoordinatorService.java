@@ -35,11 +35,7 @@ public class DepartmentCoordinatorService {
     public DepartmentCoordinator getDepartmentCoordinatorByDepartmentId(Long id) {
         Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository.findByDepartmentID(id);
 
-        if ( !departmentCoordinatorOptional.isPresent() ) {
-            throw new IllegalStateException("Department Coordinator with department id:" + id + " doesn't exist!");
-        }
-
-        return departmentCoordinatorOptional.get();
+        return departmentCoordinatorOptional.orElse(null);
     }
 
     public void deleteDepartmentCoordinatorById(Long id) {
