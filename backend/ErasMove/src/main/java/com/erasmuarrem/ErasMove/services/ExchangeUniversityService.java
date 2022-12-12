@@ -236,4 +236,22 @@ public class ExchangeUniversityService {
 
         return acceptedStudents;
     }
+
+    public String editExchangeUniversityDetailsByID(Long id, String universityName, String country, int quota) {
+        Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository
+                .findById(id);
+
+        if ( !exchangeUniversityOptional.isPresent() ) {
+            return "Exchange University with id:" + id + " doesn't exist!";
+        }
+
+        ExchangeUniversity exchangeUniversity = exchangeUniversityOptional.get();
+
+        exchangeUniversity.setUniversityName(universityName);
+        exchangeUniversity.setCountry(country);
+        exchangeUniversity.setUniversityQuota(quota);
+
+        exchangeUniversityRepository.save(exchangeUniversity);
+        return "Exchange University with id:" + id + " has been edited!";
+    }
 }

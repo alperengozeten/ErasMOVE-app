@@ -70,6 +70,12 @@ public class ExchangeUniversityController {
         return exchangeUniversityService.addOutgoingStudentByIDAndOutgoingStudentID(id, outgoingStudentID);
     }
 
+    @PatchMapping("/editDetails/{id}")
+    public String editExchangeUniversityDetailsByID(@PathVariable("id") Long id, @RequestParam String universityName,
+                                                    @RequestParam String country, @RequestParam int quota) {
+        return exchangeUniversityService.editExchangeUniversityDetailsByID(id, universityName, country, quota);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteExchangeUniversityByID(@PathVariable("id") Long id) {
         exchangeUniversityService.deleteExchangeUniversityByID(id);
