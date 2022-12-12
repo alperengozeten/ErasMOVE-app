@@ -55,6 +55,14 @@ public class DepartmentCoordinatorService {
             throw new IllegalStateException("The department coordinator with " + departmentCoordinator.getEmail() + " already exists!");
         }
 
+        Optional<DepartmentCoordinator> coordinatorOptional = departmentCoordinatorRepository.findByDepartmentID(
+                departmentCoordinator.getDepartment().getID()
+        );
+
+        if ( coordinatorOptional.isPresent() ) {
+            throw new IllegalStateException("Department Coordinator for Department with id:" + departmentCoordinator.getDepartment().getID() + " already exists!");
+        }
+
         departmentCoordinatorRepository.save(departmentCoordinator);
     }
 }

@@ -169,7 +169,7 @@ public class UserManagementService {
 
     // DEPARTMENT COORDINATOR
 
-    public void addDepartmentCoordinator(String token, DepartmentCoordinator departmentCoordinator) {
+    public ResponseEntity<String> addDepartmentCoordinator(String token, DepartmentCoordinator departmentCoordinator) {
         List<Admin> admins = adminService.getAllAdmins();
         if (admins!=null ) {
             boolean tokenMatches = false;
@@ -184,18 +184,29 @@ public class UserManagementService {
             if ( tokenMatches ) {
                 Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository.findByEmail( departmentCoordinator.getEmail() );
                 if ( departmentCoordinatorOptional.isPresent() ) {
-                    throw new IllegalStateException("The department coordinator with " +departmentCoordinator.getEmail()+  " already exists.");
+                    return new ResponseEntity<>("The department coordinator with " +departmentCoordinator.getEmail()+  " already exists.", HttpStatus.BAD_REQUEST);
                 }
+
+                Optional<DepartmentCoordinator> coordinatorOptional = departmentCoordinatorRepository.findByDepartmentID(
+                        departmentCoordinator.getDepartment().getID()
+                );
+
+                if ( coordinatorOptional.isPresent() ) {
+                    return new ResponseEntity<>("Department Coordinator for Department with id:" + departmentCoordinator.getDepartment().getID() + " already exists!", HttpStatus.BAD_REQUEST);
+                }
+
                 hashingPasswordHelper.setPassword(departmentCoordinator.getHashedPassword());
                 departmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
                 departmentCoordinatorRepository.save(departmentCoordinator);
+
+                return new ResponseEntity<>("Department Coordinator added!", HttpStatus.OK);
             }
             else {
-                throw new IllegalStateException("Unauthorized Request!");
+                return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
             }
         }
         else {
-            throw new IllegalStateException("Unauthorized Request!");
+            return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
         }
     }
 

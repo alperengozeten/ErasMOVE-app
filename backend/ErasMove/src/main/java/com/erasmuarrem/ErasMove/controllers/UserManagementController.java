@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.services.UserManagementService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,8 +51,8 @@ public class UserManagementController {
     // DEPARTMENT COORDINATOR
 
     @PostMapping("/add/departmentCoordinator")
-    public void addDepartmentCoordinator(@RequestParam String adminToken,@RequestBody DepartmentCoordinator departmentCoordinator) {
-        userManagementService.addDepartmentCoordinator(adminToken,departmentCoordinator);
+    public ResponseEntity<String> addDepartmentCoordinator(@RequestParam String adminToken,@RequestBody DepartmentCoordinator departmentCoordinator) {
+        return userManagementService.addDepartmentCoordinator(adminToken,departmentCoordinator);
     }
 
     @PostMapping("/login/departmentCoordinator")
@@ -115,8 +116,8 @@ public class UserManagementController {
 
     //Course Coordinator
     @PostMapping("/add/courseCoordinator")
-    public void addCourseCoordinator(@RequestParam String adminToken,@RequestBody CourseCoordinator courseCoordinator ) {
-        userManagementService.addCourseCoordinator(adminToken, courseCoordinator);
+    public ResponseEntity<String> addCourseCoordinator(@RequestParam String adminToken, @RequestBody CourseCoordinator courseCoordinator ) {
+        return userManagementService.addCourseCoordinator(adminToken, courseCoordinator);
     }
 
     @PostMapping("/login/courseCoordinator")
