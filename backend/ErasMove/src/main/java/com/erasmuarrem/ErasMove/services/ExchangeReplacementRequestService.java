@@ -97,7 +97,7 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
     }
 
-    public void acceptExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ExchangeReplacementRequest acceptExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
@@ -126,9 +126,11 @@ public class ExchangeReplacementRequestService {
 
         exchangeReplacementRequest.setStatus("ACCEPTED"); // set the status
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save back to the repository
+
+        return exchangeReplacementRequest;
     }
 
-    public void declineExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ExchangeReplacementRequest declineExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
@@ -145,5 +147,7 @@ public class ExchangeReplacementRequestService {
 
         exchangeReplacementRequest.setStatus("DECLINED");
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
+
+        return exchangeReplacementRequest;
     }
 }

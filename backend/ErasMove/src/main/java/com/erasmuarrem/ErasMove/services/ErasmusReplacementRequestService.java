@@ -100,7 +100,7 @@ public class ErasmusReplacementRequestService {
         return erasmusReplacementRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
     }
 
-    public void acceptErasmusReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ErasmusReplacementRequest acceptErasmusReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
@@ -136,9 +136,11 @@ public class ErasmusReplacementRequestService {
 
         erasmusReplacementRequest.setStatus("ACCEPTED"); // change the status if succesful
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
+
+        return erasmusReplacementRequest;
     }
 
-    public void declineErasmusReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ErasmusReplacementRequest declineErasmusReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
@@ -156,5 +158,7 @@ public class ErasmusReplacementRequestService {
 
         erasmusReplacementRequest.setStatus("DECLINED");
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
+
+        return erasmusReplacementRequest;
     }
 }
