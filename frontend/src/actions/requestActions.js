@@ -1,4 +1,4 @@
-import { ACCEPT_PREAPPROVAL_FORM_REQUEST, DECLINE_PREAPPROVAL_FORM_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_PREAPPROVAL_FORM_REQUEST, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_PREAPPROVAL_FORMS_REQUEST, SEND_REPLACEMENT_OFFER_REQUEST } from "../constants/actionTypes";
+import { ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST, ACCEPT_PREAPPROVAL_FORM_REQUEST, DECLINE_COURSE_APPROVAL_REQUEST_REQUEST, DECLINE_PREAPPROVAL_FORM_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_PREAPPROVAL_FORM_REQUEST, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_PREAPPROVAL_FORMS_REQUEST, SEND_REPLACEMENT_OFFER_REQUEST } from "../constants/actionTypes";
 
 export const sendReplacementOffer = id => 
     ({
@@ -36,4 +36,14 @@ export const acceptPreApprovalFormRequest = (id, feedback) => ({
 export const declinePreApprovalFormRequest = (id, feedback) => ({
         type: DECLINE_PREAPPROVAL_FORM_REQUEST,
         payload: { id, feedback },
+    });
+
+export const acceptCourseApprovalRequestRequest = (id, type, feedback) => ({
+        type: ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST,
+        payload: { id, type, feedback },
+    });
+
+export const declineCourseApprovalRequestRequest = (id, type, feedback) => ({
+        type: DECLINE_COURSE_APPROVAL_REQUEST_REQUEST,
+        payload: { id, type, feedback },
     });

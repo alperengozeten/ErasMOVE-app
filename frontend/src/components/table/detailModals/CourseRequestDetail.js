@@ -3,19 +3,30 @@ import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import PropTypes  from 'prop-types';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
+import { connect } from "react-redux";
 import { sentenceCase } from 'change-case';
 
 import Label from '../../label';
-import { connect } from "react-redux";
+import { acceptCourseApprovalRequestRequest, declineCourseApprovalRequestRequest } from '../../../actions';
 
 
-const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, courseRequest }) => {
+const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, courseRequest, acceptCourseApprovalRequestRequest, declineCourseApprovalRequestRequest }) => {
 
     const [feedback, setFeedback] = useState('');
 
     const handleChangeFeedback = e => setFeedback(e.target.value);
 
     const status = courseRequest.status;
+
+    const handleAccept = () => {
+        acceptCourseApprovalRequestRequest(courseRequest.id, courseRequest.type, feedback);
+        handleCloseDetails();
+    };
+
+    const handleDecline = () => {
+        declineCourseApprovalRequestRequest(courseRequest.id, courseRequest.type, feedback);
+        handleCloseDetails();
+    };
 
     return (
         <Modal
@@ -140,13 +151,13 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                                     <Grid container >
                                                         
                                                         <Grid item xs={2} >
-                                                            <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" onClick={handleCloseDetails} >
+                                                            <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" onClick={handleAccept} >
                                                                 Accept
                                                             </Button>
                                                         </Grid>
                                                       
                                                         <Grid item xs={2} >
-                                                            <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleCloseDetails} >
+                                                            <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleDecline} >
                                                                 Reject
                                                             </Button>
                                                         </Grid>
@@ -245,12 +256,19 @@ const mapStateToProps = state => {
     };
 };
 
+const mapActionsToProps = {
+    acceptCourseApprovalRequestRequest,
+    declineCourseApprovalRequestRequest,
+};
+
 CourseRequestDetail.propTypes = {
     openDetails: PropTypes.bool,
     handleCloseDetails: PropTypes.func,
     authType: PropTypes.string,
     id: PropTypes.number,
     courseRequest: PropTypes.object,
+    acceptCourseApprovalRequestRequest: PropTypes.func,
+    declineCourseApprovalRequestRequest: PropTypes.func,
 };
   
 CourseRequestDetail.defaultProps = {
@@ -259,4 +277,4 @@ CourseRequestDetail.defaultProps = {
     courseRequest: {},
 };
 
-export default connect(mapStateToProps, {})(CourseRequestDetail);
+export default connect(mapStateToProps, mapActionsToProps)(CourseRequestDetail);
