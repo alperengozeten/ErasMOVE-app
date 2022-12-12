@@ -1,6 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects';
 
-import { GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+import { DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -55,10 +55,34 @@ function* getCourseApprovalRequestsRequest({ payload: { id } }) {
   }
 }
 
+function* deletePreApprovalFormRequest({ payload: { id } }) {
+    console.log(`Course Approvals deleted with id ${id}`);
+  
+    try {
+  
+      // Send API request here
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Request failed for preApproval forms');
+      }
+  
+      yield put({
+        type: DELETE_PREAPPROVAL_FORM_SUCCESS,
+        payload: id,
+      });
+    } catch (error) {
+      yield put({
+        type: DELETE_PREAPPROVAL_FORM_FAIL,
+        payload: error.message,
+      });
+    }
+  }
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
   takeEvery(GET_COURSE_APPROVAL_REQUESTS_REQUEST, getCourseApprovalRequestsRequest),
+  takeEvery(DELETE_PREAPPROVAL_FORM_REQUEST, deletePreApprovalFormRequest),
 ];
 
 const dummyForms = [

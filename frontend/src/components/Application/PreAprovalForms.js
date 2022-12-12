@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import PreApprovalsTableForStudents from '../table/PreApprovalsTableForStudent';
 import PreApprovalCourse from './PreApprovalCourse';
 
-const PreApprovalForms = ({ preApprovalForms, hostCourses, approvedCourses }) => {
+const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses }) => {
     const [open, setOpen] = React.useState(false);
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
@@ -105,7 +105,7 @@ const PreApprovalForms = ({ preApprovalForms, hostCourses, approvedCourses }) =>
                 </Grid>
             </Grid>
 
-            <PreApprovalsTableForStudents preApprovalForms={preApprovalForms} />
+            <PreApprovalsTableForStudents deletePreApprovalFormRequest={deletePreApprovalFormRequest} preApprovalForms={preApprovalForms} />
         </Stack>
     );
 };
@@ -137,6 +137,7 @@ PreApprovalForms.propTypes = {
     preApprovalForms: PropTypes.array,
     hostCourses: PropTypes.array,
     approvedCourses: PropTypes.array,
+    deletePreApprovalFormRequest: PropTypes.func,
 };
   
 PreApprovalForms.defaultProps = {

@@ -38,9 +38,7 @@ const root = ReactDOM.createRoot(container);
 // Initial render
 root.render(
   <Provider store={ store }>
-    <React.StrictMode>
       <AppContainer />
-    </React.StrictMode>
   </Provider>,
 );
 

@@ -12,10 +12,10 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 import ProfileApplicationPage from "../ProfileApplicationPage";
-import { getPreApprovalFormsRequest, getCourseApprovalRequestsRequest } from "../../actions";
+import { getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, deletePreApprovalFormRequest } from "../../actions";
 
 
-const Application = ({ getCourseApprovalRequestsRequest, getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
+const Application = ({ deletePreApprovalFormRequest, getCourseApprovalRequestsRequest, getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
   useEffect(() => {
     getPreApprovalFormsRequest(userId);
     getCourseApprovalRequestsRequest(userId);
@@ -54,7 +54,7 @@ const Application = ({ getCourseApprovalRequestsRequest, getPreApprovalFormsRequ
                     </TabPanel>
                     <TabPanel value="1" index={1}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <PreApprovalForms preApprovalForms={preApprovalForms} hostCourses={hostCourses} approvedCourses={approvedCourses} />
+                            <PreApprovalForms deletePreApprovalFormRequest={deletePreApprovalFormRequest} preApprovalForms={preApprovalForms} hostCourses={hostCourses} approvedCourses={approvedCourses} />
                         </Box>
                     </TabPanel>
                     <TabPanel value="2" index={2}>
@@ -88,6 +88,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
     getPreApprovalFormsRequest,
     getCourseApprovalRequestsRequest,
+    deletePreApprovalFormRequest,
 };
 
 Application.propTypes = {
@@ -97,6 +98,7 @@ Application.propTypes = {
     approvedCourses: PropTypes.array,
     getPreApprovalFormsRequest: PropTypes.func,
     getCourseApprovalRequestsRequest: PropTypes.func,
+    deletePreApprovalFormRequest: PropTypes.func,
     userId: PropTypes.number,
 };
   

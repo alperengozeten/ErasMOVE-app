@@ -5,7 +5,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const DeleteModal = ({ openDelete, handleCloseDelete, name }) => {
+const DeleteModal = ({ handleDelete, openDelete, handleCloseDelete, name }) => {
     
 
     return (
@@ -40,7 +40,7 @@ const DeleteModal = ({ openDelete, handleCloseDelete, name }) => {
                                     </Button>
                                 </Grid>
                                 <Grid item xs={4}>
-                                    <Button variant="contained" startIcon={<DeleteForeverIcon /> } color="error" size="medium" onClick={handleCloseDelete} >
+                                    <Button variant="contained" startIcon={<DeleteForeverIcon /> } color="error" size="medium" onClick={handleDelete} >
                                         Delete
                                     </Button>
                                 </Grid>
@@ -70,11 +70,13 @@ DeleteModal.propTypes = {
     openDelete: PropTypes.bool,
     handleCloseDelete: PropTypes.func,
     name: PropTypes.string,
+    handleDelete: PropTypes.func,
 };
   
 DeleteModal.defaultProps = {
     openDelete: false,
     handleCloseDelete: f => f,
+    handleDelete: f => f,
 };
 
 export default DeleteModal;

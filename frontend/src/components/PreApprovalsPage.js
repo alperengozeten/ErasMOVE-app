@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PreApprovalsTable from './table/PreApprovalsTable';
-import { getPreApprovalFormsRequest } from "../actions";
+import { getPreApprovalFormsRequest, deletePreApprovalFormRequest } from "../actions";
 
 
-const PreApprovalPage = ({ getPreApprovalFormsRequest, preApprovalForms, userId }) => {
+const PreApprovalPage = ({ deletePreApprovalFormRequest, getPreApprovalFormsRequest, preApprovalForms, userId }) => {
     useEffect(() => {
         getPreApprovalFormsRequest(userId);
     }, [getPreApprovalFormsRequest, userId]);
@@ -19,7 +19,7 @@ const PreApprovalPage = ({ getPreApprovalFormsRequest, preApprovalForms, userId 
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <PreApprovalsTable preApprovalForms= {preApprovalForms} />
+                    <PreApprovalsTable deletePreApprovalFormRequest={deletePreApprovalFormRequest} preApprovalForms= {preApprovalForms} />
                 </Grid>
             </Grid>
         </Stack>
@@ -36,12 +36,14 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
     getPreApprovalFormsRequest,
+    deletePreApprovalFormRequest,
 };
 
 PreApprovalPage.propTypes = {
     preApprovalForms: PropTypes.array,
     userId: PropTypes.number,
     getPreApprovalFormsRequest: PropTypes.func,
+    deletePreApprovalFormRequest: PropTypes.func,
 };
   
 PreApprovalPage.defaultProps = {

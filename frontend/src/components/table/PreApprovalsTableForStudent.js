@@ -63,8 +63,8 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-
-const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
+ 
+const PreApprovalsTableForStudents = ({ preApprovalForms, deletePreApprovalFormRequest }) => {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -94,8 +94,14 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleOpenDelete = () => setOpenDelete(true);
-  const handleCloseDelete = () => setOpenDelete(false);
+  const handleOpenDelete = id => {
+    setRequesDetailsID(id);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setRequesDetailsID(0);
+    setOpenDelete(false);
+  };
 
   const handleOpenDetails = id => {
     setRequesDetailsID(id);
@@ -104,6 +110,12 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
   const handleCloseDetails = () => { 
     setRequesDetailsID(0);
     setOpenDetails(false);
+  };
+
+  const handleDelete = () => {
+    deletePreApprovalFormRequest(requesDetailsID);
+    setRequesDetailsID(0);
+    handleCloseDelete();
   };
 
   const filteredUsers = applySortFilter(preApprovalForms, getComparator(order, orderBy), null);
@@ -144,11 +156,10 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
                             </IconButton>
                           </Tooltip>
                           <Tooltip describeChild title="Delete request">
-                            <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
-                          <DeleteModal openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"PreApproval Form"}/>
                         </TableCell>
                       </TableRow>
                     );
@@ -173,6 +184,7 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <DeleteModal openDelete={openDelete} handleDelete={() => handleDelete()} handleCloseDelete={handleCloseDelete} name={"PreApproval Form"}/>
         {requesDetailsID ? <PreApprovalRequestDetail preApprovalForm={preApprovalForms.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
       </Container>
     </>
@@ -181,6 +193,7 @@ const PreApprovalsTableForStudents = ({ preApprovalForms }) => {
 
 PreApprovalsTableForStudents.propTypes = {
     preApprovalForms: PropTypes.array,
+    deletePreApprovalFormRequest: PropTypes.func,
 };
   
 PreApprovalsTableForStudents.defaultProps = {
