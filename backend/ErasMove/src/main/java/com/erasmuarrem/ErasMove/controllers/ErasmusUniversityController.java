@@ -65,6 +65,12 @@ public class ErasmusUniversityController {
         erasmusUniversityService.addErasmusUniversity(erasmusUniversity);
     }
 
+    @PatchMapping("/editDetails/{id}")
+    public String editDetailsByErasmusUniversityID(@PathVariable("id") Long id, @RequestParam String universityName,
+                                                   @RequestParam String country) {
+        return erasmusUniversityService.editDetailsByErasmusUniversityID(id, universityName, country);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteErasmusUniversityByID(@PathVariable("id") Long id) {
         erasmusUniversityService.deleteErasmusUniversityByID(id);

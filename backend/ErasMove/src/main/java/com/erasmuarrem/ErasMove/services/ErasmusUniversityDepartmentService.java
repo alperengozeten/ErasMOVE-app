@@ -257,4 +257,21 @@ public class ErasmusUniversityDepartmentService {
         courseRepository.deleteById(electiveCourseID); // delete the course
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment); // save the department back
     }
+
+    public String updateQuotaByErasmusUniversityDepartmentID(Long id, int newQuota) {
+        Optional<ErasmusUniversityDepartment> erasmusUniversityDepartmentOptional = erasmusUniversityDepartmentRepository
+                .findById(id);
+
+        if ( !erasmusUniversityDepartmentOptional.isPresent() ) {
+            return "Erasmus University Department with id:" + id + " doesn't exist!";
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
+
+        erasmusUniversityDepartment.setQuota(newQuota);
+
+        erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment); // save the department back!
+        return "The quota for Erasmus University Department with name:" + erasmusUniversityDepartment.getDepartmentName() +
+                " for University:" + erasmusUniversityDepartment.getErasmusUniversity().getUniversityName() + " has been updated!";
+    }
 }

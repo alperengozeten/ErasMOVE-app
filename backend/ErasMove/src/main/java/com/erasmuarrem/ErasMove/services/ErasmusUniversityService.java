@@ -176,4 +176,20 @@ public class ErasmusUniversityService {
 
         return acceptedStudents;
     }
+
+    public String editDetailsByErasmusUniversityID(Long id, String universityName, String country) {
+        Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findById(id);
+
+        if ( !erasmusUniversityOptional.isPresent() ) {
+            return "Erasmus University with id:" + id + " doesn't exist!";
+        }
+
+        ErasmusUniversity erasmusUniversity = erasmusUniversityOptional.get();
+
+        erasmusUniversity.setUniversityName(universityName);
+        erasmusUniversity.setCountry(country);
+
+        erasmusUniversityRepository.save(erasmusUniversity);
+        return "Erasmus University with id: " + id + " has been updated!";
+    }
 }

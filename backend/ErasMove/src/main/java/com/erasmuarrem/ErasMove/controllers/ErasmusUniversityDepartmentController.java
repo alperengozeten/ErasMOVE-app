@@ -55,6 +55,11 @@ public class ErasmusUniversityDepartmentController {
         return erasmusUniversityDepartmentService.addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(id, outgoingStudentID);
     }
 
+    @PatchMapping("/updateQuota/{id}")
+    public String updateQuotaByErasmusUniversityDepartmentID(@PathVariable("id") Long id, @RequestParam int newQuota) {
+        return erasmusUniversityDepartmentService.updateQuotaByErasmusUniversityDepartmentID(id, newQuota);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteErasmusUniversityDepartmentByID(@PathVariable("id") Long id) {
         erasmusUniversityDepartmentService.deleteErasmusUniversityDepartmentByID(id);
