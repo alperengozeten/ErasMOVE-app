@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 
-const CourseRequests = ({ courseRequests }) => {
+const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
     const [open, setOpen] = React.useState(false);
     
     const [departmentValue, setDepartmentValue] = React.useState(0);
@@ -146,7 +146,7 @@ const CourseRequests = ({ courseRequests }) => {
                     </Modal>
                 </Grid>
             </Grid>
-            <CourseRequestTableForStudents courseRequests={courseRequests} sendReplacementOffer={sendReplacementOffer}  />
+            <CourseRequestTableForStudents deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest} courseRequests={courseRequests} sendReplacementOffer={sendReplacementOffer}  />
         </Stack>
     );
 };
@@ -167,6 +167,7 @@ const style = {
 
 CourseRequests.propTypes = {
     courseRequests: PropTypes.array,
+    deleteCourseApprovalRequestRequest: PropTypes.func,
 };
   
 CourseRequests.defaultProps = {

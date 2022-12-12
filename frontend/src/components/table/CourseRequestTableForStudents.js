@@ -66,7 +66,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const CourseRequestTableForStudents = ({ courseRequests }) => {
+const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -80,6 +80,8 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
   const [openDetails, setOpenDetails] = React.useState(false);
 
   const [requesDetailsID, setRequesDetailsID] = React.useState(0);
+
+  const [requestType, setRequestType] = React.useState("");
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -96,8 +98,16 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleOpenDelete = () => setOpenDelete(true);
-  const handleCloseDelete = () => setOpenDelete(false);
+  const handleOpenDelete = (id, type) => {
+    setRequesDetailsID(id);
+    setRequestType(type);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setRequesDetailsID(0);
+    setRequestType("");
+    setOpenDelete(false);
+  };
 
   const handleOpenDetails = id => {
     setRequesDetailsID(id);
@@ -107,6 +117,13 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
     setRequesDetailsID(0);
     setOpenDetails(false);
   };
+
+  const handleDelete = () => {
+    deleteCourseApprovalRequestRequest(requesDetailsID, requestType);
+    setRequesDetailsID(0);
+    handleCloseDelete();
+  };
+
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), null);
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
@@ -126,7 +143,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, courseName, description, courseCoordinator, status } = row;
+                    const { id, courseName, description, courseCoordinator, status, type } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -147,7 +164,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
                             </IconButton>
                           </Tooltip>
                           <Tooltip describeChild title="Delete request">
-                            <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id, type) }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>
@@ -176,7 +193,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
           />
         </Card>
         {requesDetailsID ? <CourseRequestDetail courseRequest={courseRequests.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
-        <DeleteModal openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
+        <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
       </Container>
     </>
   );
@@ -184,6 +201,7 @@ const CourseRequestTableForStudents = ({ courseRequests }) => {
 
 CourseRequestTableForStudents.propTypes = {
     courseRequests: PropTypes.array,
+    deleteCourseApprovalRequestRequest: PropTypes.func,
 };
   
 CourseRequestTableForStudents.defaultProps = {

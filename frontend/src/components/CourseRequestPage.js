@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import CourseRequestTable from './table/CourseRequestTable';
-import { getCourseApprovalRequestsRequest } from "../actions";
+import { getCourseApprovalRequestsRequest, deleteCourseApprovalRequestRequest } from "../actions";
 
 
-const CourseRequestPage = ({ getCourseApprovalRequestsRequest, courseRequests, userId}) => {
+const CourseRequestPage = ({ deleteCourseApprovalRequestRequest, getCourseApprovalRequestsRequest, courseRequests, userId}) => {
     useEffect(() => {
         getCourseApprovalRequestsRequest(userId);
     }, [getCourseApprovalRequestsRequest, userId]);
@@ -18,7 +18,7 @@ const CourseRequestPage = ({ getCourseApprovalRequestsRequest, courseRequests, u
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <CourseRequestTable courseRequests = {courseRequests} />
+                    <CourseRequestTable deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest} courseRequests = {courseRequests} />
                 </Grid>
             </Grid>
         </Stack>
@@ -35,12 +35,14 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
     getCourseApprovalRequestsRequest,
+    deleteCourseApprovalRequestRequest
 };
 
 CourseRequestPage.propTypes = {
     courseRequests: PropTypes.array,
     userId: PropTypes.number,
     getCourseApprovalRequestsRequest: PropTypes.func,
+    deleteCourseApprovalRequestRequest: PropTypes.func,
 };
   
 CourseRequestPage.defaultProps = {

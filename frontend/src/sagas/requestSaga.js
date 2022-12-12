@@ -1,6 +1,6 @@
 import { takeEvery, put } from 'redux-saga/effects';
 
-import { DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+import { DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL, GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -76,13 +76,44 @@ function* deletePreApprovalFormRequest({ payload: { id } }) {
         payload: error.message,
       });
     }
-  }
+}
+
+function* deleteCourseApprovalRequestRequest({ payload: { id, type } }) {
+    console.log(`Course Approvals deleted with id ${id}`);
+  
+    try {
+
+        if(type == "Elective") {
+            // Send DELETE API request here
+        } else {
+            // Send DELETE API request here
+
+        }
+  
+        const status = 200;
+        if (status !== 200) {
+            throw Error('Delete request failed for course approval request');
+        }
+  
+      yield put({
+        type: DELETE_COURSE_APPROVAL_REQUEST_SUCCESS,
+        payload: id,
+      });
+    } catch (error) {
+      yield put({
+        type: DELETE_COURSE_APPROVAL_REQUEST_FAIL,
+        payload: error.message,
+      });
+    }
+}
+
 
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
   takeEvery(GET_COURSE_APPROVAL_REQUESTS_REQUEST, getCourseApprovalRequestsRequest),
   takeEvery(DELETE_PREAPPROVAL_FORM_REQUEST, deletePreApprovalFormRequest),
+  takeEvery(DELETE_COURSE_APPROVAL_REQUEST_REQUEST, deleteCourseApprovalRequestRequest),
 ];
 
 const dummyForms = [

@@ -22,6 +22,7 @@ import {
   IconButton,
   Stack,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 // components
 import Scrollbar from './scrollbar';
@@ -30,6 +31,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 // sections
 import { UserListHead, UserListToolbar } from './user';
 import CourseRequestDetail from './detailModals/CourseRequestDetail';
+import DeleteModal from '../DeleteModal';
 
 // ----------------------------------------------------------------------
 
@@ -68,7 +70,7 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-const CourseRequestTable = ({ courseRequests }) => {
+const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
 
   const [page, setPage] = useState(0);
 
@@ -110,6 +112,10 @@ const CourseRequestTable = ({ courseRequests }) => {
 
   const [openDetails, setOpenDetails] = React.useState(false);
 
+  const [openDelete, setOpenDelete] = React.useState(false);
+
+  const [requestType, setRequestType] = React.useState("");
+
   const handleOpenDetails = id => { 
     setRequesDetailsID(id);
     setOpenDetails(true);
@@ -119,6 +125,25 @@ const CourseRequestTable = ({ courseRequests }) => {
     setRequesDetailsID(0);
     setOpenDetails(false);
   };
+
+  const handleOpenDelete = (id, type) => {
+    setRequesDetailsID(id);
+    setRequestType(type);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setRequesDetailsID(0);
+    setRequestType("");
+    setOpenDelete(false);
+  };
+
+  
+  const handleDelete = () => {
+    deleteCourseApprovalRequestRequest(requesDetailsID, requestType);
+    setRequesDetailsID(0);
+    handleCloseDelete();
+  };
+
 
   return (
     <>
@@ -137,7 +162,7 @@ const CourseRequestTable = ({ courseRequests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, status,avatarUrl } = row;
+                    const { id, name, status, avatarUrl, type } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -160,6 +185,11 @@ const CourseRequestTable = ({ courseRequests }) => {
                           <Tooltip describeChild title="Open details">
                             <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
                               <DescriptionIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip describeChild title="Delete request">
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id, type) }>
+                              <DeleteIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
@@ -210,6 +240,7 @@ const CourseRequestTable = ({ courseRequests }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
         {requesDetailsID ? <CourseRequestDetail courseRequest={courseRequests.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
       </Container>
     </>
@@ -218,6 +249,7 @@ const CourseRequestTable = ({ courseRequests }) => {
 
 CourseRequestTable.propTypes = {
     courseRequests: PropTypes.array,
+    deleteCourseApprovalRequestRequest: PropTypes.func
 };
   
 CourseRequestTable.defaultProps = {
