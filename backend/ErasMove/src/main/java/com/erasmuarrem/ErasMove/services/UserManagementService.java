@@ -3,6 +3,8 @@ package com.erasmuarrem.ErasMove.services;
 import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -447,7 +449,7 @@ public class UserManagementService {
     }
 
     //COURSE COORDINATOR
-    public void addCourseCoordinator(String token ,CourseCoordinator courseCoordinator) {
+    public ResponseEntity<String> addCourseCoordinator(String token , CourseCoordinator courseCoordinator) {
         List<Admin> admins = adminService.getAllAdmins();
         if (admins!=null ) {
             boolean tokenMatches = false;
@@ -462,18 +464,32 @@ public class UserManagementService {
             if ( tokenMatches ) {
                 Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository.findByEmail( courseCoordinator.getEmail() );
                 if ( courseCoordinatorOptional.isPresent() ) {
-                    throw new IllegalStateException("The course coordinator with email " +courseCoordinator.getEmail()+  " already exists.");
+                    return new ResponseEntity<>("The course coordinator with email " +courseCoordinator.getEmail()+  " already exists.", HttpStatus.BAD_REQUEST);
                 }
+
+                List<Course> courseList = courseCoordinator.getCourseList();
+
+                for (Course course : courseList) {
+                    Optional<CourseCoordinator> coordinatorOptional = courseCoordinatorRepository
+                            .findByCourseList_ID(course.getID());
+
+                    if ( coordinatorOptional.isPresent() ) {
+                        return new ResponseEntity<>("The course with id:" + course.getID() + " already has a course coordinator!", HttpStatus.BAD_REQUEST);
+                    }
+                }
+
                 hashingPasswordHelper.setPassword(courseCoordinator.getHashedPassword());
                 courseCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
                 courseCoordinatorRepository.save(courseCoordinator);
+
+                return new ResponseEntity<>("Course Coordinator has been added!", HttpStatus.OK);
             }
             else {
-                throw new IllegalStateException("Unauthorized Request!");
+                return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
             }
         }
         else {
-            throw new IllegalStateException("Unauthorized Request!");
+            return new ResponseEntity<>("Unauthorized Request!", HttpStatus.BAD_REQUEST);
         }
     }
     public String loginCourseCoordinator( String email, String password) {

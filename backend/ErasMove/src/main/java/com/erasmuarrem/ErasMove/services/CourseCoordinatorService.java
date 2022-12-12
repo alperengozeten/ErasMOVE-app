@@ -1,5 +1,6 @@
 package com.erasmuarrem.ErasMove.services;
 
+import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.CourseCoordinator;
 import com.erasmuarrem.ErasMove.repositories.CourseCoordinatorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,17 @@ public class CourseCoordinatorService {
     }
 
     public void addCourseCoordinator(CourseCoordinator courseCoordinator) {
+        List<Course> courseList = courseCoordinator.getCourseList();
+
+        for (Course course : courseList) {
+            Optional<CourseCoordinator> courseCoordinatorOptional = courseCoordinatorRepository
+                    .findByCourseList_ID(course.getID());
+
+            if ( courseCoordinatorOptional.isPresent() ) {
+                throw new IllegalStateException("The course with id:" + course.getID() + " already has a course coordinator!");
+            }
+        }
+
         courseCoordinatorRepository.save(courseCoordinator);
     }
 
