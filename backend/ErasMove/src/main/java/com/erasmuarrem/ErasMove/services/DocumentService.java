@@ -4,9 +4,14 @@ import com.erasmuarrem.ErasMove.models.Document;
 import com.erasmuarrem.ErasMove.repositories.DocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,5 +49,19 @@ public class DocumentService {
 
         documentRepository.save(newDocument);
         return "File saved successfully!";
+    }
+
+    public ResponseEntity<Resource> getDocumentByFolderNameAndRequestID(String folder, Long requestID) {
+        String path = new FileSystemResource("").getFile().getAbsolutePath();
+        Path root = Path.of(path);
+        root = root.resolve("documents").resolve(folder).resolve(requestID + ".pdf");
+
+        Resource resource;
+        try {
+            resource = new UrlResource(root.toUri());
+            return new ResponseEntity<>(resource, HttpStatus.OK);
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException("Could not read the file!");
+        }
     }
 }
