@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +26,10 @@ public class ElectiveCourseApprovalRequestService {
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final CourseRepository courseRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository) {
+    public ElectiveCourseApprovalRequestService(ElectiveCourseApprovalRequestRepository electiveCourseApprovalRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository, NotificationService notificationService) {
         this.electiveCourseApprovalRequestRepository = electiveCourseApprovalRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
@@ -40,6 +42,7 @@ public class ElectiveCourseApprovalRequestService {
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
         this.courseRepository = courseRepository;
+        this.notificationService = notificationService;
     }
 
     public List<ElectiveCourseApprovalRequest> getElectiveCourseApprovalRequests() {
@@ -90,6 +93,20 @@ public class ElectiveCourseApprovalRequestService {
                     return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
+
+            // get the related department!
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            List<Course> acceptedCourses = erasmusUniversityDepartment.getElectiveCourseList();
+
+            for (Course acceptedCourse: acceptedCourses) {
+                if ( acceptedCourse.getCourseName().equals(electiveCourseApprovalRequest.getCourseName()) ) {
+                    return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been accepted!", HttpStatus.BAD_REQUEST);
+                }
+            }
         }
         else {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
@@ -105,7 +122,30 @@ public class ElectiveCourseApprovalRequestService {
                     return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
+
+            ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
+                    .getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(
+                            exchangeUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            List<Course> acceptedCourses = exchangeUniversityDepartment.getElectiveCourseList();
+
+            for (Course acceptedCourse: acceptedCourses) {
+                if ( acceptedCourse.getCourseName().equals(electiveCourseApprovalRequest.getCourseName()) ) {
+                    return new ResponseEntity<>("Elective Course with name:" + electiveCourseApprovalRequest.getCourseName() + " has already been accepted!", HttpStatus.BAD_REQUEST);
+                }
+            }
         }
+
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have a new file Elective Course Approval Request by Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
 
         electiveCourseApprovalRequest.setDepartmentCoordinator(departmentCoordinator);
         electiveCourseApprovalRequest.setStatus("WAITING"); // set status before saving
@@ -204,6 +244,18 @@ public class ElectiveCourseApprovalRequestService {
             exchangeUniversityRepository.save(exchangeUniversity); // save the university back
         }
 
+        DepartmentCoordinator departmentCoordinator = electiveCourseApprovalRequest.getDepartmentCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Elective Course Approval Request has been rejected by the Department Coordinator: " +
+                departmentCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
+
         electiveCourseApprovalRequest.setStatus("DECLINED");
         electiveCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
@@ -271,6 +323,18 @@ public class ElectiveCourseApprovalRequestService {
 
             exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(newAcceptedCourse, exchangeUniversityDepartment.getID());
         }
+
+        DepartmentCoordinator departmentCoordinator = electiveCourseApprovalRequest.getDepartmentCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Elective Course Approval Request has been accepted by the Department Coordinator: " +
+                departmentCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
 
         electiveCourseApprovalRequest.setStatus("ACCEPTED");
         electiveCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
