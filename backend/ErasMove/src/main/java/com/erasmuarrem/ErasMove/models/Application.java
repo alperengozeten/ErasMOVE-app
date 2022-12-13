@@ -20,7 +20,7 @@ public class Application {
 
     @OneToOne
     private OutgoingStudent outgoingStudent;
-    private double applicationPoint;
+    private double applicationScore;
 
     private String selectedSemester;
     @ElementCollection

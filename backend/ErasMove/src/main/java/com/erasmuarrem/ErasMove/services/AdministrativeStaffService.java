@@ -118,24 +118,21 @@ public class AdministrativeStaffService {
              email.setSubject("Welcome to Erasmove! Login Credentials");
              System.out.println(emailService.sendSimpleMail(email));
 
-
             outgoingStudentService.addOutgoingStudent(newStudent);
 
-
-
             Application newApplication = new Application();
-            newApplication.setApplicationPoint(applicationLines.get(i).getTotalPoint());
+            newApplication.setApplicationScore(applicationLines.get(i).getTotalPoint());
             newApplication.setOutgoingStudent(newStudent);
             List<Long> uniIDs = new ArrayList<>();
             if ( isErasmus ) {
-                for( int k = 0; k < applicationLines.get(i).getSelectedUniversitys().size(); k++ ) {
-                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLines.get(i).getSelectedUniversitys().get(k));
+                for( int k = 0; k < applicationLines.get(i).getSelectedUniversities().size(); k++ ) {
+                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLines.get(i).getSelectedUniversities().get(k));
                     uniIDs.add( erasmusUniversity.getID() );
                 }
             }
             else {
-                for( int k = 0; k < applicationLines.get(i).getSelectedUniversitys().size(); k++ ) {
-                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLines.get(i).getSelectedUniversitys().get(k));
+                for( int k = 0; k < applicationLines.get(i).getSelectedUniversities().size(); k++ ) {
+                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLines.get(i).getSelectedUniversities().get(k));
                     uniIDs.add( exchangeUniversity.getID() );
                 }
 
