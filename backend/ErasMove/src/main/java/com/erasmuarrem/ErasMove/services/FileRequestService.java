@@ -1,9 +1,6 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
-import com.erasmuarrem.ErasMove.models.FileRequest;
-import com.erasmuarrem.ErasMove.models.Notification;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.AdministrativeStaffRepository;
 import com.erasmuarrem.ErasMove.repositories.FileRequestRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
@@ -48,11 +45,11 @@ public class FileRequestService {
         return fileRequestOptional.get();
     }
 
-    public ResponseEntity<String> addFileRequest(FileRequest fileRequest) {
+    public ResponseEntity<ResponseMessage> addFileRequest(FileRequest fileRequest) {
         Long outgoingStudentID = fileRequest.getStudent().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", (long) -1), HttpStatus.BAD_REQUEST);
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
@@ -60,7 +57,7 @@ public class FileRequestService {
         AdministrativeStaff administrativeStaff = administrativeStaffService.getAdministrativeStaffByDepartmentId(outgoingStudent.getDepartment().getID());
 
         if ( administrativeStaff == null ) {
-            return new ResponseEntity<>("There is no Administrative Staff for Department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!",
+            return new ResponseEntity<>(new ResponseMessage("There is no Administrative Staff for Department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!", (long) -1),
                     HttpStatus.BAD_REQUEST);
         }
 
@@ -77,7 +74,7 @@ public class FileRequestService {
         fileRequest.setStatus("WAITING");
         fileRequest.setAdministrativeStaff(administrativeStaff);
         fileRequestRepository.save(fileRequest);
-        return new ResponseEntity<>("File Request has been sent!", HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage("File Request has been sent!", fileRequest.getID()), HttpStatus.OK);
     }
 
     public void deleteFileRequestByID(Long id) {
