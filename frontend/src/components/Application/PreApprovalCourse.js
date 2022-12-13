@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 import CourseSelect from './CourseSelect';
+import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import CourseCardForCreate from './CourseCardForCreate';
 
 const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquivalentChange, index, handleCourseChange, hostCourses, approvedCourses }) => {
     
@@ -28,6 +30,88 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
     };
 
     return (
+        <section style={{ width: '100%', backgroundColor: '#eee', padding: '10px' }}>
+            <Grid container spacing={2}>
+                <Grid item xs={11}>
+                    <Typography id="modal-modal-title" sx={{ marginBottom: '10px'}}
+                        variant="h3" component="h1">
+                        Mobility Course {index+1}
+                    </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                    <IconButton sx={{marginRight: '10px'}} color='error' aria-label="delete" onClick={() => filterMergedCourse(index)}>
+                        <DeleteIcon />
+                    </IconButton>
+                </Grid>
+
+            </Grid>
+            <MDBCard className="mb-4">
+                <MDBCardBody>
+                    {mergedCourses[index]?.courses?.map((course, courseIndex) => (
+                        <CourseCardForCreate
+                            key={courseIndex}
+                            courseIndex={courseIndex}
+                            mergedCourses={mergedCourses}
+                            handleCourseEquivalentChange={handleCourseEquivalentChange}
+                            index={index}
+                            handleCourseChange={handleCourseChange}
+                            approvedCourses={approvedCourses}
+                            filterCourse={filterCourse}
+                        />
+                    ))}
+                    <MDBRow>
+                        <MDBCol sm="12">
+                            <Button
+                                sx={{margin: 'auto'}}
+                                variant="contained"
+                                color="primary"
+                                size="medium"
+                                onClick={handleMergeCourse} 
+                            >
+                                Add Course
+                            </Button>
+                        </MDBCol>
+                    </MDBRow>
+                    <hr />
+                    <MDBRow>
+                    <MDBCol sm="3">
+                        <MDBCardText>Type</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="9">
+                        <MDBCardText className="text-muted"> Course</MDBCardText>
+                    </MDBCol>
+                    </MDBRow>
+                    <hr />
+                    <MDBRow>
+                    <MDBCol sm="3">
+                        <MDBCardText>Equivalent Course</MDBCardText>
+                    </MDBCol>
+                    <MDBCol sm="9">
+                        <CourseSelect hostCourses={hostCourses} mergedCourses={mergedCourses} equivalent={true} index={index} handleCourseEquivalentChange={handleCourseEquivalentChange} />
+                    </MDBCol>
+                    </MDBRow>
+                    <hr />
+                    <MDBRow>
+                        <MDBCol sm="3">
+                            <MDBCardText>Description</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                            <MDBCardText>{hostCourses.filter(hCourse => hCourse.id === (mergedCourses[index]?.equivalentCourse))[0]?.description}</MDBCardText>
+                        </MDBCol>
+                    </MDBRow>
+                    <hr />
+                    <MDBRow>
+                        <MDBCol sm="3">
+                            <MDBCardText>ECTS</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                            <MDBCardText>{hostCourses.filter(hCourse => hCourse.id === (mergedCourses[index]?.equivalentCourse))[0]?.ects}</MDBCardText>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBCardBody>
+            </MDBCard>
+        
+        {/* 
         <Grid container direction={"row"} spacing={2} sx={{backgroundColor: "#DCDCDC", borderRadius: '4px', paddingBottom: '15px'}}>
             <Grid sx={{marginLeft: "20px"}} item container>
                 <Grid item xs={4}>
@@ -42,6 +126,7 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
                     </IconButton>
                 </Grid>
             </Grid>
+            
             <Grid item container alignItems={'center'} spacing={2} >
                 <Grid item xs={1}></Grid>
                 <Grid item xs={4}>
@@ -84,7 +169,8 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
                 </Grid>
 
             </Grid>
-        </Grid>
+                                    </Grid>*/}
+            </section>
     );
 }; 
 
