@@ -11,6 +11,8 @@ import announcements from './announcementReducer';
 import courses from './courseReducer';
 import toDoLists from './toDoListReducer';
 import user from './userReducer';
+import allUsers from './adminUserReducer';
+
 
 
 
@@ -26,6 +28,7 @@ const reducers = {
   courses,
   toDoLists,
   user,
+  allUsers,
 };
 
 export default combineReducers(reducers);

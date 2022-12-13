@@ -5,6 +5,8 @@ import requests from './requests';
 import announcements from './announcements';
 import student from './student';
 import toDoList from './toDoList';
+import adminUsersPage from './adminUsersPage';
+
 
 
 
@@ -26,7 +28,7 @@ const menuItems = authType => {
         list = [dashboard, pages, requests(authType), universities, announcements, toDoList];
     } else if (authType === 'Admin') {
         // TODO: update this list
-        list = [dashboard, student, pages, universities, announcements, toDoList];
+        list = [dashboard, student, pages, universities, announcements, toDoList, adminUsersPage];
     }
     return list;
 };

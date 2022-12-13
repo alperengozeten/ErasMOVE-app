@@ -15,6 +15,8 @@ import Application from '../components/Application';
 import HostUniversity from '../components/HostUniversity';
 import PreApprovalsPage from '../components/PreApprovalsPage';
 import ToDoListPage from '../components/ToDoListPage';
+import AdminUsersPage from '../components/AdminUsersPage';
+
 
 const MainRoutes = {
     path: '/main',
@@ -70,6 +72,10 @@ const MainRoutes = {
         {
             path: '/main/toDoList',
             element: <ToDoListPage />
+        },
+        {
+            path: '/main/adminUsersPage',
+            element: <AdminUsersPage />
         },
     
     ]
