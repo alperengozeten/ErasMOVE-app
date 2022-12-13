@@ -12,6 +12,7 @@ const INITIAL_STATE = {
         status: "waiting",
         admittedUniversity: null,
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 2,
         name: "Kürşad Güzelkaya",
@@ -23,6 +24,7 @@ const INITIAL_STATE = {
         status: "waiting",
         admittedUniversity: null,
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 3,
         name: "Jake Paul",
@@ -34,6 +36,7 @@ const INITIAL_STATE = {
         status: "waiting",
         admittedUniversity: null,
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 4,
         name: "Lionel Messi",
@@ -45,6 +48,7 @@ const INITIAL_STATE = {
         status: "waiting",
         admittedUniversity: null,
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 5,
         name: "Cristiano Ronaldo",
@@ -56,6 +60,7 @@ const INITIAL_STATE = {
         status: "waiting",
         admittedUniversity: null,
         documents: [],
+        languages: ["English", "German", "French"],
     },
   ], 
   // To just represent for now
@@ -71,6 +76,7 @@ const INITIAL_STATE = {
         status: "placed",
         admittedUniversity: "Stanford",
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 2,
         name: "Kürşad Güzelkaya",
@@ -82,6 +88,7 @@ const INITIAL_STATE = {
         status: "placed",
         admittedUniversity: "Harward",
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 3,
         name: "Jake Paul",
@@ -93,6 +100,7 @@ const INITIAL_STATE = {
         status: "placed",
         admittedUniversity: "MIT",
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 4,
         name: "Lionel Messi",
@@ -104,6 +112,7 @@ const INITIAL_STATE = {
         status: "placed",
         admittedUniversity: "UCLA",
         documents: [],
+        languages: ["English", "German", "French"],
     },{
         id: 5,
         name: "Cristiano Ronaldo",
@@ -115,6 +124,7 @@ const INITIAL_STATE = {
         status: "placed",
         admittedUniversity: "Colby",
         documents: [],
+        languages: ["English", "German", "French"],
     },
   ],
 };
