@@ -1,13 +1,25 @@
 import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import SendIcon from '@mui/icons-material/Send';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import PreApprovalsTableForStudents from '../table/PreApprovalsTableForStudent';
 import PreApprovalCourse from './PreApprovalCourse';
 
-const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest }) => {
+const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest, getCoursesByDepartment }) => {
+    useEffect(() => {
+
+        // Send an action to get related course
+        const department = 'CS'; // TODO: get from reducer
+        const university = 'Bilkent University'; // TODO: get from reducer
+        const type = 'Exchange'; // TODO: get from reducer
+
+
+        getCoursesByDepartment("-", department, "host"); 
+        getCoursesByDepartment(type, department, university); 
+    }, []);
+    
     const [open, setOpen] = React.useState(false);
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
@@ -176,6 +188,7 @@ PreApprovalForms.propTypes = {
     approvedCourses: PropTypes.array,
     deletePreApprovalFormRequest: PropTypes.func,
     createPreApprovalFormRequest: PropTypes.func,
+    getCoursesByDepartment: PropTypes.func,
 };
   
 PreApprovalForms.defaultProps = {
