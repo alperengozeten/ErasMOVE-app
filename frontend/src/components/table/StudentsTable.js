@@ -20,6 +20,10 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  Modal,
+  Box,
+  TextField,
+  Button
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 // components
@@ -128,6 +132,24 @@ const StudentsTable = ({ applications }) => {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setDisabled(true);
+    
+  };
+
+  const handleEdit = () => {
+    setDisabled(false);
+  };
+
   return (
     <>
       <Container>
@@ -209,11 +231,107 @@ const StudentsTable = ({ applications }) => {
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Open application details">
-                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                            <IconButton size="large" color="inherit" onClick={handleClickOpen}>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
+                        <Modal
+                          open={open}
+                          onClose={handleClose}
+                          aria-labelledby="modal-modal-title"
+                          aria-describedby="modal-modal-description"
+                          BackdropProps={{ style : {backgroundColor: "rgba(0,0,0,0.04)"}}}
+
+                        >
+                          <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h6" component="h2">
+                              Add Language Details
+                            </Typography>
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Student Name</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="name"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={name}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>ID</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="id"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={id}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Department</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="dep"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={department}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Score</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="score"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={score}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Status</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="status"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={status}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Selected Semester</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="semester"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={selectedSemester}
+                              disabled
+                            />
+                            <Typography id="modal-modal-description" sx={{ mt: 2 }}>Selected Universities</Typography>
+                            <TextField
+                              required
+                              autoFocus
+                              margin="dense"
+                              id="uni"
+                              fullWidth
+                              variant="standard"
+                              defaultValue={selectedUniversities}
+                              disabled
+                            />
+                            
+                            <Box alignRight= {true}>
+                              <Button onClick={handleClose}>Close</Button>
+                              <Button onClick={handleEdit}>Edit</Button>
+                            </Box>
+                          </Box>
+                        </Modal>
                       </TableRow>
                     );
                   })}
@@ -264,6 +382,19 @@ const StudentsTable = ({ applications }) => {
       </Container>
     </>
   );
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: '50%',
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "6px",
+  boxShadow: 24,
+  p: 4,
 };
 
 StudentsTable.propTypes = {
