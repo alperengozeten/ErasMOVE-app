@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
+import com.erasmuarrem.ErasMove.models.ResponseMessage;
 import com.erasmuarrem.ErasMove.services.PreApprovalFormRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,7 +50,7 @@ public class PreApprovalFormRequestController {
     }
 
     @PostMapping("/add") // the student must be admitted to be able to call this!
-    public ResponseEntity<String> addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
+    public ResponseEntity<ResponseMessage> addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
         return preApprovalFormRequestService.addPreApprovalFormRequest(preApprovalFormRequest);
     }
 

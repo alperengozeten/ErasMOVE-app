@@ -50,11 +50,11 @@ public class PreApprovalFormRequestService {
         return preApprovalFormRequestOptional.get();
     }
 
-    public ResponseEntity<String> addPreApprovalFormRequest(PreApprovalFormRequest preApprovalFormRequest) {
+    public ResponseEntity<ResponseMessage> addPreApprovalFormRequest(PreApprovalFormRequest preApprovalFormRequest) {
         Long outgoingStudentID = preApprovalFormRequest.getStudent().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
-            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", (long) -1), HttpStatus.BAD_REQUEST);
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
@@ -63,21 +63,21 @@ public class PreApprovalFormRequestService {
                 .getDepartmentCoordinatorByDepartmentId(outgoingStudent.getDepartment().getID());
 
         if ( departmentCoordinator == null ) {
-            return new ResponseEntity<>("There is no Department Coordinator for department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new ResponseMessage("There is no Department Coordinator for department:" + outgoingStudent.getDepartment().getDepartmentName() + " to respond!", (long) -1), HttpStatus.BAD_REQUEST);
         }
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( erasmusUniversity == null ) {
-                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseMessage("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", (long) -1), HttpStatus.BAD_REQUEST);
             }
         }
         else {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
 
             if ( exchangeUniversity == null ) {
-                return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseMessage("Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!", (long) -1), HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -86,10 +86,10 @@ public class PreApprovalFormRequestService {
         // the student shouldn't have a waiting or accepted request
         for (PreApprovalFormRequest approvalFormRequest: preApprovalFormRequests) {
             if ( approvalFormRequest.getStatus().equals("ACCEPTED") ) {
-                return new ResponseEntity<>("Student with id:" + outgoingStudentID + " already has an accepted Pre-Approval Form!", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseMessage("Student with id:" + outgoingStudentID + " already has an accepted Pre-Approval Form!", (long) -1), HttpStatus.BAD_REQUEST);
             }
             else if ( approvalFormRequest.getStatus().equals("WAITING") ) {
-                return new ResponseEntity<>("Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new ResponseMessage("Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!", (long) -1), HttpStatus.BAD_REQUEST);
             }
         }
 
@@ -106,7 +106,9 @@ public class PreApprovalFormRequestService {
         preApprovalFormRequest.setDepartmentCoordinator(departmentCoordinator); // set the department coordinator
         preApprovalFormRequest.setStatus("WAITING"); // set status
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
-        return new ResponseEntity<>("Pre-Approval Form is submitted!", HttpStatus.OK);
+        System.out.println("id:" + preApprovalFormRequest.getID());
+
+        return new ResponseEntity<>(new ResponseMessage("Pre-Approval Form is submitted!", preApprovalFormRequest.getID()), HttpStatus.OK);
     }
 
     public void deletePreApprovalFormRequestByID(Long id) {
