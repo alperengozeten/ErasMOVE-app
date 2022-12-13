@@ -32,7 +32,7 @@ const TABLE_HEAD = [
   { id: 'courseName', label: 'Course Name', alignRight: false },
   { id: 'type', label: 'Type', alignRight: false },
   { id: 'description', label: 'Description', alignRight: false },
-  { id: 'courseCoordinator', label: 'Course Coordinator', alignRight: false },
+  { id: 'coordinator', label: 'Coordinator', alignRight: false },
   { id: 'status', label: 'Status', alignRight: true },
 ];
 
