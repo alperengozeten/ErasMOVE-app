@@ -18,6 +18,6 @@ public class Document {
 
     private Long requestID;
 
-    private String documentName;
-    private String description;
+    private String type;
+    private String folder;
 }

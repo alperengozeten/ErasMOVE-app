@@ -1,0 +1,48 @@
+package com.erasmuarrem.ErasMove.services;
+
+import com.erasmuarrem.ErasMove.models.Document;
+import com.erasmuarrem.ErasMove.repositories.DocumentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+@Service
+public class DocumentService {
+
+    private final DocumentRepository documentRepository;
+
+    @Autowired
+    public DocumentService(DocumentRepository documentRepository) {
+        this.documentRepository = documentRepository;
+    }
+
+    public String saveDocument(MultipartFile multipartFile, String folder, String type, Long requestID) {
+
+        String path = new FileSystemResource("").getFile().getAbsolutePath();
+        Path root = Path.of(path);
+        root = root.resolve("documents").resolve(folder).resolve(requestID + ".pdf");
+
+        Document newDocument = new Document();
+        newDocument.setFolder(folder);
+        newDocument.setType(type);
+        newDocument.setRequestID(requestID);
+
+        try {
+            Files.copy(multipartFile.getInputStream(), root);
+        } catch (Exception e) {
+            if (e instanceof FileAlreadyExistsException) {
+                return "A file of that name already exists.";
+            }
+
+            return e.getMessage();
+        }
+
+        documentRepository.save(newDocument);
+        return "File saved successfully!";
+    }
+}
