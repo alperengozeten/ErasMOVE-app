@@ -22,14 +22,18 @@ public class AdministrativeStaffService {
     private final EmailService emailService;
     private final ApplicationService applicationService;
     private final OutgoingStudentService outgoingStudentService;
+    private final ErasmusUniversityService erasmusUniversityService;
+    private final ExchangeUniversityService exchangeUniversityService;
     @Autowired
     public AdministrativeStaffService(AdministrativeStaffRepository administrativeStaffRepository, DepartmentService departmentService, EmailService emailService,
-                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService ) {
+                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService ) {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.departmentService = departmentService;
         this.emailService = emailService;
         this.outgoingStudentService = outgoingStudentService;
         this.applicationService = applicationService;
+        this.erasmusUniversityService = erasmusUniversityService;
+        this.exchangeUniversityService = exchangeUniversityService;
     }
 
     public List<AdministrativeStaff> getAdministrativeStaffs() {
@@ -122,11 +126,23 @@ public class AdministrativeStaffService {
             Application newApplication = new Application();
             newApplication.setApplicationPoint(applicationLines.get(i).getTotalPoint());
             newApplication.setOutgoingStudent(newStudent);
+            List<Long> uniIDs = new ArrayList<>();
+            if ( isErasmus ) {
+                for( int k = 0; k < applicationLines.get(i).getSelectedUniversitys().size(); k++ ) {
+                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLines.get(i).getSelectedUniversitys().get(k));
+                    uniIDs.add( erasmusUniversity.getID() );
+                }
+            }
+            else {
+                for( int k = 0; k < applicationLines.get(i).getSelectedUniversitys().size(); k++ ) {
+                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLines.get(i).getSelectedUniversitys().get(k));
+                    uniIDs.add( exchangeUniversity.getID() );
+                }
+
+            }
             newApplication.setSelectedSemester(applicationLines.get(i).getSelectedSemester());
 
-            List<Long> selectedUnis = new ArrayList<>(applicationLines.get(i).getSelectedUniversityIds());
-
-            newApplication.setSelectedUniversityIds(selectedUnis);
+            newApplication.setSelectedUniversityIds(uniIDs);
 
             applicationService.addApplication(newApplication);
         }
