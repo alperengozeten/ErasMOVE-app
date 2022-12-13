@@ -142,7 +142,7 @@ public class ElectiveCourseApprovalRequestService {
         newNotification.setRead(false);
         newNotification.setApplicationUser(departmentCoordinator);
         newNotification.setDate(LocalDate.now());
-        newNotification.setContent("You have a new file Elective Course Approval Request by Outgoing Student: " +
+        newNotification.setContent("You have a new Elective Course Approval Request by Outgoing Student: " +
                 outgoingStudent.getName() + "!");
 
         notificationService.saveNotification(newNotification); // save the notification

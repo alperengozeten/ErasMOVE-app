@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,9 +26,10 @@ public class MandatoryCourseApprovalRequestService {
     private final ExchangeUniversityRepository exchangeUniversityRepository;
     private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final CourseRepository courseRepository;
+    private final NotificationService notificationService;
 
     @Autowired
-    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository, CourseCoordinatorRepository courseCoordinatorRepository, CourseCoordinatorService courseCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository) {
+    public MandatoryCourseApprovalRequestService(MandatoryCourseApprovalRequestRepository mandatoryCourseApprovalRequestRepository, CourseCoordinatorRepository courseCoordinatorRepository, CourseCoordinatorService courseCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityRepository erasmusUniversityRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, ExchangeUniversityRepository exchangeUniversityRepository, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService, CourseRepository courseRepository, NotificationService notificationService) {
         this.mandatoryCourseApprovalRequestRepository = mandatoryCourseApprovalRequestRepository;
         this.courseCoordinatorRepository = courseCoordinatorRepository;
         this.courseCoordinatorService = courseCoordinatorService;
@@ -40,6 +42,7 @@ public class MandatoryCourseApprovalRequestService {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
         this.courseRepository = courseRepository;
+        this.notificationService = notificationService;
     }
 
 
@@ -93,11 +96,25 @@ public class MandatoryCourseApprovalRequestService {
                 return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " isn't accepted to a university!", HttpStatus.BAD_REQUEST);
             }
 
+            // get the related department!
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
             List<Course> rejectedCourses = erasmusUniversity.getRejectedCourses();
 
             for (Course rejectedCourse: rejectedCourses) {
                 if ( rejectedCourse.getCourseName().equals(mandatoryCourseApprovalRequest.getCourseName()) ) {
                     return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
+                }
+            }
+
+            List<Course> acceptedCourses = erasmusUniversityDepartment.getCourseList();
+
+            for (Course acceptedCourse: acceptedCourses) {
+                if ( acceptedCourse.getCourseName().equals(mandatoryCourseApprovalRequest.getCourseName()) ) {
+                    return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been accepted!", HttpStatus.BAD_REQUEST);
                 }
             }
         }
@@ -115,7 +132,30 @@ public class MandatoryCourseApprovalRequestService {
                     return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been rejected!", HttpStatus.BAD_REQUEST);
                 }
             }
+
+            ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentService
+                    .getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(
+                            exchangeUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            List<Course> acceptedCourses = exchangeUniversityDepartment.getCourseList();
+
+            for (Course acceptedCourse: acceptedCourses) {
+                if ( acceptedCourse.getCourseName().equals(mandatoryCourseApprovalRequest.getCourseName()) ) {
+                    return new ResponseEntity<>("Mandatory Course with name:" + mandatoryCourseApprovalRequest.getCourseName() + " has already been accepted!", HttpStatus.BAD_REQUEST);
+                }
+            }
         }
+
+        // send notification to the course coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(courseCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have a new Mandatory Course Approval Request by Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
 
         mandatoryCourseApprovalRequest.setCourseCoordinator(courseCoordinator);
         mandatoryCourseApprovalRequest.setStatus("WAITING"); // set status before saving
@@ -213,6 +253,18 @@ public class MandatoryCourseApprovalRequestService {
             exchangeUniversityRepository.save(exchangeUniversity); // save the university back
         }
 
+        CourseCoordinator courseCoordinator = mandatoryCourseApprovalRequest.getCourseCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Elective Course Approval Request has been rejected by the Course Coordinator: " +
+                courseCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
+
         mandatoryCourseApprovalRequest.setStatus("DECLINED");
         mandatoryCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
 
@@ -281,6 +333,18 @@ public class MandatoryCourseApprovalRequestService {
             // add mandatory course to the department
             exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(newAcceptedCourse, exchangeUniversityDepartment.getID());
         }
+
+        CourseCoordinator courseCoordinator = mandatoryCourseApprovalRequest.getCourseCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Elective Course Approval Request has been accepted by the Course Coordinator: " +
+                courseCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         mandatoryCourseApprovalRequest.setStatus("ACCEPTED");
         mandatoryCourseApprovalRequest.setFeedback(feedback); // add this to the rejected courses!!
