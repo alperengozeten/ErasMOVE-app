@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/administrativeStaff")
+@CrossOrigin
 public class AdministrativeStaffController {
 
     private final AdministrativeStaffService administrativeStaffService;
