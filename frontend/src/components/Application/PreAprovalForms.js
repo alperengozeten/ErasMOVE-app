@@ -1,12 +1,13 @@
 import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import SendIcon from '@mui/icons-material/Send';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 import PreApprovalsTableForStudents from '../table/PreApprovalsTableForStudent';
 import PreApprovalCourse from './PreApprovalCourse';
 
-const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses }) => {
+const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest }) => {
     const [open, setOpen] = React.useState(false);
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
@@ -55,6 +56,14 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
         setMergedCourses(newMergedCourses);
     };
 
+    const handleCreatePreApprovalForm = () => {
+        const preApprovalForm = {
+            mobilityCourses: mergedCourses,
+        };
+        createPreApprovalFormRequest(preApprovalForm);
+        handleClose();
+    };
+
     return (
         <Stack spacing={2}>
             <Grid container spacing={2}>
@@ -97,8 +106,36 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                                     startIcon={<NoteAddIcon />}
                                     onClick={() => setMergedCourses([...mergedCourses, {courses: ['']}])} 
                                 >
-                                    Add Course
+                                    Add Mobility Course
                                 </Button>
+                                <Grid container justifyContent={'center'} spacing={3}>
+                                    <Grid item container justifyContent={'center'} xs={4}>
+                                        <Button
+                                            fullWidth
+                                            sx={{margin: 'auto'}}
+                                            variant="contained"
+                                            color="success"
+                                            size="medium"
+                                            startIcon={<SendIcon />}
+                                            onClick={handleCreatePreApprovalForm} 
+                                        >
+                                            Create
+                                        </Button>
+                                    </Grid>
+                                    <Grid item container justifyContent={'center'} xs={4}>
+                                        <Button
+                                            fullWidth
+                                            sx={{margin: 'auto'}}
+                                            variant="contained"
+                                            color="error"
+                                            size="medium"
+                                            onClick={handleClose} 
+                                        >
+                                            Back
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                                
                             </Stack>
                         </Box>
                     </Modal>
@@ -119,13 +156,13 @@ const style = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: '60%',
+    width: '70%',
     bgcolor: "background.paper",
     border: "none",
     borderRadius: "6px",
     boxShadow: 24,
     p: 4,
-    maxHeight: "80%",
+    maxHeight: "90%",
     mb: 2,
     display: "flex",
     flexDirection: "column",
@@ -138,6 +175,7 @@ PreApprovalForms.propTypes = {
     hostCourses: PropTypes.array,
     approvedCourses: PropTypes.array,
     deletePreApprovalFormRequest: PropTypes.func,
+    createPreApprovalFormRequest: PropTypes.func,
 };
   
 PreApprovalForms.defaultProps = {
