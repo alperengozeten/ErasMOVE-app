@@ -9,14 +9,8 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 
 export const AccountProfileDetails = props => {
-
   const [values, setValues] = React.useState({
     firstName: "Kütür Kütür Şad",
     lastName: "BeautifulRock",
@@ -31,7 +25,10 @@ export const AccountProfileDetails = props => {
   return (
     <form autoComplete="off" noValidate {...props}>
       <Card>
-        <CardHeader subheader="The information cannot be edited" title="Profile" />
+        <CardHeader
+          subheader="The information cannot be edited"
+          title="Profile"
+        />
         <Divider />
         <CardContent>
           <Grid container spacing={3}>
@@ -97,30 +94,21 @@ export const AccountProfileDetails = props => {
               />
             </Grid>
             <Grid item md={12} xs={12}>
-              <FormControl disabled>
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Languages Approved
-                </FormLabel>
-                <RadioGroup
-                  name="radio-buttons-group"
-                >
-                  <FormControlLabel
-                    value="english"
-                    control={<Radio />}
-                    label={values.languages[0]}
-                  />
-                  <FormControlLabel
-                    value="german"
-                    control={<Radio />}
-                    label={values.languages[1]}
-                  />
-                  <FormControlLabel
-                    value="ığdırish"
-                    control={<Radio />}
-                    label={values.languages[2]}
-                  />
-                </RadioGroup>
-              </FormControl>
+              <TextField
+                select
+                fullWidth
+                label="Languages Approved"
+                defaulValue="Languages Approved"
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                {values.languages.map((option, index) => (
+                  <option key={index}>
+                    {option}
+                  </option>
+                ))}
+              </TextField>
             </Grid>
           </Grid>
         </CardContent>

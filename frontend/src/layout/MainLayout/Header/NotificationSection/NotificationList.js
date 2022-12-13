@@ -100,16 +100,10 @@ const NotificationList = ({ notifications }) => {
                   <Grid item>
                     {isUnread ? (
                       <Chip label="Unread" sx={chipWarningSX} />
-                    ) : (
-                      null
-                    )}
+                    ) : null}
                   </Grid>
                   <Grid item>
-                    {isNew ? (
-                      <Chip label="New" sx={chipSuccessSX} />
-                    ) : (
-                      null
-                    )}
+                    {isNew ? <Chip label="New" sx={chipSuccessSX} /> : null}
                   </Grid>
                 </Grid>
               </Grid>
