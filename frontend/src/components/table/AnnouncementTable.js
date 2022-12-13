@@ -2,8 +2,6 @@ import React from "react";
 import { filter } from "lodash";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import TextField from '@mui/material/TextField';
-
 
 // @mui
 import {
@@ -17,7 +15,6 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination,
   Button,
   Modal,
   Box
@@ -71,21 +68,11 @@ function applySortFilter(array, comparator, query) {
 }
 
 const AnnouncementTable = ({ announcements }) => {
-  const [addModalOpen, setAddModalOpen] = useState(false);
-
-  const handleAddModalOpen = () => {
-    setAddModalOpen(true);
-  };
-
-  const handleAddModalClose = () => {
-    setAddModalOpen(false);
-  };
+ 
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
 
