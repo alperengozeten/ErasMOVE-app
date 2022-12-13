@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,15 +23,17 @@ public class PreApprovalFormRequestService {
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.departmentCoordinatorService = departmentCoordinatorService;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
+        this.notificationService = notificationService;
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequests() {
@@ -90,7 +93,18 @@ public class PreApprovalFormRequestService {
             }
         }
 
-        preApprovalFormRequest.setStatus("WAITING");
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("A new Pre-Approval Form submitted by the Outgoing Student: " +
+                outgoingStudent.getName() + " and waiting for the response!");
+
+        notificationService.saveNotification(newNotification);
+
+        preApprovalFormRequest.setDepartmentCoordinator(departmentCoordinator); // set the department coordinator
+        preApprovalFormRequest.setStatus("WAITING"); // set status
         preApprovalFormRequestRepository.save(preApprovalFormRequest);
         return new ResponseEntity<>("Pre-Approval Form is submitted!", HttpStatus.OK);
     }
@@ -148,6 +162,18 @@ public class PreApprovalFormRequestService {
             return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
 
+        OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
+        DepartmentCoordinator departmentCoordinator = preApprovalFormRequest.getDepartmentCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Pre-Approval form has been rejected by the Department Coordinator: " + departmentCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
+
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("DECLINED");
 
@@ -167,6 +193,18 @@ public class PreApprovalFormRequestService {
         if ( preApprovalFormRequest.getStatus().equals("ACCEPTED") || preApprovalFormRequest.getStatus().equals("DECLINED") ) {
             return new ResponseEntity<>("Pre-Approval Form with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
+
+        OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
+        DepartmentCoordinator departmentCoordinator = preApprovalFormRequest.getDepartmentCoordinator();
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("Your Pre-Approval form has been rejected by the Department Coordinator: " + departmentCoordinator.getName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         preApprovalFormRequest.setFeedback(feedback);
         preApprovalFormRequest.setStatus("ACCEPTED");
