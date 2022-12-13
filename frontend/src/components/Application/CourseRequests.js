@@ -9,7 +9,7 @@ import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
-const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
+const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest }) => {
     const [open, setOpen] = React.useState(false);
     
     const [departmentValue, setDepartmentValue] = React.useState(0);
@@ -40,6 +40,27 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests }) 
     const handleEctsChange = e => setEcts(e.target.value);
 
     const handleElectiveChange = e => setIsElective(e.target.value);
+
+    const handleCreateCourseRequest = () => {
+        const type = isElective ? 'Elective' : 'Mandatory';
+        const courseRequest = {
+            // TODO: remove these when connecto API
+            id: 12,
+            type,
+            courseCoordinator: 'XXX hoca',
+            status: 'WAITING',
+            
+            courseName,
+            description,
+            ects,
+            department: departmentValue,
+            equivalentCourse: courseValue,
+            syllabus: null,
+
+        };
+        createCourseApprovalRequestRequest(courseRequest, type);
+        handleClose();
+    };
 
     return (
         <Stack spacing={2}>
@@ -196,7 +217,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests }) 
                                     <Grid container justifyContent={"center"}>
                                         <Grid item xs={3}></Grid>
                                         <Grid item xs={4}>
-                                            <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" startIcon={<SendIcon />} onClick={handleClose} >
+                                            <Button sx={{margin: 'auto'}} variant="contained" color="success" size="medium" startIcon={<SendIcon />} onClick={handleCreateCourseRequest} >
                                                 Create 
                                             </Button>
                                         </Grid>
@@ -241,6 +262,7 @@ const style = {
 CourseRequests.propTypes = {
     courseRequests: PropTypes.array,
     deleteCourseApprovalRequestRequest: PropTypes.func,
+    createCourseApprovalRequestRequest: PropTypes.func,
 };
   
 CourseRequests.defaultProps = {

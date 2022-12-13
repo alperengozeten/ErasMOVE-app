@@ -12,10 +12,27 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 import ProfileApplicationPage from "../ProfileApplicationPage";
-import { getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, deletePreApprovalFormRequest, deleteCourseApprovalRequestRequest } from "../../actions";
+import {
+    getPreApprovalFormsRequest,
+    getCourseApprovalRequestsRequest,
+    deletePreApprovalFormRequest,
+    deleteCourseApprovalRequestRequest,
+    createCourseApprovalRequestRequest
+} from "../../actions";
 
 
-const Application = ({ deleteCourseApprovalRequestRequest, deletePreApprovalFormRequest, getCourseApprovalRequestsRequest, getPreApprovalFormsRequest, courseRequests, preApprovalForms, hostCourses, approvedCourses, userId }) => {
+const Application = ({
+    deleteCourseApprovalRequestRequest,
+    deletePreApprovalFormRequest,
+    getCourseApprovalRequestsRequest, 
+    getPreApprovalFormsRequest,
+    courseRequests,
+    preApprovalForms,
+    hostCourses,
+    approvedCourses,
+    userId,
+    createCourseApprovalRequestRequest,
+}) => {
   useEffect(() => {
     getPreApprovalFormsRequest(userId);
     getCourseApprovalRequestsRequest(userId);
@@ -59,7 +76,11 @@ const Application = ({ deleteCourseApprovalRequestRequest, deletePreApprovalForm
                     </TabPanel>
                     <TabPanel value="2" index={2}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <CourseRequests deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest} courseRequests={courseRequests} />
+                            <CourseRequests
+                                createCourseApprovalRequestRequest={createCourseApprovalRequestRequest}
+                                deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest}
+                                courseRequests={courseRequests}
+                            />
                         </Box>
                     </TabPanel>
                 </TabContext>
@@ -90,6 +111,7 @@ const mapActionsToProps = {
     getCourseApprovalRequestsRequest,
     deletePreApprovalFormRequest,
     deleteCourseApprovalRequestRequest,
+    createCourseApprovalRequestRequest,
 };
 
 Application.propTypes = {
@@ -101,6 +123,7 @@ Application.propTypes = {
     getCourseApprovalRequestsRequest: PropTypes.func,
     deletePreApprovalFormRequest: PropTypes.func,
     deleteCourseApprovalRequestRequest: PropTypes.func,
+    createCourseApprovalRequestRequest: PropTypes.func,
     userId: PropTypes.number,
 };
   

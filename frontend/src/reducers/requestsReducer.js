@@ -1,4 +1,4 @@
-import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
+import { CREATE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     courseRequests: [], 
@@ -55,6 +55,8 @@ const requestsReducer = (state = INITIAL_STATE, action) => {
             return { ...state, preApprovalForms: state.preApprovalForms.filter(preApprovalForm => preApprovalForm.id !== action.payload) };
         case DELETE_COURSE_APPROVAL_REQUEST_SUCCESS:
             return { ...state, courseRequests: state.courseRequests.filter(courseRequest => courseRequest.id !== action.payload) };
+        case CREATE_COURSE_APPROVAL_REQUEST_SUCCESS:
+            return { ...state, courseRequests: [...state.courseRequests, action.payload] };
     }
   };
   
