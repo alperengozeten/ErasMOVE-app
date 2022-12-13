@@ -19,6 +19,7 @@ import {
     deleteCourseApprovalRequestRequest,
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
+    getCoursesByDepartment,
 } from "../../actions";
 
 
@@ -34,6 +35,7 @@ const Application = ({
     userId,
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
+    getCoursesByDepartment,
 }) => {
   useEffect(() => {
     getPreApprovalFormsRequest(userId);
@@ -79,6 +81,7 @@ const Application = ({
                                 preApprovalForms={preApprovalForms}
                                 hostCourses={hostCourses}
                                 approvedCourses={approvedCourses}
+                                getCoursesByDepartment={getCoursesByDepartment}
                             />
                         </Box>
                     </TabPanel>
@@ -88,6 +91,7 @@ const Application = ({
                                 createCourseApprovalRequestRequest={createCourseApprovalRequestRequest}
                                 deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest}
                                 courseRequests={courseRequests}
+                                getCoursesByDepartment={getCoursesByDepartment}
                             />
                         </Box>
                     </TabPanel>
@@ -121,6 +125,7 @@ const mapActionsToProps = {
     deleteCourseApprovalRequestRequest,
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
+    getCoursesByDepartment,
 };
 
 Application.propTypes = {
@@ -134,6 +139,7 @@ Application.propTypes = {
     deleteCourseApprovalRequestRequest: PropTypes.func,
     createCourseApprovalRequestRequest: PropTypes.func,
     createPreApprovalFormRequest: PropTypes.func,
+    getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
 };
   

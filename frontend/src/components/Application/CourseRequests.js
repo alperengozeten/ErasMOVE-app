@@ -9,7 +9,7 @@ import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
-const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest }) => {
+const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest, getCoursesByDepartment }) => {
     const [open, setOpen] = React.useState(false);
     
     const [departmentValue, setDepartmentValue] = React.useState(0);
@@ -29,6 +29,9 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
         setCourseValue(0);
 
         // Send an action to get related course
+        const university = 'Bilkent University'; // TODO: get from reducer
+        const type = 'Exchange'; // TODO: get from reducer
+        getCoursesByDepartment(type, departmentValue, university); 
     };
     
     const handleCourseChange = e => setCourseValue(e.target.value);
@@ -263,6 +266,7 @@ CourseRequests.propTypes = {
     courseRequests: PropTypes.array,
     deleteCourseApprovalRequestRequest: PropTypes.func,
     createCourseApprovalRequestRequest: PropTypes.func,
+    getCoursesByDepartment: PropTypes.func,
 };
   
 CourseRequests.defaultProps = {
