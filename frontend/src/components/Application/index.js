@@ -36,6 +36,7 @@ const Application = ({
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
     getCoursesByDepartment,
+    
 }) => {
   useEffect(() => {
     getPreApprovalFormsRequest(userId);
@@ -47,7 +48,6 @@ const Application = ({
   const handleChange = (event, newValue) => {
     setValue(`${newValue}`);
   };
-
   return (
     <Stack spacing={2}>
         <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -70,7 +70,7 @@ const Application = ({
                 </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <ProfileApplicationPage/>
+                            <ProfileApplicationPage />
                         </Box>
                     </TabPanel>
                     <TabPanel value="1" index={1}>
@@ -141,6 +141,7 @@ Application.propTypes = {
     createPreApprovalFormRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
+
 };
   
 Application.defaultProps = {
