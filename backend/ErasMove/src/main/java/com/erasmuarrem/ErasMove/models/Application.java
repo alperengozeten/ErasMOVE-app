@@ -20,10 +20,12 @@ public class Application {
 
     @OneToOne
     private OutgoingStudent outgoingStudent;
+    private double applicationPoint;
 
     private String selectedSemester;
     @ElementCollection
     private List<Long> selectedUniversityIds;
+
 
     // add some other attributes
 

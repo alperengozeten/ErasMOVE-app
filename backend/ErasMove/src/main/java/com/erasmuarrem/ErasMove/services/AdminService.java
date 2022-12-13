@@ -1,8 +1,7 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
-import com.erasmuarrem.ErasMove.models.Admin;
-import com.erasmuarrem.ErasMove.models.Token;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.AdminRepository;
 import com.erasmuarrem.ErasMove.repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class AdminService {
     private HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
     @Autowired
-    public AdminService( AdminRepository adminRepository, TokenRepository tokenRepository ) {
+    public AdminService( AdminRepository adminRepository, TokenRepository tokenRepository) {
         this.adminRepository = adminRepository;
         this.tokenRepository = tokenRepository;
     }

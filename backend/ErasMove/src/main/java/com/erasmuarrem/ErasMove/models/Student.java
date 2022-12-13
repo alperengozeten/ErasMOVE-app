@@ -12,7 +12,7 @@ import lombok.Setter;
 public abstract class Student extends ApplicationUser {
 
     private int semester;
-
+    private Long studentId;
     @OneToOne
     private Department department;
 }

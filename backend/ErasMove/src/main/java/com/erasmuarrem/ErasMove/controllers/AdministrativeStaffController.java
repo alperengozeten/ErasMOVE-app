@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
+import com.erasmuarrem.ErasMove.models.ApplicationWrapper;
 import com.erasmuarrem.ErasMove.services.AdministrativeStaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,5 +48,10 @@ public class AdministrativeStaffController {
     @DeleteMapping("/delete/{id}")
     public void deleteAdministrativeStaff(@PathVariable("id") Long id) {
         administrativeStaffService.deleteAdministrativeStaff(id);
+    }
+
+    @PostMapping("/addOutgoingStudents")
+    public ResponseEntity<String> addOutgoingStudents(@RequestParam boolean isErasmus, @RequestParam Long departmentId, @RequestBody List<ApplicationWrapper> applicationWrapperList ) {
+       return administrativeStaffService.addStudents(isErasmus, departmentId, applicationWrapperList);
     }
 }
