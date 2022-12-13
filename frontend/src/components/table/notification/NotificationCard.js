@@ -4,6 +4,7 @@ import { useTheme, styled } from "@mui/material/styles";
 import {
   Avatar,
   Chip,
+  Divider,
   Grid,
   ListItem,
   ListItemAvatar,
@@ -11,7 +12,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import User1 from "../../../../assets/images/users/user-round.svg";
+import PropTypes from "prop-types";
 
 // styles
 const ListItemWrapper = styled("div")(({ theme }) => ({
@@ -27,15 +28,7 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
 
-const [notificationInfo, setNotificationInfo] = React.useState({
-    notification: "Notification Notification Notification Notification Notification Notification...",
-    from: "Bilmemne Bilmemne Hoca",
-    isUnread: true,
-    date: "12.12.2022",
-    isNew: true,
-  });
-
-const NotificationCard = props => {
+const NotificationCard = ({ notificationInfo }) => {
   const theme = useTheme();
 
   const chipSX = {
@@ -60,7 +53,7 @@ const NotificationCard = props => {
     <ListItemWrapper>
       <ListItem alignItems="center">
         <ListItemAvatar>
-          <Avatar alt="John Doe" src={User1} />
+          <Avatar alt="John Doe" />
         </ListItemAvatar>
         <ListItemText primary={notificationInfo.from} />
         <ListItemSecondaryAction>
@@ -82,16 +75,33 @@ const NotificationCard = props => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item>
-              {notificationInfo.isUnread ? <Chip label="Unread" sx={chipWarningSX} /> : {undefined}}
+              {notificationInfo.isUnread ? (
+                <Chip label="Unread" sx={chipWarningSX} />
+              ) : (
+                { undefined }
+              )}
             </Grid>
             <Grid item>
-              {notificationInfo.isNew ? <Chip label="New" sx={chipSuccessSX} /> : {undefined}}
+              {notificationInfo.isNew ? (
+                <Chip label="New" sx={chipSuccessSX} />
+              ) : (
+                { undefined }
+              )}
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <Divider/>
     </ListItemWrapper>
   );
+};
+
+NotificationCard.propTypes = {
+  notificationInfo: PropTypes.object,
+};
+
+NotificationCard.defaultProps = {
+  notificationInfo: {},
 };
 
 export default NotificationCard;
