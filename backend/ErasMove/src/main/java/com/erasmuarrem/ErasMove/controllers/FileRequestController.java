@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/fileRequest")
+@CrossOrigin
 public class FileRequestController {
 
     private final FileRequestService fileRequestService;

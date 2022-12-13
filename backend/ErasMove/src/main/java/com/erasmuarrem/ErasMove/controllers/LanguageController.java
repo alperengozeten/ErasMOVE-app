@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/language")
+@CrossOrigin
 public class LanguageController {
 
     private final LanguageService languageService;

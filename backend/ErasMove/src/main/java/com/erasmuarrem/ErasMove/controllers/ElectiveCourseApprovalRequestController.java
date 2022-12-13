@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/electiveCourseApprovalRequest")
+@CrossOrigin
 public class ElectiveCourseApprovalRequestController {
 
     private final ElectiveCourseApprovalRequestService electiveCourseApprovalRequestService;

@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/exchangeReplacementRequest")
+@CrossOrigin
 public class ExchangeReplacementRequestController {
 
     private final ExchangeReplacementRequestService exchangeReplacementRequestService;

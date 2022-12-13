@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/preApprovalForm")
+@CrossOrigin
 public class PreApprovalFormRequestController {
 
     private final PreApprovalFormRequestService preApprovalFormRequestService;

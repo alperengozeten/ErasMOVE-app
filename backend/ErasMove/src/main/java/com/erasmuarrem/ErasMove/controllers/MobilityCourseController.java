@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mobilityCourse")
+@CrossOrigin
 public class MobilityCourseController {
 
     private final MobilityCourseService mobilityCourseService;
