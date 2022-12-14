@@ -38,9 +38,12 @@ const Application = ({
     getCoursesByDepartment,
     
 }) => {
+    const status = "WAITINGG";
   useEffect(() => {
-    getPreApprovalFormsRequest(userId);
-    getCourseApprovalRequestsRequest(userId);
+    if (status !==  "WAITING") {
+        getPreApprovalFormsRequest(userId);
+        getCourseApprovalRequestsRequest(userId);
+    }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
 
   const [value, setValue] = useState("0");
@@ -62,11 +65,17 @@ const Application = ({
             <Box sx={{ width: "90%", height: "90%" }}>
                 <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList onChange={handleChange}>
-                    <Tab label="Application" value={"0"} />
-                    <Tab label="PreApproval Forms" value={"1"} />
-                    <Tab label="Course Requests" value={"2"} />
-                    </TabList>
+                    {status === "WAITING" ? (
+                        <TabList onChange={handleChange}>
+                            <Tab label="Application" value={"0"} />
+                        </TabList>
+                    ) : (
+                        <TabList onChange={handleChange}>
+                            <Tab label="Application" value={"0"} />
+                            <Tab label="PreApproval Forms" value={"1"} />
+                            <Tab label="Course Requests" value={"2"} />
+                        </TabList>
+                    )}
                 </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
