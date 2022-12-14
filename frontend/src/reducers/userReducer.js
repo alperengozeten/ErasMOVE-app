@@ -2,26 +2,18 @@ import { GET_APPLICATION_SUCCESS, GET_USER_SUCCESS } from "../constants/actionTy
 
 
 const INITIAL_STATE = {
-  user: {
-    id: 32,
-    type: 'Outgoing Student',
-    name: 'John Doe',
-    email: 'john@bilkent.edu.tr',
-    studentInfo: {
-      studentID: '21902131',
-      semesterNo: 7,
-      departmentName: 'Computer Science',
-    },
-  },
-  application: {}
+  user: JSON.parse(localStorage.getItem('user')),
+  application: JSON.parse(localStorage.getItem('application')),
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_USER_SUCCESS: {
+      localStorage.setItem('user', JSON.stringify(action.payload));
       return {...state, user: action.payload };
     }
     case GET_APPLICATION_SUCCESS: {
+      localStorage.setItem('application', JSON.stringify(action.payload));
       return {...state, application: action.payload };
     }
     default:

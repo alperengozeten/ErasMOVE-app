@@ -1,12 +1,14 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 import { CREATE_ANNOUNCEMENT_FAIL, CREATE_ANNOUNCEMENT_REQUEST, CREATE_ANNOUNCEMENT_SUCCESS, GET_ANNOUNCEMENTS_FAIL, GET_ANNOUNCEMENTS_REQUEST, GET_ANNOUNCEMENTS_SUCCESS } from '../constants/actionTypes';
+import { getAnnouncements } from '../lib/api/unsplashService';
 
-function* getAnnouncementRequest() {
+function* getAnnouncementRequest({ payload: { departmentId } }) {
     yield console.log(`Get announcements...`);
 
     try {
         // TODO: send Post request here
-        //const { data } = yield call(getApplication, id);
+        const { data } = yield call(getAnnouncements, departmentId);
+        console.log('data: ', data);
   
         const status = 200;
         if (status !== 200) {
@@ -15,7 +17,7 @@ function* getAnnouncementRequest() {
   
         yield put({
             type: GET_ANNOUNCEMENTS_SUCCESS,
-            payload: announcements,
+            payload: data,
         });
     } catch (error) {
       yield put({

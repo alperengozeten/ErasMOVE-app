@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { getAnnouncementRequest, createAnnouncementRequest } from "../actions/announcementActions";
 
-const Announcements = ({ announcements, getAnnouncementRequest, createAnnouncementRequest, authType, userId }) => {
+const Announcements = ({ announcements, getAnnouncementRequest, createAnnouncementRequest, authType, userId, user }) => {
   React.useEffect(() => {
-    getAnnouncementRequest();
+    getAnnouncementRequest(user?.department?.id);
   }, []);
 
   return (
@@ -33,10 +33,12 @@ const mapStateToProps = state => {
   const announcements = state.announcements.announcements;
   const authType = state.auth.authType;
   const userId = state.auth.userId;
+  const user = state.user.user;
   return {
     announcements,
     authType,
     userId,
+    user,
   };
 };
 
@@ -51,6 +53,7 @@ Announcements.propTypes = {
   createAnnouncementRequest: PropTypes.func,
   authType: PropTypes.string,
   userId: PropTypes.string,
+  user: PropTypes.object,
 };
 
 Announcements.defaultProps = {

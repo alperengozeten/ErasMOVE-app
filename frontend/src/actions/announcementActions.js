@@ -1,8 +1,8 @@
 import { CREATE_ANNOUNCEMENT_REQUEST, DELETE_ANNOUNCEMENT_REQUEST, GET_ANNOUNCEMENTS_REQUEST } from "../constants/actionTypes";
 
-export const getAnnouncementRequest = () => ({
+export const getAnnouncementRequest = departmentId => ({
     type: GET_ANNOUNCEMENTS_REQUEST,
-    payload: {  },
+    payload: { departmentId },
   });
 
 export const createAnnouncementRequest = announcement => ({

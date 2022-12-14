@@ -114,7 +114,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
 
                 <TableBody>
                   {filteredUsers.map(row => {
-                    const { id, date, from, title, description } =
+                    const { id, date, departmentCoordinator, title, description } =
                       row;
 
                     return (
@@ -133,14 +133,14 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
                             spacing={2}
                           >
                             <Typography variant="inherit" noWrap>
-                              {from}
+                              {departmentCoordinator?.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="center">{title}</TableCell>
 
-                        <TableCell align="center">{description.substring(0, 30) + "..."}</TableCell>
+                        <TableCell align="center">{description.substring(0, 30) + (description.length > 30 ? "..." : '')}</TableCell>
 
                         <TableCell align="center">{date}</TableCell>
 
@@ -168,7 +168,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
                                 variant="h4"
                                 component="h2"
                               >
-                                {from}
+                                {departmentCoordinator?.name}
                               </Typography>
                               <Typography
                                 id="modal-modal-description"

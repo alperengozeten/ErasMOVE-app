@@ -102,3 +102,8 @@ export const declineErasmusReplacementRequest = id => (
   axios.post(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}/decline`, )
 );
 
+// PreApproval forms
+export const getAnnouncements = departmentId => (
+  axios.get(`${baseURL}/announcement/department/${departmentId}`)
+);
+
