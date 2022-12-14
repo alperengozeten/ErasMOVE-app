@@ -79,7 +79,7 @@ export const AccountProfileDetails = ({ user }) => {
                 disabled
                 label="Department"
                 name="department"
-                value={user.department}
+                value={user.department.departmentName}
                 variant="outlined"
               />
             </Grid>
