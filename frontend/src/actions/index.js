@@ -4,5 +4,7 @@ export * from './requestActions';
 export * from './courseActions';
 export * from './userActions';
 export * from './applicationActions';
+export * from './announcementActions';
+
 
 

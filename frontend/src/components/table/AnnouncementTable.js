@@ -29,8 +29,9 @@ import { AnnouncementToolbar} from "./announcement";
 
 const TABLE_HEAD = [
   { id: "from", label: "From", alignRight: false },
+  { id: "title", label: "Title", alignRight: false },
+  { id: "description", label: "Description", alignRight: false },
   { id: "date", label: "Date", alignRight: false },
-  { id: "announcementPrev", label: "Announcement", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -67,7 +68,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const AnnouncementTable = ({ announcements }) => {
+const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType, userId }) => {
  
 
   const [open, setOpen] = useState(false);
@@ -78,7 +79,7 @@ const AnnouncementTable = ({ announcements }) => {
 
   const [orderBy, setOrderBy] = useState("name");
 
-  const [filterName, setFilterName] = useState("");
+  const [filterName] = useState("");
 
   // const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -100,7 +101,7 @@ const AnnouncementTable = ({ announcements }) => {
     <>
       <Container>
         <Card>
-        <AnnouncementToolbar />
+        <AnnouncementToolbar authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -113,7 +114,7 @@ const AnnouncementTable = ({ announcements }) => {
 
                 <TableBody>
                   {filteredUsers.map(row => {
-                    const { id, date, from, announcement } =
+                    const { id, date, from, title, description } =
                       row;
 
                     return (
@@ -137,9 +138,12 @@ const AnnouncementTable = ({ announcements }) => {
                           </Stack>
                         </TableCell>
 
+                        <TableCell align="center">{title}</TableCell>
+
+                        <TableCell align="center">{description.substring(0, 30) + "..."}</TableCell>
+
                         <TableCell align="center">{date}</TableCell>
 
-                        <TableCell align="center">{announcement.substring(0, 30) + "..."}</TableCell>
 
                         <TableCell align="right">
                           <Button
@@ -170,7 +174,7 @@ const AnnouncementTable = ({ announcements }) => {
                                 id="modal-modal-description"
                                 sx={{ mt: 2 }}
                               >
-                                {announcement}
+                                {description}
                               </Typography>
                             </Box>
                           </Modal>
@@ -242,6 +246,9 @@ const style = {
 };
 AnnouncementTable.propTypes = {
   announcements: PropTypes.array,
+  createAnnouncementRequest: PropTypes.func,
+  authType: PropTypes.string,
+  userId: PropTypes.string,
 };
 
 AnnouncementTable.defaultProps = {

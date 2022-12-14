@@ -54,7 +54,7 @@ const mapActionsToProps = {
 App.propTypes = {
   typeForReq: PropTypes.string,
   status: PropTypes.string,
-  userId: PropTypes.number,
+  userId: PropTypes.string,
   getUserRequest: PropTypes.func,
   getApplicationRequest: PropTypes.func,
 };
