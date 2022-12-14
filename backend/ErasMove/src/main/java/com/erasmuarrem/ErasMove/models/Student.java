@@ -11,7 +11,6 @@ import lombok.Setter;
 @MappedSuperclass
 public abstract class Student extends ApplicationUser {
 
-    private int semester;
     private Long studentId;
     @OneToOne
     private Department department;

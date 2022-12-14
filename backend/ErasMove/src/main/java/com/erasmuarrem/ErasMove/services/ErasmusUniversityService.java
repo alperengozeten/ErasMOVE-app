@@ -45,11 +45,7 @@ public class ErasmusUniversityService {
     public ErasmusUniversity getErasmusUniversityByName(String universityName) {
         Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findByUniversityName(universityName);
 
-        if ( !erasmusUniversityOptional.isPresent() ) {
-            throw new IllegalStateException("Erasmus University with name:" + universityName + " doesn't exist!");
-        }
-
-        return erasmusUniversityOptional.get();
+        return erasmusUniversityOptional.orElse(null);
     }
 
     public void addErasmusUniversity(ErasmusUniversity erasmusUniversity) {

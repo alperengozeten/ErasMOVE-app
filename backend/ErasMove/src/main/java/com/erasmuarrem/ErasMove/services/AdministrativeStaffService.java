@@ -94,56 +94,70 @@ public class AdministrativeStaffService {
     }
 
 
-    public ResponseEntity<String> addStudents( boolean isErasmus, Long departmentid, List<ApplicationWrapper> applicationLines )  {
-        for ( int i =0; i < applicationLines.size(); i++ ) {
+    public ResponseEntity<String> addStudents(boolean isErasmus, Long departmentid, List<ApplicationWrapper> applicationLines )  {
+        StringBuilder output = new StringBuilder();
 
+        for (ApplicationWrapper applicationLine : applicationLines) {
             OutgoingStudent newStudent = new OutgoingStudent();
 
-            newStudent.setName(applicationLines.get(i).getFirstName() +" " + applicationLines.get(i).getLastName() );
+            newStudent.setName(applicationLine.getFirstName() + " " + applicationLine.getLastName());
             newStudent.setDepartment(departmentService.getDepartmentById(departmentid));
-            newStudent.setCgpa(applicationLines.get(i).getCgpa());
+            newStudent.setCgpa(applicationLine.getCgpa());
             newStudent.setIsErasmus(isErasmus);
-            newStudent.setStudentId( applicationLines.get(i).getStudentId() );
-            newStudent.setEmail( ( applicationLines.get(i).getFirstName() + "." + applicationLines.get(i).getLastName() + "@ug.bilkent.edu.tr").toLowerCase() );//??
+            newStudent.setStudentId(applicationLine.getStudentId());
+            newStudent.setEmail((applicationLine.getFirstName() + "." + applicationLine.getLastName() + "@ug.bilkent.edu.tr").toLowerCase());//??
             //newStudent.setSemester();??
             //newStudent.setIsDoubleMajor()??
 
             String newPassword = RandomPasswordGenerator();
             hashingPasswordHelper.setPassword(newPassword);
             newStudent.setHashedPassword(hashingPasswordHelper.Hash());
-             Email email = new Email();
-             email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
-                     + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
-             email.setRecipient(newStudent.getEmail());
-             email.setSubject("Welcome to Erasmove! Login Credentials");
-             System.out.println(emailService.sendSimpleMail(email));
+            Email email = new Email();
+            email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
+                    + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
+            email.setRecipient(newStudent.getEmail());
+            email.setSubject("Welcome to ErasMove! Login Credentials");
+            System.out.println(emailService.sendSimpleMail(email));
 
             outgoingStudentService.addOutgoingStudent(newStudent);
 
             Application newApplication = new Application();
-            newApplication.setApplicationScore(applicationLines.get(i).getTotalPoint());
+            newApplication.setApplicationScore(applicationLine.getTotalPoint());
             newApplication.setOutgoingStudent(newStudent);
             List<Long> uniIDs = new ArrayList<>();
-            if ( isErasmus ) {
-                for( int k = 0; k < applicationLines.get(i).getSelectedUniversities().size(); k++ ) {
-                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLines.get(i).getSelectedUniversities().get(k));
-                    uniIDs.add( erasmusUniversity.getID() );
+            if (isErasmus) {
+                for (int k = 0; k < applicationLine.getSelectedUniversities().size(); k++) {
+                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLine.getSelectedUniversities().get(k));
+
+                    if ( erasmusUniversity == null ) {
+                        output.append("Erasmus University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!\n");
+                    }
+                    else {
+                        uniIDs.add(erasmusUniversity.getID());
+                    }
                 }
-            }
-            else {
-                for( int k = 0; k < applicationLines.get(i).getSelectedUniversities().size(); k++ ) {
-                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLines.get(i).getSelectedUniversities().get(k));
-                    uniIDs.add( exchangeUniversity.getID() );
+            } else {
+                for (int k = 0; k < applicationLine.getSelectedUniversities().size(); k++) {
+                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLine.getSelectedUniversities().get(k));
+
+                    if ( exchangeUniversity == null ) {
+                        output.append("Exchange University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!");
+                    }
+                    else {
+                        uniIDs.add(exchangeUniversity.getID());
+                    }
                 }
 
             }
-            newApplication.setSelectedSemester(applicationLines.get(i).getSelectedSemester());
+            newApplication.setSelectedSemester(applicationLine.getSelectedSemester());
 
             newApplication.setSelectedUniversityIds(uniIDs);
 
             applicationService.addApplication(newApplication);
         }
-        return new ResponseEntity<>("All outgoing students are added successfully!" , HttpStatus.OK);
+
+        output.append("Process has completed!");
+        return new ResponseEntity<>(output.toString(), HttpStatus.OK); // return the response
     }
     private String RandomPasswordGenerator() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-*!";

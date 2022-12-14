@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class IncomingStudent extends Student {
     private String universityName;
-
+    private String semester;
     @ManyToMany
     private List<Course> preferredCourses;
 
