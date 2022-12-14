@@ -5,6 +5,7 @@ import requestSaga from './requestSaga';
 import universitySaga from './universitySaga';
 import userSaga from './userSaga';
 import applicationSaga from './applicationSaga';
+import announcementSaga from './announcementSaga';
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     ...universitySaga,
     ...userSaga,
     ...applicationSaga,
+    ...announcementSaga,
   ]);
 }
