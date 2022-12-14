@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useTheme } from "react";
 import PropTypes from "prop-types";
 // @mui
 import {
@@ -11,24 +11,53 @@ import {
   Button,
   Select,
   Chip,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
+  MenuItem
 } from "@mui/material";
 
 // ----------------------------------------------------------------------
 
 const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 // ----------------------------------------------------------------------
 
 const ApplicationDetails = ({ application }) => {
-
   const [open, setOpen] = useState(false);
+  const [editable, setEditable] = useState(true);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setEditable(false);
     setOpen(false);
+  };
+
+  // const theme = useTheme();
+  const [langAdded, setLangAdded] = useState([]);
+
+  const handleChange = event => {
+    const {
+      target: { value },
+    } = event;
+    setLangAdded(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
   };
 
   return (
@@ -140,7 +169,48 @@ const ApplicationDetails = ({ application }) => {
         defaultValue={application.languages}
         disabled
       />
-      <Button onClick={null}>Add Language</Button>
+      <Button onClick={handleClickOpen}>Add Language</Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        BackdropProps={{
+          style: { backgroundColor: "rgba(0,0,0,0.04)" },
+        }}
+      >
+        <Box sx={style}>
+          <Container>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="demo-multiple-chip-label">Add Language</InputLabel>
+              <Select
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                multiple
+                value={application.languages}
+                onChange={handleChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                renderValue={selected => (
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {selected.map(value => (
+                      <Chip key={value} label={value} />
+                    ))}
+                  </Box>
+                )}
+                MenuProps={MenuProps}
+              >
+                {defaultLanguages.map(lang => (
+                  <MenuItem
+                    key={lang}
+                    value={lang}
+                  >
+                    {lang}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Container>
+          <Button onClick={handleClose}>Add Languages</Button>
+        </Box>
+      </Modal>
     </>
   );
 };
@@ -150,10 +220,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "50%",
+  width: "60%",
   bgcolor: "background.paper",
   border: "none",
   borderRadius: "6px",
+  alignItems: "center",
   boxShadow: 24,
   p: 4,
 };
