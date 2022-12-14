@@ -40,11 +40,7 @@ public class ApplicationService {
     public Application getByOutgoingStudentID(Long id) {
         Optional<Application> applicationOptional = applicationRepository.findByOutgoingStudentID(id);
 
-        if ( !applicationOptional.isPresent() ) {
-            throw new IllegalStateException("Application for student ID: " + id + " doesn't exist!");
-        }
-
-        return applicationOptional.get();
+        return applicationOptional.orElse(null);
     }
 
     public Application getApplicationById(Long id) {

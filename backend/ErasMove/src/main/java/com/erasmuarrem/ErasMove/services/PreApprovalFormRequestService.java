@@ -24,9 +24,10 @@ public class PreApprovalFormRequestService {
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
     private final NotificationService notificationService;
+    private final ApplicationService applicationService;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService, ApplicationService applicationService) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -34,6 +35,7 @@ public class PreApprovalFormRequestService {
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
         this.notificationService = notificationService;
+        this.applicationService = applicationService;
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequests() {
@@ -92,6 +94,14 @@ public class PreApprovalFormRequestService {
                 return new ResponseEntity<>(new ResponseMessage("Student with id:" + outgoingStudentID + " already has a waiting Pre-Approval Form!", (long) -1), HttpStatus.BAD_REQUEST);
             }
         }
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudentID);
+
+        if ( application == null ) {
+            return new ResponseEntity<>(new ResponseMessage("Student with id:" + outgoingStudentID + " doesn't currently have an application!", (long) -1), HttpStatus.BAD_REQUEST);
+        }
+
+        application.setPreApprovalFormStatus("WAITING");
 
         // send notification to the department coordinator
         Notification newNotification = new Notification();
@@ -167,6 +177,14 @@ public class PreApprovalFormRequestService {
         OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
         DepartmentCoordinator departmentCoordinator = preApprovalFormRequest.getDepartmentCoordinator();
 
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudent.getID());
+
+        if ( application == null ) {
+            return new ResponseEntity<>("Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!", HttpStatus.BAD_REQUEST);
+        }
+
+        application.setPreApprovalFormStatus("DECLINED");
+
         // send notification to the outgoing student
         Notification newNotification = new Notification();
         newNotification.setRead(false);
@@ -198,6 +216,14 @@ public class PreApprovalFormRequestService {
 
         OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
         DepartmentCoordinator departmentCoordinator = preApprovalFormRequest.getDepartmentCoordinator();
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudent.getID());
+
+        if ( application == null ) {
+            return new ResponseEntity<>("Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!", HttpStatus.BAD_REQUEST);
+        }
+
+        application.setPreApprovalFormStatus("ACCEPTED");
 
         // send notification to the outgoing student
         Notification newNotification = new Notification();

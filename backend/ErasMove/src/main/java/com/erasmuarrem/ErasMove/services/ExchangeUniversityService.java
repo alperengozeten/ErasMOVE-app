@@ -1,5 +1,6 @@
 package com.erasmuarrem.ErasMove.services;
 
+import com.erasmuarrem.ErasMove.models.Application;
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
@@ -20,12 +21,14 @@ public class ExchangeUniversityService {
     private final ExchangeUniversityRepository exchangeUniversityRepository;
     private final CourseRepository courseRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ApplicationService applicationService;
 
     @Autowired
-    public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository) {
+    public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService) {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
+        this.applicationService = applicationService;
     }
 
     public List<ExchangeUniversity> getExchangeUniversities() {
@@ -161,6 +164,14 @@ public class ExchangeUniversityService {
         if ( acceptedStudents.contains(outgoingStudent) ) {
             return "Student with id:" + outgoingStudentID + " is already accepted!";
         }
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudent.getID());
+
+        if ( application == null ) {
+            return "Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!";
+        }
+
+        application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
 
         acceptedStudents.add(outgoingStudent);
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);

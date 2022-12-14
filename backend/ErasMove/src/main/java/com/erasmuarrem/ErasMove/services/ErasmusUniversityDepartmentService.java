@@ -1,9 +1,6 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.Course;
-import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
-import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityDepartmentRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
@@ -21,13 +18,15 @@ public class ErasmusUniversityDepartmentService {
     private final CourseRepository courseRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityRepository erasmusUniversityRepository;
+    private final ApplicationService applicationService;
 
     @Autowired
-    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository) {
+    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository, ApplicationService applicationService) {
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityRepository = erasmusUniversityRepository;
+        this.applicationService = applicationService;
     }
 
     public List<ErasmusUniversityDepartment> getErasmusUniversityDepartments() {
@@ -154,6 +153,14 @@ public class ErasmusUniversityDepartmentService {
         if ( acceptedStudents.contains(outgoingStudent) ) {
             return "Outgoing student with id:" + id + " is already accepted to this university!";
         }
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudent.getID());
+
+        if ( application == null ) {
+            return "Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!";
+        }
+
+        application.setAdmittedStatus("Admitted to " + erasmusUniversity.getUniversityName()); // set application status
 
         acceptedStudents.add(outgoingStudent);
         erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);
