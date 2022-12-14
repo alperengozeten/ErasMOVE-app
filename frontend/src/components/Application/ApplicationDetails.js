@@ -47,8 +47,7 @@ const ApplicationDetails = ({ application }) => {
     setOpen(false);
   };
 
-  // const theme = useTheme();
-  const [langAdded, setLangAdded] = useState([]);
+  const [langAdded, setLangAdded] = useState(application.languages);
 
   const handleChange = event => {
     const {
@@ -185,7 +184,7 @@ const ApplicationDetails = ({ application }) => {
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
-                value={application.languages}
+                value={langAdded}
                 onChange={handleChange}
                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                 renderValue={selected => (
@@ -220,7 +219,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "60%",
+  width: "30%",
   bgcolor: "background.paper",
   border: "none",
   borderRadius: "6px",
