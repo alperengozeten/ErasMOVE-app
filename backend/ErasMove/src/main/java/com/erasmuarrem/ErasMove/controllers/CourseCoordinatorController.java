@@ -34,6 +34,11 @@ public class CourseCoordinatorController {
         return courseCoordinatorService.getCourseCoordinatorByCourseID(id);
     }
 
+    @GetMapping("/department/{departmentID}")
+    public List<CourseCoordinator> getCourseCoordinatorsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return courseCoordinatorService.getCourseCoordinatorsByDepartmentID(departmentID);
+    }
+
     @PostMapping("/add")
     public void addCourseCoordinator(@RequestBody CourseCoordinator courseCoordinator) {
         courseCoordinatorService.addCourseCoordinator(courseCoordinator);
