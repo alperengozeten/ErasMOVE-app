@@ -86,9 +86,9 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const [department, setDepartment] = useState('');
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
+  // const handleOpenApplication = id => {
+  //   console.log("id: ", id);
+  // };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
