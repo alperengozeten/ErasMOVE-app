@@ -34,6 +34,11 @@ public class AnnouncementController {
         return announcementService.getAnnouncementByDepartmentCoordinatorId(id);
     }
 
+    @GetMapping("/department/{departmentID}")
+    public List<Announcement> getAnnouncementsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return announcementService.getAnnouncementsByDepartmentID(departmentID);
+    }
+
     @PostMapping("/add")
     public void addAnnouncement(@RequestBody Announcement announcement) {
         announcementService.addAnnouncement(announcement);

@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
-    List<Announcement> findByDepartmentCoordinatorID(Long deparmentCoordinatorID);
+    List<Announcement> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
+    List<Announcement> findByDepartmentCoordinator_Department_ID(Long departmentID);
 }
