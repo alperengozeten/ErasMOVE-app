@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.FileRequest;
+import com.erasmuarrem.ErasMove.models.ResponseMessage;
 import com.erasmuarrem.ErasMove.services.FileRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/fileRequest")
+@CrossOrigin
 public class FileRequestController {
 
     private final FileRequestService fileRequestService;
@@ -48,7 +50,7 @@ public class FileRequestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addFileRequest(@RequestBody FileRequest fileRequest) {
+    public ResponseEntity<ResponseMessage> addFileRequest(@RequestBody FileRequest fileRequest) {
         return fileRequestService.addFileRequest(fileRequest);
     }
 

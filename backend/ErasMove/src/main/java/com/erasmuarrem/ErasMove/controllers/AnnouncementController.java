@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/announcement")
+@CrossOrigin
 public class AnnouncementController {
 
     private final AnnouncementService announcementService;

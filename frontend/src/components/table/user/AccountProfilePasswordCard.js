@@ -14,19 +14,14 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import PropTypes from 'prop-types';
 
-export const AccountProfilePasswordCard = props => {
 
-  const [values, setValues] = React.useState({
-    firstName: "Kütür Kütür Şad",
-    lastName: "BeautifulRock",
-    email: "igdirli76serserii@hotmail.com",
-    password: "0123456789",
-    phone: "05313113131",
-    department: "Computer Science",
-    cgpa: "3.31",
-    languages: ["English", "German", "Iğdırish"],
-  });
+export const AccountProfilePasswordCard = ({ user }) => {
+
+  const values = {
+    password: "password hashed??",
+  };
 
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -35,7 +30,7 @@ export const AccountProfilePasswordCard = props => {
   };
 
   return (
-    <form autoComplete="off" noValidate {...props}>
+    <form autoComplete="off" >
       <Card>
         <CardHeader
           subheader="You can change your password from here."
@@ -50,7 +45,7 @@ export const AccountProfilePasswordCard = props => {
                 disabled
                 label="E-Mail"
                 name="firstName"
-                value={values.email}
+                value={user.email}
                 variant="outlined"
               />
             </Grid>
@@ -109,4 +104,8 @@ export const AccountProfilePasswordCard = props => {
       </Card>
     </form>
   );
+};
+
+AccountProfilePasswordCard.propTypes = {
+  user: PropTypes.object,
 };

@@ -13,6 +13,6 @@ public class ApplicationWrapper {
     private String selectedSemester;
     private Long studentId;
     private double totalPoint;
-    private List<Long> selectedUniversityIds;
+    private List<String> selectedUniversities;
 
 }

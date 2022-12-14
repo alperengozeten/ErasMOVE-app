@@ -141,7 +141,7 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStu.setUserToken(token);
                 outgoingStudentRepository.save(currStu);
-                return new ResponseEntity<>("Successful login", HttpStatus.OK);
+                return new ResponseEntity<>(""+ currStu.getID(), HttpStatus.OK);
             }
             return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
@@ -234,7 +234,7 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currDepCord.setUserToken(token);
                 departmentCoordinatorRepository.save(currDepCord);
-                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
+                return new ResponseEntity<>("" + currDepCord.getID(), HttpStatus.OK);
 
             }
             return new ResponseEntity<>( "Incorrect login credentials.", HttpStatus.BAD_REQUEST );
@@ -347,7 +347,7 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStaff.setUserToken(token);
                 administrativeStaffRepository.save(currStaff);
-                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
+                return new ResponseEntity<>("" + currStaff.getID(), HttpStatus.OK);
             }
             return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
@@ -444,7 +444,7 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currStu.setUserToken(token);
                 incomingStudentRepository.save(currStu);
-                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
+                return new ResponseEntity<>("" + currStu.getID(), HttpStatus.OK);
             }
             return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }
@@ -551,7 +551,7 @@ public class UserManagementService {
                 tokenRepository.save(token);
                 currCourseCord.setUserToken(token);
                 courseCoordinatorRepository.save(currCourseCord);
-                return new ResponseEntity<>("Log in successful", HttpStatus.OK);
+                return new ResponseEntity<>("" + currCourseCord.getID(), HttpStatus.OK);
             }
             return new ResponseEntity<>("Incorrect login credentials.", HttpStatus.BAD_REQUEST);
         }

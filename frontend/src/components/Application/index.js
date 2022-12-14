@@ -36,10 +36,14 @@ const Application = ({
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
     getCoursesByDepartment,
+    
 }) => {
+    const status = "WAITINGG";
   useEffect(() => {
-    getPreApprovalFormsRequest(userId);
-    getCourseApprovalRequestsRequest(userId);
+    if (status !==  "WAITING") {
+        getPreApprovalFormsRequest(userId);
+        getCourseApprovalRequestsRequest(userId);
+    }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
 
   const [value, setValue] = useState("0");
@@ -47,7 +51,6 @@ const Application = ({
   const handleChange = (event, newValue) => {
     setValue(`${newValue}`);
   };
-
   return (
     <Stack spacing={2}>
         <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -62,15 +65,21 @@ const Application = ({
             <Box sx={{ width: "90%", height: "90%" }}>
                 <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    <TabList onChange={handleChange}>
-                    <Tab label="Application" value={"0"} />
-                    <Tab label="PreApproval Forms" value={"1"} />
-                    <Tab label="Course Requests" value={"2"} />
-                    </TabList>
+                    {status === "WAITING" ? (
+                        <TabList onChange={handleChange}>
+                            <Tab label="Application" value={"0"} />
+                        </TabList>
+                    ) : (
+                        <TabList onChange={handleChange}>
+                            <Tab label="Application" value={"0"} />
+                            <Tab label="PreApproval Forms" value={"1"} />
+                            <Tab label="Course Requests" value={"2"} />
+                        </TabList>
+                    )}
                 </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <ProfileApplicationPage/>
+                            <ProfileApplicationPage />
                         </Box>
                     </TabPanel>
                     <TabPanel value="1" index={1}>
@@ -141,6 +150,7 @@ Application.propTypes = {
     createPreApprovalFormRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
+
 };
   
 Application.defaultProps = {

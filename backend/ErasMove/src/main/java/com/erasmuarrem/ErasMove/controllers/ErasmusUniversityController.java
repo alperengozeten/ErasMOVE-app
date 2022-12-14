@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/erasmusUniversity")
+@CrossOrigin
 public class ErasmusUniversityController {
 
     private final ErasmusUniversityService erasmusUniversityService;

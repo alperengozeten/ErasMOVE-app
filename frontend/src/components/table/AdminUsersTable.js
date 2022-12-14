@@ -1,6 +1,5 @@
 import React from 'react';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -13,7 +12,6 @@ import {
   Stack,
   Paper,
   Avatar,
-  Popover,
   TableRow,
   TableBody,
   TableCell,
@@ -25,9 +23,7 @@ import {
   Tooltip,
   Button
 } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
 // components
-import Label from '../label';
 import Scrollbar from './scrollbar';
 // sections
 import { AdminUsersListHead, AdminUsersListToolbar } from './adminUsers';
@@ -79,7 +75,7 @@ function applySortFilter(array, comparator, query) {
 const AdminUsersTable = ({ allUsers }) => {
     const [openDelete, setOpenDelete] = React.useState(false);
 
-    const [openDetails, setOpenDetails] = React.useState(false);
+    // const [openDetails, setOpenDetails] = React.useState(false);
     const [page, setPage] = useState(0);
 
     const [order, setOrder] = useState('asc');
@@ -90,7 +86,7 @@ const AdminUsersTable = ({ allUsers }) => {
     
     const [rowsPerPage, setRowsPerPage] = useState(5);
     
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    // const [anchorEl, setAnchorEl] = React.useState(null);
   
     const [department, setDepartment] = useState('');
 
@@ -102,12 +98,12 @@ const AdminUsersTable = ({ allUsers }) => {
         setOpenDelete(false);
       };
     
-      const handleOpenDetails = id => {
-        setOpenDetails(true);
-      };
-      const handleCloseDetails = () => { 
-        setOpenDetails(false);
-      };
+    //   const handleOpenDetails = () => {
+    //     setOpenDetails(true);
+    //   };
+    //   const handleCloseDetails = () => { 
+    //     setOpenDetails(false);
+    //   };
     
       const handleDelete = () => {
         handleCloseDelete();
@@ -139,15 +135,15 @@ const AdminUsersTable = ({ allUsers }) => {
     setFilterName(event.target.value);
   };
 
-  const handlePopoverOpen = event => {
-    setAnchorEl(event.currentTarget);
-  };
+//   const handlePopoverOpen = event => {
+//     setAnchorEl(event.currentTarget);
+//   };
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
+//   const handlePopoverClose = () => {
+//     setAnchorEl(null);
+//   };
 
-  const openPopover = Boolean(anchorEl);
+//   const openPopover = Boolean(anchorEl);
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUsers.length) : 0;
 

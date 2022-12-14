@@ -45,11 +45,7 @@ public class ExchangeUniversityService {
     public ExchangeUniversity getExchangeUniversityByName(String universityName) {
         Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findByUniversityName(universityName);
 
-        if ( !exchangeUniversityOptional.isPresent() ) {
-            throw new IllegalStateException("Exchange University with name:" + universityName + " doesn't exist!");
-        }
-
-        return exchangeUniversityOptional.get();
+        return exchangeUniversityOptional.orElse(null);
     }
 
     public void addExchangeUniversity(ExchangeUniversity exchangeUniversity) {

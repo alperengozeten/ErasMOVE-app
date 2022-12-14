@@ -1,4 +1,5 @@
 import {
+  call,
   delay,
   put,
   takeEvery,
@@ -10,46 +11,46 @@ import {
   CHANGE_PASSWORD_SUCCESS,
   CHOOSE_AUTH_TYPE,
   CLEAR_ERRORS,
-  GET_USER,
   LOG_IN_FAIL,
   LOG_IN_REQUEST,
   LOG_IN_SUCCESS,
   LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
   SEND_CODE_FAIL,
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
 } from '../constants/actionTypes';
+import { userLogin } from '../lib/api/unsplashService';
 
 function* logInRequest({ payload: {user, navigate} }) {
   console.log('User Info: ', user);
-
-  const outgoingStudent = {
-    type: 'Outgoing Student',
-    name: 'John Doe',
-    email: 'john@bilkent.edu.tr',
-    studentInfo: {
-      studentID: '21902131',
-      semesterNo: 7,
-      departmentName: 'Computer Science',
-    },
-  };
   
   if (user.email != '' && user.password != '') {
-    //TODO: API call to login 
-    const key = 123;
-    yield put({
-      type: LOG_IN_SUCCESS,
-      payload: key,
-    });
+    if (user.typeForReq !== 'admin') {
+      try {
+        const { data } = yield call(userLogin, user.typeForReq, user.email,user.password);
+        console.log('data: ', data);
+    
+        
+        //TODO: API call to login 
+        yield put({
+          type: LOG_IN_SUCCESS,
+          payload: Number(data),
+        });
 
-    //TODO: API call to get user details 
-    yield put({
-      type: GET_USER,
-      payload: outgoingStudent,
-    });
+        // Redirect user to dashboard
+        navigate('/main');
+        
+      } catch (error) {
+        // Create error
+        yield put({ type: LOG_IN_FAIL, payload: error.msg });
+      }
 
-    // Redirect user to dashboard
-    navigate('/main');
+    } else {
+      // Redirect user to dashboard
+      navigate('/main');
+    }
+
   } else {
     const empty = user.email == '' ? 'email' : 'password';
 
@@ -67,7 +68,7 @@ function* logOutRequest({ payload: navigate }) {
   //TODO: API call to send code request
 
   yield put({
-    type: SEND_CODE_SUCCESS,
+    type: LOG_OUT_SUCCESS,
     payload: {},
   });
   yield put({ type: CHOOSE_AUTH_TYPE, authType: ''});

@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/incomingStudent")
+@CrossOrigin
 public class IncomingStudentController {
     private final IncomingStudentService incomingStudentService;
     @Autowired

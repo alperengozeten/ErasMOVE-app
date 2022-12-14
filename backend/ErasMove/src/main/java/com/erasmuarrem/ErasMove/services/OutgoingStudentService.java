@@ -1,11 +1,10 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
-import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
-import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -87,5 +86,35 @@ public class OutgoingStudentService {
         // delete the Pre-Approval forms of the student!
         String output = preApprovalFormRequestService.deletePreApprovalFormRequestByOutgoingStudentID(outgoingStudentID);
         return output + "\nPlacement of the Outgoing Student with id:" + outgoingStudentID + " has been cancelled!";
+    }
+
+    public ResponseEntity<ContractedUniversity> getAcceptedUniversityByOutgoingStudentID(Long outgoingStudentID) {
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            ErasmusUniversity erasmusUniversity = erasmusUniversityService
+                    .getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( erasmusUniversity == null ) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(erasmusUniversity, HttpStatus.OK);
+        }
+        else {
+            ExchangeUniversity exchangeUniversity = exchangeUniversityService
+                    .getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( exchangeUniversity == null ) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(exchangeUniversity, HttpStatus.OK);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.MandatoryCourseApprovalRequest;
+import com.erasmuarrem.ErasMove.models.ResponseMessage;
 import com.erasmuarrem.ErasMove.services.MandatoryCourseApprovalRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/mandatoryCourseApprovalRequest")
+@CrossOrigin
 public class MandatoryCourseApprovalRequestController {
 
     private final MandatoryCourseApprovalRequestService mandatoryCourseApprovalRequestService;
@@ -51,7 +53,7 @@ public class MandatoryCourseApprovalRequestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
+    public ResponseEntity<ResponseMessage> addMandatoryCourseApprovalRequest(@RequestBody MandatoryCourseApprovalRequest mandatoryCourseApprovalRequest) {
         return mandatoryCourseApprovalRequestService.addMandatoryCourseApprovalRequest(mandatoryCourseApprovalRequest);
     }
 

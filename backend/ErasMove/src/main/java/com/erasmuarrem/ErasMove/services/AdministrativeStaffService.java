@@ -22,14 +22,18 @@ public class AdministrativeStaffService {
     private final EmailService emailService;
     private final ApplicationService applicationService;
     private final OutgoingStudentService outgoingStudentService;
+    private final ErasmusUniversityService erasmusUniversityService;
+    private final ExchangeUniversityService exchangeUniversityService;
     @Autowired
     public AdministrativeStaffService(AdministrativeStaffRepository administrativeStaffRepository, DepartmentService departmentService, EmailService emailService,
-                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService ) {
+                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService ) {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.departmentService = departmentService;
         this.emailService = emailService;
         this.outgoingStudentService = outgoingStudentService;
         this.applicationService = applicationService;
+        this.erasmusUniversityService = erasmusUniversityService;
+        this.exchangeUniversityService = exchangeUniversityService;
     }
 
     public List<AdministrativeStaff> getAdministrativeStaffs() {
@@ -90,47 +94,70 @@ public class AdministrativeStaffService {
     }
 
 
-    public ResponseEntity<String> addStudents( boolean isErasmus, Long departmentid, List<ApplicationWrapper> applicationLines )  {
-        for ( int i =0; i < applicationLines.size(); i++ ) {
+    public ResponseEntity<String> addStudents(boolean isErasmus, Long departmentid, List<ApplicationWrapper> applicationLines )  {
+        StringBuilder output = new StringBuilder();
 
+        for (ApplicationWrapper applicationLine : applicationLines) {
             OutgoingStudent newStudent = new OutgoingStudent();
 
-            newStudent.setName(applicationLines.get(i).getFirstName() +" " + applicationLines.get(i).getLastName() );
+            newStudent.setName(applicationLine.getFirstName() + " " + applicationLine.getLastName());
             newStudent.setDepartment(departmentService.getDepartmentById(departmentid));
-            newStudent.setCgpa(applicationLines.get(i).getCgpa());
+            newStudent.setCgpa(applicationLine.getCgpa());
             newStudent.setIsErasmus(isErasmus);
-            newStudent.setStudentId( applicationLines.get(i).getStudentId() );
-            newStudent.setEmail( ( applicationLines.get(i).getFirstName() + "." + applicationLines.get(i).getLastName() + "@ug.bilkent.edu.tr").toLowerCase() );//??
+            newStudent.setStudentId(applicationLine.getStudentId());
+            newStudent.setEmail((applicationLine.getFirstName() + "." + applicationLine.getLastName() + "@ug.bilkent.edu.tr").toLowerCase());//??
             //newStudent.setSemester();??
             //newStudent.setIsDoubleMajor()??
 
             String newPassword = RandomPasswordGenerator();
             hashingPasswordHelper.setPassword(newPassword);
             newStudent.setHashedPassword(hashingPasswordHelper.Hash());
-             Email email = new Email();
-             email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
-                     + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
-             email.setRecipient(newStudent.getEmail());
-             email.setSubject("Welcome to Erasmove! Login Credentials");
-             System.out.println(emailService.sendSimpleMail(email));
-
+            Email email = new Email();
+            email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
+                    + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
+            email.setRecipient(newStudent.getEmail());
+            email.setSubject("Welcome to ErasMove! Login Credentials");
+            System.out.println(emailService.sendSimpleMail(email));
 
             outgoingStudentService.addOutgoingStudent(newStudent);
 
-
-
             Application newApplication = new Application();
-            newApplication.setApplicationPoint(applicationLines.get(i).getTotalPoint());
+            newApplication.setApplicationScore(applicationLine.getTotalPoint());
             newApplication.setOutgoingStudent(newStudent);
-            newApplication.setSelectedSemester(applicationLines.get(i).getSelectedSemester());
+            List<ContractedUniversity> universities = new ArrayList<>();
+            if (isErasmus) {
+                for (int k = 0; k < applicationLine.getSelectedUniversities().size(); k++) {
+                    ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLine.getSelectedUniversities().get(k));
 
-            List<Long> selectedUnis = new ArrayList<>(applicationLines.get(i).getSelectedUniversityIds());
+                    if ( erasmusUniversity == null ) {
+                        output.append("Erasmus University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!\n");
+                    }
+                    else {
+                        universities.add(erasmusUniversity);
+                    }
+                }
+            } else {
+                for (int k = 0; k < applicationLine.getSelectedUniversities().size(); k++) {
+                    ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByName(applicationLine.getSelectedUniversities().get(k));
 
-            newApplication.setSelectedUniversityIds(selectedUnis);
+                    if ( exchangeUniversity == null ) {
+                        output.append("Exchange University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!");
+                    }
+                    else {
+                        universities.add(exchangeUniversity);
+                    }
+                }
+
+            }
+            newApplication.setSelectedSemester(applicationLine.getSelectedSemester());
+
+            newApplication.setSelectedUniversities(universities);
 
             applicationService.addApplication(newApplication);
         }
-        return new ResponseEntity<>("All outgoing students are added successfully!" , HttpStatus.OK);
+
+        output.append("Process has completed!");
+        return new ResponseEntity<>(output.toString(), HttpStatus.OK); // return the response
     }
     private String RandomPasswordGenerator() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@.-*!";
