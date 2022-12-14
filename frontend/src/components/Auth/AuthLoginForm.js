@@ -34,7 +34,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link, useNavigate } from 'react-router-dom';
 
-const AuthLoginForm = ({ logInRequest }) => {
+const AuthLoginForm = ({ logInRequest, typeForReq }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
 
@@ -80,6 +80,7 @@ const AuthLoginForm = ({ logInRequest }) => {
                         const user = {
                             email: values.email,
                             password: values.password,
+                            typeForReq: typeForReq
                         };
                         logInRequest(user, navigate);
                     } catch (err) {
@@ -196,6 +197,7 @@ const AuthLoginForm = ({ logInRequest }) => {
 
 AuthLoginForm.propTypes = {
   logInRequest: PropTypes.func.isRequired,
+  typeForReq: PropTypes.string,
 };
 
 AuthLoginForm.defaultProps = {

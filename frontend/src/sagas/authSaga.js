@@ -1,4 +1,5 @@
 import {
+  call,
   delay,
   put,
   takeEvery,
@@ -19,6 +20,7 @@ import {
   SEND_CODE_REQUEST,
   SEND_CODE_SUCCESS,
 } from '../constants/actionTypes';
+import { getUser, userLogin } from '../lib/api/unsplashService';
 
 function* logInRequest({ payload: {user, navigate} }) {
   console.log('User Info: ', user);
@@ -35,21 +37,41 @@ function* logInRequest({ payload: {user, navigate} }) {
   };
   
   if (user.email != '' && user.password != '') {
-    //TODO: API call to login 
-    const key = 123;
-    yield put({
-      type: LOG_IN_SUCCESS,
-      payload: key,
-    });
+    if (user.typeForReq !== 'admin') {
+      try {
+        const { id } = yield call(userLogin, user.typeForReq, user.email,user.password);
+        console.log('data: ', id);
+    
+        
+        //TODO: API call to login 
+        const key = 123;
+        yield put({
+          type: LOG_IN_SUCCESS,
+          payload: key,
+        });
 
-    //TODO: API call to get user details 
-    yield put({
-      type: GET_USER,
-      payload: outgoingStudent,
-    });
+        // Redirect user to dashboard
+        navigate('/main');
+        
+      } catch (error) {
+        // Create error
+        yield put({ type: LOG_IN_FAIL, payload: error.msg });
+      }
+      
+      //const { data } = yield call(getUser, user.typeForReq, Number(id));
+      //console.log(data);
+  
+      //TODO: API call to get user details 
+      yield put({
+        type: GET_USER,
+        payload: outgoingStudent,
+      });
 
-    // Redirect user to dashboard
-    navigate('/main');
+    } else {
+      // Redirect user to dashboard
+      navigate('/main');
+    }
+
   } else {
     const empty = user.email == '' ? 'email' : 'password';
 

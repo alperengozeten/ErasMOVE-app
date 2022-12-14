@@ -17,7 +17,7 @@ import logo from '../../assets/images/logo.png';
 
 // assets
 
-const Login = ({ logInRequest, authType }) => {
+const Login = ({ logInRequest, authType, typeForReq }) => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -72,7 +72,7 @@ const Login = ({ logInRequest, authType }) => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={ 12 }>
-                                        <AuthLoginForm logInRequest={ logInRequest } />
+                                        <AuthLoginForm typeForReq={typeForReq} logInRequest={ logInRequest } />
                                     </Grid>
                                     <Grid item xs={ 12 }>
                                         <Button fullWidth variant="contained" color="primary" size="medium" onClick={() => backToLanding()} >
@@ -94,8 +94,10 @@ const Login = ({ logInRequest, authType }) => {
 
 const mapStateToProps = state => {
     const authType = state.auth.authType;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         authType,
+        typeForReq,
     };
 };
 
@@ -105,6 +107,7 @@ const mapStateToProps = state => {
 Login.propTypes = {
   logInRequest: PropTypes.func.isRequired,
   authType: PropTypes.string,
+  typeForReq: PropTypes.string
 };
 
 
