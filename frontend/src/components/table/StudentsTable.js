@@ -150,23 +150,16 @@ const StudentsTable = ({ applications }) => {
   const isNotFound = !filteredUsers.length && !!filterName;
 
   const [open, setOpen] = useState(false);
-  const [disabled, setDisabled] = useState(true);
+  const [applicationDetailsID, setApplicationDetailsID] = React.useState(0);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = id => {
+    setApplicationDetailsID(id);
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setDisabled(true);
-  };
-
-  const handleEdit = () => {
-    setDisabled(false);
-  };
-
-  const handleCloseEdit = () => {
-    setDisabled(true);
+    setApplicationDetailsID(0);
   };
 
   return (
@@ -289,12 +282,13 @@ const StudentsTable = ({ applications }) => {
                               <IconButton
                                 size="large"
                                 color="inherit"
-                                onClick={handleClickOpen}
+                                onClick={() => handleClickOpen(id)}
                               >
                                 <DescriptionIcon />
                               </IconButton>
                             </Tooltip>
-                            <Modal
+                          </TableCell>
+                          <Modal
                               open={open}
                               onClose={handleClose}
                               BackdropProps={{
@@ -303,23 +297,21 @@ const StudentsTable = ({ applications }) => {
                             >
                               <Box sx={style}>
                                 <Container>
-                                  <ApplicationDetails
-                                    name={name}
-                                    id={id}
-                                    department={department}
-                                    score={score}
-                                    status={status}
-                                    selectedSemester={selectedSemester}
-                                    selectedUniversities={selectedUniversities}
-                                    languages={languages}
-                                  />
-                                  <Box alignRight={true}>
+                                  {applicationDetailsID ? (
+                                    <ApplicationDetails
+                                      application={
+                                        applications.filter(
+                                          req => req.id === applicationDetailsID
+                                        )[0]
+                                      }
+                                    />
+                                  ) : null}
+                                  <Box>
                                     <Button onClick={handleClose}>Close</Button>
                                   </Box>
                                 </Container>
                               </Box>
                             </Modal>
-                          </TableCell>
                         </TableRow>
                       );
                     })}
