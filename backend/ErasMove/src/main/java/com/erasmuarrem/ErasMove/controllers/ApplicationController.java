@@ -39,6 +39,11 @@ public class ApplicationController {
         return applicationService.getByOutgoingStudentID(id);
     }
 
+    @GetMapping("/departmentID/{departmentID}")
+    public List<Application> getApplicationsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return applicationService.getApplicationsByDepartmentID(departmentID);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteCourse(@PathVariable("id") Long id) {
         applicationService.deleteCourse(id);

@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.Application;
 import com.erasmuarrem.ErasMove.repositories.ApplicationRepository;
+import com.erasmuarrem.ErasMove.repositories.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,12 @@ import java.util.Optional;
 public class ApplicationService {
 
     private final ApplicationRepository applicationRepository;
+    private final DepartmentRepository departmentRepository;
 
     @Autowired
-    public ApplicationService(ApplicationRepository applicationRepository) {
+    public ApplicationService(ApplicationRepository applicationRepository, DepartmentRepository departmentRepository) {
         this.applicationRepository = applicationRepository;
+        this.departmentRepository = departmentRepository;
     }
 
 
@@ -62,5 +65,14 @@ public class ApplicationService {
         }
 
         applicationRepository.deleteById(id);
+    }
+
+    public List<Application> getApplicationsByDepartmentID(Long departmentID) {
+
+        if ( !departmentRepository.existsById(departmentID) ) {
+            throw new IllegalStateException("Department with id:" + departmentID + " doesn't exist!");
+        }
+
+        return applicationRepository.findByOutgoingStudent_DepartmentID(departmentID);
     }
 }
