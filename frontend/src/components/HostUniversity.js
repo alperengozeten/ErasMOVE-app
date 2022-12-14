@@ -34,19 +34,16 @@ const Universities = () => {
   const [courseOpen, setCourseOpen] = React.useState(false);
   const [courseName, setCourseName] = React.useState("");
   const [departmentName, setDepartmentName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+
 
   const [departmentValue, setDepartmentValue] = React.useState(0);
   const [instructorValue, setInstructorValue] = React.useState(0);
   const [facultyValue, setFacultyValue] = React.useState(0);
-  const [ects, setEcts] = React.useState(0);
+
 
   const handleDepartmentChange = e => {
     setDepartmentValue(e.target.value);
   };
-  const handleEctsChange = e => setEcts(e.target.value);
-
-  const handleDescriptionChange = e => setDescription(e.target.value);
 
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
 
@@ -56,6 +53,7 @@ const Universities = () => {
   function printArray(item) {
     return [item] + ", ";
   }
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -71,24 +69,15 @@ const Universities = () => {
   const handleCourseClose = () => {
     setCourseOpen(false);
   };
-  const dummyUni = {
-    id: 1,
-    name: "Bilkent University",
-    departments: ["CS", "EEE", "MBG", "ME", "IE", "POLS", "MAN"],
-    courses: [
-      "CS101",
-      "CS102",
-      "CS223",
-      "IE400",
-      "IE270",
-      "ME101",
-      "ME102",
-      "EEE101",
-      "EEE102",
-      "MBG110",
-      "IBG202",
-    ],
-  };
+     const dummyUni = {
+       id: 1,
+       name: "Bilkent University",
+      type: "Erasmus, Exchange",
+       departments: ["CS", "EEE", "MBG", "ME", "IE", "POLS", "MAN"],
+      semester: "Fall",
+       language: "English",
+       courses: [ "CS101", "CS102", "CS223","IE400", "IE270","ME101", "ME102","EEE101", "EEE102","MBG110", "IBG202"]
+     };
 
   const handleChange = (event, newValue) => {
     setValue(`${newValue}`);
@@ -135,7 +124,18 @@ const Universities = () => {
                                 </MDBCardText>
                               </MDBCol>
                             </MDBRow>
-                           
+                            <hr />
+                            <MDBRow>
+                              <MDBCol sm="3">
+                                <MDBCardText>Type</MDBCardText>
+                              </MDBCol>
+                              <MDBCol sm="9">
+                                <MDBCardText className="text-muted">
+                                {dummyUni.type}
+                                  
+                                </MDBCardText>
+                              </MDBCol>
+                            </MDBRow>
                             <hr />
                             <MDBRow>
                               <MDBCol sm="3">
@@ -143,7 +143,7 @@ const Universities = () => {
                               </MDBCol>
                               <MDBCol sm="6">
                                 <MDBCardText className="text-muted">
-                                  {dummyUni.departments.map(printArray)}
+                                {dummyUni.departments.map(printArray)}
                                 </MDBCardText>
                               </MDBCol>
                               <MDBCol sm="3">
@@ -200,7 +200,28 @@ const Universities = () => {
                                 <MDBCardText></MDBCardText>
                               </MDBCol>
                             </MDBRow>
-                           
+                            <hr />
+                            <MDBRow>
+                              <MDBCol sm="3">
+                                <MDBCardText>Semester</MDBCardText>
+                              </MDBCol>
+                              <MDBCol sm="9">
+                                <MDBCardText className="text-muted">
+                                {dummyUni.semester}
+                                </MDBCardText>
+                              </MDBCol>
+                            </MDBRow>
+                            <hr />
+                            <MDBRow>
+                              <MDBCol sm="3">
+                                <MDBCardText>Languages</MDBCardText>
+                              </MDBCol>
+                              <MDBCol sm="9">
+                                <MDBCardText className="text-muted">
+                                {dummyUni.language}
+                                </MDBCardText>
+                              </MDBCol>
+                            </MDBRow>
                           </MDBCardBody>
                         </MDBCard>
                       </MDBCol>
@@ -251,6 +272,7 @@ const Universities = () => {
                         <MDBCol sm="9">
                           <FormControl
                             sx={{
+                              m: 1,
                               minWidth: 250,
                             }}
                           >
@@ -277,6 +299,38 @@ const Universities = () => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
+                          <MDBCardText>Course Instructor</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <FormControl
+                            sx={{
+                              m: 1,
+                              minWidth: 250,
+                            }}
+                          >
+                            <Select
+                              required
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={instructorValue}
+                              disabled={departmentValue ? false : true}
+                              size="small"
+                              onChange={handleInstructorChange}
+                            >
+                              <MenuItem disabled value={0}>
+                                Select
+                              </MenuItem>
+                              <MenuItem value={10}>Eray Tüzün</MenuItem>
+                              <MenuItem value={20}>Dilek Köksal</MenuItem>
+                              <MenuItem value={30}>David Davenport</MenuItem>
+                              <MenuItem value={40}>Abdullah Atalar</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
                           <MDBCardText>Course Name</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
@@ -284,37 +338,7 @@ const Universities = () => {
                             id="outlined-multiline-flexible"
                             value={courseName}
                             onChange={handleCourseNameChange}
-                            disabled={departmentValue ? false : true}
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Description</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            fullWidth
-                            value={description}
-                            onChange={handleDescriptionChange}
-                            disabled={departmentValue ? false : true}
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>ECTS</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            type={"number"}
-                            value={ects}
-                            onChange={handleEctsChange}
-                            disabled={departmentValue ? false : true}
+                            disabled={instructorValue ? false : true}
                           />
                         </MDBCol>
                       </MDBRow>
@@ -381,6 +405,40 @@ const Universities = () => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
+                          <MDBCardText>Faculty</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <FormControl
+                            sx={{
+                              minWidth: 250,
+                            }}
+                          >
+                            <Select
+                              required
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={facultyValue}
+                              size="small"
+                              onChange={handleFacultyChange}
+                            >
+                              <MenuItem disabled value={0}>
+                                Select
+                              </MenuItem>
+                              <MenuItem value={10}>FACULTY OF APPLIED SCIENCES</MenuItem>
+                              <MenuItem value={20}>FACULTY OF ART, DESIGN, AND ARCHITECTURE</MenuItem>
+                              <MenuItem value={30}>FACULTY OF BUSINESS ADMINISTRATION</MenuItem>
+                              <MenuItem value={40}>FACULTY OF ENGINEERING</MenuItem>
+                              <MenuItem value={50}>FACULTY OF HUMANITIES AND LETTERS</MenuItem>
+                              <MenuItem value={60}>FACULTY OF SCIENCE</MenuItem>
+                              <MenuItem value={70}>FACULTY OF MUSIC AND PERFORMING ARTS</MenuItem>
+                              <MenuItem value={80}>FACULTY OF LAW</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
                           <MDBCardText>Department Name</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
@@ -388,6 +446,7 @@ const Universities = () => {
                             id="outlined-multiline-flexible"
                             value={departmentName}
                             onChange={handleDepartmentNameChange}
+                            disabled={facultyValue ? false : true}
                           />
                         </MDBCol>
                       </MDBRow>
