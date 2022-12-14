@@ -23,8 +23,9 @@ public class Application {
     private double applicationScore;
 
     private String selectedSemester;
-    @ElementCollection
-    private List<Long> selectedUniversityIds;
+
+    @ManyToMany
+    private List<ContractedUniversity> selectedUniversities;
 
 
     // add some other attributes

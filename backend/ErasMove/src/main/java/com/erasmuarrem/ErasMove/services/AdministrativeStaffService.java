@@ -124,7 +124,7 @@ public class AdministrativeStaffService {
             Application newApplication = new Application();
             newApplication.setApplicationScore(applicationLine.getTotalPoint());
             newApplication.setOutgoingStudent(newStudent);
-            List<Long> uniIDs = new ArrayList<>();
+            List<ContractedUniversity> universities = new ArrayList<>();
             if (isErasmus) {
                 for (int k = 0; k < applicationLine.getSelectedUniversities().size(); k++) {
                     ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByName(applicationLine.getSelectedUniversities().get(k));
@@ -133,7 +133,7 @@ public class AdministrativeStaffService {
                         output.append("Erasmus University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!\n");
                     }
                     else {
-                        uniIDs.add(erasmusUniversity.getID());
+                        universities.add(erasmusUniversity);
                     }
                 }
             } else {
@@ -144,14 +144,14 @@ public class AdministrativeStaffService {
                         output.append("Exchange University with name:" + applicationLine.getSelectedUniversities().get(k) + " not found for student:" + newStudent.getName() + "!");
                     }
                     else {
-                        uniIDs.add(exchangeUniversity.getID());
+                        universities.add(exchangeUniversity);
                     }
                 }
 
             }
             newApplication.setSelectedSemester(applicationLine.getSelectedSemester());
 
-            newApplication.setSelectedUniversityIds(uniIDs);
+            newApplication.setSelectedUniversities(universities);
 
             applicationService.addApplication(newApplication);
         }

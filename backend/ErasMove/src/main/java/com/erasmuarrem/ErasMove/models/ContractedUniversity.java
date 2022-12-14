@@ -8,11 +8,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@MappedSuperclass
+@Entity
+@Table
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ContractedUniversity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long ID;
 
     private String universityName;
