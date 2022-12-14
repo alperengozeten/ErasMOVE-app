@@ -1,10 +1,12 @@
 package com.erasmuarrem.ErasMove.controllers;
 
+import com.erasmuarrem.ErasMove.models.ContractedUniversity;
 import com.erasmuarrem.ErasMove.models.Language;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.LanguageService;
 import com.erasmuarrem.ErasMove.services.OutgoingStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +33,11 @@ public class OutgoingStudentController {
     @GetMapping("/{id}")
     public OutgoingStudent getStudent(@PathVariable("id") Long id) {
         return outgoingStudentService.getStudentByID(id).orElse(null);
+    }
+
+    @GetMapping("/acceptedUniversity/{outgoingStudentID}")
+    public ResponseEntity<ContractedUniversity> getAcceptedUniversityByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return outgoingStudentService.getAcceptedUniversityByOutgoingStudentID(outgoingStudentID);
     }
 
     @PostMapping("/add")
