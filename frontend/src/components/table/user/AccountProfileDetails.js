@@ -1,7 +1,5 @@
 import * as React from "react";
 import {
-  Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
@@ -9,9 +7,11 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
+import PropTypes from 'prop-types';
 
-export const AccountProfileDetails = props => {
-  const [values, setValues] = React.useState({
+
+export const AccountProfileDetails = ({ user }) => {
+  const values = {
     firstName: "Kütür Kütür Şad",
     lastName: "BeautifulRock",
     email: "igdirli76serserii@hotmail.com",
@@ -20,10 +20,10 @@ export const AccountProfileDetails = props => {
     department: "Computer Science",
     cgpa: "3.31",
     languages: ["English", "German", "Iğdırish"],
-  });
+  };
 
   return (
-    <form autoComplete="off" noValidate {...props}>
+    <form autoComplete="off">
       <Card>
         <CardHeader
           subheader="The information cannot be edited"
@@ -38,7 +38,7 @@ export const AccountProfileDetails = props => {
                 disabled
                 label="First Name"
                 name="firstName"
-                value={values.firstName}
+                value={user.name}
                 variant="outlined"
               />
             </Grid>
@@ -58,7 +58,7 @@ export const AccountProfileDetails = props => {
                 disabled
                 label="Email Address"
                 name="email"
-                value={values.email}
+                value={user.email}
                 variant="outlined"
               />
             </Grid>
@@ -79,7 +79,7 @@ export const AccountProfileDetails = props => {
                 disabled
                 label="Department"
                 name="department"
-                value={values.department}
+                value={user.department}
                 variant="outlined"
               />
             </Grid>
@@ -89,7 +89,7 @@ export const AccountProfileDetails = props => {
                 disabled
                 label="CGPA"
                 name="cgpa"
-                value={values.cgpa}
+                value={user.cgpa}
                 variant="outlined"
               />
             </Grid>
@@ -116,4 +116,8 @@ export const AccountProfileDetails = props => {
       </Card>
     </form>
   );
+};
+
+AccountProfileDetails.propTypes = {
+  user: PropTypes.object,
 };

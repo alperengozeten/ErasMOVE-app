@@ -7,11 +7,14 @@ import TabPanel from "@mui/lab/TabPanel";
 import SwipeableViews from "react-swipeable-views";
 import { Container } from "@mui/material";
 import Grid from "@mui/material/Grid";
+import { connect } from "react-redux";
+import PropTypes from 'prop-types';
+
 import { AccountProfile } from "./table/user/AccountProfile";
 import { AccountProfileDetails } from "./table/user/AccountProfileDetails";
 import { AccountProfilePasswordCard } from "./table/user/AccountProfilePasswordCard";
 
-export default function UserProfile() {
+const UserProfile = ({ user })  => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -56,7 +59,7 @@ export default function UserProfile() {
                       <AccountProfile />
                     </Grid>
                     <Grid item lg={8} md={6} xs={12}>
-                      <AccountProfileDetails />
+                      <AccountProfileDetails user={user} />
                     </Grid>
                   </Grid>
                 </Container>
@@ -73,7 +76,7 @@ export default function UserProfile() {
                 <Container maxWidth="lg">
                   <Grid container spacing={3}>
                     <Grid item lg={12} md={6} xs={12}>
-                      <AccountProfilePasswordCard />
+                      <AccountProfilePasswordCard user={user} />
                     </Grid>
                   </Grid>
                 </Container>
@@ -84,4 +87,17 @@ export default function UserProfile() {
       </Box>
     </Grid>
   );
-}
+};
+
+const mapStateToProps = state => {
+  const user = state.user.user;
+  return {
+    user,
+  };
+};
+
+UserProfile.propTypes = {
+  user: PropTypes.object,
+};
+
+export default connect(mapStateToProps, {})(UserProfile);

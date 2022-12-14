@@ -19,6 +19,10 @@ export const getUser = (authType, id) => (
   axios.get(`${baseURL}/${authType}/${id}`)
 );
 
+export const getApplication = id => (
+  axios.get(`${baseURL}/application/outgoingStudent/${id}`)
+);
+
 
 
 export const getElectiveCourseApprovals = (id, authType) => (
