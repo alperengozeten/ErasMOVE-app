@@ -1,11 +1,15 @@
 import { Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PlacedStudentTable from '../table/PlacedStudentsTable';
+import { getApplicationsByDepartment } from '../../actions';
 
-const PlacementList = ({ applications }) => {
+const PlacementList = ({ applications, user, getApplicationsByDepartment }) => {
+    useEffect(() => {
+        getApplicationsByDepartment(user?.department?.departmentName, true);
+    }, [user, getApplicationsByDepartment]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -22,17 +26,21 @@ const PlacementList = ({ applications }) => {
 
 const mapStateToProps = state => {
     const applications = state.applications.placedApplications;
+    const user = state.user.user;
     return {
         applications,
+        user
     };
+};
+
+const mapActionsToProps = {
+    getApplicationsByDepartment,
 };
 
 PlacementList.propTypes = {
     applications: PropTypes.array,
-};
-  
-PlacementList.defaultProps = {
-    applications: [],
+    getApplicationsByDepartment: PropTypes.func,
+    user: PropTypes.object,
 };
 
-export default connect(mapStateToProps, {})(PlacementList);
+export default connect(mapStateToProps, mapActionsToProps)(PlacementList);

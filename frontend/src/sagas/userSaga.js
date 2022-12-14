@@ -3,7 +3,7 @@ import { GET_APPLICATION_FAIL, GET_APPLICATION_REQUEST, GET_APPLICATION_SUCCESS,
 import { getApplication, getUser } from '../lib/api/unsplashService';
 
 function* getUserRequest({ payload: { id, typeForReq } }) {
-  console.log(`Pre approval form created `);
+  console.log(`Get user `);
 
   try {
       // TODO: send Post request here
@@ -27,7 +27,7 @@ function* getUserRequest({ payload: { id, typeForReq } }) {
 }
 
 function* getApplicationRequest({ payload: { id } }) {
-    console.log(`Pre approval form created `);
+    console.log(`Get application`);
   
     try {
         // TODO: send Post request here
@@ -50,9 +50,9 @@ function* getApplicationRequest({ payload: { id } }) {
     }
   }
 
-const universitySaga = [
+const userSaga = [
   takeEvery(GET_USER_REQUEST, getUserRequest),
   takeEvery(GET_APPLICATION_REQUEST, getApplicationRequest),
 ];
 
-export default universitySaga;
+export default userSaga;

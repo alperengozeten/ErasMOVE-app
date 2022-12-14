@@ -8,7 +8,7 @@ function createApplicationsFromExcel({ payload: { id } }) {
 }
 
 function* getCoursesByDepartment({ payload: { type, department, university } }) {
-  console.log(`Pre approval form created `);
+  console.log(`Get courses ${type} ${department} ${university}`);
 
   try {
       // TODO: send Post request here
