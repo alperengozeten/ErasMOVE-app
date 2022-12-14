@@ -337,7 +337,6 @@ const Universities = () => {
                           <TextField
                             id="outlined-multiline-flexible"
                             value={courseName}
-                            defaultValue="Enter Course Name"
                             onChange={handleCourseNameChange}
                             disabled={instructorValue ? false : true}
                           />
@@ -446,7 +445,6 @@ const Universities = () => {
                           <TextField
                             id="outlined-multiline-flexible"
                             value={departmentName}
-                            defaultValue="Enter Course Name"
                             onChange={handleDepartmentNameChange}
                             disabled={facultyValue ? false : true}
                           />
