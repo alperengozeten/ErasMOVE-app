@@ -301,23 +301,23 @@ const StudentsTable = ({ applications }) => {
                                 style: { backgroundColor: "rgba(0,0,0,0.04)" },
                               }}
                             >
-                              <Container>
-                                <ApplicationDetails
-                                  name={name}
-                                  id={id}
-                                  department={department}
-                                  score={score}
-                                  status={status}
-                                  selectedSemester={selectedSemester}
-                                  selectedUniversities={selectedUniversities}
-                                  languages={languages}
-                                />
-                                <Box alignRight={true}>
-                                  <Button onClick={handleClose}>Close</Button>
-                                  <Button onClick={handleEdit}>Add Language</Button>
-                                  <Button onClick={handleCloseEdit}>Save</Button>
-                                </Box>
-                              </Container>
+                              <Box sx={style}>
+                                <Container>
+                                  <ApplicationDetails
+                                    name={name}
+                                    id={id}
+                                    department={department}
+                                    score={score}
+                                    status={status}
+                                    selectedSemester={selectedSemester}
+                                    selectedUniversities={selectedUniversities}
+                                    languages={languages}
+                                  />
+                                  <Box alignRight={true}>
+                                    <Button onClick={handleClose}>Close</Button>
+                                  </Box>
+                                </Container>
+                              </Box>
                             </Modal>
                           </TableCell>
                         </TableRow>
