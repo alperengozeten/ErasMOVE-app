@@ -34,7 +34,7 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application }) => {
+const ApplicationDetails = ({ application, languageEditable }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
 
@@ -62,7 +62,7 @@ const ApplicationDetails = ({ application }) => {
   return (
     <>
       <Typography id="modal-modal-title" variant="h4" component="h2">
-        Add Language Details
+        Student Details
       </Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         Student Name
@@ -168,7 +168,7 @@ const ApplicationDetails = ({ application }) => {
         defaultValue={application.languages}
         disabled
       />
-      <Button onClick={handleClickOpen}>Add Language</Button>
+      {languageEditable ? (<Button onClick={handleClickOpen}>Add Language</Button>) : null}
       <Modal
         open={open}
         onClose={handleClose}
@@ -207,7 +207,7 @@ const ApplicationDetails = ({ application }) => {
               </Select>
             </FormControl>
           </Container>
-          <Button onClick={handleClose}>Add Languages</Button>
+          {languageEditable ? (<Button onClick={handleClose}>Add Languages</Button>) : null}
         </Box>
       </Modal>
     </>
@@ -230,10 +230,12 @@ const style = {
 
 ApplicationDetails.propTypes = {
   application: PropTypes.object,
+  languageEditable: PropTypes.bool,
 };
 
 ApplicationDetails.defaultProps = {
   application: {},
+  languageEditable: false,
 };
 
 export default ApplicationDetails;

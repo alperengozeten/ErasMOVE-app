@@ -299,6 +299,7 @@ const StudentsTable = ({ applications }) => {
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
+                                      languageEditable={true}
                                       application={
                                         applications.filter(
                                           req => req.id === applicationDetailsID

@@ -19,6 +19,9 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  Box,
+  Button,
+  Modal
 } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 // components
@@ -26,6 +29,7 @@ import Label from '../label';
 import Scrollbar from './scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from './user';
+import ApplicationDetails from "../Application/ApplicationDetails";
 
 // ----------------------------------------------------------------------
 
@@ -114,6 +118,19 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const [open, setOpen] = useState(false);
+  const [applicationDetailsID, setApplicationDetailsID] = React.useState(0);
+
+  const handleClickOpen = id => {
+    setApplicationDetailsID(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setApplicationDetailsID(0);
+  };
+
   return (
     <>
       <Container>
@@ -158,11 +175,36 @@ const PlacedStudentsTable = ({ applications }) => {
 
                         <TableCell align="right">
                           <Tooltip describeChild title="Open application details">
-                            <IconButton size="large" color="inherit" onClick={() => handleOpenApplication(id) }>
+                            <IconButton size="large" color="inherit" onClick={() => handleClickOpen(id)}>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
+                        <Modal
+                              open={open}
+                              onClose={handleClose}
+                              BackdropProps={{
+                                style: { backgroundColor: "rgba(0,0,0,0.04)" },
+                              }}
+                            >
+                              <Box sx={style}>
+                                <Container>
+                                  {applicationDetailsID ? (
+                                    <ApplicationDetails
+                                      languageEditable={false}
+                                      application={
+                                        applications.filter(
+                                          req => req.id === applicationDetailsID
+                                        )[0]
+                                      }
+                                    />
+                                  ) : null}
+                                  <Box>
+                                    <Button onClick={handleClose}>Close</Button>
+                                  </Box>
+                                </Container>
+                              </Box>
+                            </Modal>
                       </TableRow>
                     );
                   })}
@@ -213,6 +255,19 @@ const PlacedStudentsTable = ({ applications }) => {
       </Container>
     </>
   );
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "6px",
+  boxShadow: 24,
+  p: 4,
 };
 
 PlacedStudentsTable.propTypes = {
