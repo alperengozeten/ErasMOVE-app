@@ -1,11 +1,15 @@
 import { Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import StudentsTable from '../table/StudentsTable';
+import { getApplicationsByDepartment } from '../../actions';
 
-const ApplicationList = ({ applications }) => {
+const ApplicationList = ({ applications, getApplicationsByDepartment, user }) => {
+    useEffect(() => {
+        getApplicationsByDepartment(user?.department?.departmentName, true);
+    }, [user, getApplicationsByDepartment]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -13,7 +17,7 @@ const ApplicationList = ({ applications }) => {
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <StudentsTable applications={applications} />
+                    { applications[0] ? <StudentsTable applications={applications} /> : null}
                 </Grid>
             </Grid>
         </Stack>
@@ -22,13 +26,21 @@ const ApplicationList = ({ applications }) => {
 
 const mapStateToProps = state => {
     const applications = state.applications.placedApplications;
+    const user = state.user.user;
     return {
         applications,
+        user
     };
+};
+
+const mapActionsToProps = {
+    getApplicationsByDepartment,
 };
 
 ApplicationList.propTypes = {
     applications: PropTypes.array,
+    getApplicationsByDepartment: PropTypes.func,
+    user: PropTypes.object,
 };
   
 ApplicationList.defaultProps = {
@@ -36,4 +48,4 @@ ApplicationList.defaultProps = {
 };
 
 
-export default connect(mapStateToProps, {})(ApplicationList);
+export default connect(mapStateToProps, mapActionsToProps)(ApplicationList);

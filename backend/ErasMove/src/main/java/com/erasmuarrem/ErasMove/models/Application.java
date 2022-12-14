@@ -21,8 +21,10 @@ public class Application {
     @OneToOne
     private OutgoingStudent outgoingStudent;
     private double applicationScore;
-
     private String selectedSemester;
+    private String admittedStatus;
+    private String preApprovalFormStatus;
+    // language status???
 
     @ManyToMany
     private List<ContractedUniversity> selectedUniversities;

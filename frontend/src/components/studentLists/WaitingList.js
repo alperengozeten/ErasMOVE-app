@@ -1,12 +1,15 @@
 import { Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import WaitingStudentsTable from '../table/WaitingStudentsTable';
-import { sendReplacementOffer } from '../../actions';
+import { sendReplacementOffer, getApplicationsByDepartment } from '../../actions';
 
-const WaitingList = ({ applications }) => {
+const WaitingList = ({ applications, getApplicationsByDepartment, user }) => {
+    useEffect(() => {
+        getApplicationsByDepartment(user?.department?.departmentName, true);
+    }, [user, getApplicationsByDepartment]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -23,17 +26,22 @@ const WaitingList = ({ applications }) => {
 
 const mapStateToProps = state => {
     const applications = state.applications.applications;
+    const user = state.user.user;
     return {
         applications,
+        user,
     };
 };
 
 const mapActionsToProps = {
-    sendReplacementOffer
+    sendReplacementOffer,
+    getApplicationsByDepartment
 };
 
 WaitingList.propTypes = {
     applications: PropTypes.array,
+    getApplicationsByDepartment: PropTypes.func,
+    user: PropTypes.object,
 };
   
 WaitingList.defaultProps = {
