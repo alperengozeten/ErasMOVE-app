@@ -33,6 +33,7 @@ import Label from "../label";
 import Scrollbar from "./scrollbar";
 // sections
 import { UserListHead, UserListToolbar } from "./user";
+import ApplicationDetails from "../Application/ApplicationDetails";
 
 // ----------------------------------------------------------------------
 
@@ -45,13 +46,7 @@ const TABLE_HEAD = [
   { id: "status", label: "Status", alignRight: true },
 ];
 
-const defaultLanguages = [
-  'English',
-  'German',
-  'Spanish',
-  'French',
-  'Turkish',
-];
+const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
 
 // ----------------------------------------------------------------------
 
@@ -299,161 +294,32 @@ const StudentsTable = ({ applications }) => {
                                 <DescriptionIcon />
                               </IconButton>
                             </Tooltip>
+                            <Modal
+                              open={open}
+                              onClose={handleClose}
+                              BackdropProps={{
+                                style: { backgroundColor: "rgba(0,0,0,0.04)" },
+                              }}
+                            >
+                              <Container>
+                                <ApplicationDetails
+                                  name={name}
+                                  id={id}
+                                  department={department}
+                                  score={score}
+                                  status={status}
+                                  selectedSemester={selectedSemester}
+                                  selectedUniversities={selectedUniversities}
+                                  languages={languages}
+                                />
+                                <Box alignRight={true}>
+                                  <Button onClick={handleClose}>Close</Button>
+                                  <Button onClick={handleEdit}>Add Language</Button>
+                                  <Button onClick={handleCloseEdit}>Save</Button>
+                                </Box>
+                              </Container>
+                            </Modal>
                           </TableCell>
-                          <Modal
-                            open={open}
-                            onClose={handleClose}
-                            aria-labelledby="modal-modal-title"
-                            aria-describedby="modal-modal-description"
-                            BackdropProps={{
-                              style: { backgroundColor: "rgba(0,0,0,0.04)" },
-                            }}
-                          >
-                            <Box sx={style}>
-                              <Typography
-                                id="modal-modal-title"
-                                variant="h4"
-                                component="h2"
-                              >
-                                Add Language Details
-                              </Typography>
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Student Name
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="name"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={name}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                ID
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="id"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={id}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Department
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="dep"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={department}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Score
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="score"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={score}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Status
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="status"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={status}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Selected Semester
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="semester"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={selectedSemester}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Selected Universities
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="uni"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={selectedUniversities}
-                                disabled
-                              />
-                              <Typography
-                                id="modal-modal-description"
-                                sx={{ mt: 2 }}
-                              >
-                                Languages
-                              </Typography>
-                              <TextField
-                                required
-                                autoFocus
-                                margin="dense"
-                                id="lng"
-                                fullWidth
-                                variant="standard"
-                                defaultValue={languages}
-                                disabled
-                              />
-                              
-                              <Box alignRight={true}>
-                                <Button onClick={handleClose}>Close</Button>
-                                <Button onClick={handleEdit}>
-                                  Add Language
-                                </Button>
-                              </Box>
-                            </Box>
-                          </Modal>
                         </TableRow>
                       );
                     })}
