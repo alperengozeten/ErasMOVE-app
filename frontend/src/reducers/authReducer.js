@@ -37,7 +37,7 @@ const loginReducer = (state = INITIAL_STATE, action) => {
         typeForReq = 'admin';
       
       localStorage.setItem('authTypeForReq', typeForReq);
-      return { ...state, authTypeForReq: typeForReq };
+      return { ...state, authTypeForReq: typeForReq, authType: action.authType };
     }
     default:
       return state;
