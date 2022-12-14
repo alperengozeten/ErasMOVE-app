@@ -1,6 +1,8 @@
 package com.erasmuarrem.ErasMove.controllers;
 
+import com.erasmuarrem.ErasMove.models.Language;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.services.LanguageService;
 import com.erasmuarrem.ErasMove.services.OutgoingStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +15,12 @@ import java.util.List;
 public class OutgoingStudentController {
 
     private final OutgoingStudentService outgoingStudentService;
+    private final LanguageService languageService;
 
     @Autowired
-    public OutgoingStudentController(OutgoingStudentService outgoingStudentService) {
+    public OutgoingStudentController(OutgoingStudentService outgoingStudentService, LanguageService languageService) {
         this.outgoingStudentService = outgoingStudentService;
+        this.languageService = languageService;
     }
 
     @GetMapping
@@ -37,5 +41,41 @@ public class OutgoingStudentController {
     @DeleteMapping("/cancelPlacement/{outgoingStudentID}")
     public String cancelPlacementByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
         return outgoingStudentService.cancelPlacementByOutgoingStudentID(outgoingStudentID);
+    }
+
+    // LANGUAGES
+    @GetMapping("/language")
+    public List<Language> getLanguages() {
+        return languageService.getLanguages();
+    }
+
+    @GetMapping("/language/{id}")
+    public Language getLanguageByID(@PathVariable("id") Long id) {
+        return languageService.getLanguageByID(id);
+    }
+
+    @GetMapping("/language/outgoingStudent/{id}")
+    public List<Language> getLanguagesByOutgoingStudentID(@PathVariable("id") Long id) {
+        return languageService.getLanguagesByOutgoingStudentID(id);
+    }
+
+    @GetMapping("/language/outgoingStudent/{id}/language/{name}")
+    public Language getLanguageByOutgoingStudentIDAndLanguageName(
+            @PathVariable("id") Long outgoingStudentID,
+            @PathVariable("name") String languageName) {
+        return languageService.getLanguagesByOutgoingStudentIDAndLanguageName(
+                outgoingStudentID,
+                languageName
+        );
+    }
+
+    @PostMapping("/language/add")
+    public void addLanguage(@RequestBody Language language) {
+        languageService.addLanguage(language);
+    }
+
+    @DeleteMapping("/language/delete/{id}")
+    public void deleteLanguageByID(@PathVariable("id") Long id) {
+        languageService.deleteLanguageByID(id);
     }
 }
