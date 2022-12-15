@@ -12,4 +12,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     Optional<Application> findByOutgoingStudentID(Long id);
     List<Application> findByOutgoingStudent_DepartmentID(Long departmentID);
+    List<Application> findByOutgoingStudent_Department_departmentName(String departmentName);
 }
