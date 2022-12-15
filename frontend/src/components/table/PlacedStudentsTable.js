@@ -170,7 +170,7 @@ const PlacedStudentsTable = ({ applications }) => {
                         <TableCell align="center">{admittedUniversity}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'waiting' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'WAITING' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

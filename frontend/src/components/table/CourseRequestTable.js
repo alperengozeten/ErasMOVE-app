@@ -184,7 +184,7 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
 
 
                         <TableCell align="center">
-                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                    

@@ -72,7 +72,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                     variant="h3" component="h1">
                                     Response
                                 </Typography>
-                                {(status == 'waiting') && (authType == 'Department Coordinator') 
+                                {(status == 'WAITING') && (authType == 'Department Coordinator') 
                                 ? (
                                     <MDBRow>
                                         <MDBCol md="12">
@@ -84,7 +84,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                     </MDBCol>
                                                     <MDBCol sm="9">
                                                         <MDBCardText className="text-muted">
-                                                            <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                         </MDBCardText>
                                                     </MDBCol>
                                                 </MDBRow>
@@ -150,12 +150,12 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                     </MDBCol>
                                                     <MDBCol sm="9">
                                                         <MDBCardText className="text-muted">
-                                                            <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                         </MDBCardText>
                                                     </MDBCol>
                                                 </MDBRow>
-                                                {status !== 'waiting' ? <hr /> : null}
-                                                {status !== 'waiting' ? (<MDBRow>
+                                                {status !== 'WAITING' ? <hr /> : null}
+                                                {status !== 'WAITING' ? (<MDBRow>
                                                     <MDBCol sm="3">
                                                         <MDBCardText>Feedback</MDBCardText>
                                                     </MDBCol>
