@@ -9,9 +9,9 @@ import { CssBaseline, StyledEngineProvider } from "@mui/material";
 import Routes from '../routes';
 import themes from '../themes';
 // import NavigationScroll from '../layout/NavigationScroll';
-import { getUserRequest, getApplicationRequest } from '../actions';
+import { getUserRequest, getApplicationRequest, getNotificationsRequest } from '../actions';
 
-const App = ({ getUserRequest, getApplicationRequest, typeForReq, status, userId }) => {
+const App = ({ getUserRequest, getApplicationRequest, typeForReq, status, userId, getNotificationsRequest }) => {
   useEffect(() => {
     if (status == 'authenticated') {
       getUserRequest(userId, typeForReq);
@@ -20,7 +20,9 @@ const App = ({ getUserRequest, getApplicationRequest, typeForReq, status, userId
         getApplicationRequest(userId);
       }
     }
-  }, [getUserRequest, getApplicationRequest, typeForReq, status, userId]);
+
+    getNotificationsRequest(userId);
+  }, [getUserRequest, getApplicationRequest, typeForReq, status, userId, getNotificationsRequest]);
   const customization = useSelector(state => state.customization);
 
   return (
@@ -49,6 +51,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
   getUserRequest,
   getApplicationRequest,
+  getNotificationsRequest,
 };
 
 App.propTypes = {
@@ -57,6 +60,7 @@ App.propTypes = {
   userId: PropTypes.string,
   getUserRequest: PropTypes.func,
   getApplicationRequest: PropTypes.func,
+  getNotificationsRequest: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(App);

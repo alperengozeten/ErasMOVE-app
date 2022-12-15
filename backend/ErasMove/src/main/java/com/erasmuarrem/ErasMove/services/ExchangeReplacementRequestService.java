@@ -48,9 +48,8 @@ public class ExchangeReplacementRequestService {
 
     public ResponseEntity<String> addExchangeReplacementRequest(ExchangeReplacementRequest exchangeReplacementRequest) {
 
-        Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID(); // get the ID of the student
-        Long departmentCoordinatorID = exchangeReplacementRequest.getDepartmentCoordinator().getID(); // get the id of
-                                                                                                    // the department coordinator
+        Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID();
+        Long departmentCoordinatorID = exchangeReplacementRequest.getDepartmentCoordinator().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
@@ -60,13 +59,21 @@ public class ExchangeReplacementRequestService {
             return new ResponseEntity<>("Department Coordinator with id:" + departmentCoordinatorID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
+        if ( exchangeReplacementRequest.getStatus() != null && !exchangeReplacementRequest.getStatus().equals("PROPOSAL") ) {
+            return new ResponseEntity<>("Exchange Replacement Request has already been responded!", HttpStatus.BAD_REQUEST);
+        }
+
         // allow max of 1 active requests for a student at a time!
-        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+        List<ExchangeReplacementRequest> exchangeReplacementRequestList = exchangeReplacementRequestRepository
                 .findByStudentID(outgoingStudentID);
 
-        if ( exchangeReplacementRequestOptional.isPresent() ) {
-            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID +
-                    " already has replacement request!", HttpStatus.BAD_REQUEST);
+        for (ExchangeReplacementRequest replacementRequest : exchangeReplacementRequestList) {
+            if ( replacementRequest.getStatus().equals("WAITING") ) {
+                return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a waiting request!", HttpStatus.BAD_REQUEST);
+            }
+            else if ( replacementRequest.getStatus().equals("ACCEPTED") ) {
+                return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already accepted a replacement request!", HttpStatus.BAD_REQUEST);
+            }
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
@@ -102,16 +109,13 @@ public class ExchangeReplacementRequestService {
         exchangeReplacementRequestRepository.deleteById(id);
     }
 
-    public ExchangeReplacementRequest getExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentId) {
+    public List<ExchangeReplacementRequest> getExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentId) {
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentId) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentId + " doesn't exist!");
         }
 
-        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
-                .findByStudentID(outgoingStudentId);
-
-        return exchangeReplacementRequestOptional.get();
+        return exchangeReplacementRequestRepository.findByStudentID(outgoingStudentId);
     }
 
     public List<ExchangeReplacementRequest> getExchangeReplacementRequestsByDepartmentCoordinatorID(Long departmentCoordinatorID) {
@@ -123,24 +127,28 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequestRepository.findByDepartmentCoordinatorID(departmentCoordinatorID);
     }
 
-    public ExchangeReplacementRequest acceptExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ExchangeReplacementRequest acceptExchangeReplacementRequestByExchangeReplacementRequestID(Long exchangeReplacementRequestID) {
+
+        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+                .findById(exchangeReplacementRequestID);
+
+        if ( !exchangeReplacementRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange Replacement Request with id: " + exchangeReplacementRequestID + " doesn't exist!");
+        }
+
+        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+        Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
-        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
-                .findByStudentID(outgoingStudentID);
-
-        if ( !exchangeReplacementRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Exchange Replacement Request for Outgoing Student with id:" + outgoingStudentID
-                    + " doesn't exist!");
+        if ( exchangeReplacementRequest.getStatus().equals("ACCEPTED") || exchangeReplacementRequest.getStatus().equals("DECLINED") ) {
+            throw new IllegalStateException("Replacement Request has already been responded!");
         }
 
-        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
-
-        if ( exchangeReplacementRequest.getStatus().equals("DECLINED") || exchangeReplacementRequest.getStatus().equals("ACCEPTED") ) {
-            throw new IllegalStateException("Replacement Request has already been responded!");
+        if ( exchangeReplacementRequest.getStatus().equals("PROPOSAL") ) {
+            throw new IllegalStateException("The Exchange Replacement Request has not been added by the Department Coordinator yet!");
         }
 
         ExchangeUniversity exchangeUniversity = exchangeReplacementRequest.getExchangeUniversity(); // get the exchange university
@@ -170,20 +178,29 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequest;
     }
 
-    public ExchangeReplacementRequest declineExchangeReplacementRequestByOutgoingStudentID(Long outgoingStudentID) {
+    public ExchangeReplacementRequest declineExchangeReplacementRequestByExchangeReplacementRequestID(Long exchangeReplacementRequestID) {
+
+        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
+                .findById(exchangeReplacementRequestID);
+
+        if ( !exchangeReplacementRequestOptional.isPresent() ) {
+            throw new IllegalStateException("Exchange Replacement Request with id: " + exchangeReplacementRequestID + " doesn't exist!");
+        }
+
+        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+        Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID();
 
         if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
             throw new IllegalStateException("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!");
         }
 
-        Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
-                .findByStudentID(outgoingStudentID);
-
-        if ( !exchangeReplacementRequestOptional.isPresent() ) {
-            throw new IllegalStateException("Exchange Replacement Request doesn't exist for Outgoing Student with id:" + outgoingStudentID + "!");
+        if ( exchangeReplacementRequest.getStatus().equals("ACCEPTED") || exchangeReplacementRequest.getStatus().equals("DECLINED") ) {
+            throw new IllegalStateException("Replacement Request has already been responded!");
         }
 
-        ExchangeReplacementRequest exchangeReplacementRequest = exchangeReplacementRequestOptional.get();
+        if ( exchangeReplacementRequest.getStatus().equals("PROPOSAL") ) {
+            throw new IllegalStateException("The Exchange Replacement Request has not been added by the Department Coordinator yet!");
+        }
 
         ExchangeUniversity exchangeUniversity = exchangeReplacementRequest.getExchangeUniversity();
         OutgoingStudent outgoingStudent = exchangeReplacementRequest.getStudent();
@@ -195,7 +212,7 @@ public class ExchangeReplacementRequestService {
         newNotification.setApplicationUser(departmentCoordinator);
         newNotification.setDate(LocalDate.now());
         newNotification.setContent("The replacement offer for Exchange University: " +
-                exchangeUniversity.getUniversityName() + " has been rejected by the Outgoing Student: " +
+                exchangeUniversity.getUniversityName() + " has been declined by the Outgoing Student: " +
                 outgoingStudent.getName() + "!");
 
         notificationService.saveNotification(newNotification);
@@ -204,5 +221,76 @@ public class ExchangeReplacementRequestService {
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
 
         return exchangeReplacementRequest;
+    }
+
+    public ResponseEntity<String> proposeExchangeReplacementRequest(ExchangeReplacementRequest exchangeReplacementRequest) {
+        Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID();
+
+        if ( !outgoingStudentRepository.existsById(outgoingStudentID) ) {
+            return new ResponseEntity<>("Outgoing Student with id:" + outgoingStudentID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentRepository.findById(outgoingStudentID).get();
+        Department department = outgoingStudent.getDepartment();
+
+        Optional<DepartmentCoordinator> departmentCoordinatorOptional = departmentCoordinatorRepository
+                .findByDepartmentID(department.getID());
+
+        if ( !departmentCoordinatorOptional.isPresent() ) {
+            return new ResponseEntity<>("Department Coordinator for department:" + department.getDepartmentName() + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        // allow max of 1 proposal or accepted for a student at a time!
+        List<ExchangeReplacementRequest> exchangeReplacementRequestList = exchangeReplacementRequestRepository
+                .findByStudentID(outgoingStudentID);
+
+        for (ExchangeReplacementRequest replacementRequest : exchangeReplacementRequestList) {
+            switch (replacementRequest.getStatus()) {
+                case "ACCEPTED":
+                    return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already accepted an offer!", HttpStatus.BAD_REQUEST);
+                case "PROPOSAL":
+                    return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a proposal!", HttpStatus.BAD_REQUEST);
+                case "WAITING":
+                    return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a waiting replacement offer!", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            return new ResponseEntity<>("The Outgoing Student with id:" + outgoingStudentID + " is an Erasmus Applicant, request failed!", HttpStatus.BAD_REQUEST);
+        }
+
+        DepartmentCoordinator departmentCoordinator = departmentCoordinatorOptional.get();
+        ExchangeUniversity exchangeUniversity = exchangeUniversityService
+                .getExchangeUniversityByID(exchangeReplacementRequest.getExchangeUniversity().getID());
+
+        if ( exchangeUniversity == null ) {
+            return new ResponseEntity<>("There is no Exchange University with id:" + exchangeReplacementRequest.getExchangeUniversity().getID() + "!", HttpStatus.BAD_REQUEST);
+        }
+
+        // send notification here?
+        // send notification to the department coordinator
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(departmentCoordinator);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have a new proposed replacement offer for Exchange University: " +
+                exchangeUniversity.getUniversityName() + " to the Outgoing Student: " +
+                outgoingStudent.getName() + "!");
+
+        notificationService.saveNotification(newNotification); // save the notification
+
+        exchangeReplacementRequest.setDepartmentCoordinator(departmentCoordinator);
+        exchangeReplacementRequest.setStatus("PROPOSAL");
+        exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
+        return new ResponseEntity<>("Exchange Replacement Request has been proposed to the Department Coordinator: " + departmentCoordinator.getName() + "!", HttpStatus.OK);
+    }
+
+    public List<ExchangeReplacementRequest> getProposedExchangeReplacementRequestsByDepartmentCoordinatorID(Long departmentCoordinatorID) {
+
+        if ( !departmentCoordinatorRepository.existsById(departmentCoordinatorID) ) {
+            throw new IllegalStateException("Department Coordinator with id: " + departmentCoordinatorID + " doesn't exist!");
+        }
+
+        return exchangeReplacementRequestRepository.findByStatusAndDepartmentCoordinator_ID("PROPOSAL", departmentCoordinatorID);
     }
 }

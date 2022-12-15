@@ -38,14 +38,14 @@ export const declinePreApprovalFormRequest = (id, feedback) => ({
         payload: { id, feedback },
     });
 
-export const acceptCourseApprovalRequestRequest = (id, type, feedback) => ({
+export const acceptCourseApprovalRequestRequest = (id, type, feedback, userId) => ({
         type: ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST,
-        payload: { id, type, feedback },
+        payload: { id, type, feedback, userId },
     });
 
-export const declineCourseApprovalRequestRequest = (id, type, feedback) => ({
+export const declineCourseApprovalRequestRequest = (id, type, feedback, userId) => ({
         type: DECLINE_COURSE_APPROVAL_REQUEST_REQUEST,
-        payload: { id, type, feedback },
+        payload: { id, type, feedback, userId },
     });
 
 export const createCourseApprovalRequestRequest = (courseRequest, type) => ({

@@ -16,6 +16,8 @@ import HostUniversity from '../components/HostUniversity';
 import PreApprovalsPage from '../components/PreApprovalsPage';
 import ToDoListPage from '../components/ToDoListPage';
 import AdminUsersPage from '../components/AdminUsersPage';
+import ProposalPage from '../components/ProposalPage';
+
 
 
 const MainRoutes = {
@@ -37,6 +39,10 @@ const MainRoutes = {
         {
             path: '/main/waitingList',
             element: <WaitingList />
+        },
+        {
+            path: '/main/proposal',
+            element: <ProposalPage />
         },
         {
             path: '/main/universities',

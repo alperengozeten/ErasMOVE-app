@@ -38,7 +38,6 @@ import DeleteModal from '../DeleteModal';
 const TABLE_HEAD = [
   { id: 'name', label: 'Student Name', alignRight: false },
   { id: 'courseName', label: 'Course Name', alignRight: false },
-  { id: 'type', label: 'Type', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
 ];
 
@@ -128,9 +127,9 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
     setOpenDetails(false);
   };
 
-  const handleOpenDelete = (id, type) => {
+  const handleOpenDelete = id => {
     setRequesDetailsID(id);
-    setRequestType(type);
+    setRequestType(courseRequests.filter(req => req.id === id)[0].departmentCoordinator ? 'Elective' : 'Mandatory');
     setOpenDelete(true);
   };
   const handleCloseDelete = () => {
@@ -164,7 +163,7 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, status, avatarUrl, type, courseName } = row;
+                    const { id, student, status, avatarUrl, courseName } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -174,17 +173,15 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {student.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
-                        <TableCell align='center' component="th" scope="row" padding="none">{type}</TableCell>
-
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                    
@@ -195,7 +192,7 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                             </IconButton>
                           </Tooltip>
                           <Tooltip describeChild title="Delete request">
-                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id, type) }>
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>

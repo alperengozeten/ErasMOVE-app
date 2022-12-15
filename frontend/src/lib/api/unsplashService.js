@@ -29,6 +29,12 @@ export const getApplication = id => (
   axios.get(`${baseURL}/application/outgoingStudent/${id}`)
 );
 
+// Notifications
+export const getNotifications = id => (
+  axios.get(`${baseURL}/notification/user/${id}`)
+);
+
+
 // Elective course approvals
 export const getElectiveCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/electiveCourseApprovalRequest/${authType}/${id}`)
@@ -42,6 +48,14 @@ export const createElectiveCourseApproval = courseApproval => (
     }, 
     body: JSON.stringify(courseApproval)
   })
+);
+
+export const acceptElectiveCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/electiveCourseApprovalRequest/accept/${id}?feedback=${feedback}`)
+);
+
+export const declineElectiveCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/electiveCourseApprovalRequest/decline/${id}?feedback=${feedback}`)
 );
 
 export const deleteElectiveCourseApproval = id => (
@@ -61,6 +75,14 @@ export const createMandatoryCourseApproval = courseApproval => (
     }, 
     body: JSON.stringify(courseApproval)
   })
+);
+
+export const acceptMandatoryCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/mandatoryCourseApprovalRequest/accept/${id}?feedback=${feedback}`)
+);
+
+export const declineMandatoryCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/mandatoryCourseApprovalRequest/decline/${id}?feedback=${feedback}`)
 );
 
 export const deleteMandatoryCourseApproval = id => (

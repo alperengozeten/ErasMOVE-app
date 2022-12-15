@@ -31,7 +31,7 @@ public class ExchangeReplacementRequestController {
     }
 
     @GetMapping("/outgoingStudent/{id}")
-    public ExchangeReplacementRequest getExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentId) {
+    public List<ExchangeReplacementRequest> getExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentId) {
         return exchangeReplacementRequestService.getExchangeReplacementRequestByOutgoingStudentID(outgoingStudentId);
     }
 
@@ -40,19 +40,31 @@ public class ExchangeReplacementRequestController {
         return exchangeReplacementRequestService.getExchangeReplacementRequestsByDepartmentCoordinatorID(departmentCoordinatorID);
     }
 
+    @GetMapping("/proposedRequests/departmentCoordinator/{id}")
+    public List<ExchangeReplacementRequest> getProposedExchangeReplacementRequestsByDepartmentCoordinatorID(
+            @PathVariable("id") Long departmentCoordinatorID
+    ) {
+        return exchangeReplacementRequestService.getProposedExchangeReplacementRequestsByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
+
+    @PostMapping("/propose")
+    public ResponseEntity<String> proposeExchangeReplacementRequest(@RequestBody ExchangeReplacementRequest exchangeReplacementRequest) {
+        return exchangeReplacementRequestService.proposeExchangeReplacementRequest(exchangeReplacementRequest);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addExchangeReplacementRequest(@RequestBody ExchangeReplacementRequest exchangeReplacementRequest) {
         return exchangeReplacementRequestService.addExchangeReplacementRequest(exchangeReplacementRequest);
     }
 
-    @PostMapping("/outgoingStudent/{id}/accept")
-    public ExchangeReplacementRequest acceptExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
-        return exchangeReplacementRequestService.acceptExchangeReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    @PostMapping("/accept/{id}")
+    public ExchangeReplacementRequest acceptExchangeReplacementRequestByExchangeReplacementRequestID(@PathVariable("id") Long requestID) {
+        return exchangeReplacementRequestService.acceptExchangeReplacementRequestByExchangeReplacementRequestID(requestID);
     }
 
-    @PostMapping("/outgoingStudent/{id}/decline")
-    public ExchangeReplacementRequest declineExchangeReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
-        return exchangeReplacementRequestService.declineExchangeReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    @PostMapping("/decline/{id}")
+    public ExchangeReplacementRequest declineExchangeReplacementRequestByExchangeReplacementRequestID(@PathVariable("id") Long requestID) {
+        return exchangeReplacementRequestService.declineExchangeReplacementRequestByExchangeReplacementRequestID(requestID);
     }
 
     @DeleteMapping("/delete/{id}")

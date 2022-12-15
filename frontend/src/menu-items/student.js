@@ -29,6 +29,15 @@ const student = {
             icon: icons.IconDashboard,
             breadcrumbs: false
         }
+        ,
+        {
+            id: 'proposal',
+            title: 'Proposal',
+            type: 'item',
+            url: '/main/proposal',
+            icon: icons.IconDashboard,
+            breadcrumbs: false
+        }
     ]
 };
 

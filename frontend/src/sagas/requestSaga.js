@@ -9,13 +9,15 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { createElectiveCourseApproval, createMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
   console.log(`Replacement offerd to student with id ${id}`);
 }
 
+
+// PreApproval
 function* getPreApprovalFormsRequest({ payload: { id } }) {
   console.log(`PreApprovals requested with id ${id}`);
 
@@ -40,6 +42,102 @@ function* getPreApprovalFormsRequest({ payload: { id } }) {
   }
 }
 
+
+function* deletePreApprovalFormRequest({ payload: { id } }) {
+  console.log(`Course Approvals deleted with id ${id}`);
+
+  try {
+
+    //TODO: Send API request here
+    const status = 200;
+    if (status !== 200) {
+      throw Error('Request failed for preApproval forms');
+    }
+
+    yield put({
+      type: DELETE_PREAPPROVAL_FORM_SUCCESS,
+      payload: id,
+    });
+  } catch (error) {
+    yield put({
+      type: DELETE_PREAPPROVAL_FORM_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
+  console.log(`PreApproval form accepted with id ${id} with msg: ${feedback}`);
+
+  try {
+      //TODO: Send POST API request here
+
+
+
+      const status = 200;
+      if (status !== 200) {
+          throw Error('Accept request failed for  preApproval form ');
+      }
+
+      yield put({
+          type: ACCEPT_PREAPPROVAL_FORM_SUCCESS,
+          payload: id,
+      });
+  } catch (error) {
+    yield put({
+      type: ACCEPT_PREAPPROVAL_FORM_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
+  console.log(`PreApproval form declined with id ${id} with msg: ${feedback}`);
+
+  try {
+      //TODO: Send POST API request here
+
+      const status = 200;
+      if (status !== 200) {
+          throw Error('Accept request failed for  preApproval form ');
+      }
+
+      yield put({
+          type: DECLINE_PREAPPROVAL_FORM_SUCCESS,
+          payload: id,
+      });
+  } catch (error) {
+    yield put({
+      type: DECLINE_PREAPPROVAL_FORM_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* createPreApprovalFormRequest({ payload: { preApprovalForm } }) {
+  console.log(`Pre approval form created `);
+
+  try {
+      // TODO: send Post request here
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: CREATE_PREAPPROVAL_FORM_SUCCES,
+          payload: preApprovalForm,
+      });
+  } catch (error) {
+    yield put({
+      type: CREATE_PREAPPROVAL_FORM_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+// Course Approvals
 function* getCourseApprovalRequestsRequest({ payload: { id, typeForReq } }) {
   console.log(`Course Approvals requested with id ${id}`);
 
@@ -75,28 +173,6 @@ function* getCourseApprovalRequestsRequest({ payload: { id, typeForReq } }) {
   }
 }
 
-function* deletePreApprovalFormRequest({ payload: { id } }) {
-    console.log(`Course Approvals deleted with id ${id}`);
-  
-    try {
-  
-      //TODO: Send API request here
-      const status = 200;
-      if (status !== 200) {
-        throw Error('Request failed for preApproval forms');
-      }
-  
-      yield put({
-        type: DELETE_PREAPPROVAL_FORM_SUCCESS,
-        payload: id,
-      });
-    } catch (error) {
-      yield put({
-        type: DELETE_PREAPPROVAL_FORM_FAIL,
-        payload: error.message,
-      });
-    }
-}
 
 function* deleteCourseApprovalRequestRequest({ payload: { id, type } }) {
     console.log(`Course Approvals deleted with id ${id}`);
@@ -105,9 +181,12 @@ function* deleteCourseApprovalRequestRequest({ payload: { id, type } }) {
 
         if(type == "Elective") {
             //TODO: Send DELETE API request here
+            const response = yield call(deleteElectiveCourseApproval, id);
+            console.log(response);
         } else {
             //TODO: Send DELETE API request here
-
+            const response = yield call(deleteMandatoryCourseApproval, id);
+            console.log(response);
         }
   
         const status = 200;
@@ -127,61 +206,20 @@ function* deleteCourseApprovalRequestRequest({ payload: { id, type } }) {
     }
 }
 
-function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
-    console.log(`PreApproval form accepted with id ${id} with msg: ${feedback}`);
-  
-    try {
-        //TODO: Send POST API request here
-  
-        const status = 200;
-        if (status !== 200) {
-            throw Error('Accept request failed for  preApproval form ');
-        }
-  
-        yield put({
-            type: ACCEPT_PREAPPROVAL_FORM_SUCCESS,
-            payload: id,
-        });
-    } catch (error) {
-      yield put({
-        type: ACCEPT_PREAPPROVAL_FORM_FAIL,
-        payload: error.message,
-      });
-    }
-}
 
-function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
-    console.log(`PreApproval form declined with id ${id} with msg: ${feedback}`);
-  
-    try {
-        //TODO: Send POST API request here
-  
-        const status = 200;
-        if (status !== 200) {
-            throw Error('Accept request failed for  preApproval form ');
-        }
-  
-        yield put({
-            type: DECLINE_PREAPPROVAL_FORM_SUCCESS,
-            payload: id,
-        });
-    } catch (error) {
-      yield put({
-        type: DECLINE_PREAPPROVAL_FORM_FAIL,
-        payload: error.message,
-      });
-    }
-}
 
-function* acceptCourseApprovalRequestRequest({ payload: { id, type, feedback } }) {
+function* acceptCourseApprovalRequestRequest({ payload: { id, type, feedback, userId } }) {
     console.log(`PreApproval form accepted with id ${id} with msg: ${feedback}`);
   
     try {
 
         if(type == "Elective") {
-            //TODO: Send POST API request here
+            const { data } = yield call(acceptElectiveCourseApproval, id, feedback);
+            console.log(data);
         } else {
             //TODO: Send POST API request here
+            const { data } = yield call(acceptMandatoryCourseApproval, id, feedback);
+            console.log(data);
         }
         
   
@@ -194,6 +232,11 @@ function* acceptCourseApprovalRequestRequest({ payload: { id, type, feedback } }
             type: ACCEPT_COURSE_APPROVAL_REQUEST_SUCCESS,
             payload: id,
         });
+
+        yield put({
+          type: GET_COURSE_APPROVAL_REQUESTS_REQUEST,
+          payload: { id: userId, typeForReq: (type === 'Elective' ? "departmentCoordinator" : "courseCoordinator")}
+        });
     } catch (error) {
       yield put({
         type: ACCEPT_COURSE_APPROVAL_REQUEST_FAIL,
@@ -202,14 +245,16 @@ function* acceptCourseApprovalRequestRequest({ payload: { id, type, feedback } }
     }
 }
 
-function* declineCourseApprovalRequestRequest({ payload: { id, type, feedback } }) {
+function* declineCourseApprovalRequestRequest({ payload: { id, type, feedback, userId } }) {
     console.log(`Course approval request declined with id ${id} with msg: ${feedback}`);
   
     try {
         if(type == "Elective") {
-            // TODO: Send POST API request here
+            const { data } = yield call(declineElectiveCourseApproval, id, feedback);
+            console.log(data);
         } else {
-            //TODO: Send POST API request here
+            const { data } = yield call(declineMandatoryCourseApproval, id, feedback);
+            console.log(data);
         }
   
         const status = 200;
@@ -220,6 +265,11 @@ function* declineCourseApprovalRequestRequest({ payload: { id, type, feedback } 
         yield put({
             type: DECLINE_COURSE_APPROVAL_REQUEST_SUCCESS,
             payload: id,
+        });
+
+        yield put({
+          type: GET_COURSE_APPROVAL_REQUESTS_REQUEST,
+          payload: { id: userId, typeForReq: (type === 'Elective' ? "departmentCoordinator" : "courseCoordinator")}
         });
     } catch (error) {
       yield put({
@@ -264,30 +314,6 @@ function* createCourseApprovalRequestRequest({ payload: { courseRequest, type } 
     });
   }
 }
-
-function* createPreApprovalFormRequest({ payload: { preApprovalForm } }) {
-  console.log(`Pre approval form created `);
-
-  try {
-      // TODO: send Post request here
-
-      const status = 200;
-      if (status !== 200) {
-        throw Error('Accept request failed for  course approval request ');
-      }
-
-      yield put({
-          type: CREATE_PREAPPROVAL_FORM_SUCCES,
-          payload: preApprovalForm,
-      });
-  } catch (error) {
-    yield put({
-      type: CREATE_PREAPPROVAL_FORM_FAIL,
-      payload: error.message,
-    });
-  }
-}
-
 
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
