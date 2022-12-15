@@ -72,7 +72,9 @@ const NotificationList = ({ notifications }) => {
       }}
     >
       {notifications.map(row => {
-        const { id, from, date, isUnread, isNew, notification } = row;
+        const { id, date, read, isNew, content } = row;
+
+        const from = 'From ??';
 
         return (
           <ListItemWrapper key={id}>
@@ -93,12 +95,12 @@ const NotificationList = ({ notifications }) => {
             </ListItem>
             <Grid container direction="column" className="list-container">
               <Grid item xs={12} sx={{ pb: 2 }}>
-                <Typography variant="subtitle2">{notification}</Typography>
+                <Typography variant="subtitle2">{content}</Typography>
               </Grid>
               <Grid item xs={12}>
                 <Grid container spacing={2}>
                   <Grid item>
-                    {isUnread ? (
+                    {!read ? (
                       <Chip label="Unread" sx={chipWarningSX} />
                     ) : null}
                   </Grid>
