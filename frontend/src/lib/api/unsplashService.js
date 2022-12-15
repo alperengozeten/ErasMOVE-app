@@ -44,6 +44,14 @@ export const createElectiveCourseApproval = courseApproval => (
   })
 );
 
+export const acceptElectiveCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/electiveCourseApprovalRequest/accept/${id}?feedback=${feedback}`)
+);
+
+export const declineElectiveCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/electiveCourseApprovalRequest/decline/${id}?feedback=${feedback}`)
+);
+
 export const deleteElectiveCourseApproval = id => (
   axios.delete(`${baseURL}/electiveCourseApprovalRequest/delete/${id}`)
 );
@@ -61,6 +69,14 @@ export const createMandatoryCourseApproval = courseApproval => (
     }, 
     body: JSON.stringify(courseApproval)
   })
+);
+
+export const acceptMandatoryCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/mandatoryCourseApprovalRequest/accept/${id}?feedback=${feedback}`)
+);
+
+export const declineMandatoryCourseApproval = (id, feedback) => (
+  axios.post(`${baseURL}/mandatoryCourseApprovalRequest/decline/${id}?feedback=${feedback}`)
 );
 
 export const deleteMandatoryCourseApproval = id => (

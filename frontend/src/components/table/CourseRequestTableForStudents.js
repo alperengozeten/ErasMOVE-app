@@ -99,9 +99,9 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleOpenDelete = (id, type) => {
+  const handleOpenDelete = id => {
     setRequesDetailsID(id);
-    setRequestType(type);
+    setRequestType(courseRequests.filter(req => req.id === id)[0].departmentCoordinator ? 'Elective' : 'Mandatory');
     setOpenDelete(true);
   };
   const handleCloseDelete = () => {
@@ -151,14 +151,13 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                     
 
                     const courseCoordinator = 'Coordi';
-                    const type='Elective';
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
                         <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
-                        <TableCell align='center' component="th" scope="row" padding="none">{type}</TableCell>
+                        <TableCell align='center' component="th" scope="row" padding="none">{courseRequests.filter(req => req.id === id)[0].departmentCoordinator ? 'Elective' : 'Mandatory'}</TableCell>
                         <TableCell align='center' component="th" scope="row" padding="none">{description}</TableCell>
                         <TableCell align='center' component="th" scope="row" padding="none">{courseCoordinator}</TableCell>
 
@@ -173,7 +172,7 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                             </IconButton>
                           </Tooltip>
                           <Tooltip describeChild title="Delete request">
-                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id, type) }>
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip>

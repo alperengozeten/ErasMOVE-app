@@ -19,12 +19,12 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
     const status = courseRequest.status;
 
     const handleAccept = () => {
-        acceptCourseApprovalRequestRequest(courseRequest.id, courseRequest.type, feedback);
+        acceptCourseApprovalRequestRequest(courseRequest.id, (authType === 'Course Coordinator' ? "Mandatory" : "Elective" ), feedback, (authType === 'Course Coordinator' ? courseRequest.courseCoordinator.id : courseRequest.departmentCoordinator.id));
         handleCloseDetails();
     };
 
     const handleDecline = () => {
-        declineCourseApprovalRequestRequest(courseRequest.id, courseRequest.type, feedback);
+        declineCourseApprovalRequestRequest(courseRequest.id, (authType === 'Course Coordinator' ? "Mandatory" : "Elective" ), feedback, (authType === 'Course Coordinator' ? courseRequest.courseCoordinator.id : courseRequest.departmentCoordinator.id));
         handleCloseDetails();
     };
 
@@ -58,7 +58,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                                 <MDBCardText>Student</MDBCardText>
                                             </MDBCol>
                                             <MDBCol sm="9">
-                                                <MDBCardText className="text-muted">{courseRequest.name}</MDBCardText>
+                                                <MDBCardText className="text-muted">{courseRequest.student.name}</MDBCardText>
                                             </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -94,7 +94,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                             <MDBCardText>Equivalent Course</MDBCardText>
                                         </MDBCol>
                                         <MDBCol sm="9">
-                                            <MDBCardText className="text-muted">{courseRequest.equivalentCourse}</MDBCardText>
+                                            <MDBCardText className="text-muted">{courseRequest.correspondingCourse.courseName}</MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -127,7 +127,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                                         </MDBCol>
                                                         <MDBCol sm="9">
                                                             <MDBCardText className="text-muted">
-                                                                <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                                <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                             </MDBCardText>
                                                         </MDBCol>
                                                     </MDBRow>
@@ -195,7 +195,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                                         </MDBCol>
                                                         <MDBCol sm="9">
                                                             <MDBCardText className="text-muted">
-                                                                <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                                <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                             </MDBCardText>
                                                         </MDBCol>
                                                     </MDBRow>
