@@ -56,6 +56,11 @@ public class ExchangeUniversityController {
         return exchangeUniversityService.getAllAcceptedOutgoingStudents();
     }
 
+    @GetMapping("/nonEmptyQuota")
+    public List<ExchangeUniversity> getExchangeUniversitiesWithNonEmptyQuota() {
+        return exchangeUniversityService.getExchangeUniversitiesWithNonEmptyQuota();
+    }
+
     @PostMapping("/rejectedCourses/{id}")
     public void addRejectedCourseByID(@RequestBody Course course, @PathVariable("id") Long exchangeUniversityID) {
         exchangeUniversityService.addRejectedCourseByID(course, exchangeUniversityID);

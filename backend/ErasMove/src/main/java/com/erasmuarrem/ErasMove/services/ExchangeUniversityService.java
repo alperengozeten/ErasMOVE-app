@@ -258,4 +258,20 @@ public class ExchangeUniversityService {
         exchangeUniversityRepository.save(exchangeUniversity);
         return "Exchange University with id:" + id + " has been edited!";
     }
+
+    public List<ExchangeUniversity> getExchangeUniversitiesWithNonEmptyQuota() {
+
+        List<ExchangeUniversity> nonEmptyQuotaList = new ArrayList<>();
+        List<ExchangeUniversity> exchangeUniversityList = exchangeUniversityRepository
+                .findAll();
+
+        for (ExchangeUniversity exchangeUniversity : exchangeUniversityList) {
+
+            if ( exchangeUniversity.getUniversityQuota() > 0 ) {
+                nonEmptyQuotaList.add(exchangeUniversity);
+            }
+        }
+
+        return nonEmptyQuotaList;
+    }
 }
