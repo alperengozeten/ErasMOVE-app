@@ -1,10 +1,7 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.*;
-import com.erasmuarrem.ErasMove.repositories.CourseRepository;
-import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityDepartmentRepository;
-import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
-import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
+import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +16,18 @@ public class ErasmusUniversityDepartmentService {
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityRepository erasmusUniversityRepository;
     private final ApplicationService applicationService;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository, ApplicationService applicationService) {
+    public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository,
+                                              OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository,
+                                              ApplicationService applicationService, ApplicationRepository applicationRepository) {
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityRepository = erasmusUniversityRepository;
         this.applicationService = applicationService;
+        this.applicationRepository = applicationRepository;
     }
 
     public List<ErasmusUniversityDepartment> getErasmusUniversityDepartments() {
@@ -161,6 +162,7 @@ public class ErasmusUniversityDepartmentService {
         }
 
         application.setAdmittedStatus("Admitted to " + erasmusUniversity.getUniversityName()); // set application status
+        applicationRepository.save(application);
 
         acceptedStudents.add(outgoingStudent);
         erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);

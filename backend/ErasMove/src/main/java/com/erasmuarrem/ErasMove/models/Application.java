@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Application {
+public class Application implements Comparable<Application> {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
@@ -28,6 +28,12 @@ public class Application {
 
     @ManyToMany
     private List<ContractedUniversity> selectedUniversities;
+
+    @Override
+    public int compareTo(Application o) {
+       return Double.compare(this.applicationScore, o.applicationScore );
+    }
+
 
 
     // add some other attributes

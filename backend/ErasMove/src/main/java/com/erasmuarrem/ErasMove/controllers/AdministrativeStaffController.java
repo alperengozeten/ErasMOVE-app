@@ -13,9 +13,7 @@ import java.util.List;
 @RequestMapping("/administrativeStaff")
 @CrossOrigin
 public class AdministrativeStaffController {
-
     private final AdministrativeStaffService administrativeStaffService;
-
     @Autowired
     public AdministrativeStaffController( AdministrativeStaffService administrativeStaffService ) {
         this.administrativeStaffService = administrativeStaffService;
@@ -54,5 +52,15 @@ public class AdministrativeStaffController {
     @PostMapping("/addOutgoingStudents")
     public ResponseEntity<String> addOutgoingStudents(@RequestParam boolean isErasmus, @RequestParam Long departmentId, @RequestBody List<ApplicationWrapper> applicationWrapperList ) {
        return administrativeStaffService.addStudents(isErasmus, departmentId, applicationWrapperList);
+    }
+
+    @PostMapping("/erasmus/place")
+    public void placeErasmusStudents(@RequestParam String departmentName ) {
+        administrativeStaffService.placeErasmusStudents(departmentName);
+    }
+
+    @PostMapping("/exchange/place")
+    public void placeExchangeStudent() {
+        administrativeStaffService.placeExchangeStudents();
     }
 }

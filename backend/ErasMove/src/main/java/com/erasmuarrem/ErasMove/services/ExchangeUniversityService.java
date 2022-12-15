@@ -4,6 +4,7 @@ import com.erasmuarrem.ErasMove.models.Application;
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
+import com.erasmuarrem.ErasMove.repositories.ApplicationRepository;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ExchangeUniversityRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
@@ -22,13 +23,17 @@ public class ExchangeUniversityService {
     private final CourseRepository courseRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ApplicationService applicationService;
+    private final ApplicationRepository applicationRepository;
 
     @Autowired
-    public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService) {
+    public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository,
+                                     OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService,
+                                     ApplicationRepository applicationRepository ) {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.applicationService = applicationService;
+        this.applicationRepository = applicationRepository;
     }
 
     public List<ExchangeUniversity> getExchangeUniversities() {
@@ -168,7 +173,7 @@ public class ExchangeUniversityService {
         }
 
         application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
-
+        applicationRepository.save(application);
         acceptedStudents.add(outgoingStudent);
         exchangeUniversity.setAcceptedStudents(acceptedStudents);
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
@@ -258,4 +263,21 @@ public class ExchangeUniversityService {
         exchangeUniversityRepository.save(exchangeUniversity);
         return "Exchange University with id:" + id + " has been edited!";
     }
+
+    public List<ExchangeUniversity> getExchangeUniversitiesWithNonEmptyQuota() {
+
+        List<ExchangeUniversity> nonEmptyQuotaList = new ArrayList<>();
+        List<ExchangeUniversity> exchangeUniversityList = exchangeUniversityRepository
+                .findAll();
+
+        for (ExchangeUniversity exchangeUniversity : exchangeUniversityList) {
+
+            if ( exchangeUniversity.getUniversityQuota() > 0 ) {
+                nonEmptyQuotaList.add(exchangeUniversity);
+            }
+        }
+
+        return nonEmptyQuotaList;
+    }
+
 }
