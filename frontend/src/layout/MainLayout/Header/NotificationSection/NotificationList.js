@@ -101,12 +101,12 @@ const NotificationList = ({ notifications }) => {
                   <Typography variant="subtitle1">{content}</Typography>
                 </Grid>
                 <Grid item xs={12} flexDirection={'column'}>
-                  <Grid container>
+                  <Grid container spacing={2}>
                     <Grid item alignContent={"center"}>
                       {!read ? <Chip label="Unread" sx={chipWarningSX} /> : null}
                     </Grid>
                     <Grid item alignContent={"center"}>
-                      {read ? <Button variant={"outlined"} color="info">Mark as read</Button> : null}
+                      {!read ? <Button variant={"outlined"} color="info">Mark as read</Button> : null}
                     </Grid>
                   </Grid>
                 </Grid>
