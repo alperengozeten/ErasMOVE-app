@@ -11,17 +11,20 @@ import {
   ListItemText,
   Chip,
   Avatar,
+  Button,
+  Divider,
 } from "@mui/material";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { IconBell } from '@tabler/icons';
 
 // styles
 const ListItemWrapper = styled("div")(({ theme }) => ({
   cursor: "pointer",
   padding: 16,
   "&:hover": {
-    background: theme.palette.primary.light,
+    background: theme.palette.secondary.light,
   },
   "& .MuiListItem-root": {
     padding: 0,
@@ -31,23 +34,17 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
 const NotificationList = ({ notifications }) => {
   // console.log(notifications);
   const theme = useTheme();
+  const noNotif = notifications.length == 0;
 
   const chipSX = {
-    height: 24,
-    padding: "0 6px",
+    height: 36,
+    padding: "0 4px",
   };
 
   const chipWarningSX = {
     ...chipSX,
     color: theme.palette.warning.dark,
     backgroundColor: theme.palette.warning.light,
-  };
-
-  const chipSuccessSX = {
-    ...chipSX,
-    color: theme.palette.success.dark,
-    backgroundColor: theme.palette.success.light,
-    height: 28,
   };
 
   return (
@@ -71,46 +68,52 @@ const NotificationList = ({ notifications }) => {
         },
       }}
     >
-      {notifications.map(row => {
-        const { id, date, read, isNew, content } = row;
+      {noNotif ? (
+        <ListItemWrapper>
+          <ListItem alignItems="center">
+            <ListItemText primary={"There are no notifications..."} />
+          </ListItem>
+        </ListItemWrapper>
+      ) : null}
 
-        const from = 'From ??';
+      {notifications.map(row => {
+        const { id, date, read, content } = row;
 
         return (
-          <ListItemWrapper key={id}>
-            <ListItem alignItems="center">
-              <ListItemAvatar>
-                <Avatar alt="John Doe" />
-              </ListItemAvatar>
-              <ListItemText primary={from} />
-              <ListItemSecondaryAction>
-                <Grid container justifyContent="flex-end">
-                  <Grid item xs={12}>
-                    <Typography variant="caption" display="block" gutterBottom>
-                      {date}
-                    </Typography>
+          <>
+            <ListItemWrapper key={id}>
+              <ListItem alignItems="center">
+                <ListItemAvatar>
+                  <IconBell stroke={1.5} size="1.3rem" />
+                </ListItemAvatar>
+                <ListItemSecondaryAction>
+                  <Grid container justifyContent="flex-end">
+                    <Grid item xs={12}>
+                      <Typography variant="caption" display="block" gutterBottom>
+                        {date}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </ListItemSecondaryAction>
+              </ListItem>
+              <Grid container direction="column" className="list-container" spacing={2} paddingTop={2}>
+                <Grid item xs={12} sx={{ pb: 2 }}>
+                  <Typography variant="subtitle1">{content}</Typography>
+                </Grid>
+                <Grid item xs={12} flexDirection={'column'}>
+                  <Grid container>
+                    <Grid item alignContent={"center"}>
+                      {!read ? <Chip label="Unread" sx={chipWarningSX} /> : null}
+                    </Grid>
+                    <Grid item alignContent={"center"}>
+                      {read ? <Button variant={"outlined"} color="info">Mark as read</Button> : null}
+                    </Grid>
                   </Grid>
                 </Grid>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <Grid container direction="column" className="list-container">
-              <Grid item xs={12} sx={{ pb: 2 }}>
-                <Typography variant="subtitle2">{content}</Typography>
               </Grid>
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    {!read ? (
-                      <Chip label="Unread" sx={chipWarningSX} />
-                    ) : null}
-                  </Grid>
-                  <Grid item>
-                    {isNew ? <Chip label="New" sx={chipSuccessSX} /> : null}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </ListItemWrapper>
+            </ListItemWrapper>
+            <Divider/>
+          </>
         );
       })}
     </List>
