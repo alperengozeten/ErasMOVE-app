@@ -56,6 +56,11 @@ public class ErasmusUniversityController {
         return erasmusUniversityService.getAllAcceptedOutgoingStudents();
     }
 
+    @GetMapping("/nonEmptyQuota/{departmentName}")
+    public List<ErasmusUniversity> getErasmusUniversitiesWithNonEmptyDepartmentQuotaByDepartmentName(@PathVariable("departmentName") String departmentName) {
+        return erasmusUniversityService.getErasmusUniversitiesWithNonEmptyDepartmentQuotaByDepartmentName(departmentName);
+    }
+
     @PostMapping("/rejectedCourses/{id}")
     public void addRejectedCourseByID(@RequestBody Course course, @PathVariable("id") Long erasmusUniversityID) {
         erasmusUniversityService.addRejectedCourse(course, erasmusUniversityID);

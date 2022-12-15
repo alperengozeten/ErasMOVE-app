@@ -2,8 +2,10 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
+import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
+import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityDepartmentRepository;
 import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,14 @@ public class ErasmusUniversityService {
     private final ErasmusUniversityRepository erasmusUniversityRepository;
     private final CourseRepository courseRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository;
 
     @Autowired
-    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository) {
+    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository) {
         this.erasmusUniversityRepository = erasmusUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
+        this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
     }
 
     public List<ErasmusUniversity> getErasmusUniversities() {
@@ -183,5 +187,21 @@ public class ErasmusUniversityService {
 
         erasmusUniversityRepository.save(erasmusUniversity);
         return "Erasmus University with id: " + id + " has been updated!";
+    }
+
+    public List<ErasmusUniversity> getErasmusUniversitiesWithNonEmptyDepartmentQuotaByDepartmentName(String departmentName) {
+
+        List<ErasmusUniversity> erasmusUniversityList = new ArrayList<>();
+        List<ErasmusUniversityDepartment> erasmusUniversityDepartmentList = erasmusUniversityDepartmentRepository
+                .findByDepartmentName(departmentName);
+
+        for (ErasmusUniversityDepartment erasmusUniversityDepartment : erasmusUniversityDepartmentList) {
+
+            if ( erasmusUniversityDepartment.getQuota() > 0 ) {
+                erasmusUniversityList.add(erasmusUniversityDepartment.getErasmusUniversity());
+            }
+        }
+
+        return erasmusUniversityList;
     }
 }
