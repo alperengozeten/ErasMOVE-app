@@ -174,6 +174,7 @@ public class ExchangeUniversityService {
         application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
 
         acceptedStudents.add(outgoingStudent);
+        exchangeUniversity.setAcceptedStudents(acceptedStudents);
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
         exchangeUniversityRepository.save(exchangeUniversity);
         return "Student with id:" + outgoingStudentID + " has been added to the Exchange University!";

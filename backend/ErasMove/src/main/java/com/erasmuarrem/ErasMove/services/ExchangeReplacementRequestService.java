@@ -88,6 +88,8 @@ public class ExchangeReplacementRequestService {
                 departmentCoordinator.getName() + "!");
 
         notificationService.saveNotification(newNotification);
+
+        exchangeReplacementRequest.setStatus("WAITING");
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save to the database
         return new ResponseEntity<>("Replacement Request has been sent!", HttpStatus.OK);
     }

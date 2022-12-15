@@ -35,11 +35,7 @@ public class ErasmusUniversityService {
     public ErasmusUniversity getErasmusUniversityByID(Long id) {
         Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findById(id);
 
-        if ( !erasmusUniversityOptional.isPresent() ) {
-            throw new IllegalStateException("Erasmus University with id:" + id + " doesn't exist!");
-        }
-
-        return erasmusUniversityOptional.get();
+        return erasmusUniversityOptional.orElse(null);
     }
 
     public ErasmusUniversity getErasmusUniversityByName(String universityName) {

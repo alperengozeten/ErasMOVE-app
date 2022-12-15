@@ -31,7 +31,7 @@ public class ErasmusReplacementRequestController {
     }
 
     @GetMapping("/outgoingStudent/{id}")
-    public ErasmusReplacementRequest getErasmusReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
+    public List<ErasmusReplacementRequest> getErasmusReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
         return erasmusReplacementRequestService.getErasmusReplacementRequestByOutgoingStudentID(outgoingStudentID);
     }
 
@@ -41,19 +41,31 @@ public class ErasmusReplacementRequestController {
         return erasmusReplacementRequestService.getErasmusReplacementRequestByDepartmentCoordinatorID(departmentCoordinatorID);
     }
 
+    @GetMapping("/proposedRequests/departmentCoordinator/{id}")
+    public List<ErasmusReplacementRequest> getProposedErasmusReplacementRequestsByDepartmentCoordinatorID(
+            @PathVariable("id") Long departmentCoordinatorID
+    ) {
+        return erasmusReplacementRequestService.getProposedErasmusReplacementRequestsByDepartmentCoordinatorID(departmentCoordinatorID);
+    }
+
+    @PostMapping("/propose")
+    public ResponseEntity<String> proposeErasmusReplacementRequest(@RequestBody ErasmusReplacementRequest erasmusReplacementRequest) {
+        return erasmusReplacementRequestService.proposeErasmusReplacementRequest(erasmusReplacementRequest);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addErasmusReplacementRequest(@RequestBody ErasmusReplacementRequest erasmusReplacementRequest) {
         return erasmusReplacementRequestService.addErasmusReplacementRequest(erasmusReplacementRequest);
     }
 
-    @PostMapping("/outgoingStudent/{id}/accept")
-    public ErasmusReplacementRequest acceptErasmusReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
-        return erasmusReplacementRequestService.acceptErasmusReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    @PostMapping("/accept/{id}")
+    public ErasmusReplacementRequest acceptErasmusReplacementRequestByErasmusReplacementRequestID(@PathVariable("id") Long requestID) {
+        return erasmusReplacementRequestService.acceptErasmusReplacementRequestByErasmusReplacementRequestID(requestID);
     }
 
-    @PostMapping("/outgoingStudent/{id}/decline")
-    public ErasmusReplacementRequest declineErasmusReplacementRequestByOutgoingStudentID(@PathVariable("id") Long outgoingStudentID) {
-        return erasmusReplacementRequestService.declineErasmusReplacementRequestByOutgoingStudentID(outgoingStudentID);
+    @PostMapping("/decline/{id}")
+    public ErasmusReplacementRequest declineErasmusReplacementRequestByErasmusReplacementRequestID(@PathVariable("id") Long requestID) {
+        return erasmusReplacementRequestService.declineErasmusReplacementRequestByErasmusReplacementRequestID(requestID);
     }
 
     @DeleteMapping("/delete/{id}")
