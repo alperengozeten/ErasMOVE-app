@@ -1,3 +1,4 @@
+import { GET_DEPARTMENTS_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     universities: [
@@ -42,11 +43,21 @@ const INITIAL_STATE = {
         departments:[" CS "," IE "]
 
       },
-    ]
+    ],
+    hostUniDepartments: [],
+    erasmusDepartments: [],
+    exchangeDepartments: [],
   };
   
   const universityReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
+      case GET_DEPARTMENTS_SUCCESS:
+        return {
+          ...state,
+          hostUniDepartments: action.payload.filter(dep => (!dep.erasmusUniversity && !dep.exchangeUniversity)),
+          erasmusDepartments: action.payload.filter(dep => dep.erasmusUniversity),
+          exchangeDepartments: action.payload.filter(dep => dep.exchangeUniversity),
+        };
       default:
         return state;
     }

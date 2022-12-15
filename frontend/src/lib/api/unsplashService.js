@@ -102,7 +102,7 @@ export const declineErasmusReplacementRequest = id => (
   axios.post(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}/decline`, )
 );
 
-// PreApproval forms
+// Announcements
 export const getAnnouncements = departmentId => (
   axios.get(`${baseURL}/announcement/department/${departmentId}`)
 );
@@ -117,3 +117,7 @@ export const createAnnouncement = announcement => (
   })
 );
 
+// Departments
+export const getDepartments = () => (
+  axios.get(`${baseURL}/department`)
+);

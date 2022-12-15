@@ -20,6 +20,7 @@ import {
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
     getCoursesByDepartment,
+    getDepartments,
 } from "../../actions";
 
 
@@ -37,12 +38,15 @@ const Application = ({
     createPreApprovalFormRequest,
     getCoursesByDepartment,
     application,
+    getDepartments,
+    hostUniDepartments,
 }) => {
-    const status = "WAITINGG";
+
   useEffect(() => {
     if (application.admittedStatus !==  "NOT ADMITTED") {
         getPreApprovalFormsRequest(userId);
         getCourseApprovalRequestsRequest(userId);
+        getDepartments();
     }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
 
@@ -101,6 +105,8 @@ const Application = ({
                                 deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest}
                                 courseRequests={courseRequests}
                                 getCoursesByDepartment={getCoursesByDepartment}
+                                getDepartments={getDepartments}
+                                hostUniDepartments={hostUniDepartments}
                             />
                         </Box>
                     </TabPanel>
@@ -119,6 +125,7 @@ const mapStateToProps = state => {
     const approvedCourses = state.courses.approvedCourses;
     const userId = state.user.user.id;
     const application = state.user.application;
+    const hostUniDepartments = state.universities.hostUniDepartments;
     return {
         courseRequests,
         preApprovalForms,
@@ -126,6 +133,7 @@ const mapStateToProps = state => {
         approvedCourses,
         userId,
         application,
+        hostUniDepartments,
     };
 };
 
@@ -137,6 +145,7 @@ const mapActionsToProps = {
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
     getCoursesByDepartment,
+    getDepartments,
 };
 
 Application.propTypes = {
@@ -153,6 +162,8 @@ Application.propTypes = {
     getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
     application: PropTypes.object,
+    getDepartments: PropTypes.func,
+    hostUniDepartments: PropTypes.array,
 };
   
 Application.defaultProps = {

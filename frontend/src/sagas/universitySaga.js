@@ -1,6 +1,7 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS } from '../constants/actionTypes';
+import { CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_FAIL, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS } from '../constants/actionTypes';
+import { getDepartments } from '../lib/api/unsplashService';
 
 
 function createApplicationsFromExcel({ payload: { id } }) {
@@ -32,9 +33,35 @@ function* getCoursesByDepartment({ payload: { type, department, university } }) 
   }
 }
 
+function* getDepartmentsFunc() {
+  console.log(`Get departments `);
+
+  try {
+      // TODO: send Post request here
+      const { data } = yield call(getDepartments);
+      console.log(data);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: GET_DEPARTMENTS_SUCCESS,
+          payload: data,
+      });
+  } catch (error) {
+    yield put({
+      type: GET_DEPARTMENTS_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const universitySaga = [
   takeEvery(CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, createApplicationsFromExcel),
   takeEvery(GET_COURSES_BY_DEPARTMENT_REQUEST, getCoursesByDepartment),
+  takeEvery(GET_DEPARTMENTS_REQUEST, getDepartmentsFunc),
 ];
 
 export default universitySaga;

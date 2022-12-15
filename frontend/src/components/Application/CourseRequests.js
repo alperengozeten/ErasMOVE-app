@@ -9,7 +9,8 @@ import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
-const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest, getCoursesByDepartment }) => {
+const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest, getCoursesByDepartment, hostUniDepartments }) => {
+
     const [open, setOpen] = React.useState(false);
     
     const [departmentValue, setDepartmentValue] = React.useState(0);
@@ -169,9 +170,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                                                     onChange={handleDepartmentChange}
                                                 >
                                                     <MenuItem disabled value={0}>Select</MenuItem>
-                                                    <MenuItem value={10}>Computer Science</MenuItem>
-                                                    <MenuItem value={20}>Electrical Engineering</MenuItem>
-                                                    <MenuItem value={30}>Mechanical Engineering</MenuItem>
+                                                    {hostUniDepartments.map(dep => (<MenuItem key={dep.id} value={dep.id}>{dep.departmentName}</MenuItem>))}
                                                 </Select>
                                             </FormControl>   
                                         </MDBCol>
@@ -192,9 +191,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                                                     disabled={departmentValue ? false : true }
                                                 >
                                                     <MenuItem disabled value={0}>Select</MenuItem>
-                                                    <MenuItem value={10}>CS319</MenuItem>
-                                                    <MenuItem value={20}>CS315</MenuItem>
-                                                    <MenuItem value={30}>CS102</MenuItem>
+                                                    {hostUniDepartments.filter(dep => dep.id === departmentValue)[0]?.courseList?.map(course => (<MenuItem key={course.id} value={course.id}>{course.courseName}</MenuItem>))}
                                                 </Select>
                                             </FormControl>   
                                         </MDBCol>
@@ -267,6 +264,8 @@ CourseRequests.propTypes = {
     deleteCourseApprovalRequestRequest: PropTypes.func,
     createCourseApprovalRequestRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
+    getDepartments: PropTypes.func,
+    hostUniDepartments: PropTypes.array,
 };
   
 CourseRequests.defaultProps = {
