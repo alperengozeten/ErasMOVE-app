@@ -9,8 +9,9 @@ import {
 } from "mdb-react-ui-kit";
 import { Box, Button, FormControl, Grid, MenuItem, Modal, Select, Stack, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import PropTypes from "prop-types";
 
-export default function ProfileApplicationPage() {
+export default function ProfileApplicationPage({ application }) {
   const [open, setOpen] = React.useState(false);
     
   const [documentValue, setDocumentValue] = React.useState(0);
@@ -56,7 +57,7 @@ export default function ProfileApplicationPage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {dummyStudent.type}
+                      {application.outgoingStudent.isErasmus ? "Erasmus" : "Exchange"}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -67,7 +68,7 @@ export default function ProfileApplicationPage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {dummyStudent.status}
+                      {application.admittedStatus}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -91,7 +92,18 @@ export default function ProfileApplicationPage() {
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {dummyStudent.selectedSemester}
+                      {application.selectedSemester}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
+                    <MDBCardText>Score</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {application.applicationScore}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -230,6 +242,11 @@ export default function ProfileApplicationPage() {
     </section>
   );
 }
+
+ProfileApplicationPage.propTypes = {
+  application: PropTypes.object,
+};
+
 const style = {
   position: "absolute",
   top: "50%",

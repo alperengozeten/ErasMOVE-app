@@ -36,11 +36,11 @@ const Application = ({
     createCourseApprovalRequestRequest,
     createPreApprovalFormRequest,
     getCoursesByDepartment,
-    
+    application,
 }) => {
     const status = "WAITINGG";
   useEffect(() => {
-    if (status !==  "WAITING") {
+    if (application.admittedStatus !==  "NOT ADMITTED") {
         getPreApprovalFormsRequest(userId);
         getCourseApprovalRequestsRequest(userId);
     }
@@ -65,7 +65,7 @@ const Application = ({
             <Box sx={{ width: "90%", height: "90%" }}>
                 <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    {status === "WAITING" ? (
+                    {(application.admittedStatus ===  "NOT ADMITTED") ? (
                         <TabList onChange={handleChange}>
                             <Tab label="Application" value={"0"} />
                         </TabList>
@@ -79,7 +79,7 @@ const Application = ({
                 </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <ProfileApplicationPage />
+                            <ProfileApplicationPage application={application} />
                         </Box>
                     </TabPanel>
                     <TabPanel value="1" index={1}>
@@ -118,12 +118,14 @@ const mapStateToProps = state => {
     const hostCourses = state.courses.hostCourses;
     const approvedCourses = state.courses.approvedCourses;
     const userId = state.user.user.id;
+    const application = state.user.application;
     return {
         courseRequests,
         preApprovalForms,
         hostCourses,
         approvedCourses,
         userId,
+        application,
     };
 };
 
@@ -150,7 +152,7 @@ Application.propTypes = {
     createPreApprovalFormRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
-
+    application: PropTypes.object,
 };
   
 Application.defaultProps = {
