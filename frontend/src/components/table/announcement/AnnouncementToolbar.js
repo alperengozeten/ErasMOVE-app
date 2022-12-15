@@ -28,7 +28,7 @@ const StyledRoot = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function AnnouncementToolbar({ createAnnouncementRequest, authType, userId }) {
+export default function AnnouncementToolbar({ createAnnouncementRequest, authType, userId, user }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -43,8 +43,10 @@ export default function AnnouncementToolbar({ createAnnouncementRequest, authTyp
   };
 
   const handleCreateAnnouncement = () => {
-    createAnnouncementRequest({title, description, userId});
+    createAnnouncementRequest({title, description, departmentCoordinator: { id: Number(userId) }}, user.department.id );
     handleClose();
+    setTitle("");
+    setDescription("");
   };
 
   return (
@@ -136,6 +138,7 @@ export default function AnnouncementToolbar({ createAnnouncementRequest, authTyp
     </StyledRoot>
   );
 }
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -154,6 +157,7 @@ AnnouncementToolbar.propTypes = {
   createAnnouncementRequest: PropTypes.func,
   authType: PropTypes.string,
   userId: PropTypes.string,
+  user: PropTypes.object,
 };
 
 AnnouncementToolbar.defaultProps = {

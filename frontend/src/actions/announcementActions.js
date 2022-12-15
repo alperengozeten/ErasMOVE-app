@@ -5,9 +5,9 @@ export const getAnnouncementRequest = departmentId => ({
     payload: { departmentId },
   });
 
-export const createAnnouncementRequest = announcement => ({
+export const createAnnouncementRequest = (announcement, departmentId) => ({
     type: CREATE_ANNOUNCEMENT_REQUEST,
-    payload: { announcement },
+    payload: { announcement, departmentId },
   });
 
 export const deleteAnnouncementRequest = id => ({

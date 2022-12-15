@@ -8,7 +8,7 @@ import { getAnnouncementRequest, createAnnouncementRequest } from "../actions/an
 const Announcements = ({ announcements, getAnnouncementRequest, createAnnouncementRequest, authType, userId, user }) => {
   React.useEffect(() => {
     getAnnouncementRequest(user?.department?.id);
-  }, []);
+  }, [user, getAnnouncementRequest]);
 
   return (
     <Stack spacing={2}>
@@ -22,7 +22,7 @@ const Announcements = ({ announcements, getAnnouncementRequest, createAnnounceme
       </Typography>
       <Grid container justifyContent={'center'}>
         <Grid item xs={12}>
-          <AnnouncementTable authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} announcements={announcements} />
+          <AnnouncementTable user={user} authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} announcements={announcements} />
         </Grid>
       </Grid>
     </Stack>

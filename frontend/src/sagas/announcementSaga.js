@@ -1,6 +1,6 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, delay } from 'redux-saga/effects';
 import { CREATE_ANNOUNCEMENT_FAIL, CREATE_ANNOUNCEMENT_REQUEST, CREATE_ANNOUNCEMENT_SUCCESS, GET_ANNOUNCEMENTS_FAIL, GET_ANNOUNCEMENTS_REQUEST, GET_ANNOUNCEMENTS_SUCCESS } from '../constants/actionTypes';
-import { getAnnouncements } from '../lib/api/unsplashService';
+import { createAnnouncement, getAnnouncements } from '../lib/api/unsplashService';
 
 function* getAnnouncementRequest({ payload: { departmentId } }) {
     yield console.log(`Get announcements...`);
@@ -27,28 +27,28 @@ function* getAnnouncementRequest({ payload: { departmentId } }) {
     }
 }
 
-function* createAnnouncementRequest({ payload: { announcement } }) {
+function* createAnnouncementRequest({ payload: { announcement, departmentId } }) {
     yield console.log(`Create announcement... `);
 
     try {
         // TODO: send Post request here
-        //const { data } = yield call(getApplication, id);
-  
+        const { data } = yield call(createAnnouncement, announcement);
+
         const status = 200;
         if (status !== 200) {
           throw Error('Accept request failed for  course approval request ');
         }
 
-        const announcementToSend = {
-            date: "22.02.2022",
-            from: "David Davenport",
-            title: announcement.title,
-            description: announcement.description,
-        };
+        yield delay(2);
+
+        yield put({
+          type: CREATE_ANNOUNCEMENT_SUCCESS,
+          payload: {},
+        });
   
         yield put({
-            type: CREATE_ANNOUNCEMENT_SUCCESS,
-            payload: announcementToSend,
+            type: GET_ANNOUNCEMENTS_REQUEST,
+            payload: {departmentId},
         });
     } catch (error) {
       yield put({

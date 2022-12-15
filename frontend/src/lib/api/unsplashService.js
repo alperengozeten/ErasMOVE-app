@@ -107,3 +107,13 @@ export const getAnnouncements = departmentId => (
   axios.get(`${baseURL}/announcement/department/${departmentId}`)
 );
 
+export const createAnnouncement = announcement => (
+  fetch(`${baseURL}/announcement/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(announcement)
+  })
+);
+

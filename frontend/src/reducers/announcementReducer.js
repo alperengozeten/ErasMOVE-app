@@ -1,4 +1,4 @@
-import { CREATE_ANNOUNCEMENT_SUCCESS, GET_ANNOUNCEMENTS_SUCCESS } from "../constants/actionTypes";
+import { GET_ANNOUNCEMENTS_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
   announcements: [],
@@ -8,8 +8,6 @@ const announcementReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_ANNOUNCEMENTS_SUCCESS:
       return {...state, announcements: action.payload };
-    case CREATE_ANNOUNCEMENT_SUCCESS:
-      return {...state, announcements: [...state.announcements, action.payload] };
     default:
       return state;
   }

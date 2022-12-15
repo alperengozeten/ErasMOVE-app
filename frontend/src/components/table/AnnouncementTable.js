@@ -68,7 +68,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType, userId }) => {
+const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType, userId, user }) => {
  
 
   const [open, setOpen] = useState(false);
@@ -101,7 +101,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
     <>
       <Container>
         <Card>
-        <AnnouncementToolbar authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} />
+        <AnnouncementToolbar user={user} authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -114,7 +114,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
 
                 <TableBody>
                   {filteredUsers.map(row => {
-                    const { id, date, departmentCoordinator, title, description } =
+                    const { id, announcedDate, departmentCoordinator, title, description } =
                       row;
 
                     return (
@@ -142,7 +142,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
 
                         <TableCell align="center">{description.substring(0, 30) + (description.length > 30 ? "..." : '')}</TableCell>
 
-                        <TableCell align="center">{date}</TableCell>
+                        <TableCell align="center">{announcedDate}</TableCell>
 
 
                         <TableCell align="right">
@@ -249,6 +249,7 @@ AnnouncementTable.propTypes = {
   createAnnouncementRequest: PropTypes.func,
   authType: PropTypes.string,
   userId: PropTypes.string,
+  user: PropTypes.object,
 };
 
 AnnouncementTable.defaultProps = {
