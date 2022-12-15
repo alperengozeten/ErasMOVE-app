@@ -84,7 +84,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                     </MDBCol>
                                                     <MDBCol sm="9">
                                                         <MDBCardText className="text-muted">
-                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                         </MDBCardText>
                                                     </MDBCol>
                                                 </MDBRow>
@@ -150,7 +150,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                     </MDBCol>
                                                     <MDBCol sm="9">
                                                         <MDBCardText className="text-muted">
-                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                                                            <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                                                         </MDBCardText>
                                                     </MDBCol>
                                                 </MDBRow>

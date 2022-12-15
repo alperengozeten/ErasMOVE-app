@@ -146,7 +146,7 @@ const PreApprovalsTableForStudents = ({ preApprovalForms, deletePreApprovalFormR
                         <TableCell align='center' component="th" scope="row" padding="none">{`PreApproval Form ${index+1}`}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
