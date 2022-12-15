@@ -5,10 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ExchangeReplacementRequestRepository extends JpaRepository<ExchangeReplacementRequest, Long> {
-    Optional<ExchangeReplacementRequest> findByStudentID(Long outgoingStudentID);
+    List<ExchangeReplacementRequest> findByStudentID(Long outgoingStudentID);
     List<ExchangeReplacementRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
+    List<ExchangeReplacementRequest> findByStatusAndDepartmentCoordinator_ID(String status, Long departmentCoordinatorID);
 }
