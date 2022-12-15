@@ -1,4 +1,4 @@
-import { takeEvery, put } from 'redux-saga/effects';
+import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST, ACCEPT_COURSE_APPROVAL_REQUEST_SUCCESS,
   ACCEPT_PREAPPROVAL_FORM_FAIL, ACCEPT_PREAPPROVAL_FORM_REQUEST, ACCEPT_PREAPPROVAL_FORM_SUCCESS, CREATE_COURSE_APPROVAL_REQUEST_FAIL,
@@ -9,6 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+import { createElectiveCourseApproval, createMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -39,21 +40,32 @@ function* getPreApprovalFormsRequest({ payload: { id } }) {
   }
 }
 
-function* getCourseApprovalRequestsRequest({ payload: { id } }) {
+function* getCourseApprovalRequestsRequest({ payload: { id, typeForReq } }) {
   console.log(`Course Approvals requested with id ${id}`);
 
   try {
 
-    //TODO: Send API request here
+    let electiveCourseApprovals = [];
+    let mandatoryCourseApprovals = [];
+
+    if (typeForReq !== 'courseCoordinator') {
+      const {data: elective} = yield call(getElectiveCourseApprovals, id, typeForReq);
+      electiveCourseApprovals = elective;
+    } else if (typeForReq !== 'departmentCoordinator') {
+      const {data: mandatory} = yield call(getMandatoryCourseApprovals, id, typeForReq);
+      mandatoryCourseApprovals = mandatory;
+    }
+
+    const courseApprovals = [...electiveCourseApprovals, ...mandatoryCourseApprovals];
+
     const status = 200;
-    const courseApprovalRequests = dummyCourseApprovals;
     if (status !== 200) {
       throw Error('Request failed for preApproval forms');
     }
 
     yield put({
       type: GET_COURSE_APPROVAL_REQUESTS_SUCCESS,
-      payload: courseApprovalRequests,
+      payload: courseApprovals,
     });
   } catch (error) {
     yield put({
@@ -222,9 +234,11 @@ function* createCourseApprovalRequestRequest({ payload: { courseRequest, type } 
 
   try {
       if(type == "Elective") {
-          // TODO: Send POST API request here
+          const { data } = yield call(createElectiveCourseApproval, courseRequest);
+          console.log(data);
       } else {
-          //TODO: Send POST API request here
+          const { data } = yield call(createMandatoryCourseApproval, courseRequest);
+          console.log(data);
       }
 
       const status = 200;
@@ -236,6 +250,13 @@ function* createCourseApprovalRequestRequest({ payload: { courseRequest, type } 
           type: CREATE_COURSE_APPROVAL_REQUEST_SUCCESS,
           payload: courseRequest,
       });
+
+      const studentId = courseRequest.student.id;
+
+      yield put({
+        type: GET_COURSE_APPROVAL_REQUESTS_REQUEST,
+        payload: { id: studentId, typeForReq: "outgoingStudent" },
+    });
   } catch (error) {
     yield put({
       type: CREATE_COURSE_APPROVAL_REQUEST_FAIL,
@@ -392,65 +413,6 @@ const dummyForms = [
           }
       ],
       feedback: "LGTM. You are perfect :))",
-  },
-];
-
-const dummyCourseApprovals = [
-  {
-      id: 1,
-      name: "John Doe",
-      courseName: "CS315",
-      equivalentCourse: "CS316",
-      description: "Programming Languages",
-      courseCoordinator: "Altay Güvenir",
-      status: "waiting",
-      type: "Must",
-      documents: [],
-      feedback: ""
-  },{
-      id: 2,
-      name: "Kürşad Güzelkaya",
-      courseName: "CS319",
-      equivalentCourse: "CS316",
-      description: "Objec Oriented SE",
-      courseCoordinator: "Eray Hoca",
-      status: "rejected",
-      type: "Elective",
-      documents: [],
-      feedback: "Please fix the issues!!"
-  },{
-      id: 3,
-      name: "Jake Paul",
-      courseName: "CS115",
-      equivalentCourse: "CS316",
-      description: "Python",
-      courseCoordinator: "Aynur Dayanık",
-      status: "accepted",
-      type: "Must",
-      documents: [],
-      feedback: "LGTM Thanks!"
-  },{
-      id: 4,
-      name: "Lionel Messi",
-      courseName: "MATH230",
-      equivalentCourse: "CS316",
-      description: "Programming Languages",
-      courseCoordinator: "Altay Güvenir",
-      status: "waiting",
-      type: "Must",
-      documents: [],
-      feedback: ""
-  },{
-      id: 5,
-      name: "Cristiano Ronaldo",
-      courseName: "CS315",
-      equivalentCourse: "CS316",
-      description: "Programming Languages",
-      courseCoordinator: "Altay Güvenir",
-      status: "rejected",
-      type: "Elective",
-      documents: [],
-      feedback: "This is terrible mann :/"
   },
 ];
 

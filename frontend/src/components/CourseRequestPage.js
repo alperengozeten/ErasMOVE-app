@@ -7,10 +7,10 @@ import CourseRequestTable from './table/CourseRequestTable';
 import { getCourseApprovalRequestsRequest, deleteCourseApprovalRequestRequest } from "../actions";
 
 
-const CourseRequestPage = ({ deleteCourseApprovalRequestRequest, getCourseApprovalRequestsRequest, courseRequests, userId}) => {
+const CourseRequestPage = ({ deleteCourseApprovalRequestRequest, getCourseApprovalRequestsRequest, courseRequests, userId, typeForReq}) => {
     useEffect(() => {
-        getCourseApprovalRequestsRequest(userId);
-    }, [getCourseApprovalRequestsRequest, userId]);
+        getCourseApprovalRequestsRequest(userId, typeForReq);
+    }, [getCourseApprovalRequestsRequest, userId, typeForReq]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -27,9 +27,11 @@ const CourseRequestPage = ({ deleteCourseApprovalRequestRequest, getCourseApprov
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
     const userId = state.user.user.id;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         courseRequests,
         userId,
+        typeForReq,
     };
 };
 
@@ -43,6 +45,7 @@ CourseRequestPage.propTypes = {
     userId: PropTypes.number,
     getCourseApprovalRequestsRequest: PropTypes.func,
     deleteCourseApprovalRequestRequest: PropTypes.func,
+    typeForReq: PropTypes.string,
 };
   
 CourseRequestPage.defaultProps = {

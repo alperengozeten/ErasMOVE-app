@@ -9,7 +9,7 @@ import { sendReplacementOffer } from '../../actions';
 import CourseRequestTableForStudents from '../table/CourseRequestTableForStudents';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from 'mdb-react-ui-kit';
 
-const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest, getCoursesByDepartment, hostUniDepartments }) => {
+const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, createCourseApprovalRequestRequest, userId, getCoursesByDepartment, hostUniDepartments }) => {
 
     const [open, setOpen] = React.useState(false);
     
@@ -47,20 +47,16 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
 
     const handleCreateCourseRequest = () => {
         const type = isElective ? 'Elective' : 'Mandatory';
-        const courseRequest = {
-            // TODO: remove these when connecto API
-            id: 12,
-            type,
-            courseCoordinator: 'XXX hoca',
-            status: 'WAITING',
-            
+        const courseRequest = {          
             courseName,
             description,
-            ects,
-            department: departmentValue,
-            equivalentCourse: courseValue,
-            syllabus: null,
-
+            ects: Number(ects),
+            correspondingCourse: {
+                id: courseValue,
+            },
+            student: {
+                id: Number(userId)
+            }
         };
         createCourseApprovalRequestRequest(courseRequest, type);
         handleClose();
@@ -266,6 +262,7 @@ CourseRequests.propTypes = {
     getCoursesByDepartment: PropTypes.func,
     getDepartments: PropTypes.func,
     hostUniDepartments: PropTypes.array,
+    userId: PropTypes.number,
 };
   
 CourseRequests.defaultProps = {

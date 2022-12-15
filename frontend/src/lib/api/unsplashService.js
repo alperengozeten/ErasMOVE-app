@@ -34,8 +34,14 @@ export const getElectiveCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/electiveCourseApprovalRequest/${authType}/${id}`)
 );
 
-export const createElectiveCourseApproval = (id, courseApproval) => (
-  axios.post(`${baseURL}/electiveCourseApprovalRequest/add`, courseApproval)
+export const createElectiveCourseApproval = courseApproval => (
+  fetch(`${baseURL}/electiveCourseApprovalRequest/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(courseApproval)
+  })
 );
 
 export const deleteElectiveCourseApproval = id => (
@@ -47,8 +53,14 @@ export const getMandatoryCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/mandatoryCourseApprovalRequest/${authType}/${id}`)
 );
 
-export const createMandatoryCourseApproval = (id, courseApproval) => (
-  axios.post(`${baseURL}/mandatoryCourseApprovalRequest/add`, courseApproval)
+export const createMandatoryCourseApproval = courseApproval => (
+  fetch(`${baseURL}/mandatoryCourseApprovalRequest/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(courseApproval)
+  })
 );
 
 export const deleteMandatoryCourseApproval = id => (

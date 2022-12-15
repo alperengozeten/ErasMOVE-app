@@ -12,10 +12,10 @@ export const getPreApprovalFormsRequest = id =>
         payload: { id },
     });    
 
-export const getCourseApprovalRequestsRequest = id => 
+export const getCourseApprovalRequestsRequest = (id, typeForReq) => 
     ({
         type: GET_COURSE_APPROVAL_REQUESTS_REQUEST,
-        payload: { id },
+        payload: { id, typeForReq },
     });  
 
 export const deletePreApprovalFormRequest = id => ({

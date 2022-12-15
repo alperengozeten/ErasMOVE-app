@@ -143,8 +143,15 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, courseName, description, courseCoordinator, status, type } = row;
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map(row => {
+                    const id = row.id;
+                    const courseName = row.courseName;
+                    const description = row.description;
+                    const status = row.status;
+                    
+
+                    const courseCoordinator = 'Coordi';
+                    const type='Elective';
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -156,7 +163,7 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                         <TableCell align='center' component="th" scope="row" padding="none">{courseCoordinator}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'waiting' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(status === 'WAITING' && 'warning') || (status === 'rejected' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

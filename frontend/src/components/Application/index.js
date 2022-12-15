@@ -40,12 +40,13 @@ const Application = ({
     application,
     getDepartments,
     hostUniDepartments,
+    typeForReq,
 }) => {
 
   useEffect(() => {
     if (application.admittedStatus !==  "NOT ADMITTED") {
-        getPreApprovalFormsRequest(userId);
-        getCourseApprovalRequestsRequest(userId);
+        getPreApprovalFormsRequest(userId, typeForReq);
+        getCourseApprovalRequestsRequest(userId, typeForReq);
         getDepartments();
     }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
@@ -107,6 +108,7 @@ const Application = ({
                                 getCoursesByDepartment={getCoursesByDepartment}
                                 getDepartments={getDepartments}
                                 hostUniDepartments={hostUniDepartments}
+                                userId={userId}
                             />
                         </Box>
                     </TabPanel>
@@ -126,6 +128,7 @@ const mapStateToProps = state => {
     const userId = state.user.user.id;
     const application = state.user.application;
     const hostUniDepartments = state.universities.hostUniDepartments;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         courseRequests,
         preApprovalForms,
@@ -134,6 +137,7 @@ const mapStateToProps = state => {
         userId,
         application,
         hostUniDepartments,
+        typeForReq,
     };
 };
 
@@ -164,6 +168,7 @@ Application.propTypes = {
     application: PropTypes.object,
     getDepartments: PropTypes.func,
     hostUniDepartments: PropTypes.array,
+    typeForReq: PropTypes.string,
 };
   
 Application.defaultProps = {
