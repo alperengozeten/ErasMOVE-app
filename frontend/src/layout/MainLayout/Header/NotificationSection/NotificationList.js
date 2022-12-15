@@ -10,7 +10,7 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Chip,
-  Avatar,
+  Stack,
   Button,
   Divider,
 } from "@mui/material";
@@ -80,7 +80,7 @@ const NotificationList = ({ notifications }) => {
         const { id, date, read, content } = row;
 
         return (
-          <>
+          <Stack key={id}>
             <ListItemWrapper key={id}>
               <ListItem alignItems="center">
                 <ListItemAvatar>
@@ -113,7 +113,7 @@ const NotificationList = ({ notifications }) => {
               </Grid>
             </ListItemWrapper>
             <Divider/>
-          </>
+          </Stack>
         );
       })}
     </List>

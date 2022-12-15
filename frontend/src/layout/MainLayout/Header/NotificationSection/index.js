@@ -16,6 +16,9 @@ import {
     Badge
 } from '@mui/material';
 
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+
 // third-party
 import PerfectScrollbar from 'react-perfect-scrollbar';
 
@@ -49,9 +52,17 @@ import { IconBell } from '@tabler/icons';
 
 // ==============================|| NOTIFICATION ||============================== //
 
-const NotificationSection = () => {
+const NotificationSection = ({notifications}) => {
     const theme = useTheme();
     const matchesXs = useMediaQuery(theme.breakpoints.down('md'));
+
+    var unReadCount = 0;
+    notifications.map(row => {
+        const { id, date, read, content } = row;
+        if(!read)
+            unReadCount++;
+    }
+    );
 
     const [open, setOpen] = useState(false);
     // const [value, setValue] = useState('');
@@ -94,7 +105,7 @@ const NotificationSection = () => {
                     }
                 }}
             >
-                <Badge badgeContent={15} max={10} color={'secondary'}>
+                <Badge badgeContent={unReadCount} max={10} color={'secondary'}>
                     <ButtonBase sx={{ borderRadius: '12px' }}>
                             <Avatar
                                 variant="rounded"
@@ -210,4 +221,19 @@ const NotificationSection = () => {
     );
 };
 
-export default NotificationSection;
+const mapStateToProps = state => {
+    const notifications = state.notifications.notifications;
+    return {
+      notifications,
+    };
+  };
+  
+  NotificationSection.propTypes = {
+    notifications: PropTypes.array,
+  };
+  
+  NotificationSection.defaultProps = {
+    notifications: [],
+  };
+
+  export default connect(mapStateToProps, {})(NotificationSection);
