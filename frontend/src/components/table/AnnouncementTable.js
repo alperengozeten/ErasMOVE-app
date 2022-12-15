@@ -152,7 +152,7 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
                             size="small"
                             onClick={handleOpen}
                           >
-                            Show Announcement Details
+                            Details
                           </Button>
                           <Modal
                             open={open}

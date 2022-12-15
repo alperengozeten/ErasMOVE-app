@@ -222,7 +222,7 @@ const UniversityTable = ({ universities }) => {
                               size="small"
                               onClick={handleClickOpen}
                             >
-                              Go To Details
+                              Details
                             </Button>
                             
                           <Tooltip describeChild title="Delete user">
