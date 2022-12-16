@@ -69,19 +69,20 @@ const Application = ({
         >
             <Box sx={{ width: "90%", height: "90%" }}>
                 <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                    {(application.admittedStatus ===  "NOT ADMITTED") ? (
-                        <TabList onChange={handleChange}>
-                            <Tab label="Application" value={"0"} />
-                        </TabList>
-                    ) : (
-                        <TabList onChange={handleChange}>
-                            <Tab label="Application" value={"0"} />
-                            <Tab label="PreApproval Forms" value={"1"} />
-                            <Tab label="Course Requests" value={"2"} />
-                        </TabList>
-                    )}
-                </Box>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        {(application.admittedStatus ===  "NOT ADMITTED") ? (
+                            <TabList onChange={handleChange}>
+                                <Tab label="Application" value={"0"} />
+                            </TabList>
+                        ) : (
+                            <TabList onChange={handleChange}>
+                                <Tab label="Application" value={"0"} />
+                                <Tab label="PreApproval Forms" value={"1"} />
+                                <Tab label="Course Requests" value={"2"} />
+                                {/* <Tab label="Replacement Offers" value={"3"} /> */}
+                            </TabList>
+                        )}
+                    </Box>
                     <TabPanel value="0" index={0}>
                         <Box sx={{ flexGrow: 1 }}>
                             <ProfileApplicationPage application={application} />
@@ -113,6 +114,11 @@ const Application = ({
                             />
                         </Box>
                     </TabPanel>
+                    {/* <TabPanel value="3" index={3}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            def
+                        </Box>
+                    </TabPanel> */}
                 </TabContext>
             </Box>
         </Grid>
