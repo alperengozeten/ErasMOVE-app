@@ -19,9 +19,10 @@ const App = ({ getUserRequest, getApplicationRequest, typeForReq, status, userId
       if (typeForReq == 'outgoingStudent') {
         getApplicationRequest(userId);
       }
+      
+      getNotificationsRequest(userId);
     }
 
-    getNotificationsRequest(userId);
   }, [getUserRequest, getApplicationRequest, typeForReq, status, userId, getNotificationsRequest]);
   const customization = useSelector(state => state.customization);
 

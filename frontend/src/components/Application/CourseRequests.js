@@ -19,7 +19,9 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
     const [courseName, setCourseName] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [ects, setEcts] = React.useState(0);
+    const [syllabus, setSyllabus] = React.useState(null);
 
+    console.log(syllabus);
 
 
     const handleOpen = () => setOpen(true);
@@ -46,7 +48,6 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
     const handleElectiveChange = e => setIsElective(e.target.value);
 
     const handleCreateCourseRequest = () => {
-        const type = isElective ? 'Elective' : 'Mandatory';
         const courseRequest = {          
             courseName,
             description,
@@ -58,7 +59,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                 id: Number(userId)
             }
         };
-        createCourseApprovalRequestRequest(courseRequest, type);
+        createCourseApprovalRequestRequest(courseRequest, (isElective ? 'Elective' : 'Mandatory'), syllabus);
         handleClose();
     };
 
@@ -197,11 +198,16 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                                         <MDBCol sm="3">
                                             <MDBCardText>Syllabus</MDBCardText>
                                         </MDBCol>
-                                        <MDBCol sm="9">
+                                        <MDBCol sm="6">
                                             <Button startIcon={<UploadFileIcon />} variant="contained" component="label">
                                                 Upload Syllabus
-                                                <input hidden accept="image/*" multiple type="file" />
+                                                <input hidden accept="application/pdf" multiple type="file" onChange={e => setSyllabus(e.target.files[0])} />
                                             </Button>
+                                        </MDBCol>
+                                        <MDBCol sm="3">
+                                            {syllabus ? <Button variant="contained" color="error" component="label" onClick={() => setSyllabus(null)}>
+                                                Delete File
+                                            </Button> : null}
                                         </MDBCol>
                                         </MDBRow>
                                     </MDBCardBody>

@@ -28,14 +28,14 @@ function* logInRequest({ payload: {user, navigate} }) {
   if (user.email != '' && user.password != '') {
     if (user.typeForReq !== 'admin') {
       try {
-        const { data } = yield call(userLogin, user.typeForReq, user.email,user.password);
-        console.log('data: ', data);
+        const response = yield call(userLogin, user.typeForReq, user.email,user.password);
+        console.log('response: ', response);
     
         
         //TODO: API call to login 
         yield put({
           type: LOG_IN_SUCCESS,
-          payload: Number(data),
+          payload: Number(response.data),
         });
 
         // Redirect user to dashboard

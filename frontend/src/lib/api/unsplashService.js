@@ -62,6 +62,13 @@ export const deleteElectiveCourseApproval = id => (
   axios.delete(`${baseURL}/electiveCourseApprovalRequest/delete/${id}`)
 );
 
+export const sendSyllabusElective = (id, syllabus) => (
+  fetch(`${baseURL}/document/electiveCourseApproval/syllabus/${id}`, {
+    method: 'POST',
+    body: syllabus
+  })
+);
+
 // Mandatory course approvals
 export const getMandatoryCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/mandatoryCourseApprovalRequest/${authType}/${id}`)
@@ -87,6 +94,13 @@ export const declineMandatoryCourseApproval = (id, feedback) => (
 
 export const deleteMandatoryCourseApproval = id => (
   axios.delete(`${baseURL}/mandatoryCourseApprovalRequest/delete/${id}`)
+);
+
+export const sendSyllabusMandatory = (id, syllabus) => (
+  fetch(`${baseURL}/document/mandatoryCourseApproval/syllabus/${id}`, {
+    method: 'POST',
+    body: syllabus
+  })
 );
 
 // PreApproval forms

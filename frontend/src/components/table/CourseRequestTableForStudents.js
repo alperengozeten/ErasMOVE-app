@@ -143,7 +143,7 @@ const CourseRequestTableForStudents = ({ deleteCourseApprovalRequestRequest, cou
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map(row => {
+                  {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map(row => {
                     const id = row.id;
                     const courseName = row.courseName;
                     const description = row.description;

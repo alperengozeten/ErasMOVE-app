@@ -9,7 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -279,16 +279,43 @@ function* declineCourseApprovalRequestRequest({ payload: { id, type, feedback, u
     }
 }
 
-function* createCourseApprovalRequestRequest({ payload: { courseRequest, type } }) {
+function* createCourseApprovalRequestRequest({ payload: { courseRequest, type, file } }) {
   console.log(`Course approval request created `);
 
   try {
       if(type == "Elective") {
-          const { data } = yield call(createElectiveCourseApproval, courseRequest);
-          console.log(data);
+          const response = yield call(createElectiveCourseApproval, courseRequest);
+          let requestId = 0;
+          let msg = '';
+
+          yield response.json().then(value => {
+            requestId = value.id;
+            msg = value.msg;
+          });
+
+          const formData = new FormData();
+          formData.append('syllabus', file);
+
+          const res2 = yield call(sendSyllabusElective, requestId, formData);
+          console.log('res2: ', res2);
+          console.log(msg);
+          
       } else {
-          const { data } = yield call(createMandatoryCourseApproval, courseRequest);
-          console.log(data);
+          const response = yield call(createMandatoryCourseApproval, courseRequest);
+          let requestId = 0;
+          let msg = '';
+
+          yield response.json().then(value => {
+            requestId = value.id;
+            msg = value.msg;
+          });
+
+          const formData = new FormData();
+          formData.append('syllabus', file);
+
+          const res2 = yield call(sendSyllabusMandatory, requestId, formData);
+          console.log('res2: ', res2);
+          console.log(msg);
       }
 
       const status = 200;

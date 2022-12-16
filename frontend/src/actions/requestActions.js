@@ -48,9 +48,9 @@ export const declineCourseApprovalRequestRequest = (id, type, feedback, userId) 
         payload: { id, type, feedback, userId },
     });
 
-export const createCourseApprovalRequestRequest = (courseRequest, type) => ({
+export const createCourseApprovalRequestRequest = (courseRequest, type, file) => ({
         type: CREATE_COURSE_APPROVAL_REQUEST_REQUEST,
-        payload: { courseRequest, type },
+        payload: { courseRequest, type, file },
     });
 
 export const createPreApprovalFormRequest = preApprovalForm => ({
