@@ -29,6 +29,14 @@ export const getApplication = id => (
   axios.get(`${baseURL}/application/outgoingStudent/${id}`)
 );
 
+export const getAcceptedErasmusUniversity = id => (
+  axios.get(`${baseURL}/erasmusUniversity/acceptedStudent/${id}`)
+);
+
+export const getAcceptedExchangeUniversity = id => (
+  axios.get(`${baseURL}/exchangeUniversity/acceptedStudent/${id}`)
+);
+
 export const getApplicationsByDepartment = id => (
   axios.get(`${baseURL}/application/departmentID/${id}`)
 );
@@ -38,6 +46,9 @@ export const getNotifications = id => (
   axios.get(`${baseURL}/notification/user/${id}`)
 );
 
+export const markAsReadNotification = id => (
+  axios.post(`${baseURL}/notification/markRead/${id}`)
+);
 
 // Elective course approvals
 export const getElectiveCourseApprovals = (id, authType) => (

@@ -19,6 +19,8 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { IconBell } from '@tabler/icons';
 
+import { markNotificationReadRequest } from '../../../../actions';
+
 // styles
 const ListItemWrapper = styled("div")(({ theme }) => ({
   cursor: "pointer",
@@ -31,7 +33,7 @@ const ListItemWrapper = styled("div")(({ theme }) => ({
   },
 }));
 
-const NotificationList = ({ notifications }) => {
+const NotificationList = ({ notifications, markNotificationReadRequest }) => {
   // console.log(notifications);
   const theme = useTheme();
   const noNotif = notifications.length == 0;
@@ -45,6 +47,10 @@ const NotificationList = ({ notifications }) => {
     ...chipSX,
     color: theme.palette.warning.dark,
     backgroundColor: theme.palette.warning.light,
+  };
+
+  const handleMarkRead = id => {
+    markNotificationReadRequest(id);
   };
 
   return (
@@ -106,7 +112,7 @@ const NotificationList = ({ notifications }) => {
                       {!read ? <Chip label="Unread" sx={chipWarningSX} /> : null}
                     </Grid>
                     <Grid item alignContent={"center"}>
-                      {!read ? <Button variant={"outlined"} color="info">Mark as read</Button> : null}
+                      {!read ? <Button variant={"outlined"} color="info" onClick={() => handleMarkRead(id)}>Mark as read</Button> : null}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -127,12 +133,17 @@ const mapStateToProps = state => {
   };
 };
 
+const mapActionsToProps = {
+  markNotificationReadRequest,
+};
+
 NotificationList.propTypes = {
   notifications: PropTypes.array,
+  markNotificationReadRequest: PropTypes.func,
 };
 
 NotificationList.defaultProps = {
   notifications: [],
 };
 
-export default connect(mapStateToProps, {})(NotificationList);
+export default connect(mapStateToProps, mapActionsToProps)(NotificationList);
