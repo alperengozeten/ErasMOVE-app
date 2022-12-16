@@ -187,7 +187,7 @@ const PlacedStudentsTable = ({ applications }) => {
                                 style: { backgroundColor: "rgba(0,0,0,0.04)" },
                               }}
                             >
-                              <Box sx={style}>
+                              <Box sx={boxStyle}>
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
@@ -257,17 +257,23 @@ const PlacedStudentsTable = ({ applications }) => {
   );
 };
 
-const style = {
+const boxStyle = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "50%",
+  width: '40%',
   bgcolor: "background.paper",
   border: "none",
   borderRadius: "6px",
   boxShadow: 24,
   p: 4,
+  maxHeight: "95%",
+  mb: 2,
+  display: "flex",
+  flexDirection: "column",
+  overflow: "hidden",
+  overflowY: "scroll",
 };
 
 PlacedStudentsTable.propTypes = {

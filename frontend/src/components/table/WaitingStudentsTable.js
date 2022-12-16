@@ -288,7 +288,7 @@ const boxStyle = {
   borderRadius: "6px",
   boxShadow: 24,
   p: 4,
-  maxHeight: "90%",
+  maxHeight: "95%",
   mb: 2,
   display: "flex",
   flexDirection: "column",
