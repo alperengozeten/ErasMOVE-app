@@ -33,8 +33,16 @@ export const getAcceptedErasmusUniversity = id => (
   axios.get(`${baseURL}/erasmusUniversity/acceptedStudent/${id}`)
 );
 
+export const getAcceptedErasmusDepartment = id => (
+  axios.get(`${baseURL}/erasmusUniversityDepartment/acceptedStudent/${id}`)
+);
+
 export const getAcceptedExchangeUniversity = id => (
   axios.get(`${baseURL}/exchangeUniversity/acceptedStudent/${id}`)
+);
+
+export const getAcceptedExchangeDepartment = id => (
+  axios.get(`${baseURL}/exchangeUniversityDepartment/acceptedStudent/${id}`)
 );
 
 export const getApplicationsByDepartment = id => (
@@ -138,7 +146,7 @@ export const createPreApprovalForm = preApprovalForm => (
 );
 
 export const addMobilityCoursesToPreApprovalForm = (id, mobilityCourses) => (
-  fetch(`${baseURL}//mobilityCourse/addAll/${id}`, {
+  fetch(`${baseURL}/mobilityCourse/addAll/${id}`, {
     method: 'POST',
     headers: {
       'Content-type' : 'application/json'

@@ -9,7 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm, addMobilityCoursesToPreApprovalForm, createElectiveCourseApproval, createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm, addMobilityCoursesToPreApprovalForm, createElectiveCourseApproval, createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval, declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -107,7 +107,7 @@ function* declinePreApprovalFormRequest({ payload: { id, feedback, userId } }) {
   console.log(`PreApproval form declined with id ${id} with msg: ${feedback}`);
 
   try {
-      const { data } = yield call(acceptPreApprvalForm, id, feedback);
+      const { data } = yield call(declinePreApprovalForm, id, feedback);
       console.log(data);
 
       const status = 200;
@@ -154,8 +154,22 @@ function* createPreApprovalFormRequest({ payload: { preApprovalForm, userId } })
         requestId = value.id;
         msg = value.msg;
       });
-      console.log('reqId: ',requestId);
+      
+      const mobilityCourses = [];
+      for (let i = 0; i < preApprovalForm.mobilityCourses.length; i++) {
+        const mg = []; 
+        for (let j = 0; j < preApprovalForm.mobilityCourses[i].courses.length; j++) {
+          mg[j] ={ id: preApprovalForm.mobilityCourses[i].courses[j] };
+        }
+        mobilityCourses[i] = {
+          type: preApprovalForm.mobilityCourses[i].type,
+          mergedCourses: mg,
+          correspondingCourse: { id: preApprovalForm.mobilityCourses[i].equivalentCourse }
+        };
+      }
 
+      const { data } = yield call(addMobilityCoursesToPreApprovalForm, requestId, mobilityCourses);
+      console.log(data);
 
       const status = 200;
       if (status !== 200) {
@@ -165,6 +179,11 @@ function* createPreApprovalFormRequest({ payload: { preApprovalForm, userId } })
       yield put({
           type: CREATE_PREAPPROVAL_FORM_SUCCES,
           payload: preApprovalForm,
+      });
+
+      yield put({
+        type: GET_PREAPPROVAL_FORMS_REQUEST,
+        payload: { id: userId, typeForReq: "outgoingStudent" },
       });
   } catch (error) {
     yield put({

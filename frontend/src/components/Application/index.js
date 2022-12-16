@@ -41,6 +41,7 @@ const Application = ({
     getDepartments,
     hostUniDepartments,
     typeForReq,
+    contractedUniDepartments,
 }) => {
 
   useEffect(() => {
@@ -93,10 +94,11 @@ const Application = ({
                                 createPreApprovalFormRequest={createPreApprovalFormRequest}
                                 deletePreApprovalFormRequest={deletePreApprovalFormRequest}
                                 preApprovalForms={preApprovalForms}
-                                hostCourses={hostCourses}
+                                hostDepartment={application.outgoingStudent.department}
                                 approvedCourses={approvedCourses}
                                 getCoursesByDepartment={getCoursesByDepartment}
                                 userId={userId}
+                                acceptedUniDepartment={application.acceptedDepartment}
                             />
                         </Box>
                     </TabPanel>
@@ -107,7 +109,6 @@ const Application = ({
                                 deleteCourseApprovalRequestRequest={deleteCourseApprovalRequestRequest}
                                 courseRequests={courseRequests}
                                 getCoursesByDepartment={getCoursesByDepartment}
-                                getDepartments={getDepartments}
                                 hostUniDepartments={hostUniDepartments}
                                 userId={userId}
                             />
@@ -129,6 +130,7 @@ const mapStateToProps = state => {
     const userId = state.user.user.id;
     const application = state.user.application;
     const hostUniDepartments = state.universities.hostUniDepartments;
+    const contractedUniDepartments = [...state.universities.erasmusDepartments, ...state.universities.exchangeDepartments];
     const typeForReq = state.auth.authTypeForReq;
     return {
         courseRequests,
@@ -139,6 +141,7 @@ const mapStateToProps = state => {
         application,
         hostUniDepartments,
         typeForReq,
+        contractedUniDepartments,
     };
 };
 
@@ -170,6 +173,7 @@ Application.propTypes = {
     getDepartments: PropTypes.func,
     hostUniDepartments: PropTypes.array,
     typeForReq: PropTypes.string,
+    contractedUniDepartments: PropTypes.array,
 };
   
 Application.defaultProps = {

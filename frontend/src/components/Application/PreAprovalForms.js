@@ -1,25 +1,14 @@
 import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import SendIcon from '@mui/icons-material/Send';
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import PreApprovalsTableForStudents from '../table/PreApprovalsTableForStudent';
 import PreApprovalCourse from './PreApprovalCourse';
 
-const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest, getCoursesByDepartment, userId }) => {
-    useEffect(() => {
-
-        // Send an action to get related course
-        const department = 'CS'; // TODO: get from reducer
-        const university = 'Bilkent University'; // TODO: get from reducer
-        const type = 'Exchange'; // TODO: get from reducer
-
-
-        getCoursesByDepartment("-", department, "host"); 
-        getCoursesByDepartment(type, department, university); 
-    }, []);
-    
+const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostDepartment, createPreApprovalFormRequest, userId, acceptedUniDepartment }) => {
+ 
     const [open, setOpen] = React.useState(false);
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
@@ -101,8 +90,8 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                                 {mergedCourses.map((mergedCourse, index) => (
                                     <PreApprovalCourse
                                         key={index}
-                                        hostCourses={hostCourses}
-                                        approvedCourses={approvedCourses}
+                                        hostDepartment={hostDepartment}
+                                        approvedCourses={[...acceptedUniDepartment.courseList, ...acceptedUniDepartment.electiveCourseList]}
                                         mergedCourses={mergedCourses}
                                         index={index}
                                         handleCourseChange={handleCourseChange}
@@ -184,12 +173,13 @@ const style = {
 
 PreApprovalForms.propTypes = {
     preApprovalForms: PropTypes.array,
-    hostCourses: PropTypes.array,
+    hostDepartment: PropTypes.object,
     approvedCourses: PropTypes.array,
     deletePreApprovalFormRequest: PropTypes.func,
     createPreApprovalFormRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
     userId: PropTypes.number,
+    acceptedUniDepartment: PropTypes.object,
 };
   
 PreApprovalForms.defaultProps = {

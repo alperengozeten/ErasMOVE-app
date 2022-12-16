@@ -10,7 +10,6 @@ const CourseSelect = ({mergedCourses, equivalent, handleCourseEquivalentChange, 
             handleCourseChange(e, courseIndex, index);
         }
     };
-    console.log(mergedCourses);
     let value = '';
     if (mergedCourses) {
         if (mergedCourses[index]?.courses) {

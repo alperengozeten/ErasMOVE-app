@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton, Typography } from '@mui/material';
+import { Button, FormControl, FormControlLabel, Grid, IconButton, Radio, RadioGroup, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -7,9 +7,26 @@ import CourseSelect from './CourseSelect';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 import CourseCardForCreate from './CourseCardForCreate';
 
-const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquivalentChange, index, handleCourseChange, hostCourses, approvedCourses }) => {
+const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquivalentChange, index, handleCourseChange, hostDepartment, approvedCourses }) => {
     
     const [forceUpdate, setForceUpdate] = useState(false);
+    const [isElective, setIsElective] = useState(0);
+    const [hostCourses, setHostCourses] = useState(hostDepartment.courseList);
+
+    
+    const handleElectiveChange = e => {
+        setIsElective(e.target.value);
+        if (e.target.value === "0") {
+            setHostCourses(hostDepartment.courseList);
+        } else {
+            setHostCourses(hostDepartment.electiveCourseList);
+        }
+
+        const newMergedCourses = [...mergedCourses];
+        newMergedCourses[index] = {...mergedCourses[index], type: (isElective==="0" ? "Mandatory" : "Elective") };
+        setMergedCourses(newMergedCourses);
+    };
+
     const handleMergeCourse = () => {
         const newMergedCourses = [...mergedCourses];
         newMergedCourses[index] = {...mergedCourses[index], courses: [...mergedCourses[index].courses, '']};
@@ -47,6 +64,27 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
             </Grid>
             <MDBCard className="mb-4">
                 <MDBCardBody>
+                    <MDBRow>
+                        <MDBCol sm="3">
+                            <MDBCardText>Type</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                            <FormControl>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="demo-radio-buttons-group-label"
+                                    defaultValue={false}
+                                    name="radio-buttons-group"
+                                    value={isElective}
+                                    onChange={handleElectiveChange}
+                                >
+                                    <FormControlLabel value={0} control={<Radio />} label="Mandatory" />
+                                    <FormControlLabel value={1} control={<Radio />} label="Elective" />
+                                </RadioGroup>
+                            </FormControl>
+                        </MDBCol>
+                    </MDBRow>
+                    <hr />
                     {mergedCourses[index]?.courses?.map((course, courseIndex) => (
                         <CourseCardForCreate
                             key={courseIndex}
@@ -71,15 +109,6 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
                                 Add Course
                             </Button>
                         </MDBCol>
-                    </MDBRow>
-                    <hr />
-                    <MDBRow>
-                    <MDBCol sm="3">
-                        <MDBCardText>Type</MDBCardText>
-                    </MDBCol>
-                    <MDBCol sm="9">
-                        <MDBCardText className="text-muted"> Course</MDBCardText>
-                    </MDBCol>
                     </MDBRow>
                     <hr />
                     <MDBRow>
@@ -182,7 +211,7 @@ PreApprovalCourse.propTypes = {
     handleCourseChange: PropTypes.func,
     handleCourseEquivalentChange: PropTypes.func,
     setMergedCourses: PropTypes.func,
-    hostCourses: PropTypes.array,
+    hostDepartment: PropTypes.object,
     approvedCourses: PropTypes.array,
 };
 
