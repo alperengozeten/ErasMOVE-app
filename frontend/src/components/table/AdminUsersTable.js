@@ -4,12 +4,20 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteModal from '../DeleteModal';
-
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardText,
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+} from "mdb-react-ui-kit";
 // @mui
 import {
   Card,
   Table,
   Stack,
+  Box,
   Paper,
   Avatar,
   TableRow,
@@ -21,6 +29,8 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
+  Grid,
+  Modal,
   Button
 } from '@mui/material';
 // components
@@ -33,12 +43,6 @@ import { AdminUsersListHead, AdminUsersListToolbar } from './adminUsers';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'actorType', label: 'Actor Type', alignRight: true },
-
-//   { id: 'department', label: 'Department', alignRight: true },
-//   { id: 'score', label: 'Score', alignRight: true },
-//   { id: 'semester', label: 'Selected Semester', alignRight: true },
-//   { id: 'placedUniversity', label: 'Selected Universities', alignRight: true },
-//   { id: 'status', label: 'Status', alignRight: true },
 ];
 
 // ----------------------------------------------------------------------
@@ -75,7 +79,7 @@ function applySortFilter(array, comparator, query) {
 const AdminUsersTable = ({ allUsers }) => {
     const [openDelete, setOpenDelete] = React.useState(false);
 
-    // const [openDetails, setOpenDetails] = React.useState(false);
+    const [openDetails, setOpenDetails] = React.useState(false);
     const [page, setPage] = useState(0);
 
     const [order, setOrder] = useState('asc');
@@ -98,22 +102,17 @@ const AdminUsersTable = ({ allUsers }) => {
         setOpenDelete(false);
       };
     
-    //   const handleOpenDetails = () => {
-    //     setOpenDetails(true);
-    //   };
-    //   const handleCloseDetails = () => { 
-    //     setOpenDetails(false);
-    //   };
+       const handleOpenDetails = () => {
+         setOpenDetails(true);
+       };
+       const handleCloseDetails = () => { 
+         setOpenDetails(false);
+       };
     
       const handleDelete = () => {
         handleCloseDelete();
       };
 
-
-
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -187,45 +186,9 @@ const AdminUsersTable = ({ allUsers }) => {
 
                         <TableCell align="center">{actorType}</TableCell>
 
-                        {/* <TableCell align="center">{score}</TableCell>
-
-                        <TableCell align="center">{selectedSemester}</TableCell> */}
+                    
 
                         <TableCell align="center"> 
-                          {/* <div>
-                            <Typography
-                              aria-owns={openPopover ? 'mouse-over-popover' : undefined}
-                              aria-haspopup="true"
-                              onMouseEnter={handlePopoverOpen}
-                              onMouseLeave={handlePopoverClose}
-                            >
-                              {`1. ${selectedUniversities[0]}`}
-                            </Typography>
-                            <Popover
-                              id="mouse-over-popover"
-                              sx={{
-                                pointerEvents: 'none',
-                              }}
-                              open={openPopover}
-                              anchorEl={anchorEl}
-                              anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                              }}
-                              transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                              }}
-                              onClose={handlePopoverClose}
-                              disableRestoreFocus
-                            >
-                              {
-                                selectedUniversities.map((university, index) => (
-                                  <Typography key={index} sx={{ p: 2 }}>{index + 1}. {university}</Typography>
-                                ))
-                              }
-                            </Popover>
-                          </div> */}
                         </TableCell>
 
                         <TableCell align="right">
@@ -233,7 +196,7 @@ const AdminUsersTable = ({ allUsers }) => {
                         </TableCell>
                         <TableCell align="right">
                         <Tooltip describeChild title="Open user details">
-                            <Button variant="contained" color="inherit" size="small" onClick={() => handleOpenApplication(id) }>
+                            <Button variant="contained" color="inherit" size="small" onClick={() => handleOpenDetails() }>
                               Details
                             </Button>
                           </Tooltip>
@@ -243,7 +206,84 @@ const AdminUsersTable = ({ allUsers }) => {
                             </IconButton>
                           </Tooltip>
                         </TableCell>
+                        <Modal
+        open={openDetails}
+        onClose={handleCloseDetails}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stack spacing={6}>
+            <Typography
+              id="modal-modal-title"
+              textAlign={"center"}
+              variant="h2"
+              component="h1"
+            >
+              User Details
+            </Typography>
+            <Stack alignItems={"center"} spacing={3}>
+              <section style={{ width: "100%", backgroundColor: "#eee" }}>
+                <MDBContainer className="py-5">
+                  <MDBCard className="mb-4">
+                    <MDBCardBody>
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Name</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                        <MDBCardText className="text-muted">
+                                  {name}
+                                </MDBCardText>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Actor Type</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                        <MDBCardText className="text-muted">
+                                  {actorType}
+                                </MDBCardText>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>E-mail</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                        <MDBCardText className="text-muted">
+                                  s2kitutturan@gmail.com
+                                </MDBCardText>
+                        </MDBCol>
+                      </MDBRow>
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBContainer>
+              </section>
+              <Grid container justifyContent={"center"}>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={4}>
+                  <Button
+                    sx={{ margin: "auto" }}
+                    variant="contained"
+                    color="error"
+                    size="medium"
+                    onClick={handleCloseDetails}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+                <Grid item xs={1}></Grid>
+              </Grid>
+            </Stack>
+          </Stack>
+        </Box>
+      </Modal>
                       </TableRow>
+                      
                     );
                   })}
                   {emptyRows > 0 && (
@@ -291,6 +331,7 @@ const AdminUsersTable = ({ allUsers }) => {
           />
         </Card>
         <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"User"}/>
+       
       </Container>
     </>
   );
@@ -304,5 +345,17 @@ AdminUsersTable.defaultProps = {
     allUsers: [],
 };
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "6px",
+  boxShadow: 24,
+  p: 4,
+};
 
 export default AdminUsersTable;

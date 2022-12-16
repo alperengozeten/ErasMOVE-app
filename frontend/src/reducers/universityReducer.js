@@ -1,4 +1,6 @@
 import { GET_DEPARTMENTS_SUCCESS } from "../constants/actionTypes";
+import { DELETE_UNIVERSITY_SUCCESS } from "../constants/actionTypes";
+
 
 const INITIAL_STATE = {
     universities: [
@@ -58,6 +60,9 @@ const INITIAL_STATE = {
           erasmusDepartments: action.payload.filter(dep => dep.erasmusUniversity),
           exchangeDepartments: action.payload.filter(dep => dep.exchangeUniversity),
         };
+      case DELETE_UNIVERSITY_SUCCESS:
+        return;
+
       default:
         return state;
     }

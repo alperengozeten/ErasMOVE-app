@@ -17,20 +17,12 @@ import Iconify from "../../table/iconify";
 import { useState } from "react";
 import {
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  FormControlLabel,
   Modal,
-  Radio,
-  RadioGroup,
   Stack,
   TextField,
 } from "@mui/material";
-
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import SendIcon from "@mui/icons-material/Send";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 import {
   MDBCard,
@@ -196,7 +188,7 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Description</MDBCardText>
+                          <MDBCardText>E-Mail</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
