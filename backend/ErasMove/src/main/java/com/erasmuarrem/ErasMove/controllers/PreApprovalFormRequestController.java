@@ -50,6 +50,11 @@ public class PreApprovalFormRequestController {
         return preApprovalFormRequestService.getPreApprovalFormRequestsByDepartmentCoordinatorIDAndOutgoingStudentID(departmentCoordinatorID, outgoingStudentID);
     }
 
+    @GetMapping("/department/{departmentID}")
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
+        return preApprovalFormRequestService.getPreApprovalFormRequestsByDepartmentID(departmentID);
+    }
+
     @PostMapping("/add") // the student must be admitted to be able to call this!
     public ResponseEntity<ResponseMessage> addPreApprovalFormRequestBy(@RequestBody PreApprovalFormRequest preApprovalFormRequest) {
         return preApprovalFormRequestService.addPreApprovalFormRequest(preApprovalFormRequest);

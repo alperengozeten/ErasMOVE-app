@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
+import com.erasmuarrem.ErasMove.repositories.DepartmentRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
 import jakarta.transaction.Transactional;
@@ -25,9 +26,10 @@ public class PreApprovalFormRequestService {
     private final ExchangeUniversityService exchangeUniversityService;
     private final NotificationService notificationService;
     private final ApplicationService applicationService;
+    private final DepartmentRepository departmentRepository;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService, ApplicationService applicationService) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService, ApplicationService applicationService, DepartmentRepository departmentRepository) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -36,6 +38,7 @@ public class PreApprovalFormRequestService {
         this.exchangeUniversityService = exchangeUniversityService;
         this.notificationService = notificationService;
         this.applicationService = applicationService;
+        this.departmentRepository = departmentRepository;
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequests() {
@@ -258,5 +261,14 @@ public class PreApprovalFormRequestService {
 
         preApprovalFormRequestRepository.deletePreApprovalFormRequestsByStudent_ID(outgoingStudentID);
         return "All Pre-Approval Forms of Outgoing Student with id:" + outgoingStudentID + " have been deleted!";
+    }
+
+    public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentID(Long departmentID) {
+
+        if ( !departmentRepository.existsById(departmentID) ) {
+            throw new IllegalStateException("Department with id:" + departmentID + " doesn't exist!");
+        }
+
+        return preApprovalFormRequestRepository.findByStudent_Department_ID(departmentID);
     }
 }

@@ -11,5 +11,6 @@ public interface PreApprovalFormRequestRepository extends JpaRepository<PreAppro
     List<PreApprovalFormRequest> findByDepartmentCoordinatorIDAndStudentID(Long departmentCoordinatorID, Long outgoingStudentID);
     List<PreApprovalFormRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
     List<PreApprovalFormRequest> findByStudentID(Long outgoingStudentID);
+    List<PreApprovalFormRequest> findByStudent_Department_ID(Long departmentID);
     void deletePreApprovalFormRequestsByStudent_ID(Long outgoingStudentID);
 }
