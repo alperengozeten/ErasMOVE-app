@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 public class AdministrativeStaffService {
@@ -24,9 +21,14 @@ public class AdministrativeStaffService {
     private final OutgoingStudentService outgoingStudentService;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
+    private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
+    private final HostUniversityService hostUniversityService;
+
     @Autowired
     public AdministrativeStaffService(AdministrativeStaffRepository administrativeStaffRepository, DepartmentService departmentService, EmailService emailService,
-                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService ) {
+                                      ApplicationService applicationService, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService,
+                                      ExchangeUniversityService exchangeUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
+                                      HostUniversityService hostUniversityService ) {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.departmentService = departmentService;
         this.emailService = emailService;
@@ -34,6 +36,9 @@ public class AdministrativeStaffService {
         this.applicationService = applicationService;
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
+        this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
+        this.hostUniversityService = hostUniversityService;
+
     }
 
     public List<AdministrativeStaff> getAdministrativeStaffs() {
@@ -152,8 +157,8 @@ public class AdministrativeStaffService {
             newApplication.setSelectedSemester(applicationLine.getSelectedSemester());
 
             newApplication.setSelectedUniversities(universities);
-            newApplication.setAdmittedStatus("NOT ADMITTED"); // set initial status
-            newApplication.setPreApprovalFormStatus("NOT SUBMITTED"); // set initial status
+            newApplication.setAdmittedStatus("Not Admitted"); // set initial status
+            newApplication.setPreApprovalFormStatus("Not Submitted"); // set initial status
 
             applicationService.addApplication(newApplication);
         }
@@ -171,5 +176,70 @@ public class AdministrativeStaffService {
         }
         return salt.toString();
     }
+
+    public void placeErasmusStudents( String departmentName ) {
+            List<Application> erasmusApplications = new ArrayList<>();
+            List<Application>  allDepartmentApplications = new ArrayList<>( applicationService.getApplicationsByDepartmentName( departmentName )  );
+            for (Application application : allDepartmentApplications) {
+                if (application.getOutgoingStudent().getIsErasmus()) {
+                    erasmusApplications.add(application);
+                }
+
+            }
+            erasmusApplications.sort(new Comparator<>() {
+                @Override
+                public int compare(Application o1, Application o2) {
+                    return o1.compareTo(o2);
+                }
+            });
+
+            for ( int i = erasmusApplications.size() -1; i > 0; i-- ) {
+                for ( int k = 0; k < erasmusApplications.get(i).getSelectedUniversities().size(); k++ ) {
+                    ErasmusUniversity erasmusUniversity = (ErasmusUniversity) erasmusApplications.get(i).getSelectedUniversities().get(k);
+                    ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(erasmusUniversity.getID(), departmentName);
+                    if ( erasmusUniversityDepartment.getQuota() != 0 ) {
+                        erasmusUniversityDepartmentService.addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(erasmusUniversityDepartment.getID(), erasmusApplications.get(i).getOutgoingStudent().getID());
+                        break;
+                    }
+                }
+                if ( erasmusApplications.get(i).getAdmittedStatus().equals("Not admitted") ) {
+                    hostUniversityService.addStudentToWaitingBinById(erasmusApplications.get(i).getOutgoingStudent().getStudentId());
+                }
+            }
+    }
+
+    public void placeExchangeStudents( ) {
+        List<Application> applications = new ArrayList<>(applicationService.getApplications());
+        List<Application> exchangeApplications = new ArrayList<>();
+
+        for (Application application : applications ) {
+            if (!application.getOutgoingStudent().getIsErasmus()) {
+                exchangeApplications.add(application);
+            }
+
+        }
+
+        exchangeApplications.sort(new Comparator<>() {
+            @Override
+            public int compare(Application o1, Application o2) {
+                return o1.compareTo(o2);
+            }
+        });
+
+        for ( int i = exchangeApplications.size() -1; i > 0; i-- ) {
+            for ( int k = 0; k < exchangeApplications.get(i).getSelectedUniversities().size(); k++ ) {
+                ExchangeUniversity exchangeUniv = (ExchangeUniversity) exchangeApplications.get(i).getSelectedUniversities().get(k);
+                if ( exchangeUniv.getUniversityQuota() != 0 ) {
+                    exchangeUniversityService.addOutgoingStudentByIDAndOutgoingStudentID(exchangeUniv.getID(),exchangeApplications.get(i).getOutgoingStudent().getID());
+                    break;
+                }
+            }
+            if ( exchangeApplications.get(i).getAdmittedStatus().equals("Not admitted") ) {
+                hostUniversityService.addStudentToWaitingBinById(exchangeApplications.get(i).getOutgoingStudent().getStudentId());
+            }
+        }
+    }
+
+
 
 }

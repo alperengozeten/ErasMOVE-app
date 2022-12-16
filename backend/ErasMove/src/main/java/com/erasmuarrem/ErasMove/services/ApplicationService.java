@@ -71,4 +71,14 @@ public class ApplicationService {
 
         return applicationRepository.findByOutgoingStudent_DepartmentID(departmentID);
     }
+
+    public List<Application> getApplicationsByDepartmentName(String departmentName ) {
+
+        if ( !departmentRepository.existsByDepartmentName(departmentName) ) {
+            throw new IllegalStateException("Department with name " + departmentName +  " doesn't exist!");
+        }
+
+        return applicationRepository.findByOutgoingStudent_Department_departmentName(departmentName);
+    }
 }
+
