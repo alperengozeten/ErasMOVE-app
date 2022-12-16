@@ -1,10 +1,13 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.Course;
-import com.erasmuarrem.ErasMove.models.ExchangeUniversityDepartment;
+import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.ExchangeUniversityDepartmentRepository;
+import com.erasmuarrem.ErasMove.repositories.ExchangeUniversityRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,11 +18,17 @@ public class ExchangeUniversityDepartmentService {
 
     private final ExchangeUniversityDepartmentRepository exchangeUniversityDepartmentRepository;
     private final CourseRepository courseRepository;
+    private final ExchangeUniversityService exchangeUniversityService;
+    private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ExchangeUniversityRepository exchangeUniversityRepository;
 
     @Autowired
-    public ExchangeUniversityDepartmentService(ExchangeUniversityDepartmentRepository exchangeUniversityDepartmentRepository, CourseRepository courseRepository) {
+    public ExchangeUniversityDepartmentService(ExchangeUniversityDepartmentRepository exchangeUniversityDepartmentRepository, CourseRepository courseRepository, ExchangeUniversityService exchangeUniversityService, OutgoingStudentRepository outgoingStudentRepository, ExchangeUniversityRepository exchangeUniversityRepository) {
         this.exchangeUniversityDepartmentRepository = exchangeUniversityDepartmentRepository;
         this.courseRepository = courseRepository;
+        this.exchangeUniversityService = exchangeUniversityService;
+        this.outgoingStudentRepository = outgoingStudentRepository;
+        this.exchangeUniversityRepository = exchangeUniversityRepository;
     }
 
     public List<ExchangeUniversityDepartment> getExchangeUniversityDepartments() {
@@ -102,7 +111,7 @@ public class ExchangeUniversityDepartmentService {
         Course course = courseOptional.get();
 
         if ( !courseList.contains(course) ) {
-            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist in erasmus department!");
+            throw new IllegalStateException("Course with id:" + courseID + " doesn't exist in exchange department!");
         }
 
         courseList.remove(course);
@@ -132,7 +141,7 @@ public class ExchangeUniversityDepartmentService {
         }
 
         if ( !courseNameExists ) {
-            throw new IllegalStateException("Course with name:" + courseName + " doesn't exist in the erasmus university department!");
+            throw new IllegalStateException("Course with name:" + courseName + " doesn't exist in the exchange university department!");
         }
 
         courseList.remove(foundCourse);
@@ -141,6 +150,10 @@ public class ExchangeUniversityDepartmentService {
     }
 
     public ExchangeUniversityDepartment getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(Long universityID, String departmentName) {
+        if ( !exchangeUniversityRepository.existsById(universityID) ) {
+            throw new IllegalStateException("Exchange University with id:" + universityID + " doesn't exist!");
+        }
+
         Optional<ExchangeUniversityDepartment> exchangeUniversityDepartmentOptional = exchangeUniversityDepartmentRepository
                 .findByExchangeUniversityIDAndDepartmentName(universityID, departmentName);
 
@@ -193,11 +206,32 @@ public class ExchangeUniversityDepartmentService {
         Course electiveCourse = courseOptional.get();
 
         if ( !electiveCourseList.contains(electiveCourse) ) {
-            throw new IllegalStateException("Course with id:" + electiveCourseID + " doesn't exist in erasmus department!");
+            throw new IllegalStateException("Course with id:" + electiveCourseID + " doesn't exist in exchange department!");
         }
 
         electiveCourseList.remove(electiveCourse);
         courseRepository.deleteById(electiveCourseID);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
+    }
+
+    public ResponseEntity<ExchangeUniversityDepartment> getExchangeUniversityDepartmentByAcceptedStudentID(Long acceptedStudentID) {
+        Optional<OutgoingStudent> acceptedStudentOptional = outgoingStudentRepository.findById(acceptedStudentID);
+
+        if ( !acceptedStudentOptional.isPresent() ) {
+            throw new IllegalStateException("Outgoing Student with id:" + acceptedStudentID + " doesn't exist!");
+        }
+
+        OutgoingStudent acceptedStudent = acceptedStudentOptional.get();
+        ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(acceptedStudentID);
+
+        if ( exchangeUniversity == null ) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        ExchangeUniversityDepartment exchangeUniversityDepartment = getExchangeUniversityDepartmentByExchangeUniversityIDAndDepartmentName(
+                exchangeUniversity.getID(), acceptedStudent.getDepartment().getDepartmentName()
+        );
+
+        return new ResponseEntity<>(exchangeUniversityDepartment, HttpStatus.OK);
     }
 }
