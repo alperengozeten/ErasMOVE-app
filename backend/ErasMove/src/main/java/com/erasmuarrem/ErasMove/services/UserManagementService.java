@@ -410,6 +410,7 @@ public class UserManagementService {
                 }
                 hashingPasswordHelper.setPassword(incomingStudent.getHashedPassword());
                 incomingStudent.setHashedPassword(hashingPasswordHelper.Hash());
+                incomingStudent.setCourseProposalStatus("Course Proposal Not Submitted");
                 incomingStudentRepository.save(incomingStudent);
                 return new ResponseEntity<>("Incoming Student successfully added!", HttpStatus.OK);
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ContractedUniversity {
+public class ContractedUniversity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
