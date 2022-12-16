@@ -9,7 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm, addMobilityCoursesToPreApprovalForm, createElectiveCourseApproval, createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -54,7 +54,9 @@ function* deletePreApprovalFormRequest({ payload: { id } }) {
 
   try {
 
-    //TODO: Send API request here
+    const { data } = yield call(deletePreApprovalForm, id);
+    console.log(data);
+    
     const status = 200;
     if (status !== 200) {
       throw Error('Request failed for preApproval forms');
@@ -72,13 +74,12 @@ function* deletePreApprovalFormRequest({ payload: { id } }) {
   }
 }
 
-function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
+function* acceptPreApprovalFormRequest({ payload: { id, feedback, userId } }) {
   console.log(`PreApproval form accepted with id ${id} with msg: ${feedback}`);
 
   try {
-      //TODO: Send POST API request here
-
-
+      const { data } = yield call(acceptPreApprvalForm, id, feedback);
+      console.log(data);
 
       const status = 200;
       if (status !== 200) {
@@ -89,6 +90,11 @@ function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
           type: ACCEPT_PREAPPROVAL_FORM_SUCCESS,
           payload: id,
       });
+
+      yield put({
+        type: GET_PREAPPROVAL_FORMS_REQUEST,
+        payload: { id: userId, typeForReq: "departmentCoordinator" },
+    });
   } catch (error) {
     yield put({
       type: ACCEPT_PREAPPROVAL_FORM_FAIL,
@@ -97,11 +103,12 @@ function* acceptPreApprovalFormRequest({ payload: { id, feedback } }) {
   }
 }
 
-function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
+function* declinePreApprovalFormRequest({ payload: { id, feedback, userId } }) {
   console.log(`PreApproval form declined with id ${id} with msg: ${feedback}`);
 
   try {
-      //TODO: Send POST API request here
+      const { data } = yield call(acceptPreApprvalForm, id, feedback);
+      console.log(data);
 
       const status = 200;
       if (status !== 200) {
@@ -112,6 +119,11 @@ function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
           type: DECLINE_PREAPPROVAL_FORM_SUCCESS,
           payload: id,
       });
+
+      yield put({
+        type: GET_PREAPPROVAL_FORMS_REQUEST,
+        payload: { id: userId, typeForReq: "departmentCoordinator" },
+    });
   } catch (error) {
     yield put({
       type: DECLINE_PREAPPROVAL_FORM_FAIL,
@@ -120,11 +132,30 @@ function* declinePreApprovalFormRequest({ payload: { id, feedback } }) {
   }
 }
 
-function* createPreApprovalFormRequest({ payload: { preApprovalForm } }) {
+function* createPreApprovalFormRequest({ payload: { preApprovalForm, userId } }) {
   console.log(`Pre approval form created `);
 
   try {
       // TODO: send Post request here
+      const preApprovalFormReq = {
+          info:"Pre-Approval Form Request",
+          feedback:"",
+          student: {
+              id: userId,
+          }, 
+      };
+      
+      const response = yield call(createPreApprovalForm, preApprovalFormReq); 
+
+      let requestId = 0;
+      let msg = '';
+
+      yield response.json().then(value => {
+        requestId = value.id;
+        msg = value.msg;
+      });
+      console.log('reqId: ',requestId);
+
 
       const status = 200;
       if (status !== 200) {

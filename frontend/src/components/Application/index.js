@@ -96,6 +96,7 @@ const Application = ({
                                 hostCourses={hostCourses}
                                 approvedCourses={approvedCourses}
                                 getCoursesByDepartment={getCoursesByDepartment}
+                                userId={userId}
                             />
                         </Box>
                     </TabPanel>

@@ -116,8 +116,24 @@ export const getPreApprovalFormMobilityCourses = id => (
   axios.get(`${baseURL}/mobilityCourse/preApprovalForm/${id}`)
 );
 
-export const createPreApprovalForm = (id, courseApproval) => (
-  axios.post(`${baseURL}/preApprovalForm/add`, courseApproval)
+export const createPreApprovalForm = preApprovalForm => (
+  fetch(`${baseURL}/preApprovalForm/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(preApprovalForm)
+  })
+);
+
+export const addMobilityCoursesToPreApprovalForm = (id, mobilityCourses) => (
+  fetch(`${baseURL}//mobilityCourse/addAll/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(mobilityCourses)
+  })
 );
 
 export const deletePreApprovalForm = id => (

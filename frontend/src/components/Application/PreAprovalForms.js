@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import PreApprovalsTableForStudents from '../table/PreApprovalsTableForStudent';
 import PreApprovalCourse from './PreApprovalCourse';
 
-const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest, getCoursesByDepartment }) => {
+const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostCourses, approvedCourses, createPreApprovalFormRequest, getCoursesByDepartment, userId }) => {
     useEffect(() => {
 
         // Send an action to get related course
@@ -72,7 +72,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
         const preApprovalForm = {
             mobilityCourses: mergedCourses,
         };
-        createPreApprovalFormRequest(preApprovalForm);
+        createPreApprovalFormRequest(preApprovalForm, userId);
         handleClose();
     };
 
@@ -189,6 +189,7 @@ PreApprovalForms.propTypes = {
     deletePreApprovalFormRequest: PropTypes.func,
     createPreApprovalFormRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
+    userId: PropTypes.number,
 };
   
 PreApprovalForms.defaultProps = {

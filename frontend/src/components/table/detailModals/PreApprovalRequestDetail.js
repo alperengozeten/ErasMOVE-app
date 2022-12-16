@@ -11,7 +11,7 @@ import MobilityCourseCard from "./MobilityCourseCard";
 import { acceptPreApprovalFormRequest, declinePreApprovalFormRequest } from '../../../actions';
 
 
-const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, preApprovalForm, acceptPreApprovalFormRequest, declinePreApprovalFormRequest }) => {
+const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, preApprovalForm, acceptPreApprovalFormRequest, declinePreApprovalFormRequest, userId }) => {
 
     const [feedback, setFeedback] = useState('');
 
@@ -20,12 +20,12 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
     const status = preApprovalForm.status;
 
     const handleAccept = () => {
-        acceptPreApprovalFormRequest(preApprovalForm.id, feedback);
+        acceptPreApprovalFormRequest(preApprovalForm.id, feedback, userId);
         handleCloseDetails();
     };
 
     const handleDecline = () => {
-        declinePreApprovalFormRequest(preApprovalForm.id, feedback);
+        declinePreApprovalFormRequest(preApprovalForm.id, feedback, userId);
         handleCloseDetails();
     };
 
@@ -207,8 +207,10 @@ const style = {
 
 const mapStateToProps = state => {
     const authType = state.auth.authType;
+    const userId = state.auth.userId;
     return {
         authType,
+        userId,
     };
 };
 
@@ -225,6 +227,7 @@ PreApprovalRequestDetail.propTypes = {
     preApprovalForm: PropTypes.object,
     acceptPreApprovalFormRequest: PropTypes.func,
     declinePreApprovalFormRequest: PropTypes.func,
+    userId: PropTypes.string,
 };
   
 PreApprovalRequestDetail.defaultProps = {
