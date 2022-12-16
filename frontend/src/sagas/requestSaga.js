@@ -9,7 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -22,20 +22,23 @@ function* getPreApprovalFormsRequest({ payload: { id, typeForReq } }) {
   console.log(`PreApprovals requested with id ${id}`);
 
   try {
+    const { data: preApps } = yield call(getPreApprovalForms, id, typeForReq);
 
-    //TODO: Send API request here
-    const { data } = yield call(getPreApprovalForms, id, typeForReq);
-    console.log('PreApps: ', data);
+    for (let i = 0; i < preApps.length; i++) {
+      const { data } = yield call(getPreApprovalFormMobilityCourses, preApps[i].id);
+      preApps[i].mobilityCourses = data;
+    }
+
+    console.log('PreAppsWMC: ', preApps);
 
     const status = 200;
-    const preApprovalForms = dummyForms;
     if (status !== 200) {
       throw Error('Request failed for preApproval forms');
     }
 
     yield put({
       type: GET_PREAPPROVAL_FORMS_SUCCESS,
-      payload: preApprovalForms,
+      payload: preApps,
     });
   } catch (error) {
     yield put({
@@ -359,119 +362,6 @@ const requestSaga = [
   takeEvery(DECLINE_COURSE_APPROVAL_REQUEST_REQUEST, declineCourseApprovalRequestRequest),
   takeEvery(CREATE_COURSE_APPROVAL_REQUEST_REQUEST, createCourseApprovalRequestRequest),
   takeEvery(CREATE_PREAPPROVAL_FORM_REQUEST, createPreApprovalFormRequest),
-];
-
-const dummyForms = [
-  {
-      id: 1,
-      name: 'Kürşad Güzelkaya',
-      status: "rejected",
-      departmentCoordinator: "Altay Güvenir",
-      mobilityCourses: [
-          {
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  },{
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          },
-          {
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          }
-      ],
-      feedback: "Man this is terrible.. Are you serious??",
-  },{
-      id: 2,
-      name: 'John Doe',
-      status: "waiting",
-      departmentCoordinator: "Aynur Dayanik",
-      mobilityCourses: [
-          {
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  },{
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          }
-      ],
-      feedback: "Man this is terrible.. Are you serious??",
-  },{
-      id: 3,
-      name: 'Namık Kemal',
-      status: "accepted",
-      departmentCoordinator: "Eray Hoca",
-      mobilityCourses: [
-          {
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  },{
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          },
-          {
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  },{
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  },{
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          },{
-              courses: [
-                  {
-                      courseName: 'CS219',
-                      description: 'Proggraming Life',
-                      ECTS: 3,
-                  }
-              ],
-              type: "Must",
-              equivalentCourse: 'CS340',
-          }
-      ],
-      feedback: "LGTM. You are perfect :))",
-  },
 ];
 
 export default requestSaga;

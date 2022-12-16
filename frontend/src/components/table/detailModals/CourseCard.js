@@ -37,7 +37,7 @@ const CourseCard = ({ course, courseIndex }) => {
                                     <MDBCardText>ECTS</MDBCardText>
                                 </MDBCol>
                                 <MDBCol sm="9">
-                                    <MDBCardText className="text-muted">{course['ECTS']}</MDBCardText>
+                                    <MDBCardText className="text-muted">{course.ects}</MDBCardText>
                                 </MDBCol>
                             </MDBRow>
                         </MDBCardBody>
