@@ -201,7 +201,7 @@ const StudentsTable = ({ applications }) => {
                             </Stack>
                           </TableCell>
 
-                          <TableCell align="center">{department}</TableCell>
+                          <TableCell align="center">{outgoingStudent.department.departmentName}</TableCell>
 
                           <TableCell align="center">{applicationScore}</TableCell>
 
