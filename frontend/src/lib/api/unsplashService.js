@@ -112,6 +112,10 @@ export const getPreApprovalForms = (id, authType) => (
   axios.get(`${baseURL}/preApprovalForm/${authType}/${id}`)
 );
 
+export const getPreApprovalFormMobilityCourses = id => (
+  axios.get(`${baseURL}/mobilityCourse/preApprovalForm/${id}`)
+);
+
 export const createPreApprovalForm = (id, courseApproval) => (
   axios.post(`${baseURL}/preApprovalForm/add`, courseApproval)
 );

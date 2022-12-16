@@ -58,7 +58,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                             </MDBCol>
                                             <MDBCol sm="9">
                                                 <MDBCardText className="text-muted">
-                                                    {preApprovalForm.name}
+                                                    {preApprovalForm.student.name}
                                                 </MDBCardText>
                                             </MDBCol>
                                         </MDBRow>
@@ -138,7 +138,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                                                         </MDBCol>
                                                         <MDBCol sm="9">
                                                             <MDBCardText className="text-muted">
-                                                                {preApprovalForm.departmentCoordinator}
+                                                                {preApprovalForm.departmentCoordinator.name}
                                                             </MDBCardText>
                                                         </MDBCol>
                                                     </MDBRow>

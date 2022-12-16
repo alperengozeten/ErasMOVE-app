@@ -16,7 +16,7 @@ const MobilityCourseCard = ({ mobilityCourse, mobilityIndex }) => {
             </Typography>
             <MDBCard className="mb-4">
                 <MDBCardBody>
-                    {mobilityCourse?.courses?.map((course, index) => (
+                    {mobilityCourse?.mergedCourses?.map((course, index) => (
                         <CourseCard key={index} course={course} courseIndex={index} />
                     ))}
                     <MDBRow>
@@ -33,7 +33,7 @@ const MobilityCourseCard = ({ mobilityCourse, mobilityIndex }) => {
                         <MDBCardText>Equivalent Course</MDBCardText>
                     </MDBCol>
                     <MDBCol sm="9">
-                        <MDBCardText className="text-muted">{mobilityCourse.equivalentCourse}</MDBCardText>
+                        <MDBCardText className="text-muted">{mobilityCourse.correspondingCourse.courseName}</MDBCardText>
                     </MDBCol>
                     </MDBRow>
                 </MDBCardBody>

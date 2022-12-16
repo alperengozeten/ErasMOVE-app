@@ -140,13 +140,13 @@ const PreApprovalsTable = ({ preApprovalForms, deletePreApprovalFormRequest }) =
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
-                    const { id, name, status } = row;
+                    const { id, student, status } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">{name}</TableCell>
+                        <TableCell component="th" scope="row" padding="none">{student.name}</TableCell>
 
                         <TableCell align='center' component="th" scope="row" padding="none">{`PreApproval Form ${index+1}`}</TableCell>
 
