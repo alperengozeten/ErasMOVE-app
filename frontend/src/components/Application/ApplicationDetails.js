@@ -14,7 +14,8 @@ import {
   FormControl,
   InputLabel,
   OutlinedInput,
-  MenuItem
+  MenuItem,
+  List
 } from "@mui/material";
 
 // ----------------------------------------------------------------------
@@ -61,8 +62,8 @@ const ApplicationDetails = ({ application, languageEditable }) => {
 
   return (
     <>
-      <Typography id="modal-modal-title" variant="h4" component="h2">
-        Student Details
+      <Typography id="modal-modal-title" variant="h3" component="h2" textAlign={"center"}>
+        Application Details
       </Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         Student Name
@@ -74,7 +75,7 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="name"
         fullWidth
         variant="standard"
-        defaultValue={application.name}
+        defaultValue={application.outgoingStudent.name}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -87,7 +88,7 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="id"
         fullWidth
         variant="standard"
-        defaultValue={application.id}
+        defaultValue={application.outgoingStudent.studentId}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -100,7 +101,7 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="dep"
         fullWidth
         variant="standard"
-        defaultValue={application.department}
+        defaultValue={application.outgoingStudent.department.departmentName}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -113,11 +114,11 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="score"
         fullWidth
         variant="standard"
-        defaultValue={application.score}
+        defaultValue={application.applicationScore}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        Status
+        Preapproval Form Status
       </Typography>
       <TextField
         required
@@ -126,7 +127,20 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="status"
         fullWidth
         variant="standard"
-        defaultValue={application.status}
+        defaultValue={application.preapprovalFormStatus}
+        disabled
+      />
+      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        Admitted Status
+      </Typography>
+      <TextField
+        required
+        autoFocus
+        margin="dense"
+        id="status"
+        fullWidth
+        variant="standard"
+        defaultValue={application.admittedStatus}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -227,6 +241,24 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+// const boxStyle = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: '80%',
+//   bgcolor: "background.paper",
+//   border: "none",
+//   borderRadius: "6px",
+//   boxShadow: 24,
+//   p: 4,
+//   maxHeight: "90%",
+//   mb: 2,
+//   display: "flex",
+//   flexDirection: "column",
+//   overflowY: "scroll",
+// };
 
 ApplicationDetails.propTypes = {
   application: PropTypes.object,
