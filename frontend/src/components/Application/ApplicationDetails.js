@@ -124,10 +124,10 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         required
         autoFocus
         margin="dense"
-        id="status"
+        id="statusPre"
         fullWidth
         variant="standard"
-        defaultValue={application.preapprovalFormStatus}
+        defaultValue={application.preApprovalFormStatus}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>

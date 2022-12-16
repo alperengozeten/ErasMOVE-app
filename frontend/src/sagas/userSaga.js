@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
-import { GET_APPLICATION_FAIL, GET_APPLICATION_REQUEST, GET_APPLICATION_SUCCESS, GET_NOTIFICATIONS_FAIL, GET_NOTIFICATIONS_REQUEST, GET_NOTIFICATIONS_SUCCESS, GET_USER_FAIL, GET_USER_REQUEST, GET_USER_SUCCESS } from '../constants/actionTypes';
-import { getApplication, getNotifications, getUser } from '../lib/api/unsplashService';
+import { GET_APPLICATION_FAIL, GET_APPLICATION_REQUEST, GET_APPLICATION_SUCCESS, GET_NOTIFICATIONS_FAIL, GET_NOTIFICATIONS_REQUEST, GET_NOTIFICATIONS_SUCCESS, GET_USER_FAIL, GET_USER_REQUEST, GET_USER_SUCCESS, MARK_NOTIFICATION_READ_FAIL, MARK_NOTIFICATION_READ_REQUEST, MARK_NOTIFICATION_READ_SUCCESS } from '../constants/actionTypes';
+import { getAcceptedErasmusUniversity, getApplication, getNotifications, getUser, markAsReadNotification } from '../lib/api/unsplashService';
 
 function* getUserRequest({ payload: { id, typeForReq } }) {
   console.log(`Get user `);
@@ -31,7 +31,12 @@ function* getApplicationRequest({ payload: { id } }) {
   
     try {
         // TODO: send Post request here
-        const { data } = yield call(getApplication, id);
+        const { data: application } = yield call(getApplication, id);
+
+        if(application?.outgoingStudent?.isErasmus) {
+          const { data } = yield call(getAcceptedErasmusUniversity, id);
+          application.acceptedUniversity = data;
+        }
   
         const status = 200;
         if (status !== 200) {
@@ -40,7 +45,7 @@ function* getApplicationRequest({ payload: { id } }) {
   
         yield put({
             type: GET_APPLICATION_SUCCESS,
-            payload: data,
+            payload: application,
         });
     } catch (error) {
       yield put({
@@ -74,10 +79,33 @@ function* getApplicationRequest({ payload: { id } }) {
     }
   }
 
+  function* markNotificationReadRequest({ payload: { id } }) {
+    console.log(`Get notifications`);
+  
+    try {
+        yield call(markAsReadNotification, id);
+  
+        const status = 200;
+        if (status !== 200) {
+          throw Error('Accept request failed for  course approval request ');
+        }
+  
+        yield put({
+            type: MARK_NOTIFICATION_READ_SUCCESS,
+            payload: id,
+        });
+    } catch (error) {
+      yield put({
+        type: MARK_NOTIFICATION_READ_FAIL,
+        payload: error.message,
+      });
+    }
+  }
 const userSaga = [
   takeEvery(GET_USER_REQUEST, getUserRequest),
   takeEvery(GET_APPLICATION_REQUEST, getApplicationRequest),
   takeEvery(GET_NOTIFICATIONS_REQUEST, getNotificationsRequest),
+  takeEvery(MARK_NOTIFICATION_READ_REQUEST, markNotificationReadRequest),
 ];
 
 export default userSaga;

@@ -1,4 +1,4 @@
-import { GET_NOTIFICATIONS_SUCCESS } from "../constants/actionTypes";
+import { GET_NOTIFICATIONS_SUCCESS, MARK_NOTIFICATION_READ_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     notifications: [
@@ -33,6 +33,11 @@ const INITIAL_STATE = {
     switch (action.type) {
       case GET_NOTIFICATIONS_SUCCESS:
         return { ...state, notifications: action.payload };
+      case MARK_NOTIFICATION_READ_SUCCESS:
+          return { 
+            ...state, 
+            notifications: [...state.notifications.filter(not => not.id !== action.payload), {...state.notifications.filter(not => not.id === action.payload)[0], read: true}]
+          };
       default:
         return state;
     }
