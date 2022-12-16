@@ -6,10 +6,10 @@ export const sendReplacementOffer = id =>
         payload: { id },
     });
 
-export const getPreApprovalFormsRequest = id => 
+export const getPreApprovalFormsRequest = (id, typeForReq) => 
     ({
         type: GET_PREAPPROVAL_FORMS_REQUEST,
-        payload: { id },
+        payload: { id, typeForReq },
     });    
 
 export const getCourseApprovalRequestsRequest = (id, typeForReq) => 

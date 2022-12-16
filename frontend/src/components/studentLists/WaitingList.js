@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import WaitingStudentsTable from '../table/WaitingStudentsTable';
 import { sendReplacementOffer, getApplicationsByDepartment } from '../../actions';
 
-const WaitingList = ({ applications, getApplicationsByDepartment, user }) => {
+const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq }) => {
     useEffect(() => {
-        getApplicationsByDepartment(user?.department?.departmentName, true);
-    }, [user, getApplicationsByDepartment]);
+        getApplicationsByDepartment(user, typeForReq);
+    }, [user, getApplicationsByDepartment, typeForReq]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -25,11 +25,13 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user }) => {
 };
 
 const mapStateToProps = state => {
-    const applications = state.applications.applications;
+    const applications = state.applications.waitingApplications;
     const user = state.user.user;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         applications,
         user,
+        typeForReq,
     };
 };
 
@@ -42,6 +44,7 @@ WaitingList.propTypes = {
     applications: PropTypes.array,
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
+    typeForReq: PropTypes.string,
 };
   
 WaitingList.defaultProps = {

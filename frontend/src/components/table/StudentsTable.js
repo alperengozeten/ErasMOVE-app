@@ -22,10 +22,7 @@ import {
   Tooltip,
   Modal,
   Box,
-  TextField,
   Button,
-  Select,
-  Chip,
 } from "@mui/material";
 import DescriptionIcon from "@mui/icons-material/Description";
 // components
@@ -46,7 +43,7 @@ const TABLE_HEAD = [
   { id: "status", label: "Status", alignRight: true },
 ];
 
-const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
+//const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
 
 // ----------------------------------------------------------------------
 
@@ -97,9 +94,7 @@ const StudentsTable = ({ applications }) => {
 
   const [department, setDepartment] = useState("");
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
+  const [hoveredId, setHoveredId] = useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -121,11 +116,13 @@ const StudentsTable = ({ applications }) => {
     setFilterName(event.target.value);
   };
 
-  const handlePopoverOpen = event => {
+  const handlePopoverOpen = (event, id) => {
+    setHoveredId(id);
     setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
+    setHoveredId(0);
     setAnchorEl(null);
   };
 
@@ -186,18 +183,7 @@ const StudentsTable = ({ applications }) => {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      const {
-                        id,
-                        name,
-                        department,
-                        score,
-                        selectedSemester,
-                        selectedUniversities,
-                        status,
-                        avatarUrl,
-                        languages,
-                      } = row;
-
+                      const { id, outgoingStudent, applicationScore, admittedStatus, selectedSemester, selectedUniversities, avatarUrl } = row;
                       return (
                         <TableRow hover key={id} tabIndex={-1} role="checkbox">
                           <TableCell padding="checkbox"></TableCell>
@@ -210,14 +196,14 @@ const StudentsTable = ({ applications }) => {
                             >
                               <Avatar alt={name} src={avatarUrl} />
                               <Typography variant="subtitle2" noWrap>
-                                {name}
+                                {outgoingStudent.name}
                               </Typography>
                             </Stack>
                           </TableCell>
 
                           <TableCell align="center">{department}</TableCell>
 
-                          <TableCell align="center">{score}</TableCell>
+                          <TableCell align="center">{applicationScore}</TableCell>
 
                           <TableCell align="center">
                             {selectedSemester}
@@ -230,10 +216,10 @@ const StudentsTable = ({ applications }) => {
                                   openPopover ? "mouse-over-popover" : undefined
                                 }
                                 aria-haspopup="true"
-                                onMouseEnter={handlePopoverOpen}
+                                onMouseEnter={e => handlePopoverOpen(e, id)}
                                 onMouseLeave={handlePopoverClose}
                               >
-                                {`1. ${selectedUniversities[0]}`}
+                                {`1. ${selectedUniversities[0]?.universityName}`}
                               </Typography>
                               <Popover
                                 id="mouse-over-popover"
@@ -253,13 +239,13 @@ const StudentsTable = ({ applications }) => {
                                 onClose={handlePopoverClose}
                                 disableRestoreFocus
                               >
-                                {selectedUniversities.map(
+                                {applications.filter(app => app.id === hoveredId)[0]?.selectedUniversities?.map(
                                   (university, index) => (
                                     <Typography key={index} sx={{ p: 2 }}>
-                                      {index + 1}. {university}
+                                      {index + 1}. {university.universityName}
                                     </Typography>
                                   )
-                                )}
+                                  )}
                               </Popover>
                             </div>
                           </TableCell>
@@ -267,10 +253,10 @@ const StudentsTable = ({ applications }) => {
                           <TableCell align="center">
                             <Label
                               color={
-                                (status === "waiting" && "error") || "success"
+                                (admittedStatus === "NOT ADMITTED" && "error") || "success"
                               }
                             >
-                              {sentenceCase(status)}
+                              {sentenceCase(admittedStatus)}
                             </Label>
                           </TableCell>
 

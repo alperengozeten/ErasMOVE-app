@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import PlacedStudentTable from '../table/PlacedStudentsTable';
 import { getApplicationsByDepartment } from '../../actions';
 
-const PlacementList = ({ applications, user, getApplicationsByDepartment }) => {
+const PlacementList = ({ applications, user, getApplicationsByDepartment, typeForReq }) => {
     useEffect(() => {
-        getApplicationsByDepartment(user?.department?.departmentName, true);
-    }, [user, getApplicationsByDepartment]);
+        getApplicationsByDepartment(user, typeForReq);
+    }, [user, getApplicationsByDepartment, typeForReq]);
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -27,9 +27,11 @@ const PlacementList = ({ applications, user, getApplicationsByDepartment }) => {
 const mapStateToProps = state => {
     const applications = state.applications.placedApplications;
     const user = state.user.user;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         applications,
-        user
+        user,
+        typeForReq,
     };
 };
 
@@ -41,6 +43,7 @@ PlacementList.propTypes = {
     applications: PropTypes.array,
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
+    typeForReq: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(PlacementList);

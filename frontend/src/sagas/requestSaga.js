@@ -9,7 +9,7 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
+import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, createElectiveCourseApproval, createMandatoryCourseApproval, declineElectiveCourseApproval, declineMandatoryCourseApproval, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -18,12 +18,15 @@ function sendReplacementOffer({ payload: { id } }) {
 
 
 // PreApproval
-function* getPreApprovalFormsRequest({ payload: { id } }) {
+function* getPreApprovalFormsRequest({ payload: { id, typeForReq } }) {
   console.log(`PreApprovals requested with id ${id}`);
 
   try {
 
     //TODO: Send API request here
+    const { data } = yield call(getPreApprovalForms, id, typeForReq);
+    console.log('PreApps: ', data);
+
     const status = 200;
     const preApprovalForms = dummyForms;
     if (status !== 200) {
@@ -149,7 +152,9 @@ function* getCourseApprovalRequestsRequest({ payload: { id, typeForReq } }) {
     if (typeForReq !== 'courseCoordinator') {
       const {data: elective} = yield call(getElectiveCourseApprovals, id, typeForReq);
       electiveCourseApprovals = elective;
-    } else if (typeForReq !== 'departmentCoordinator') {
+    } 
+    
+    if (typeForReq !== 'departmentCoordinator') {
       const {data: mandatory} = yield call(getMandatoryCourseApprovals, id, typeForReq);
       mandatoryCourseApprovals = mandatory;
     }

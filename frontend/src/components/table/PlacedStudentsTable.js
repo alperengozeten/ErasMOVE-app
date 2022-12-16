@@ -148,7 +148,7 @@ const PlacedStudentsTable = ({ applications }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, department, selectedSemester, admittedUniversity, status, avatarUrl } = row;
+                    const { id, outgoingStudent, admittedStatus, selectedSemester, avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -156,21 +156,21 @@ const PlacedStudentsTable = ({ applications }) => {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={outgoingStudent.name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {outgoingStudent.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{department}</TableCell>
+                        <TableCell align="center">{outgoingStudent.department.departmentName}</TableCell>
 
                         <TableCell align="center">{selectedSemester}</TableCell>
 
-                        <TableCell align="center">{admittedUniversity}</TableCell>
+                        <TableCell align="center">{admittedStatus}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(admittedStatus === 'WAITING' && 'error') || 'success'}>{sentenceCase(admittedStatus)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

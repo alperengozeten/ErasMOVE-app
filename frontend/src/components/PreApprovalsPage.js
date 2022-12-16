@@ -7,10 +7,10 @@ import PreApprovalsTable from './table/PreApprovalsTable';
 import { getPreApprovalFormsRequest, deletePreApprovalFormRequest } from "../actions";
 
 
-const PreApprovalPage = ({ deletePreApprovalFormRequest, getPreApprovalFormsRequest, preApprovalForms, userId }) => {
+const PreApprovalPage = ({ deletePreApprovalFormRequest, getPreApprovalFormsRequest, preApprovalForms, userId, typeForReq }) => {
     useEffect(() => {
-        getPreApprovalFormsRequest(userId);
-    }, [getPreApprovalFormsRequest, userId]);
+        getPreApprovalFormsRequest(userId, typeForReq);
+    }, [getPreApprovalFormsRequest, userId, typeForReq]);
 
     return (
         <Stack spacing={2}>
@@ -28,9 +28,11 @@ const PreApprovalPage = ({ deletePreApprovalFormRequest, getPreApprovalFormsRequ
 const mapStateToProps = state => {
     const preApprovalForms = state.requests.preApprovalForms;
     const userId = state.user.user.id;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         preApprovalForms,
-        userId
+        userId,
+        typeForReq,
     };
 };
 
@@ -44,6 +46,7 @@ PreApprovalPage.propTypes = {
     userId: PropTypes.number,
     getPreApprovalFormsRequest: PropTypes.func,
     deletePreApprovalFormRequest: PropTypes.func,
+    typeForReq: PropTypes.string,
 };
   
 PreApprovalPage.defaultProps = {

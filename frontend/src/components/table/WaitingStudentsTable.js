@@ -87,10 +87,6 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
 
   const [department, setDepartment] = useState('');
 
-  const handleOpenApplication = id => {
-    console.log("id: ", id);
-  };
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -156,7 +152,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, department, score, status, avatarUrl } = row;
+                    const { id, outgoingStudent, applicationScore, admittedStatus, avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -166,17 +162,17 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {outgoingStudent.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{department}</TableCell>
+                        <TableCell align="center">{outgoingStudent.department.departmentName}</TableCell>
 
-                        <TableCell align="center">{score}</TableCell>
+                        <TableCell align="center">{applicationScore}</TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(admittedStatus === 'NOT ADMITTED' && 'error') || 'success'}>{sentenceCase(admittedStatus)}</Label>
                         </TableCell>
 
                         <TableCell align="right">

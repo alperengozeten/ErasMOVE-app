@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import StudentsTable from '../table/StudentsTable';
 import { getApplicationsByDepartment } from '../../actions';
 
-const ApplicationList = ({ applications, getApplicationsByDepartment, user }) => {
+const ApplicationList = ({ applications, getApplicationsByDepartment, user, typeForReq }) => {
     useEffect(() => {
-        getApplicationsByDepartment(user?.department?.departmentName, true);
+        getApplicationsByDepartment(user, typeForReq);
     }, [user, getApplicationsByDepartment]);
     return (
         <Stack spacing={2}>
@@ -25,11 +25,13 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, user }) =>
 };
 
 const mapStateToProps = state => {
-    const applications = state.applications.placedApplications;
+    const applications = state.applications.applications;
     const user = state.user.user;
+    const typeForReq = state.auth.authTypeForReq;
     return {
         applications,
-        user
+        user,
+        typeForReq,
     };
 };
 
@@ -41,6 +43,7 @@ ApplicationList.propTypes = {
     applications: PropTypes.array,
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
+    typeForReq: PropTypes.string,
 };
   
 ApplicationList.defaultProps = {
