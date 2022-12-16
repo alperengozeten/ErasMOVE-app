@@ -95,13 +95,15 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
     filterName
   );
 
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const isNotFound = announcements.length===0;
 
   return (
     <>
       <Container>
         <Card>
-        <AnnouncementToolbar user={user} authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} />
+        {!isNotFound ? 
+        
+        <><AnnouncementToolbar user={user} authType={authType} userId={userId} createAnnouncementRequest={createAnnouncementRequest} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -182,50 +184,28 @@ const AnnouncementTable = ({ announcements, createAnnouncementRequest, authType,
                       </TableRow>
                     );
                   })}
-                  {/* {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )} */}
                 </TableBody>
-
-                {isNotFound && (
+              </Table>
+            </TableContainer>
+          </Scrollbar></> :
+          <>
                   <TableBody>
-                    <TableRow>
+                    <TableRow alignItems="center">
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <Paper
                           sx={{
                             textAlign: "center",
                           }}
                         >
-                          <Typography variant="h6" paragraph>
-                            Not found
-                          </Typography>
-
-                          <Typography variant="body2">
-                            No results found for &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete
-                            words.
+                          <Typography variant="h6" >
+                            You do not have any announcements.
                           </Typography>
                         </Paper>
                       </TableCell>
                     </TableRow>
                   </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          {/* <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={announcements.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          /> */}
+                  </>
+                }
         </Card>
       </Container>
     </>

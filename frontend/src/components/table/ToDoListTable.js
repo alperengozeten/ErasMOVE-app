@@ -9,6 +9,8 @@ import {
   TableCell,
   Container,
   TableContainer,
+  Typography,
+  Paper
 } from "@mui/material";
 // components
 import Scrollbar from "./scrollbar";
@@ -20,7 +22,7 @@ const ToDoListTable = ({ toDoLists }) => {
     <>
       <Container>
         <Card>
-          <Scrollbar>
+          {!(toDoLists.length===0) ? <><Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
 
@@ -41,7 +43,23 @@ const ToDoListTable = ({ toDoLists }) => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Scrollbar>
+          </Scrollbar></> :  <>
+                  <TableBody>
+                    <TableRow alignItems="center">
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <Paper
+                          sx={{
+                            textAlign: "center",
+                          }}
+                        >
+                          <Typography variant="h6" >
+                            You do not have any upcoming assignments.
+                          </Typography>
+                        </Paper>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                  </> }
         </Card>
       </Container>
     </>
