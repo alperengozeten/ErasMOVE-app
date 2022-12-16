@@ -41,6 +41,13 @@ public class MobilityCourseController {
         return mobilityCourseService.addMobilityCourse(mobilityCourse);
     }
 
+    @PostMapping("/addAll/{preApprovalFormRequestID}")
+    public ResponseEntity<String> addMobilityCoursesByPreApprovalFormRequestID(
+            @PathVariable("preApprovalFormRequestID") Long preApprovalFormRequestID,
+            @RequestBody List<MobilityCourse> mobilityCourseList) {
+        return mobilityCourseService.addMobilityCoursesByPreApprovalFormRequestID(preApprovalFormRequestID, mobilityCourseList);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteMobilityCourseByID(@PathVariable("id") Long id) {
         mobilityCourseService.deleteMobilityCourseByID(id);

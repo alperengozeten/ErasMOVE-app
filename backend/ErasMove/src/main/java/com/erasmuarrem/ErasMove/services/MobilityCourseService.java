@@ -1,6 +1,7 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.MobilityCourse;
+import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
 import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.MobilityCourseRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
@@ -86,5 +87,24 @@ public class MobilityCourseService {
 
         mobilityCourseRepository.deleteAllByPreApprovalFormRequest_ID(preApprovalFormRequestID);
         return new ResponseEntity<>("Successfully deleted the Mobility Courses with the specific Pre-Approval Form ID!", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> addMobilityCoursesByPreApprovalFormRequestID(Long preApprovalFormRequestID, List<MobilityCourse> mobilityCourseList) {
+
+        Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository
+                .findById(preApprovalFormRequestID);
+
+        if ( !preApprovalFormRequestOptional.isPresent() ) {
+            return new ResponseEntity<>("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+
+        for (MobilityCourse mobilityCourse : mobilityCourseList) {
+            mobilityCourse.setPreApprovalFormRequest(preApprovalFormRequest);
+            mobilityCourseRepository.save(mobilityCourse);
+        }
+
+        return new ResponseEntity<>("Successfully saved the mobility courses!", HttpStatus.OK);
     }
 }
