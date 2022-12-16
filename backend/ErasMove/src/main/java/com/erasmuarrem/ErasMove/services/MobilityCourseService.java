@@ -1,9 +1,13 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.MobilityCourse;
+import com.erasmuarrem.ErasMove.repositories.CourseRepository;
 import com.erasmuarrem.ErasMove.repositories.MobilityCourseRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +18,13 @@ public class MobilityCourseService {
 
     private final MobilityCourseRepository mobilityCourseRepository;
     private final PreApprovalFormRequestRepository preApprovalFormRequestRepository;
+    private final CourseRepository courseRepository;
 
     @Autowired
-    public MobilityCourseService(MobilityCourseRepository mobilityCourseRepository, PreApprovalFormRequestRepository preApprovalFormRequestRepository) {
+    public MobilityCourseService(MobilityCourseRepository mobilityCourseRepository, PreApprovalFormRequestRepository preApprovalFormRequestRepository, CourseRepository courseRepository) {
         this.mobilityCourseRepository = mobilityCourseRepository;
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
+        this.courseRepository = courseRepository;
     }
 
     public List<MobilityCourse> getMobilityCourses() {
@@ -35,35 +41,30 @@ public class MobilityCourseService {
         return mobilityCourseOptional.get();
     }
 
-    public void addMobilityCourse(MobilityCourse mobilityCourse) {
+    public ResponseEntity<String> addMobilityCourse(MobilityCourse mobilityCourse) {
         Long preApprovalFormRequestID = mobilityCourse.getPreApprovalFormRequest().getID();
 
         if ( !preApprovalFormRequestRepository.existsById(preApprovalFormRequestID) ) {
-            throw new IllegalStateException("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!");
+            return new ResponseEntity<>("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
-        Optional<MobilityCourse> mobilityCourseOptional = mobilityCourseRepository.findByPreApprovalFormRequestID(preApprovalFormRequestID);
+        Long correspondingCourseID = mobilityCourse.getCorrespondingCourse().getID();
 
-        if ( mobilityCourseOptional.isPresent() ) {
-            throw new IllegalStateException("Mobility Course already exists for Pre-Approval Form Request with id:" + preApprovalFormRequestID + "!");
+        if ( !courseRepository.existsById(correspondingCourseID) ) {
+            return new ResponseEntity<>("Corresponding Course with id:" + correspondingCourseID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
         mobilityCourseRepository.save(mobilityCourse);
+        return new ResponseEntity<>("Successfully saved the mobility course!", HttpStatus.OK);
     }
 
-    public MobilityCourse getMobilityCourseByPreApprovalFormRequestID(Long preApprovalFormRequestID) {
+    public List<MobilityCourse> getMobilityCoursesByPreApprovalFormRequestID(Long preApprovalFormRequestID) {
 
         if ( !preApprovalFormRequestRepository.existsById(preApprovalFormRequestID) ) {
             throw new IllegalStateException("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!");
         }
 
-        Optional<MobilityCourse> mobilityCourseOptional = mobilityCourseRepository.findByPreApprovalFormRequestID(preApprovalFormRequestID);
-
-        if ( !mobilityCourseOptional.isPresent() ) {
-            throw new IllegalStateException("Mobility Course doesn't exist for Pre-Approval Form Request with id:" + preApprovalFormRequestID + "!");
-        }
-
-        return mobilityCourseOptional.get();
+        return mobilityCourseRepository.findByPreApprovalFormRequestID(preApprovalFormRequestID);
     }
 
     public void deleteMobilityCourseByID(Long id) {
@@ -76,18 +77,14 @@ public class MobilityCourseService {
         mobilityCourseRepository.deleteById(id);
     }
 
-    public void deleteMobilityCourseByPreApprovalFormRequestID(Long preApprovalFormRequestID) {
+    @Transactional
+    public ResponseEntity<String> deleteMobilityCoursesByPreApprovalFormRequestID(Long preApprovalFormRequestID) {
 
         if ( !preApprovalFormRequestRepository.existsById(preApprovalFormRequestID) ) {
-            throw new IllegalStateException("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!");
+            return new ResponseEntity<>("Pre-Approval Form Request with id:" + preApprovalFormRequestID + " doesn't exist!", HttpStatus.BAD_REQUEST);
         }
 
-        Optional<MobilityCourse> mobilityCourseOptional = mobilityCourseRepository.findByPreApprovalFormRequestID(preApprovalFormRequestID);
-
-        if ( !mobilityCourseOptional.isPresent() ) {
-            throw new IllegalStateException("Mobility Course doesn't exist for Pre-Approval Form Request with id:" + preApprovalFormRequestID + "!");
-        }
-
-        mobilityCourseRepository.deleteById(mobilityCourseOptional.get().getID());
+        mobilityCourseRepository.deleteAllByPreApprovalFormRequest_ID(preApprovalFormRequestID);
+        return new ResponseEntity<>("Successfully deleted the Mobility Courses with the specific Pre-Approval Form ID!", HttpStatus.OK);
     }
 }

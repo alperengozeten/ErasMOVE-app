@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.MobilityCourse;
 import com.erasmuarrem.ErasMove.services.MobilityCourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,14 @@ public class MobilityCourseController {
     }
 
     @GetMapping("/preApprovalForm/{id}")
-    public MobilityCourse getMobilityCourseByPreApprovalFormRequestID(@PathVariable("id") Long preApprovalFormRequestID) {
-        return mobilityCourseService.getMobilityCourseByPreApprovalFormRequestID(preApprovalFormRequestID);
+    public List<MobilityCourse> getMobilityCoursesByPreApprovalFormRequestID(@PathVariable("id") Long preApprovalFormRequestID) {
+        return mobilityCourseService.getMobilityCoursesByPreApprovalFormRequestID(preApprovalFormRequestID);
     }
 
 
     @PostMapping("/add")
-    public void addMobilityCourse(@RequestBody MobilityCourse mobilityCourse) {
-        mobilityCourseService.addMobilityCourse(mobilityCourse);
+    public ResponseEntity<String> addMobilityCourse(@RequestBody MobilityCourse mobilityCourse) {
+        return mobilityCourseService.addMobilityCourse(mobilityCourse);
     }
 
     @DeleteMapping("/delete/{id}")
@@ -46,7 +47,7 @@ public class MobilityCourseController {
     }
 
     @DeleteMapping("/delete/preApprovalForm/{preApprovalFormID}")
-    public void deleteMobilityCourseByPreApprovalFormID(@PathVariable("preApprovalFormID") Long preApprovalFormID) {
-        mobilityCourseService.deleteMobilityCourseByPreApprovalFormRequestID(preApprovalFormID);
+    public ResponseEntity<String> deleteMobilityCoursesByPreApprovalFormRequestID(@PathVariable("preApprovalFormID") Long preApprovalFormID) {
+        return mobilityCourseService.deleteMobilityCoursesByPreApprovalFormRequestID(preApprovalFormID);
     }
 }
