@@ -3,6 +3,8 @@ package com.erasmuarrem.ErasMove.services;
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +19,19 @@ public class ErasmusUniversityDepartmentService {
     private final ErasmusUniversityRepository erasmusUniversityRepository;
     private final ApplicationService applicationService;
     private final ApplicationRepository applicationRepository;
+    private final ErasmusUniversityService erasmusUniversityService;
 
     @Autowired
     public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository,
                                               OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository,
-                                              ApplicationService applicationService, ApplicationRepository applicationRepository) {
+                                              ApplicationService applicationService, ApplicationRepository applicationRepository, ErasmusUniversityService erasmusUniversityService) {
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityRepository = erasmusUniversityRepository;
         this.applicationService = applicationService;
         this.applicationRepository = applicationRepository;
+        this.erasmusUniversityService = erasmusUniversityService;
     }
 
     public List<ErasmusUniversityDepartment> getErasmusUniversityDepartments() {
@@ -282,5 +286,26 @@ public class ErasmusUniversityDepartmentService {
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment); // save the department back!
         return "The quota for Erasmus University Department with name:" + erasmusUniversityDepartment.getDepartmentName() +
                 " for University:" + erasmusUniversityDepartment.getErasmusUniversity().getUniversityName() + " has been updated!";
+    }
+
+    public ResponseEntity<ErasmusUniversityDepartment> getErasmusUniversityDepartmentByAcceptedStudentID(Long acceptedStudentID) {
+        Optional<OutgoingStudent> acceptedStudentOptional = outgoingStudentRepository.findById(acceptedStudentID);
+
+        if ( !acceptedStudentOptional.isPresent() ) {
+            throw new IllegalStateException("Outgoing Student with id:" + acceptedStudentID + " doesn't exist!");
+        }
+
+        OutgoingStudent acceptedStudent = acceptedStudentOptional.get();
+        ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(acceptedStudentID);
+
+        if ( erasmusUniversity == null ) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        ErasmusUniversityDepartment erasmusUniversityDepartment = getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                erasmusUniversity.getID(), acceptedStudent.getDepartment().getDepartmentName()
+        );
+
+        return new ResponseEntity<>(erasmusUniversityDepartment, HttpStatus.OK);
     }
 }

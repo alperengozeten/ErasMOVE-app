@@ -4,6 +4,7 @@ import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
 import com.erasmuarrem.ErasMove.services.ErasmusUniversityDepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,11 @@ public class ErasmusUniversityDepartmentController {
     public ErasmusUniversityDepartment getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(@PathVariable("universityID") Long universityID,
                                                                                                             @PathVariable("departmentName") String departmentName) {
         return erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(universityID, departmentName);
+    }
+
+    @GetMapping("/acceptedStudent/{acceptedStudentID}")
+    public ResponseEntity<ErasmusUniversityDepartment> getErasmusUniversityDepartmentByAcceptedStudentID(@PathVariable("acceptedStudentID") Long acceptedStudentID) {
+        return erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByAcceptedStudentID(acceptedStudentID);
     }
 
     @PostMapping("/add")
