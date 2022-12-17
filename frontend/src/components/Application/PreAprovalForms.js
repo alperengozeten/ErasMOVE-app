@@ -59,11 +59,32 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
     };
 
     const handleCreatePreApprovalForm = () => {
+
+        var missingInfo = false;
+
+        // mergedCourses.map((mergedCourse, index) => {
+        //    mergedCourse.courses.map(course => {
+        //         if(course === ''){
+        //             missingInfo = true;
+        //         }
+        //    });   
+        //     if (mergedCourse.equivalentCourse === null) {
+        //        missingInfo = true; 
+        //     }
+        //     if(missingInfo)
+        //         break;
+        // });
+
+        if(missingInfo){
+            //gdhdgfs
+        }
+        else{
         const preApprovalForm = {
             mobilityCourses: mergedCourses,
         };
         createPreApprovalFormRequest(preApprovalForm, userId);
         handleClose();
+        }
     };
 
     console.log(mergedCourses);

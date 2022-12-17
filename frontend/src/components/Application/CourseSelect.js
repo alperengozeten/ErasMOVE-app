@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CourseSelect = ({error, mergedCourses, equivalent, handleCourseEquivalentChange, courseIndex, index, handleCourseChange, hostCourses, approvedCourses}) => {
+const CourseSelect = ({ mergedCourses, equivalent, handleCourseEquivalentChange, courseIndex, index, handleCourseChange, hostCourses, approvedCourses}) => {
     const handleChange = e => {
         if(equivalent) {
             handleCourseEquivalentChange(e, index);
@@ -31,7 +31,6 @@ const CourseSelect = ({error, mergedCourses, equivalent, handleCourseEquivalentC
         <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">{equivalent ? "Equivalent Course" : "Course"}</InputLabel>
             <Select
-            error={error}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={value ? value : ''}
