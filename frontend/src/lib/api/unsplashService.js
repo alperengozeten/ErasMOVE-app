@@ -246,3 +246,12 @@ export const createAnnouncement = announcement => (
 export const getDepartments = () => (
   axios.get(`${baseURL}/department`)
 );
+
+// Universities
+export const getExchangeUniversities = () => (
+  axios.get(`${baseURL}/exchangeUniversity`)
+);
+
+export const getErasmusUniversities = () => (
+  axios.get(`${baseURL}/erasmusUniversity`)
+);

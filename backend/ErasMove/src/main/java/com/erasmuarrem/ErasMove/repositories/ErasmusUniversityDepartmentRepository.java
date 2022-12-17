@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ErasmusUniversityDepartmentRepository extends JpaRepository<ErasmusUniversityDepartment, Long> {
     Optional<ErasmusUniversityDepartment> findByErasmusUniversityIDAndDepartmentName(Long erasmusUniversityID, String departmentName);
     List<ErasmusUniversityDepartment> findByDepartmentName(String departmentName);
+    List<ErasmusUniversityDepartment> findByErasmusUniversity_ID(Long erasmusUniversityID);
 }

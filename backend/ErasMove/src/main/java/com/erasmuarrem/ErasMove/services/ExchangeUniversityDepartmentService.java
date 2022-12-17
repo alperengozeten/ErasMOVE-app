@@ -234,4 +234,13 @@ public class ExchangeUniversityDepartmentService {
 
         return new ResponseEntity<>(exchangeUniversityDepartment, HttpStatus.OK);
     }
+
+    public List<ExchangeUniversityDepartment> getExchangeUniversityDepartmentByExchangeUniversityID(Long exchangeUniversityID) {
+
+        if ( !exchangeUniversityRepository.existsById(exchangeUniversityID) ) {
+            throw new IllegalStateException("Exchange University with id:" + exchangeUniversityID + " doesn't exist!");
+        }
+
+        return exchangeUniversityDepartmentRepository.findByExchangeUniversity_ID(exchangeUniversityID);
+    }
 }
