@@ -1,4 +1,4 @@
-import { GET_APPLICATION_SUCCESS, GET_USER_SUCCESS } from "../constants/actionTypes";
+import { GET_APPLICATION_SUCCESS, GET_USER_SUCCESS, LOG_OUT_SUCCESS } from "../constants/actionTypes";
 
 
 const INITIAL_STATE = {
@@ -8,6 +8,11 @@ const INITIAL_STATE = {
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case LOG_OUT_SUCCESS:{
+      localStorage.removeItem('user');
+      localStorage.removeItem('application');
+      return {...state, user: {}, application: {}};
+    }
     case GET_USER_SUCCESS: {
       localStorage.setItem('user', JSON.stringify(action.payload));
       return {...state, user: action.payload };

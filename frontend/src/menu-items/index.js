@@ -17,9 +17,9 @@ const menuItems = authType => {
     let list = [];
 
     if (authType === 'Outgoing Student') {
-        list = [dashboard, student, announcements];
+        list = [dashboard, student(authType), announcements];
     } else if (authType === 'Incoming Student') {
-        list = [dashboard, student, announcements];
+        list = [dashboard, student(authType), announcements];
     }  else if (authType === 'Department Coordinator') {
         list = [dashboard, pages, requests(authType), announcements, toDoList];
     }  else if (authType === 'Course Coordinator') {

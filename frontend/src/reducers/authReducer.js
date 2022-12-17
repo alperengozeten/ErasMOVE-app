@@ -17,6 +17,9 @@ const loginReducer = (state = INITIAL_STATE, action) => {
     case LOG_OUT_SUCCESS: {
       localStorage.removeItem('key');
       localStorage.removeItem('userId');
+      localStorage.removeItem('authType');
+      localStorage.removeItem('authTypeForReq');
+
       return { ...state, status: 'not-authenticated', key: null, userId: null };
     }
     case CHOOSE_AUTH_TYPE: {
