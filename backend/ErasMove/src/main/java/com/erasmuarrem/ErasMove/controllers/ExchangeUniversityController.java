@@ -2,9 +2,11 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
+import com.erasmuarrem.ErasMove.models.Language;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.ExchangeUniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,6 +71,13 @@ public class ExchangeUniversityController {
     @PostMapping("/add")
     public void addExchangeUniversity(@RequestBody ExchangeUniversity exchangeUniversity) {
         exchangeUniversityService.addExchangeUniversity(exchangeUniversity);
+    }
+
+    @PostMapping("/addLanguageRequirement/exchangeUniversity/{exchangeUniversityID}")
+    public ResponseEntity<String> addLanguageRequirementToExchangeUniversityByExchangeUniversityID(
+            @PathVariable("exchangeUniversityID") Long exchangeUniversityID,
+            @RequestBody Language language) {
+        return exchangeUniversityService.addLanguageRequirementToExchangeUniversityByExchangeUniversityID(exchangeUniversityID, language);
     }
 
     @PostMapping("/add/{id}/outgoingStudent/{outgoingStudentID}")

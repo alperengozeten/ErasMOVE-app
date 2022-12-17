@@ -1,14 +1,10 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.Course;
-import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
-import com.erasmuarrem.ErasMove.models.ErasmusUniversityDepartment;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
-import com.erasmuarrem.ErasMove.repositories.CourseRepository;
-import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityDepartmentRepository;
-import com.erasmuarrem.ErasMove.repositories.ErasmusUniversityRepository;
-import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
+import com.erasmuarrem.ErasMove.models.*;
+import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,13 +19,15 @@ public class ErasmusUniversityService {
     private final CourseRepository courseRepository;
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository;
+    private final LanguageRepository languageRepository;
 
     @Autowired
-    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository) {
+    public ErasmusUniversityService(ErasmusUniversityRepository erasmusUniversityRepository, CourseRepository courseRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, LanguageRepository languageRepository) {
         this.erasmusUniversityRepository = erasmusUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
+        this.languageRepository = languageRepository;
     }
 
     public List<ErasmusUniversity> getErasmusUniversities() {
@@ -203,5 +201,26 @@ public class ErasmusUniversityService {
         }
 
         return erasmusUniversityList;
+    }
+
+    public ResponseEntity<String> addLanguageRequirementToErasmusUniversityByErasmusUniversityID(Long erasmusUniversityID, Language language) {
+
+        Optional<ErasmusUniversity> erasmusUniversityOptional = erasmusUniversityRepository.findById(erasmusUniversityID);
+
+        if ( !erasmusUniversityOptional.isPresent() ) {
+            return new ResponseEntity<>("Erasmus University with id:" + erasmusUniversityID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        ErasmusUniversity erasmusUniversity = erasmusUniversityOptional.get();
+
+        if ( erasmusUniversity.getLanguageRequirement() != null ) {
+            return new ResponseEntity<>("The university already has a language requirement:" + erasmusUniversity.getLanguageRequirement().getLanguage() + "!", HttpStatus.BAD_REQUEST);
+        }
+
+        languageRepository.save(language); // save the language
+
+        erasmusUniversity.setLanguageRequirement(language);
+        erasmusUniversityRepository.save(erasmusUniversity);
+        return new ResponseEntity<>("Language requirement:" + language.getLanguage() + " added to the university!", HttpStatus.OK);
     }
 }

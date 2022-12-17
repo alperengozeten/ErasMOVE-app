@@ -25,4 +25,7 @@ public class ContractedUniversity {
 
     @OneToMany
     private List<OutgoingStudent> acceptedStudents;
+
+    @OneToOne
+    private Language languageRequirement;
 }

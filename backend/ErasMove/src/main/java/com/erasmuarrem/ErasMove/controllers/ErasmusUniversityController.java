@@ -2,9 +2,11 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.models.Course;
 import com.erasmuarrem.ErasMove.models.ErasmusUniversity;
+import com.erasmuarrem.ErasMove.models.Language;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.services.ErasmusUniversityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,6 +71,13 @@ public class ErasmusUniversityController {
     @PostMapping("/add")
     public void addErasmusUniversity(@RequestBody ErasmusUniversity erasmusUniversity) {
         erasmusUniversityService.addErasmusUniversity(erasmusUniversity);
+    }
+
+    @PostMapping("/addLanguageRequirement/erasmusUniversity/{erasmusUniversityID}")
+    public ResponseEntity<String> addLanguageRequirementToErasmusUniversityByErasmusUniversityID(
+            @PathVariable("erasmusUniversityID") Long erasmusUniversityID,
+            @RequestBody Language language) {
+        return erasmusUniversityService.addLanguageRequirementToErasmusUniversityByErasmusUniversityID(erasmusUniversityID, language);
     }
 
     @PatchMapping("/editDetails/{id}")

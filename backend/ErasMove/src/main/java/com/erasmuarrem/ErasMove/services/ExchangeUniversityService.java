@@ -1,14 +1,10 @@
 package com.erasmuarrem.ErasMove.services;
 
-import com.erasmuarrem.ErasMove.models.Application;
-import com.erasmuarrem.ErasMove.models.Course;
-import com.erasmuarrem.ErasMove.models.ExchangeUniversity;
-import com.erasmuarrem.ErasMove.models.OutgoingStudent;
-import com.erasmuarrem.ErasMove.repositories.ApplicationRepository;
-import com.erasmuarrem.ErasMove.repositories.CourseRepository;
-import com.erasmuarrem.ErasMove.repositories.ExchangeUniversityRepository;
-import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
+import com.erasmuarrem.ErasMove.models.*;
+import com.erasmuarrem.ErasMove.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,16 +20,18 @@ public class ExchangeUniversityService {
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ApplicationService applicationService;
     private final ApplicationRepository applicationRepository;
+    private final LanguageRepository languageRepository;
 
     @Autowired
     public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository,
                                      OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService,
-                                     ApplicationRepository applicationRepository ) {
+                                     ApplicationRepository applicationRepository, LanguageRepository languageRepository) {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.applicationService = applicationService;
         this.applicationRepository = applicationRepository;
+        this.languageRepository = languageRepository;
     }
 
     public List<ExchangeUniversity> getExchangeUniversities() {
@@ -282,4 +280,24 @@ public class ExchangeUniversityService {
         return nonEmptyQuotaList;
     }
 
+    public ResponseEntity<String> addLanguageRequirementToExchangeUniversityByExchangeUniversityID(Long exchangeUniversityID, Language language) {
+
+        Optional<ExchangeUniversity> exchangeUniversityOptional = exchangeUniversityRepository.findById(exchangeUniversityID);
+
+        if ( !exchangeUniversityOptional.isPresent() ) {
+            return new ResponseEntity<>("Exchange University with id:" + exchangeUniversityID + " doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+
+        ExchangeUniversity exchangeUniversity = exchangeUniversityOptional.get();
+
+        if ( exchangeUniversity.getLanguageRequirement() != null ) {
+            return new ResponseEntity<>("The university already has a language requirement:" + exchangeUniversity.getLanguageRequirement().getLanguage() + "!", HttpStatus.BAD_REQUEST);
+        }
+
+        languageRepository.save(language); // save the language
+
+        exchangeUniversity.setLanguageRequirement(language);
+        exchangeUniversityRepository.save(exchangeUniversity);
+        return new ResponseEntity<>("Language requirement:" + language.getLanguage() + " added to the university!", HttpStatus.OK);
+    }
 }
