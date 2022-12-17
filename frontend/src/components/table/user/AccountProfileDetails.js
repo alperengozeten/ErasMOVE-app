@@ -36,8 +36,8 @@ export const AccountProfileDetails = ({ user }) => {
               <TextField
                 fullWidth
                 disabled
-                label="First Name"
-                name="firstName"
+                label="Name"
+                name="Name"
                 value={user.name}
                 variant="outlined"
               />
@@ -46,9 +46,9 @@ export const AccountProfileDetails = ({ user }) => {
               <TextField
                 fullWidth
                 disabled
-                label="Last Name"
+                label="Erasmus or Exchange"
                 name="lastName"
-                value={values.lastName}
+                value={user.isErasmus ? "Erasmus Student" : "Exchange Student"}
                 variant="outlined"
               />
             </Grid>
@@ -66,10 +66,10 @@ export const AccountProfileDetails = ({ user }) => {
               <TextField
                 fullWidth
                 disabled
-                label="Phone Number"
+                label="Student Id"
                 name="phone"
                 type="number"
-                value={values.phone}
+                value={user.studentId}
                 variant="outlined"
               />
             </Grid>

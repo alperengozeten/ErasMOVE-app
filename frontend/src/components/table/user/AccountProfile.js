@@ -6,9 +6,10 @@ import {
     Divider,
     Typography
   } from '@mui/material';
+  import PropTypes from 'prop-types';
   import * as React from "react";
   
-  const user = {
+  const value = {
     avatar: '/static/images/avatars/avatar_6.png',
     city: 'Iğdır',
     country: 'Türkiye',
@@ -16,8 +17,8 @@ import {
     name: 'Kütür Kütür Şad',
   };
   
-  export const AccountProfile = props => (
-    <Card {...props}>
+  export const AccountProfile = ({user}) => (
+    <Card>
       <CardContent>
         <Box
           sx={{
@@ -45,19 +46,14 @@ import {
             color="textSecondary"
             variant="body2"
           >
-            {`${user.city} ${user.country}`}
+            {user.department.departmentName}
           </Typography>
         </Box>
       </CardContent>
       <Divider />
-      {/* <CardActions>
-        <Button
-          color="primary"
-          fullWidth
-          variant="text"
-        >
-          Change Profile Picture
-        </Button>
-      </CardActions> */}
     </Card>
   );
+
+  AccountProfile.propTypes = {
+    user: PropTypes.object,
+  };
