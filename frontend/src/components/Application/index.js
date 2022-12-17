@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import CourseRequests from "./CourseRequests";
 import PreApprovalForms from "./PreAprovalForms";
 import ProfileApplicationPage from "../ProfileApplicationPage";
+import { WaitingReplacementOffer } from "./WaitingReplacementOffer";
 import {
     getPreApprovalFormsRequest,
     getCourseApprovalRequestsRequest,
@@ -88,6 +89,7 @@ const Application = ({
                                 <Tab label="PreApproval Forms" value={"1"} />
                                 <Tab label="Course Requests" value={"2"} />
                                 <Tab label="File Requests" value={"3"} />
+                                <Tab label="Waiting Replacement Offer" value={"4"} />
                             </TabList>
                         )}
                     </Box>
@@ -125,6 +127,11 @@ const Application = ({
                     <TabPanel value="3" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
                             <FileRequestsForStudent userId={userId} fileRequests={fileRequests} createFileRequestRequest={createFileRequestRequest} deleteFileRequestRequest={deleteFileRequestRequest} />
+                        </Box>
+                    </TabPanel>
+                    <TabPanel value="4" index={3}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            <WaitingReplacementOffer/>
                         </Box>
                     </TabPanel>
                 </TabContext>
