@@ -27,11 +27,11 @@ public class CourseService {
     }
 
     public void addNewCourse(Course course) {
-        Optional<Course> courseOptional = courseRepository.findCourseByCourseName(course.getCourseName());
+        //Optional<Course> courseOptional = courseRepository.findCourseByCourseName(course.getCourseName());
 
-        if ( courseOptional.isPresent() ) {
-            throw new IllegalStateException("course exists");
-        }
+        //if ( courseOptional.isPresent() ) {
+        //    throw new IllegalStateException("course exists");
+        //}
 
         courseRepository.save(course);
     }
