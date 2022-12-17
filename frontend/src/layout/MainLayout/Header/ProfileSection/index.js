@@ -154,63 +154,8 @@ const ProfileSection = ({ authType }) => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
-                                    <Box sx={{ p: 2 }}>
-                                        <Stack>
-                                            <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h3">Good Morning,</Typography>
-                                                <Typography component="span" variant="h3" sx={{ fontWeight: 400 }}>
-                                                    Johne Doe
-                                                </Typography>
-                                            </Stack>
-                                            <Typography color={'secondary'} variant="h4">{authType}</Typography>
-                                        </Stack>
-                                    </Box>
-                                    <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
+                                    <PerfectScrollbar style={{ height: '50%', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
-                                            <Divider />
-                                            <Card
-                                                sx={{
-                                                    bgcolor: theme.palette.primary.light,
-                                                    my: 2
-                                                }}
-                                            >
-                                                <CardContent>
-                                                    <Grid container spacing={3} direction="column">
-                                                        <Grid item>
-                                                            <Grid item container alignItems="center" justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="subtitle1">Start DND Mode</Typography>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Switch
-                                                                        color="primary"
-                                                                        checked={sdm}
-                                                                        onChange={e => setSdm(e.target.checked)}
-                                                                        name="sdm"
-                                                                        size="small"
-                                                                    />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                        <Grid item>
-                                                            <Grid item container alignItems="center" justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="subtitle1">Allow Notifications</Typography>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Switch
-                                                                        checked={notification}
-                                                                        onChange={e => setNotification(e.target.checked)}
-                                                                        name="sdm"
-                                                                        size="small"
-                                                                    />
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                </CardContent>
-                                            </Card>
-                                            <Divider />
                                             <List
                                                 component="nav"
                                                 sx={{
@@ -227,7 +172,7 @@ const ProfileSection = ({ authType }) => {
                                                     }
                                                 }}
                                             >
-                                                <ListItemButton
+                                                {/* <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
                                                     selected={selectedIndex === 0}
                                                     onClick={event => handleListItemClick(event, 0, '/user/account-profile/profile1')}
@@ -236,7 +181,7 @@ const ProfileSection = ({ authType }) => {
                                                         <IconSettings stroke={1.5} size="1.3rem" />
                                                     </ListItemIcon>
                                                     <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                                                </ListItemButton>
+                                                </ListItemButton> */}
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
                                                     selected={selectedIndex === 1}
@@ -249,7 +194,7 @@ const ProfileSection = ({ authType }) => {
                                                         primary={
                                                             <Grid container spacing={1} justifyContent="space-between">
                                                                 <Grid item>
-                                                                    <Typography variant="body2">Social Profile</Typography>
+                                                                    <Typography variant="body2">Profile</Typography>
                                                                 </Grid>
                                                                 <Grid item>
                                                                     <Chip
