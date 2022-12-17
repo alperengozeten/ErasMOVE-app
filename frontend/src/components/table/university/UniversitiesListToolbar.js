@@ -23,6 +23,7 @@ import {
   RadioGroup,
   Stack,
   TextField,
+  Alert
 } from "@mui/material";
 
 // component
@@ -84,16 +85,49 @@ export default function UniversitiesListToolbar({
   const [isErasmus, setIsErasmus] = React.useState(false);
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
   const [departmentName, setDepartmentName] = React.useState("");
+
   const [quotaValue, setQuotaValue] = React.useState(0);
+  const [error, setError] = useState(false);
+  const [errorDepartment, setErrorDepartment] = useState(false);
 
   const handleUniversityNameChange = e => setUniversityName(e.target.value);
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
   const handleQuotaValueChange = e => setQuotaValue(e.target.value);
   const handleErasmusChange = e => setIsErasmus(e.target.value);
   const handleClickOpen = () => {setOpen(true);};
-  const handleClose = () => {setOpen(false);};
+
   const handleAddDepartment = () =>{setOpenAddDepartment(true);};
-  const handleAddDepartmentClose = () =>{setOpenAddDepartment(false);};
+  const handleAddDepartmentClose = () =>{
+    setDepartmentName("");
+    setErrorDepartment(false);
+    setOpenAddDepartment(false);};
+
+  const handleAddNewUniversityRequest = () => {
+    if (
+      universityName === "" ||
+      quotaValue === 0
+    ) {
+      setError(true);
+    } 
+    else {handleClose();}
+  };
+
+  const handleAddDepartmentRequest = () => {
+    if (
+      departmentName === ""
+    ) {
+      setErrorDepartment(true);
+    } else {
+      handleAddDepartmentClose();
+    }
+  };
+  const handleClose = () => {
+    setUniversityName("");
+    setQuotaValue(0);
+    setError(false);
+    setOpen(false);
+    };
+    
 
   return (
     <StyledRoot
@@ -177,21 +211,22 @@ export default function UniversitiesListToolbar({
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>University Name</MDBCardText>
+                          <MDBCardText>University Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
-                            required
                             id="outlined-multiline-flexible"
                             value={universityName}
                             onChange={handleUniversityNameChange}
+                            error={error}
+
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Program</MDBCardText>
+                          <MDBCardText>Program*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <FormControl>
@@ -220,15 +255,15 @@ export default function UniversitiesListToolbar({
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Quota</MDBCardText>
+                          <MDBCardText>Quota*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
-                            required
                             id="outlined-multiline-flexible"
                             type={"number"}
                             value={quotaValue}
                             onChange={handleQuotaValueChange}
+                            error={error}
                           />
                         </MDBCol>
                       </MDBRow>
@@ -248,6 +283,11 @@ export default function UniversitiesListToolbar({
                           </Button>
                         </MDBCol>
                       </MDBRow>
+                      {error ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -260,8 +300,7 @@ export default function UniversitiesListToolbar({
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleClose}
-                    disabled={quotaValue === 0 || universityName ===""}
+                    onClick={handleAddNewUniversityRequest}
 
                   >
                     Add
@@ -313,16 +352,22 @@ export default function UniversitiesListToolbar({
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Department Name</MDBCardText>
+                          <MDBCardText>Department Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
                             id="outlined-multiline-flexible"
                             value={departmentName}
                             onChange={handleDepartmentNameChange}
+                            error={errorDepartment}
                           />
                         </MDBCol>
                       </MDBRow>
+                      {errorDepartment ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -335,8 +380,7 @@ export default function UniversitiesListToolbar({
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleAddDepartmentClose}
-                    disabled={departmentName ===""}
+                    onClick={handleAddDepartmentRequest}
 
                   >
                     Add

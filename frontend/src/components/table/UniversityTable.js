@@ -14,6 +14,7 @@ import {
   Table,
   Stack,
   TableRow,
+  Alert,
   TableBody,
   TableCell,
   MenuItem,
@@ -156,6 +157,8 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const [description, setDescription] = React.useState("");
   const [departmentValue, setDepartmentValue] = React.useState(0);
   const [ects, setEcts] = React.useState(0);
+  const [error, setError] = React.useState(false);
+  const [courseError, setCourseError] = React.useState(false);
 
   const [isExchange, setIsExchange] = useState('Erasmus');
 
@@ -188,6 +191,8 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
     setOpenAddDepartment(true);
   };
   const handleAddDepartmentClose = () => {
+     setDepartmentName("");
+    setError(false);
     setOpenAddDepartment(false);
   };
 
@@ -203,6 +208,25 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   };
 
   const handleCourseClose = () => {
+    if(courseName===""|| description===""|| departmentValue===0||ects===0){
+      setCourseError(true);
+      
+    }
+    else{
+      setCourseName("");
+      setDescription("");
+      setDepartmentValue("");
+      setEcts(0);
+      setCourseError(false);
+
+    setCourseOpen(false);}
+  };
+  const handleCourseBack = () => {
+    setCourseName("");
+    setDescription("");
+    setDepartmentValue("");
+    setEcts(0);
+    setCourseError(false);
     setCourseOpen(false);
   };
 
@@ -250,6 +274,16 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
     setDisabled(true);
   };
 
+  
+  const handleAddDepartmentRequest = () => {
+    if(departmentName===""){
+      setError(true);
+    }
+    else{
+      setDepartmentName("");
+      setError(false);
+    setOpenAddDepartment(false);}
+  };
   return (
     <>
       <Container>
@@ -596,7 +630,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Department</MDBCardText>
+                          <MDBCardText>Department*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <FormControl
@@ -610,6 +644,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                               id="demo-simple-select"
                               value={departmentValue}
                               size="small"
+                              error={courseError}
                               onChange={handleDepartmentChange}
                             >
                               <MenuItem disabled value={0}>
@@ -625,21 +660,22 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Course Name</MDBCardText>
+                          <MDBCardText>Course Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
                             id="outlined-multiline-flexible"
                             value={courseName}
                             onChange={handleCourseNameChange}
-                            disabled={departmentValue ? false : true}
+                            error={courseError}
+
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Description</MDBCardText>
+                          <MDBCardText>Description*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -647,14 +683,14 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                             fullWidth
                             value={description}
                             onChange={handleDescriptionChange}
-                            disabled={departmentValue ? false : true}
+                            error ={courseError}
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>ECTS</MDBCardText>
+                          <MDBCardText>ECTS*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -662,10 +698,15 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                             type={"number"}
                             value={ects}
                             onChange={handleEctsChange}
-                            disabled={departmentValue ? false : true}
+                            error={courseError}
                           />
                         </MDBCol>
                       </MDBRow>
+                      {courseError ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -679,8 +720,6 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                     color="success"
                     size="medium"
                     onClick={handleCourseClose}
-                    disabled={ects === 0 || description ==="" || courseName ==="" || departmentValue === 0 }
-
                   >
                     Add
                   </Button>
@@ -691,7 +730,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                     variant="contained"
                     color="error"
                     size="medium"
-                    onClick={handleCourseClose}
+                    onClick={handleCourseBack}
                   >
                     Back
                   </Button>
@@ -731,16 +770,22 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Department Name</MDBCardText>
+                          <MDBCardText>Department Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
                             id="outlined-multiline-flexible"
                             value={departmentName}
                             onChange={handleDepartmentNameChange}
+                            error={error}
                           />
                         </MDBCol>
                       </MDBRow>
+                      {error ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -753,9 +798,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleAddDepartmentClose}
-                    disabled={ departmentName ===""}
-
+                    onClick={handleAddDepartmentRequest}
                   >
                     Add
                   </Button>
@@ -768,7 +811,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                     size="medium"
                     onClick={handleAddDepartmentClose}
                   >
-                    Close
+                    Back
                   </Button>
                 </Grid>
                 <Grid item xs={1}></Grid>

@@ -171,7 +171,8 @@ const StudentsTable = ({ applications }) => {
           />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+            {console.log(applications)}
+            {applications?.length > 0 ? (<TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <UserListHead
                   order={order}
@@ -180,10 +181,11 @@ const StudentsTable = ({ applications }) => {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
+                  {console.log(filteredUsers)}
                   {filteredUsers
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(row => {
-                      const { id, outgoingStudent, applicationScore, admittedStatus, selectedSemester, selectedUniversities, avatarUrl } = row;
+                    ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    ?.map(row => {
+                      const { id, outgoingStudent, applicationScore, admittedStatus, selectedSemester, selectedUniversities } = row;
                       return (
                         <TableRow hover key={id} tabIndex={-1} role="checkbox">
                           <TableCell padding="checkbox"></TableCell>
@@ -194,14 +196,14 @@ const StudentsTable = ({ applications }) => {
                               alignItems="center"
                               spacing={2}
                             >
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={outgoingStudent?.name}/>
                               <Typography variant="subtitle2" noWrap>
-                                {outgoingStudent.name}
+                                {outgoingStudent?.name}
                               </Typography>
                             </Stack>
                           </TableCell>
 
-                          <TableCell align="center">{outgoingStudent.department.departmentName}</TableCell>
+                          <TableCell align="center">{outgoingStudent?.department?.departmentName}</TableCell>
 
                           <TableCell align="center">{applicationScore}</TableCell>
 
@@ -219,7 +221,7 @@ const StudentsTable = ({ applications }) => {
                                 onMouseEnter={e => handlePopoverOpen(e, id)}
                                 onMouseLeave={handlePopoverClose}
                               >
-                                {`1. ${selectedUniversities[0]?.universityName}`}
+                                {selectedUniversities?.length > 0 ? `1. ${selectedUniversities[0]?.universityName}` : null}
                               </Typography>
                               <Popover
                                 id="mouse-over-popover"
@@ -334,7 +336,7 @@ const StudentsTable = ({ applications }) => {
                   </TableBody>
                 )}
               </Table>
-            </TableContainer>
+            </TableContainer>): null}
           </Scrollbar>
 
           <TablePagination
