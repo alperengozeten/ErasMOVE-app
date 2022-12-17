@@ -80,7 +80,7 @@ const Application = ({
                                 <Tab label="Application" value={"0"} />
                                 <Tab label="PreApproval Forms" value={"1"} />
                                 <Tab label="Course Requests" value={"2"} />
-                                {/* <Tab label="Replacement Offers" value={"3"} /> */}
+                                <Tab label="Replacement Offers" value={"3"} />
                             </TabList>
                         )}
                     </Box>
@@ -115,13 +115,13 @@ const Application = ({
                             />
                         </Box>
                     </TabPanel>
-                    {/* <TabPanel value="3" index={3}>
+                    <TabPanel value="3" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
                             def
                         </Box>
-                    </TabPanel> */}
+                    </TabPanel>
                 </TabContext>
-            </Box>
+            </Box>  
         </Grid>
     </Stack>
     
