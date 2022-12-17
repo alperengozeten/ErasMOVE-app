@@ -35,10 +35,7 @@ const Universities = () => {
   const [courseName, setCourseName] = React.useState("");
   const [departmentName, setDepartmentName] = React.useState("");
   const [description, setDescription] = React.useState("");
-
   const [departmentValue, setDepartmentValue] = React.useState(0);
-//   const [instructorValue, setInstructorValue] = React.useState(0);
-//   const [facultyValue, setFacultyValue] = React.useState(0);
   const [ects, setEcts] = React.useState(0);
 
   const handleDepartmentChange = e => {
@@ -51,11 +48,6 @@ const Universities = () => {
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
 
   const handleCourseNameChange = e => setCourseName(e.target.value);
-//   const handleInstructorChange = e => setInstructorValue(e.target.value);
-//   const handleFacultyChange = e => setFacultyValue(e.target.value);
-  function printArray(item) {
-    return [item] + ", ";
-  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -142,9 +134,9 @@ const Universities = () => {
                                 <MDBCardText>Departments</MDBCardText>
                               </MDBCol>
                               <MDBCol sm="6">
-                                <MDBCardText className="text-muted">
-                                  {dummyUni.departments.map(printArray)}
-                                </MDBCardText>
+                              {dummyUni.departments.map((department,index) => (<MDBCardText key={index} className="text-muted">
+                                  {department}
+                                </MDBCardText>))}
                               </MDBCol>
                               <MDBCol sm="3">
                                 <Button
@@ -262,11 +254,9 @@ const Universities = () => {
                               <MenuItem disabled value={0}>
                                 Select
                               </MenuItem>
-                              <MenuItem value={10}>CS</MenuItem>
-                              <MenuItem value={20}>EEE</MenuItem>
-                              <MenuItem value={30}>ME</MenuItem>
-                              <MenuItem value={40}>MBG</MenuItem>
-                              <MenuItem value={50}>IE</MenuItem>
+                              {dummyUni.departments.map((department,index) =>
+                              <MenuItem key={index} value={(index+1)*10}>{department}</MenuItem>)}
+                          
                             </Select>
                           </FormControl>
                         </MDBCol>
@@ -403,7 +393,6 @@ const Universities = () => {
                     size="medium"
                     onClick={handleClose}
                     disabled={departmentName ===""}
-
                   >
                     Add
                   </Button>

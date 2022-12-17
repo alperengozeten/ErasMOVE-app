@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import RequestsTable from './table/RequestsTable';
-import { getFileRequestsRequest, deleteFileRequestRequest } from '../actions';
+import { getFileRequestsRequest, deleteFileRequestRequest, respondFileRequestRequest } from '../actions';
 
-const RequestsPage = ({ requests, getFileRequestsRequest, typeForReq, userId, deleteFileRequestRequest }) => {
+const RequestsPage = ({ requests, getFileRequestsRequest, typeForReq, userId, deleteFileRequestRequest, respondFileRequestRequest }) => {
     useEffect(() => {
         getFileRequestsRequest(userId, typeForReq);
     }, [getFileRequestsRequest, ]);
@@ -16,7 +16,7 @@ const RequestsPage = ({ requests, getFileRequestsRequest, typeForReq, userId, de
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <RequestsTable deleteFileRequestRequest={deleteFileRequestRequest} requests = {requests} isStaff={true} />
+                    <RequestsTable userId={userId} respondFileRequestRequest={respondFileRequestRequest} deleteFileRequestRequest={deleteFileRequestRequest} requests = {requests} isStaff={true} />
                 </Grid>
             </Grid>
         </Stack>
@@ -36,6 +36,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
     getFileRequestsRequest,
     deleteFileRequestRequest,
+    respondFileRequestRequest,
 };
 
 RequestsPage.propTypes = {
@@ -44,6 +45,7 @@ RequestsPage.propTypes = {
     deleteFileRequestRequest: PropTypes.func,
     typeForReq: PropTypes.string,
     userId: PropTypes.string,
+    respondFileRequestRequest: PropTypes.func,
 };
   
 RequestsPage.defaultProps = {

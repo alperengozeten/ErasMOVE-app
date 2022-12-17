@@ -7,6 +7,7 @@ import Modal from '@mui/material/Modal';
 import { sentenceCase } from 'change-case';
 import Label from '../label';
 import DeleteIcon from '@mui/icons-material/Delete';
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 // @mui
 import {
   Card,
@@ -71,7 +72,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
+const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFileRequestRequest, userId }) => {
 
   const [page, setPage] = useState(0);
 
@@ -88,6 +89,10 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
   const [openDelete, setOpenDelete] = React.useState(false);
 
   const [requesDetailsID, setRequesDetailsID] = React.useState(0);
+
+  const [file, setFile] = React.useState(null);
+
+  console.log(file);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -124,14 +129,22 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
     handleCloseDelete();
   };
 
+  const handleRespondFileReq = () => {
+    respondFileRequestRequest(requesDetailsID, file, userId);
+    handleClose();
+    setFile(null);
+  };
+
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = id => {
     setOpen(true);
+    setRequesDetailsID(id);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setRequesDetailsID(0);
   };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
 
@@ -179,8 +192,8 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
                         </TableCell>
 
                         <TableCell align="right">
-                          {isStaff ? (<Tooltip describeChild title="Add document">
-                            <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen}>
+                          {(isStaff && status==='WAITING') ? (<Tooltip describeChild title="Add document">
+                            <Button variant="contained" color="inherit" size="small" onClick={() => handleClickOpen(id)}>
                                 Add Document
                             </Button>
                           </Tooltip>) : null}
@@ -199,10 +212,18 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
 
                         >
                           <Box sx={style}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2" >
+                            <Typography id="modal-modal-title" variant="h2" textAlign={'center'} component="h2" >
                               Add Document
                             </Typography>
-                            <Box alignRight= {true}>
+                            <Button startIcon={<UploadFileIcon />} variant="contained" component="label">
+                                Upload File
+                                <input hidden accept="application/pdf" multiple type="file" onChange={e => setFile(e.target.files[0])} />
+                            </Button>
+                            {file ? <Button variant="contained" color="error" component="label" onClick={() => setFile(null)}>
+                                  Delete File
+                              </Button> : null}
+                            <Box >
+                            <Button onClick={handleRespondFileReq}>Send</Button>
                             <Button onClick={handleClose}>Close</Button>
                             </Box>
                           </Box>
@@ -277,6 +298,8 @@ RequestsTable.propTypes = {
     requests: PropTypes.array,
     deleteFileRequestRequest: PropTypes.func,
     isStaff: PropTypes.bool,
+    respondFileRequestRequest: PropTypes.func,
+    userId: PropTypes.string,
 };
   
 RequestsTable.defaultProps = {
