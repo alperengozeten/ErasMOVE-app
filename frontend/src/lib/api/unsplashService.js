@@ -63,6 +63,10 @@ export const getElectiveCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/electiveCourseApprovalRequest/${authType}/${id}`)
 );
 
+export const getElectiveCourseApprovalDocument = id => (
+  axios.get(`${baseURL}/document/electiveCourseApproval/${id}`)
+);
+
 export const createElectiveCourseApproval = courseApproval => (
   fetch(`${baseURL}/electiveCourseApprovalRequest/add`, {
     method: 'POST',
@@ -95,6 +99,10 @@ export const sendSyllabusElective = (id, syllabus) => (
 // Mandatory course approvals
 export const getMandatoryCourseApprovals = (id, authType) => (
   axios.get(`${baseURL}/mandatoryCourseApprovalRequest/${authType}/${id}`)
+);
+
+export const getMandatoryCourseApprovalDocument = id => (
+  axios.get(`${baseURL}/document/mandatoryCourseApproval/${id}`)
 );
 
 export const createMandatoryCourseApproval = courseApproval => (
@@ -193,6 +201,24 @@ export const declineErasmusReplacementRequest = id => (
   axios.post(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}/decline`, )
 );
 
+// File requests
+export const getFileRequests = (id, typeForReq) => (
+  axios.get(`${baseURL}/fileRequest/${typeForReq}/${id}`)
+);
+
+export const deleteFileRequest = id => (
+  axios.delete(`${baseURL}/fileRequest/delete/${id}`)
+);
+
+export const createFileRequest = fileReq => (
+  fetch(`${baseURL}/fileRequest/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(fileReq)
+  })
+);
 // Announcements
 export const getAnnouncements = departmentId => (
   axios.get(`${baseURL}/announcement/department/${departmentId}`)

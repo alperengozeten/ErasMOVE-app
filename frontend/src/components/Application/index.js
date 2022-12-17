@@ -21,7 +21,11 @@ import {
     createPreApprovalFormRequest,
     getCoursesByDepartment,
     getDepartments,
+    deleteFileRequestRequest,
+    createFileRequestRequest,
+    getFileRequestsRequest,
 } from "../../actions";
+import FileRequestsForStudent from "./FileRequestForStudent";
 
 
 const Application = ({
@@ -31,7 +35,6 @@ const Application = ({
     getPreApprovalFormsRequest,
     courseRequests,
     preApprovalForms,
-    hostCourses,
     approvedCourses,
     userId,
     createCourseApprovalRequestRequest,
@@ -41,13 +44,17 @@ const Application = ({
     getDepartments,
     hostUniDepartments,
     typeForReq,
-    contractedUniDepartments,
+    fileRequests,
+    deleteFileRequestRequest,
+    createFileRequestRequest,
+    getFileRequestsRequest,
 }) => {
 
   useEffect(() => {
     if (application.admittedStatus !==  "NOT ADMITTED") {
         getPreApprovalFormsRequest(userId, typeForReq);
         getCourseApprovalRequestsRequest(userId, typeForReq);
+        getFileRequestsRequest(userId, typeForReq);
         getDepartments();
     }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
@@ -80,7 +87,7 @@ const Application = ({
                                 <Tab label="Application" value={"0"} />
                                 <Tab label="PreApproval Forms" value={"1"} />
                                 <Tab label="Course Requests" value={"2"} />
-                                {/* <Tab label="Replacement Offers" value={"3"} /> */}
+                                <Tab label="File Requests" value={"3"} />
                             </TabList>
                         )}
                     </Box>
@@ -115,11 +122,11 @@ const Application = ({
                             />
                         </Box>
                     </TabPanel>
-                    {/* <TabPanel value="3" index={3}>
+                    <TabPanel value="3" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
-                            def
+                            <FileRequestsForStudent userId={userId} fileRequests={fileRequests} createFileRequestRequest={createFileRequestRequest} deleteFileRequestRequest={deleteFileRequestRequest} />
                         </Box>
-                    </TabPanel> */}
+                    </TabPanel>
                 </TabContext>
             </Box>
         </Grid>
@@ -138,6 +145,7 @@ const mapStateToProps = state => {
     const hostUniDepartments = state.universities.hostUniDepartments;
     const contractedUniDepartments = [...state.universities.erasmusDepartments, ...state.universities.exchangeDepartments];
     const typeForReq = state.auth.authTypeForReq;
+    const fileRequests = state.requests.fileRequests;
     return {
         courseRequests,
         preApprovalForms,
@@ -148,6 +156,7 @@ const mapStateToProps = state => {
         hostUniDepartments,
         typeForReq,
         contractedUniDepartments,
+        fileRequests,
     };
 };
 
@@ -160,6 +169,9 @@ const mapActionsToProps = {
     createPreApprovalFormRequest,
     getCoursesByDepartment,
     getDepartments,
+    deleteFileRequestRequest,
+    createFileRequestRequest,
+    getFileRequestsRequest,
 };
 
 Application.propTypes = {
@@ -180,6 +192,10 @@ Application.propTypes = {
     hostUniDepartments: PropTypes.array,
     typeForReq: PropTypes.string,
     contractedUniDepartments: PropTypes.array,
+    fileRequests: PropTypes.array,
+    deleteFileRequestRequest: PropTypes.func,
+    createFileRequestRequest: PropTypes.func,
+    getFileRequestsRequest: PropTypes.func,
 };
   
 Application.defaultProps = {

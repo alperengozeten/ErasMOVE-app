@@ -2,14 +2,21 @@ import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST, ACCEPT_COURSE_APPROVAL_REQUEST_SUCCESS,
   ACCEPT_PREAPPROVAL_FORM_FAIL, ACCEPT_PREAPPROVAL_FORM_REQUEST, ACCEPT_PREAPPROVAL_FORM_SUCCESS, CREATE_COURSE_APPROVAL_REQUEST_FAIL,
-  CREATE_COURSE_APPROVAL_REQUEST_REQUEST, CREATE_COURSE_APPROVAL_REQUEST_SUCCESS, CREATE_PREAPPROVAL_FORM_FAIL,
+  CREATE_COURSE_APPROVAL_REQUEST_REQUEST, CREATE_COURSE_APPROVAL_REQUEST_SUCCESS, CREATE_FILE_REQUEST_FAIL, CREATE_FILE_REQUEST_REQUEST, CREATE_FILE_REQUEST_SUCCESS, CREATE_PREAPPROVAL_FORM_FAIL,
   CREATE_PREAPPROVAL_FORM_REQUEST, CREATE_PREAPPROVAL_FORM_SUCCES, DECLINE_COURSE_APPROVAL_REQUEST_FAIL, DECLINE_COURSE_APPROVAL_REQUEST_REQUEST,
   DECLINE_COURSE_APPROVAL_REQUEST_SUCCESS, DECLINE_PREAPPROVAL_FORM_FAIL, DECLINE_PREAPPROVAL_FORM_REQUEST,
   DECLINE_PREAPPROVAL_FORM_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
-  DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
-  GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
+  DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_FAIL, DELETE_FILE_REQUEST_REQUEST, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
+  GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_FAIL, GET_FILE_REQUESTS_REQUEST, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
   GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
-import { acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm, addMobilityCoursesToPreApprovalForm, createElectiveCourseApproval, createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval, declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovals, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms, sendSyllabusElective, sendSyllabusMandatory } from '../lib/api/unsplashService';
+import {
+  acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
+  createElectiveCourseApproval,  createFileRequest,  createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval,
+  declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteFileRequest,
+  deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
+  getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
+  sendSyllabusElective, sendSyllabusMandatory
+} from '../lib/api/unsplashService';
 
 
 function sendReplacementOffer({ payload: { id } }) {
@@ -205,11 +212,20 @@ function* getCourseApprovalRequestsRequest({ payload: { id, typeForReq } }) {
     if (typeForReq !== 'courseCoordinator') {
       const {data: elective} = yield call(getElectiveCourseApprovals, id, typeForReq);
       electiveCourseApprovals = elective;
+
+      for (let i = 0; i < electiveCourseApprovals.length; i++) {
+        const { data: syllabus } = yield call(getElectiveCourseApprovalDocument, electiveCourseApprovals[i].id);
+        electiveCourseApprovals[i].syllabus = syllabus;
+      }
     } 
     
     if (typeForReq !== 'departmentCoordinator') {
       const {data: mandatory} = yield call(getMandatoryCourseApprovals, id, typeForReq);
       mandatoryCourseApprovals = mandatory;
+      for (let i = 0; i < mandatoryCourseApprovals.length; i++) {
+        const { data: syllabus } = yield call(getMandatoryCourseApprovalDocument, mandatoryCourseApprovals[i].id);
+        mandatoryCourseApprovals[i].syllabus = syllabus;
+      }
     }
 
     const courseApprovals = [...electiveCourseApprovals, ...mandatoryCourseApprovals];
@@ -400,6 +416,90 @@ function* createCourseApprovalRequestRequest({ payload: { courseRequest, type, f
   }
 }
 
+function* getFileRequestsReq({ payload: { id, typeForReq } }) {
+  console.log(`Course approval request created `);
+
+  try {
+      const { data } = yield call(getFileRequests, id, typeForReq);  
+      console.log(data);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: GET_FILE_REQUESTS_SUCCESS,
+          payload: data,
+      });
+  } catch (error) {
+    yield put({
+      type: GET_FILE_REQUESTS_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* deleteFileRequestReq({ payload: { id } }) {
+  console.log(`delete file request `);
+
+  try {
+      const { data } = yield call(deleteFileRequest, id);  
+      console.log(data);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: DELETE_FILE_REQUEST_SUCCESS,
+          payload: id,
+      });
+  } catch (error) {
+    yield put({
+      type: DELETE_FILE_REQUEST_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* createFileRequestRequest({ payload: { info, userId } }) {
+  console.log(`create file request `);
+
+  try {
+      const fileReq = {
+        info: info,
+        student: {
+          id: userId
+        }
+      };
+
+      const { data } = yield call(createFileRequest, fileReq);  
+      console.log(data);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: CREATE_FILE_REQUEST_SUCCESS,
+          payload: userId,
+      });
+
+      yield put({
+        type: GET_FILE_REQUESTS_REQUEST,
+        payload: { id: userId, typeForReq: "outgoingStudent" }
+    });
+  } catch (error) {
+    yield put({
+      type: CREATE_FILE_REQUEST_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
@@ -412,6 +512,9 @@ const requestSaga = [
   takeEvery(DECLINE_COURSE_APPROVAL_REQUEST_REQUEST, declineCourseApprovalRequestRequest),
   takeEvery(CREATE_COURSE_APPROVAL_REQUEST_REQUEST, createCourseApprovalRequestRequest),
   takeEvery(CREATE_PREAPPROVAL_FORM_REQUEST, createPreApprovalFormRequest),
+  takeEvery(GET_FILE_REQUESTS_REQUEST, getFileRequestsReq),
+  takeEvery(DELETE_FILE_REQUEST_REQUEST, deleteFileRequestReq),
+  takeEvery(CREATE_FILE_REQUEST_REQUEST, createFileRequestRequest),
 ];
 
 export default requestSaga;

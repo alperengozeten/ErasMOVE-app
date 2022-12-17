@@ -5,6 +5,7 @@ import PropTypes  from 'prop-types';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
 import { connect } from "react-redux";
 import { sentenceCase } from 'change-case';
+//import download from 'downloadjs';
 
 import Label from '../../label';
 import { acceptCourseApprovalRequestRequest, declineCourseApprovalRequestRequest } from '../../../actions';
@@ -26,6 +27,17 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
     const handleDecline = () => {
         declineCourseApprovalRequestRequest(courseRequest.id, (authType === 'Course Coordinator' ? "Mandatory" : "Elective" ), feedback, (authType === 'Course Coordinator' ? courseRequest.courseCoordinator.id : courseRequest.departmentCoordinator.id));
         handleCloseDetails();
+    };
+
+    const handleDownloadSyllabus = () => {
+        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+            JSON.stringify(courseRequest.syllabus)
+          )}`;
+          const link = document.createElement("a");
+          link.href = jsonString;
+          link.download = "data.json";
+      
+          link.click();
     };
 
     return (
@@ -104,7 +116,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                         </MDBCol>
                                         <MDBCol sm="9">
                                             <MDBCardText className="text-muted">
-                                                <Button variant="contained">Download Syllabus</Button>
+                                                <Button variant="contained" onClick={handleDownloadSyllabus}>Download Syllabus</Button>
                                             </MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
