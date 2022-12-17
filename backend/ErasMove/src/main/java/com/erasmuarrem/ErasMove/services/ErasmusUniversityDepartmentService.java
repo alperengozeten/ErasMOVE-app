@@ -59,6 +59,8 @@ public class ErasmusUniversityDepartmentService {
                     " already exists in university with id:" + erasmusUniversityDepartment.getErasmusUniversity().getID());
         }
 
+        erasmusUniversityDepartment.setMaxQuota(erasmusUniversityDepartment.getQuota());
+
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
 
