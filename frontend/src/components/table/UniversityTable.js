@@ -49,9 +49,7 @@ import { UniversitiesListToolbar } from "./university";
 
 const TABLE_HEAD = [
   { id: "name", label: "University Name", alignRight: false },
-  { id: "type", label: "Program Type", alignRight: false },
-  { id: "emptyQuota", label: "Empty Quota", alignRight: false },
-  { id: "totalQuota", label: "Total Quota", alignRight: false },
+  { id: "country", label: "Country", alignRight: false },
   { id: "departments", label: "Departments", alignRight: false },
 ];
 const departments = [
@@ -127,7 +125,8 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
+  console.log('array: ', array);
+  const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
@@ -142,7 +141,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = ({ universities }) => {
+const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -157,6 +156,8 @@ const UniversityTable = ({ universities }) => {
   const [description, setDescription] = React.useState("");
   const [departmentValue, setDepartmentValue] = React.useState(0);
   const [ects, setEcts] = React.useState(0);
+
+  const [isExchange, setIsExchange] = useState('Erasmus');
 
   const handleDepartmentChange = e => {
     setDepartmentValue(e.target.value);
@@ -224,12 +225,18 @@ const UniversityTable = ({ universities }) => {
     setPage(0);
     setFilterName(event.target.value);
   };
+
+  const universities = isExchange === 'Exchange' ? exchangeUniversities : erasmusUniversities;
+
+  console.log(erasmusUniversities);
  
-  const filteredUsers = applySortFilter(
+  const filteredUsers = universities.length>0 ? applySortFilter(
     universities,
     getComparator(order, orderBy),
     filterName
-  );
+  ): [];
+
+  console.log('filterxx: ', filteredUsers);
 
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -250,6 +257,8 @@ const UniversityTable = ({ universities }) => {
           <UniversitiesListToolbar
             filterName={filterName}
             onFilterName={handleFilterByName}
+            setIsExchange={setIsExchange}
+            isExchange={isExchange}
           />
 
           <Scrollbar>
@@ -263,15 +272,15 @@ const UniversityTable = ({ universities }) => {
                 />
 
                 <TableBody>
+                  {console.log('filtered: ', filteredUsers)}
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
+                      console.log('row: ', row);
                       const {
                         id,
-                        name,
-                        type,
-                        emptyQuota,
-                        totalQuota,
+                        universityName,
+                        country,
                         // courses,
                       } = row;
 
@@ -291,14 +300,11 @@ const UniversityTable = ({ universities }) => {
                               spacing={2}
                             >
                               <Typography variant="inherit" noWrap>
-                                {name}
+                                {universityName}
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="center">{type}</TableCell>
-
-                          <TableCell align="center">{emptyQuota}</TableCell>
-                          <TableCell align="center">{totalQuota}</TableCell>
+                          <TableCell align="center">{country}</TableCell>
 
                           <TableCell align="right">
                             <Button
@@ -379,7 +385,7 @@ const UniversityTable = ({ universities }) => {
                                             <MDBCol sm="9">
                                               <TextField
                                                 id="outlined-multiline-flexible"
-                                                defaultValue={type}
+                                                //defaultValue={type}
                                                 disabled={disabled}
                                               />
                                             </MDBCol>
@@ -395,7 +401,7 @@ const UniversityTable = ({ universities }) => {
                                               <TextField
                                                 id="outlined-multiline-flexible"
                                                 type={"number"}
-                                                defaultValue={emptyQuota}
+                                                //defaultValue={emptyQuota}
                                                 disabled={!isEdit}
                                               />
                                             </MDBCol>
@@ -411,7 +417,7 @@ const UniversityTable = ({ universities }) => {
                                               <TextField
                                                 id="outlined-multiline-flexible"
                                                 type={"number"}
-                                                defaultValue={totalQuota}
+                                                //defaultValue={totalQuota}
                                                 disabled={disabled}
                                               />
                                             </MDBCol>
@@ -822,10 +828,14 @@ const style = {
 };
 UniversityTable.propTypes = {
   universities: PropTypes.array,
+  erasmusUniversities: PropTypes.array, 
+  exchangeUniversities: PropTypes.array,
 };
 
 UniversityTable.defaultProps = {
   universities: [],
+  erasmusUniversities: [], 
+  exchangeUniversities: [],
 };
 
 export default UniversityTable;

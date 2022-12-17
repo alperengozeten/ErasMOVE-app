@@ -9,6 +9,9 @@ import {
   OutlinedInput,
   InputAdornment,
   Button,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   Box,
@@ -65,12 +68,16 @@ UniversitiesListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  isExchange: PropTypes.string,
+  setIsExchange: PropTypes.func,
 };
 
 export default function UniversitiesListToolbar({
   numSelected,
   filterName,
   onFilterName,
+  isExchange,
+  setIsExchange,
 }) {
   const [open, setOpen] = useState(false);
   const [universityName, setUniversityName] = React.useState("");
@@ -97,11 +104,8 @@ export default function UniversitiesListToolbar({
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography component="div" variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
+      <Grid container >
+      <Grid item xs={4}>
         <StyledSearch
           value={filterName}
           onChange={onFilterName}
@@ -115,15 +119,35 @@ export default function UniversitiesListToolbar({
             </InputAdornment>
           }
         />
-      )}
-      <Button
-        variant="contained"
-        color="inherit"
-        size="small"
-        onClick={handleClickOpen}
-      >
-        Add New University
-      </Button>
+      </Grid>
+      <Grid item xs={4}>            
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Type</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={isExchange}
+                    label="Type"
+                    onChange={e => setIsExchange(e.target.value) }
+                  >
+                    <MenuItem value={'Erasmus'}>Erasmus</MenuItem>
+                    <MenuItem value={'Exchange'}>Exchange</MenuItem>
+                  </Select>
+                </FormControl>
+            
+        </Grid>
+        <Grid item xs={2}></Grid>
+      <Grid item xs={2}>
+        <Button
+          variant="contained"
+          color="inherit"
+          size="small"
+          onClick={handleClickOpen}
+        >
+          Add New University
+        </Button>
+      </Grid>
+      </Grid> 
       <Modal
         open={open}
         onClose={handleClose}
