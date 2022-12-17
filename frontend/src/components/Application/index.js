@@ -36,6 +36,7 @@ const Application = ({
     getPreApprovalFormsRequest,
     courseRequests,
     preApprovalForms,
+    replacementOffers,
     approvedCourses,
     userId,
     createCourseApprovalRequestRequest,
@@ -131,7 +132,7 @@ const Application = ({
                     </TabPanel>
                     <TabPanel value="4" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <WaitingReplacementOffer/>
+                            <WaitingReplacementOffer offer={replacementOffers[0]}/>
                         </Box>
                     </TabPanel>
                 </TabContext>
@@ -145,6 +146,7 @@ const Application = ({
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
     const preApprovalForms = state.requests.preApprovalForms;
+    const replacementOffers = state.requests.replacementOffers;
     const hostCourses = state.courses.hostCourses;
     const approvedCourses = state.courses.approvedCourses;
     const userId = state.user.user.id;
@@ -156,6 +158,7 @@ const mapStateToProps = state => {
     return {
         courseRequests,
         preApprovalForms,
+        replacementOffers,
         hostCourses,
         approvedCourses,
         userId,
@@ -184,6 +187,7 @@ const mapActionsToProps = {
 Application.propTypes = {
     courseRequests: PropTypes.array,
     preApprovalForms: PropTypes.array,
+    replacementOffers: PropTypes.array,
     hostCourses: PropTypes.array,
     approvedCourses: PropTypes.array,
     getPreApprovalFormsRequest: PropTypes.func,
@@ -208,6 +212,7 @@ Application.propTypes = {
 Application.defaultProps = {
     courseRequests: [],
     preApprovalForms: [],
+    replacementOffers: []
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Application);

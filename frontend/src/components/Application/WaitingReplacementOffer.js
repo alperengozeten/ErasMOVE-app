@@ -11,14 +11,14 @@ import {
 import PropTypes from 'prop-types';
 
 
-export const WaitingReplacementOffer = () => {
-  const offer = {
-    from: "Eray Tüzün",
-    student: "Alperen Gözeten",
-    university: "Bilkent University",
-    status: "Waiting for your response...",
-    info: "You have a replacement offer for the Exchange Program.",
-  };
+export const WaitingReplacementOffer = ({offer}) => {
+//   const offer = {
+//     from: "Eray Tüzün",
+//     student: "Alperen Gözeten",
+//     university: "Bilkent University",
+//     status: "Waiting for your response...",
+//     info: "You have a replacement offer for the Exchange Program.",
+//   };
 
   return (
     <form autoComplete="off">
@@ -99,5 +99,5 @@ export const WaitingReplacementOffer = () => {
 };
 
 WaitingReplacementOffer.propTypes = {
-  user: PropTypes.object,
+  offer: PropTypes.object,
 };

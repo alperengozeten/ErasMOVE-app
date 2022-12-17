@@ -4,6 +4,14 @@ const INITIAL_STATE = {
     courseRequests: [], 
     acceptanceLetterRequests: [], 
     preApprovalForms: [],
+    replacementOffers: [{
+        from: "Eray Tüzün",
+        student: "Alperen Gözeten",
+        university: "Bilkent University",
+        status: "Waiting for your response...",
+        info: "You have a replacement offer for the Exchange Program.",
+      },
+    ],
 };
 
 const requestsReducer = (state = INITIAL_STATE, action) => {
