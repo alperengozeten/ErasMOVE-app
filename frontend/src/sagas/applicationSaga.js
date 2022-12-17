@@ -11,9 +11,9 @@ function* getApplicationsByDepartmentReq({ payload: { user, typeForReq } }) {
         
         if (typeForReq === 'administrativeStaff') {
 
-            for (var i = 0; i < user.department.length; i++) {
-                const { data } = yield call(getApplicationsByDepartment, user.department[i].id);
-                applications = [...applications, data];
+            for (var i = 0; i < user.departments.length; i++) {
+                const { data } = yield call(getApplicationsByDepartment, user.departments[i].id);
+                applications = [...applications, ...data];
             }
         } else {
             const { data } = yield call(getApplicationsByDepartment, user.department.id);
