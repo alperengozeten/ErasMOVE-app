@@ -310,4 +310,13 @@ public class ErasmusUniversityDepartmentService {
 
         return new ResponseEntity<>(erasmusUniversityDepartment, HttpStatus.OK);
     }
+
+    public List<ErasmusUniversityDepartment> getErasmusUniversityDepartmentByErasmusUniversityID(Long erasmusUniversityID) {
+
+        if ( !erasmusUniversityRepository.existsById(erasmusUniversityID) ) {
+            throw new IllegalStateException("Erasmus University with id:" + erasmusUniversityID + " doesn't exist!");
+        }
+
+        return erasmusUniversityDepartmentRepository.findByErasmusUniversity_ID(erasmusUniversityID);
+    }
 }

@@ -44,6 +44,12 @@ public class ExchangeUniversityDepartmentController {
         return exchangeUniversityDepartmentService.getExchangeUniversityDepartmentByAcceptedStudentID(acceptedStudentID);
     }
 
+    @GetMapping("/exchangeUniversityID/{exchangeUniversityID}")
+    public List<ExchangeUniversityDepartment> getExchangeUniversityDepartmentsByExchangeUniversityID(
+            @PathVariable("exchangeUniversityID") Long exchangeUniversityID) {
+        return exchangeUniversityDepartmentService.getExchangeUniversityDepartmentByExchangeUniversityID(exchangeUniversityID);
+    }
+
     @PostMapping("/add")
     public void addExchangeUniversityDepartment(@RequestBody ExchangeUniversityDepartment exchangeUniversityDepartment) {
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(exchangeUniversityDepartment);

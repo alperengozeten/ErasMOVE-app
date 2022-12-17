@@ -42,6 +42,12 @@ public class ErasmusUniversityDepartmentController {
         return erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByAcceptedStudentID(acceptedStudentID);
     }
 
+    @GetMapping("/erasmusUniversityID/{erasmusUniversityID}")
+    public List<ErasmusUniversityDepartment> getErasmusUniversityDepartmentsByErasmusUniversityID(
+            @PathVariable("erasmusUniversityID") Long erasmusUniversityID) {
+        return erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByErasmusUniversityID(erasmusUniversityID);
+    }
+
     @PostMapping("/add")
     public void addErasmusUniversityDepartment(@RequestBody ErasmusUniversityDepartment erasmusUniversityDepartment) {
         erasmusUniversityDepartmentService.addErasmusUniversityDepartment(erasmusUniversityDepartment);
