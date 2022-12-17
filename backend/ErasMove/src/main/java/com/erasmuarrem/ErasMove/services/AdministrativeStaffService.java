@@ -157,8 +157,8 @@ public class AdministrativeStaffService {
             newApplication.setSelectedSemester(applicationLine.getSelectedSemester());
 
             newApplication.setSelectedUniversities(universities);
-            newApplication.setAdmittedStatus("Not Admitted"); // set initial status
-            newApplication.setPreApprovalFormStatus("Not Submitted"); // set initial status
+            newApplication.setAdmittedStatus("NOT ADMITTED"); // set initial status
+            newApplication.setPreApprovalFormStatus("NOT SUBMITTED"); // set initial status
 
             applicationService.addApplication(newApplication);
         }
