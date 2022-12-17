@@ -3,6 +3,15 @@ import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardText,
+  MDBCol,
+  MDBContainer,
+  MDBRow,
+} from "mdb-react-ui-kit";
 // @mui
 import {
   Card,
@@ -11,6 +20,9 @@ import {
   Paper,
   Avatar,
   TableRow,
+  FormControl,
+  MenuItem,
+  Select,
   TableBody,
   TableCell,
   Container,
@@ -19,6 +31,7 @@ import {
   TableContainer,
   TablePagination,
   Button,
+  Grid,
   Tooltip,
   Box,
   Modal
@@ -84,8 +97,12 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [universityValue, setUniversityValue] = useState(0);
+
 
   const [department, setDepartment] = useState('');
+  const [isModalOpen, setModalOpen] = useState(false);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -95,6 +112,9 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+  };
+  const handleModalClose = () => {
+    isModalOpen(false);
   };
 
   const handleChangeRowsPerPage = event => {
@@ -107,10 +127,14 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
     setFilterName(event.target.value);
   };
 
+  const handleUniversityChange = event => {
+    setUniversityValue(event.target.value);
+  };
   const dispatch = useDispatch();
 
   const offerReplacement = id => {
     console.log(1);
+    setModalOpen(true);
     dispatch(sendReplacementOffer(id));
   };
 
@@ -259,6 +283,92 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
+           <Modal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stack spacing={6}>
+            <Typography
+              id="modal-modal-title"
+              textAlign={"center"}
+              variant="h2"
+              component="h1"
+            >
+              Send Replacement Offer
+            </Typography>
+            <Stack alignItems={"center"} spacing={3}>
+              <section style={{ width: "100%", backgroundColor: "#eee" }}>
+                <MDBContainer className="py-5">
+                  <MDBCard className="mb-4">
+                    <MDBCardBody>
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>University</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <FormControl sx={{ minWidth: 250 }}>
+                            <Select
+                              required
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value={universityValue}
+                              size="small"
+                              onChange={handleUniversityChange}
+                            >
+                              <MenuItem disabled value={0}>
+                                Select
+                              </MenuItem>
+                            </Select>
+                          </FormControl>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Empty Quota</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <MDBCardText>nul
+                          </MDBCardText>
+                        </MDBCol>
+                      </MDBRow>
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBContainer>
+              </section>
+              <Grid container justifyContent={"center"}>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={4}>
+                  <Button
+                    sx={{ margin: "auto" }}
+                    variant="contained"
+                    color="success"
+                    size="medium"
+                    onClick={handleModalClose}
+                  >
+                    Send
+                  </Button>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    sx={{ margin: "auto" }}
+                    variant="contained"
+                    color="error"
+                    size="medium"
+                    onClick={handleModalClose}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+                <Grid item xs={1}></Grid>
+              </Grid>
+            </Stack>
+          </Stack>
+        </Box>
+      </Modal>
         </Card>
       </Container>
     </>
@@ -309,5 +419,16 @@ WaitingStudentsTable.defaultProps = {
     sendReplacementOffer: f => f,
 };
 
-
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "50%",
+  bgcolor: "background.paper",
+  border: "none",
+  borderRadius: "6px",
+  boxShadow: 24,
+  p: 4,
+};
 export default WaitingStudentsTable;
