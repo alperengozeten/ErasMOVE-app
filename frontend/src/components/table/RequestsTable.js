@@ -197,6 +197,11 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
                                 Add Document
                             </Button>
                           </Tooltip>) : null}
+                          {(!isStaff && status!=='WAITING') ? (<Tooltip describeChild title="Download document">
+                            <Button variant="contained" color="inherit" size="small" onClick={() => handleClickOpen(id)}>
+                                Download Document
+                            </Button>
+                          </Tooltip>) : null}
                           <Tooltip describeChild title="Delete request">
                             <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />

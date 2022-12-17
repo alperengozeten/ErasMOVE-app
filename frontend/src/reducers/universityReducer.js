@@ -1,4 +1,4 @@
-import { GET_DEPARTMENTS_SUCCESS } from "../constants/actionTypes";
+import { GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_SUCCESS } from "../constants/actionTypes";
 import { DELETE_UNIVERSITY_SUCCESS } from "../constants/actionTypes";
 
 
@@ -46,6 +46,7 @@ const INITIAL_STATE = {
 
       },
     ],
+    eramusUniversities: [],
     hostUniDepartments: [],
     erasmusDepartments: [],
     exchangeDepartments: [],
@@ -60,6 +61,12 @@ const INITIAL_STATE = {
           erasmusDepartments: action.payload.filter(dep => dep.erasmusUniversity),
           exchangeDepartments: action.payload.filter(dep => dep.exchangeUniversity),
         };
+      case GET_UNIVERSITIES_SUCCESS:
+          return {
+            ...state,
+            exchangeUniversities: action.payload.exchange,
+            erasmusUniversities: action.payload.erasmus,
+          };
       case DELETE_UNIVERSITY_SUCCESS:
         return;
 
