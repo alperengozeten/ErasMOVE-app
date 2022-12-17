@@ -19,6 +19,7 @@ import {
   Stack,
   Typography,
   Button,
+  Alert
 } from "@mui/material";
 
 const ProposalPage = () => {
@@ -27,6 +28,20 @@ const ProposalPage = () => {
   const [courseThree, setCourseThree] = React.useState(0);
   const [courseFour, setCourseFour] = React.useState(0);
   const [courseFive, setCourseFive] = React.useState(0);
+  const [error,setError] = React.useState(false);
+
+  
+  const handleCreateProposal = () => {
+    if (
+      courseOne === 0 ||
+      courseTwo === 0 ||
+      courseThree === 0 ||
+      courseFour === 0 ||
+      courseFive === 0
+    ) {
+      setError(true);
+    } 
+  };
 
   const obj = {
     departmentName: "CS",
@@ -61,7 +76,6 @@ const ProposalPage = () => {
   const handleCourseTwoChange = e => {
     setCourseTwo(e.target.value);
   };
-  const handleSave = () => {};
   const handleCourseThreeChange = e => {
     setCourseThree(e.target.value);
   };
@@ -98,7 +112,7 @@ const ProposalPage = () => {
                       <MDBCardBody>
                         <MDBRow>
                           <MDBCol sm="3">
-                            <MDBCardText>Course 1</MDBCardText>
+                            <MDBCardText>Course 1*</MDBCardText>
                           </MDBCol>
                           <MDBCol sm="9">
                             <FormControl
@@ -114,25 +128,16 @@ const ProposalPage = () => {
                                 value={courseOne}
                                 size="small"
                                 onChange={handleCourseOneChange}
+                                error={error}
+
                               >
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                <MenuItem value={10}>
-                                  {obj.courseList[0].courseName}
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  {obj.courseList[1].courseName}
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  {obj.courseList[2].courseName}
-                                </MenuItem>
-                                <MenuItem value={40}>
-                                  {obj.courseList[3].courseName}
-                                </MenuItem>
-                                <MenuItem value={50}>
-                                  {obj.courseList[4].courseName}
-                                </MenuItem>
+                                {obj.courseList.map((course,index)=> (
+                                <MenuItem key = {index}value={(index+1)*10}>
+                                  {course.courseName}
+                                </MenuItem>))}
                               </Select>
                             </FormControl>
                           </MDBCol>
@@ -198,7 +203,7 @@ const ProposalPage = () => {
                         <hr />
                         <MDBRow>
                           <MDBCol sm="3">
-                            <MDBCardText>Course 2</MDBCardText>
+                            <MDBCardText>Course 2*</MDBCardText>
                           </MDBCol>
                           <MDBCol sm="9">
                             <FormControl
@@ -214,25 +219,16 @@ const ProposalPage = () => {
                                 value={courseTwo}
                                 size="small"
                                 onChange={handleCourseTwoChange}
+                                error={error}
+
                               >
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                <MenuItem value={10}>
-                                  {obj.courseList[0].courseName}
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  {obj.courseList[1].courseName}
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  {obj.courseList[2].courseName}
-                                </MenuItem>
-                                <MenuItem value={40}>
-                                  {obj.courseList[3].courseName}
-                                </MenuItem>
-                                <MenuItem value={50}>
-                                  {obj.courseList[4].courseName}
-                                </MenuItem>
+                                {obj.courseList.map((course,index)=> (
+                                <MenuItem key = {index}value={(index+1)*10}>
+                                  {course.courseName}
+                                </MenuItem>))}
                               </Select>
                             </FormControl>
                           </MDBCol>
@@ -297,7 +293,7 @@ const ProposalPage = () => {
                         <hr />
                         <MDBRow>
                           <MDBCol sm="3">
-                            <MDBCardText>Course 3</MDBCardText>
+                            <MDBCardText>Course 3*</MDBCardText>
                           </MDBCol>
                           <MDBCol sm="9">
                             <FormControl
@@ -313,25 +309,16 @@ const ProposalPage = () => {
                                 value={courseThree}
                                 size="small"
                                 onChange={handleCourseThreeChange}
+                                error={error}
+
                               >
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                <MenuItem value={10}>
-                                  {obj.courseList[0].courseName}
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  {obj.courseList[1].courseName}
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  {obj.courseList[2].courseName}
-                                </MenuItem>
-                                <MenuItem value={40}>
-                                  {obj.courseList[3].courseName}
-                                </MenuItem>
-                                <MenuItem value={50}>
-                                  {obj.courseList[4].courseName}
-                                </MenuItem>
+                                {obj.courseList.map((course,index)=> (
+                                <MenuItem key = {index}value={(index+1)*10}>
+                                  {course.courseName}
+                                </MenuItem>))}
                               </Select>
                             </FormControl>
                           </MDBCol>
@@ -396,7 +383,7 @@ const ProposalPage = () => {
                         <hr />
                         <MDBRow>
                           <MDBCol sm="3">
-                            <MDBCardText>Course 4</MDBCardText>
+                            <MDBCardText>Course 4*</MDBCardText>
                           </MDBCol>
                           <MDBCol sm="9">
                             <FormControl
@@ -412,25 +399,16 @@ const ProposalPage = () => {
                                 value={courseFour}
                                 size="small"
                                 onChange={handleCourseFourChange}
+                                error={error}
+
                               >
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                <MenuItem value={10}>
-                                  {obj.courseList[0].courseName}
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  {obj.courseList[1].courseName}
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  {obj.courseList[2].courseName}
-                                </MenuItem>
-                                <MenuItem value={40}>
-                                  {obj.courseList[3].courseName}
-                                </MenuItem>
-                                <MenuItem value={50}>
-                                  {obj.courseList[4].courseName}
-                                </MenuItem>
+                                {obj.courseList.map((course,index)=> (
+                                <MenuItem key = {index}value={(index+1)*10}>
+                                  {course.courseName}
+                                </MenuItem>))}
                               </Select>
                             </FormControl>
                           </MDBCol>
@@ -495,7 +473,7 @@ const ProposalPage = () => {
                         <hr />
                         <MDBRow>
                           <MDBCol sm="3">
-                            <MDBCardText>Course 5</MDBCardText>
+                            <MDBCardText>Course 5*</MDBCardText>
                           </MDBCol>
                           <MDBCol sm="9">
                             <FormControl
@@ -511,25 +489,15 @@ const ProposalPage = () => {
                                 value={courseFive}
                                 size="small"
                                 onChange={handleCourseFiveChange}
+                                error={error}
                               >
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                <MenuItem value={10}>
-                                  {obj.courseList[0].courseName}
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  {obj.courseList[1].courseName}
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  {obj.courseList[2].courseName}
-                                </MenuItem>
-                                <MenuItem value={40}>
-                                  {obj.courseList[3].courseName}
-                                </MenuItem>
-                                <MenuItem value={50}>
-                                  {obj.courseList[4].courseName}
-                                </MenuItem>
+                                {obj.courseList.map((course,index)=> (
+                                <MenuItem key = {index}value={(index+1)*10}>
+                                  {course.courseName}
+                                </MenuItem>))}
                               </Select>
                             </FormControl>
                           </MDBCol>
@@ -595,6 +563,11 @@ const ProposalPage = () => {
                     </MDBCard>
                   </MDBCol>
                 </MDBRow>
+                {error ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
 
                 <Grid container justifyContent={"center"}>
                   <Grid item xs={3}></Grid>
@@ -603,7 +576,7 @@ const ProposalPage = () => {
                       sx={{ margin: "auto" }}
                       variant="contained"
                       size="large"
-                      onClick={handleSave}
+                      onClick={handleCreateProposal}
                     >
                       Save
                     </Button>

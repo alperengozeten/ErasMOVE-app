@@ -212,7 +212,6 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                     color="success"
                     size="medium"
                     onClick={handleClose}
-                    disabled={description===""|| actorValue=== 0 ||name ===""}
                   >
                     Add
                   </Button>
