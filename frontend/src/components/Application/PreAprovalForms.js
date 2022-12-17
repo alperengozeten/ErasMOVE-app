@@ -10,6 +10,7 @@ import PreApprovalCourse from './PreApprovalCourse';
 const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, hostDepartment, createPreApprovalFormRequest, userId, acceptedUniDepartment }) => {
  
     const [open, setOpen] = React.useState(false);
+    const [error, setError] = React.useState(false);
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
     const handleOpen = () => setOpen(true);
@@ -65,6 +66,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
         handleClose();
     };
 
+    console.log(mergedCourses);
     return (
         <Stack spacing={2}>
             <Grid container spacing={2}>
