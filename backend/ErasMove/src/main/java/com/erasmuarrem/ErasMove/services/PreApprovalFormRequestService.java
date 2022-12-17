@@ -27,9 +27,10 @@ public class PreApprovalFormRequestService {
     private final NotificationService notificationService;
     private final ApplicationService applicationService;
     private final DepartmentRepository departmentRepository;
+    private final MobilityCourseService mobilityCourseService;
 
     @Autowired
-    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService, ApplicationService applicationService, DepartmentRepository departmentRepository) {
+    public PreApprovalFormRequestService(PreApprovalFormRequestRepository preApprovalFormRequestRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, DepartmentCoordinatorService departmentCoordinatorService, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService, NotificationService notificationService, ApplicationService applicationService, DepartmentRepository departmentRepository, MobilityCourseService mobilityCourseService) {
         this.preApprovalFormRequestRepository = preApprovalFormRequestRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -39,6 +40,7 @@ public class PreApprovalFormRequestService {
         this.notificationService = notificationService;
         this.applicationService = applicationService;
         this.departmentRepository = departmentRepository;
+        this.mobilityCourseService = mobilityCourseService;
     }
 
     public List<PreApprovalFormRequest> getPreApprovalFormRequests() {
@@ -130,6 +132,8 @@ public class PreApprovalFormRequestService {
         if ( !preApprovalFormRequestOptional.isPresent() ) {
             throw new IllegalStateException("Pre-Approval Form Request with id:" + id + " doesn't exist!");
         }
+
+        mobilityCourseService.deleteMobilityCoursesByPreApprovalFormRequestID(preApprovalFormRequestOptional.get().getID());
 
         preApprovalFormRequestRepository.deleteById(id);
     }
@@ -257,6 +261,11 @@ public class PreApprovalFormRequestService {
 
         if ( preApprovalFormRequests.size() == 0 ) {
             return "Outgoing Student has not yet created a Pre-Approval Form!";
+        }
+
+        // delete the mobility courses belonging to the pre-approval forms
+        for (PreApprovalFormRequest preApprovalFormRequest : preApprovalFormRequests) {
+            mobilityCourseService.deleteMobilityCoursesByPreApprovalFormRequestID(preApprovalFormRequest.getID());
         }
 
         preApprovalFormRequestRepository.deletePreApprovalFormRequestsByStudent_ID(outgoingStudentID);
