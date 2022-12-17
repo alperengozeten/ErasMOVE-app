@@ -88,7 +88,7 @@ const MenuCard = () => {
     return (
         <CardStyle>
             <CardContent sx={{ p: 2 }}>
-                <List sx={{ p: 0, m: 0 }}>
+                {/* <List sx={{ p: 0, m: 0 }}>
                     <ListItem alignItems="flex-start" disableGutters sx={{ p: 0 }}>
                         <ListItemAvatar sx={{ mt: 0 }}>
                             <Avatar
@@ -116,8 +116,8 @@ const MenuCard = () => {
                             secondary={<Typography variant="caption"> 28/23 GB</Typography>}
                         />
                     </ListItem>
-                </List>
-                <LinearProgressWithLabel value={80} />
+                </List> */}
+                {/* <LinearProgressWithLabel value={80} /> */}
             </CardContent>
         </CardStyle>
     );
