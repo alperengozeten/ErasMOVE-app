@@ -219,6 +219,14 @@ export const createFileRequest = fileReq => (
     body: JSON.stringify(fileReq)
   })
 );
+
+export const respondFileRequest = (id, file) => (
+  fetch(`${baseURL}/fileRequest/respond/${id}`, {
+    method: 'POST',
+    body: file
+  })
+);
+
 // Announcements
 export const getAnnouncements = departmentId => (
   axios.get(`${baseURL}/announcement/department/${departmentId}`)

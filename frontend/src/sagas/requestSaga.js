@@ -8,13 +8,14 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DECLINE_PREAPPROVAL_FORM_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_FAIL, DELETE_FILE_REQUEST_REQUEST, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_FAIL, GET_FILE_REQUESTS_REQUEST, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
-  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 import {
   acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
   createElectiveCourseApproval,  createFileRequest,  createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval,
   declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteFileRequest,
   deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
   getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
+  respondFileRequest,
   sendSyllabusElective, sendSyllabusMandatory
 } from '../lib/api/unsplashService';
 
@@ -500,6 +501,35 @@ function* createFileRequestRequest({ payload: { info, userId } }) {
   }
 }
 
+function* respondFileRequestRequest({ payload: { id, file, userId } }) {
+  console.log(`create file request `);
+
+  try {
+      const { data } = yield call(respondFileRequest, id, file);  
+      console.log(data);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: RESPOND_FILE_REQUEST_SUCCESS,
+          payload: userId,
+      });
+
+      yield put({
+        type: GET_FILE_REQUESTS_REQUEST,
+        payload: { id: userId, typeForReq: "administrativeStaff" }
+    });
+  } catch (error) {
+    yield put({
+      type: RESPOND_FILE_REQUEST_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
@@ -515,6 +545,7 @@ const requestSaga = [
   takeEvery(GET_FILE_REQUESTS_REQUEST, getFileRequestsReq),
   takeEvery(DELETE_FILE_REQUEST_REQUEST, deleteFileRequestReq),
   takeEvery(CREATE_FILE_REQUEST_REQUEST, createFileRequestRequest),
+  takeEvery(RESPOND_FILE_REQUEST_REQUEST, respondFileRequestRequest),
 ];
 
 export default requestSaga;
