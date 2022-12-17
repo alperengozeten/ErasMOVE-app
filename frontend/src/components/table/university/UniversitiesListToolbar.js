@@ -74,22 +74,20 @@ export default function UniversitiesListToolbar({
 }) {
   const [open, setOpen] = useState(false);
   const [universityName, setUniversityName] = React.useState("");
-  // const [description, setDescription] = React.useState("");
   const [isErasmus, setIsErasmus] = React.useState(false);
-
+  const [openAddDepartment, setOpenAddDepartment] = useState(false);
+  const [departmentName, setDepartmentName] = React.useState("");
   const [quotaValue, setQuotaValue] = React.useState(0);
+
   const handleUniversityNameChange = e => setUniversityName(e.target.value);
+  const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
   const handleQuotaValueChange = e => setQuotaValue(e.target.value);
   const handleErasmusChange = e => setIsErasmus(e.target.value);
-  // const handleDescriptionChange = e => setDescription(e.target.value);
+  const handleClickOpen = () => {setOpen(true);};
+  const handleClose = () => {setOpen(false);};
+  const handleAddDepartment = () =>{setOpenAddDepartment(true);};
+  const handleAddDepartmentClose = () =>{setOpenAddDepartment(false);};
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <StyledRoot
       sx={{
@@ -159,6 +157,7 @@ export default function UniversitiesListToolbar({
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
+                            required
                             id="outlined-multiline-flexible"
                             value={universityName}
                             onChange={handleUniversityNameChange}
@@ -201,6 +200,7 @@ export default function UniversitiesListToolbar({
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
+                            required
                             id="outlined-multiline-flexible"
                             type={"number"}
                             value={quotaValue}
@@ -211,16 +211,16 @@ export default function UniversitiesListToolbar({
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Courses</MDBCardText>
+                          <MDBCardText>Departments</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <Button
                             sx={{ margin: "auto" }}
                             variant="contained"
                             size="medium"
-                            // onClick={handleAddCourse}
+                            onClick={handleAddDepartment}
                           >
-                            Add Course
+                            Add Department
                           </Button>
                         </MDBCol>
                       </MDBRow>
@@ -237,6 +237,8 @@ export default function UniversitiesListToolbar({
                     color="success"
                     size="medium"
                     onClick={handleClose}
+                    disabled={quotaValue === 0 || universityName ===""}
+
                   >
                     Add
                   </Button>
@@ -258,6 +260,81 @@ export default function UniversitiesListToolbar({
           </Stack>
         </Box>
       </Modal>
+       <Modal
+        open={openAddDepartment}
+        onClose={handleAddDepartmentClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Stack spacing={6}>
+            <Typography
+              id="modal-modal-title"
+              textAlign={"center"}
+              variant="h2"
+              component="h1"
+            >
+              Add Department
+            </Typography>
+            <Stack alignItems={"center"} spacing={3}>
+              <section
+                style={{
+                  width: "100%",
+                  backgroundColor: "#eee",
+                }}
+              >
+                <MDBContainer className="py-5">
+                  <MDBCard className="mb-4">
+                    <MDBCardBody>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Department Name</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <TextField
+                            id="outlined-multiline-flexible"
+                            value={departmentName}
+                            onChange={handleDepartmentNameChange}
+                          />
+                        </MDBCol>
+                      </MDBRow>
+                    </MDBCardBody>
+                  </MDBCard>
+                </MDBContainer>
+              </section>
+              <Grid container justifyContent={"center"}>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={4}>
+                  <Button
+                    sx={{ margin: "auto" }}
+                    variant="contained"
+                    color="success"
+                    size="medium"
+                    onClick={handleAddDepartmentClose}
+                    disabled={departmentName ===""}
+
+                  >
+                    Add
+                  </Button>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    sx={{ margin: "auto" }}
+                    variant="contained"
+                    color="error"
+                    size="medium"
+                    onClick={handleAddDepartmentClose}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+                <Grid item xs={1}></Grid>
+              </Grid>
+            </Stack>
+          </Stack>
+        </Box>
+      </Modal> 
     </StyledRoot>
   );
 }
