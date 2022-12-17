@@ -177,13 +177,10 @@ const Universities = () => {
                                     onChange={handleDepartmentChange}
                                   >
                                     <MenuItem disabled value={0}>
-                                      Select
+                                      Courses
                                     </MenuItem>
-                                    <MenuItem value={10}>CS</MenuItem>
-                                    <MenuItem value={20}>EEE</MenuItem>
-                                    <MenuItem value={30}>ME</MenuItem>
-                                    <MenuItem value={40}>MBG</MenuItem>
-                                    <MenuItem value={50}>IE</MenuItem>
+                                    {dummyUni.courses.map((course,index) => (<MenuItem key={index} disabled value={(index+1)*10}>{course}</MenuItem>))}
+                       
                                   </Select>
                                 </FormControl>
                               </MDBCol>
@@ -331,6 +328,7 @@ const Universities = () => {
                     color="success"
                     size="medium"
                     onClick={handleCourseClose}
+                    disabled={ects === 0 || description ==="" || courseName ==="" }
                   >
                     Add
                   </Button>
@@ -404,6 +402,8 @@ const Universities = () => {
                     color="success"
                     size="medium"
                     onClick={handleClose}
+                    disabled={departmentName ===""}
+
                   >
                     Add
                   </Button>

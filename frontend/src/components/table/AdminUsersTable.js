@@ -255,7 +255,7 @@ const AdminUsersTable = ({ allUsers }) => {
                         </MDBCol>
                         <MDBCol sm="9">
                         <MDBCardText className="text-muted">
-                                  s2kitutturan@gmail.com
+                                  xxx@gmail.com
                                 </MDBCardText>
                         </MDBCol>
                       </MDBRow>
