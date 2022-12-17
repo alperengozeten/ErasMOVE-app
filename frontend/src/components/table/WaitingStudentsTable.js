@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
+const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }) => {
 
   const [page, setPage] = useState(0);
 
@@ -208,9 +208,10 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer }) => {
                               </Box>
                           </Modal>
                         <TableCell align="right">
-                            <Button variant="contained" color="inherit" size="small" onClick={() => offerReplacement(id)} endIcon={<SendIcon />}>
+                          {typeForReq==='departmentCoordinator' ?
+                            (<Button variant="contained" color="inherit" size="small" onClick={() => offerReplacement(id)} endIcon={<SendIcon />}>
                                 Replacement Offer
-                            </Button>
+                            </Button>): null }
                         </TableCell>
                       </TableRow>
                     );
@@ -299,7 +300,8 @@ const boxStyle = {
 
 WaitingStudentsTable.propTypes = {
     applications: PropTypes.array,
-    sendReplacementOffer: PropTypes.func
+    sendReplacementOffer: PropTypes.func,
+    typeForReq: PropTypes.string,
 };
   
 WaitingStudentsTable.defaultProps = {

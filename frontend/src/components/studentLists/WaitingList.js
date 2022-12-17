@@ -17,7 +17,7 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForR
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <WaitingStudentsTable applications={applications} sendReplacementOffer={sendReplacementOffer}  />
+                    <WaitingStudentsTable typeForReq={typeForReq} applications={applications} sendReplacementOffer={sendReplacementOffer}  />
                 </Grid>
             </Grid>
         </Stack>
