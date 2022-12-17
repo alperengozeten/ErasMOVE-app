@@ -40,7 +40,9 @@ const ProposalPage = () => {
       courseFive === 0
     ) {
       setError(true);
-    } 
+    } else{
+    setError(false);
+    }
   };
 
   const obj = {
@@ -566,6 +568,11 @@ const ProposalPage = () => {
                 {error ? (
                         <Alert severity="error">
                           Required places must be filled!
+                        </Alert>
+                      ) : null}
+                      {!(courseFive===0)&& !(courseFour===0)&&!(courseThree===0)&&!(courseTwo===0)&&!(courseOne===0) && (courseFive===courseOne||courseFive===courseTwo || courseFive===courseThree||courseFive===courseFour || courseFour===courseOne||courseFour===courseTwo || courseFour===courseThree||courseThree===courseOne||courseThree===courseTwo || courseTwo===courseOne)? (
+                        <Alert severity="error">
+                          You cannot select one course more than one times!
                         </Alert>
                       ) : null}
 
