@@ -1,45 +1,8 @@
-import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
+import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     courseRequests: [], 
-    acceptanceLetterRequests: [
-      {
-          id: 1,
-          name: "John Doe",
-          request: "Acceptance Letter",
-          status: "waiting",
-          department: "Computer Science",
-          documents: [],
-      },{
-          id: 2,
-          name: "Kürşad Güzelkaya",
-          request: "Acceptance Letter",
-          status: "waiting",
-          department: "Electrical Engineering",
-          documents: [],
-      },{
-          id: 3,
-          name: "Jake Paul",
-          request: "Acceptance Letter",
-          status: "waiting",
-          department: "Computer Science",
-          documents: [],
-      },{
-          id: 4,
-          name: "Lionel Messi",
-          request: "Acceptance Letter",
-          status: "waiting",
-          department: "Computer Science",
-          documents: [],
-      },{
-          id: 5,
-          name: "Cristiano Ronaldo",
-          request: "Acceptance Letter",
-          status: "sent",
-          department: "Computer Science",
-          documents: [],
-      },
-    ], 
+    acceptanceLetterRequests: [], 
     preApprovalForms: [],
 };
 
@@ -51,10 +14,14 @@ const requestsReducer = (state = INITIAL_STATE, action) => {
             return { ...state, preApprovalForms: action.payload };
         case GET_COURSE_APPROVAL_REQUESTS_SUCCESS:
             return { ...state, courseRequests: action.payload };
+        case GET_FILE_REQUESTS_SUCCESS:
+            return { ...state, fileRequests: action.payload };
         case DELETE_PREAPPROVAL_FORM_SUCCESS:
             return { ...state, preApprovalForms: state.preApprovalForms.filter(preApprovalForm => preApprovalForm.id !== action.payload) };
         case DELETE_COURSE_APPROVAL_REQUEST_SUCCESS:
             return { ...state, courseRequests: state.courseRequests.filter(courseRequest => courseRequest.id !== action.payload) };
+        case DELETE_FILE_REQUEST_SUCCESS:
+            return { ...state, fileRequests: state.fileRequests.filter(fileRequest => fileRequest.id !== action.payload) };
     }
   };
   

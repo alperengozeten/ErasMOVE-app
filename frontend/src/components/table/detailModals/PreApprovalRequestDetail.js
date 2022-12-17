@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
+import SaveIcon from '@mui/icons-material/Save';
 import PropTypes  from 'prop-types';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
 import { sentenceCase } from 'change-case';
+//import {savePDF} from '@progress/kendo-react-pdf';
 
 import Label from '../../label';
 import { connect } from "react-redux";
@@ -19,6 +21,8 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
 
     const status = preApprovalForm.status;
 
+    const preAppRef = useRef(null);
+
     const handleAccept = () => {
         acceptPreApprovalFormRequest(preApprovalForm.id, feedback, userId);
         handleCloseDetails();
@@ -29,15 +33,20 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
         handleCloseDetails();
     };
 
+    const generatePDF = () => {
+        //savePDF(preAppRef.current, { paperSize: "A4"});
+    };
+
     return (
         <Modal
+            
             open={openDetails}
             onClose={handleCloseDetails}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
             BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.2)" } }}
         >
-            <Box sx={style}>
+            <Box ref={preAppRef} sx={style}>
                 <Stack spacing={6}>
                     <Typography id="modal-modal-title" textAlign={"center"}
                         variant="h2" component="h1">
@@ -175,6 +184,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                             </section>
                     </Stack>
                     <Grid container sx={{marginTop: '0px'}} alignItems={"flex-end"}>
+                        <Button variant="contained" onClick={generatePDF} startIcon={<SaveIcon />}>Save PDF</Button>
                         <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleCloseDetails} >
                             Close
                         </Button>

@@ -6,9 +6,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { sentenceCase } from 'change-case';
 import Label from '../label';
-
-
-
+import DeleteIcon from '@mui/icons-material/Delete';
 // @mui
 import {
   Card,
@@ -24,13 +22,15 @@ import {
   TableContainer,
   TablePagination,
   Tooltip,
-  Button
+  Button,
+  IconButton
 } from '@mui/material';
 // components
 import Scrollbar from './scrollbar';
 
 // sections
 import { UserListHead, UserListToolbar } from './user';
+import DeleteModal from '../DeleteModal';
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -71,7 +71,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const RequestsTable = ({ requests }) => {
+const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff }) => {
 
   const [page, setPage] = useState(0);
 
@@ -84,6 +84,10 @@ const RequestsTable = ({ requests }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [department, setDepartment] = useState('');
+
+  const [openDelete, setOpenDelete] = React.useState(false);
+
+  const [requesDetailsID, setRequesDetailsID] = React.useState(0);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -103,6 +107,21 @@ const RequestsTable = ({ requests }) => {
   const handleFilterByName = event => {
     setPage(0);
     setFilterName(event.target.value);
+  };
+
+  const handleOpenDelete = id => {
+    setRequesDetailsID(id);
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setRequesDetailsID(0);
+    setOpenDelete(false);
+  };
+
+  const handleDelete = () => {
+    deleteFileRequestRequest(requesDetailsID);
+    setRequesDetailsID(0);
+    handleCloseDelete();
   };
 
   const [open, setOpen] = useState(false);
@@ -139,7 +158,7 @@ const RequestsTable = ({ requests }) => {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, request, status,avatarUrl } = row;
+                    const { id, student, info, status,avatarUrl } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -147,23 +166,28 @@ const RequestsTable = ({ requests }) => {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={student.name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {student.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{request}</TableCell>
+                        <TableCell align="center">{info}</TableCell>
                         <TableCell align="center">
                           <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
                         <TableCell align="right">
-                          <Tooltip describeChild title="Add document">
+                          {isStaff ? (<Tooltip describeChild title="Add document">
                             <Button variant="contained" color="inherit" size="small" onClick={handleClickOpen}>
                                 Add Document
                             </Button>
+                          </Tooltip>) : null}
+                          <Tooltip describeChild title="Delete request">
+                            <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
+                              <DeleteIcon />
+                            </IconButton>
                           </Tooltip>
                         </TableCell>
                         <Modal
@@ -231,6 +255,7 @@ const RequestsTable = ({ requests }) => {
           />
         </Card>
       </Container>
+      <DeleteModal openDelete={openDelete} handleDelete={() => handleDelete()} handleCloseDelete={handleCloseDelete} name={"File Request"}/>
     </>
   );
 };
@@ -250,6 +275,8 @@ const style = {
 
 RequestsTable.propTypes = {
     requests: PropTypes.array,
+    deleteFileRequestRequest: PropTypes.func,
+    isStaff: PropTypes.bool,
 };
   
 RequestsTable.defaultProps = {
