@@ -28,7 +28,7 @@ const menuItems = authType => {
         list = [dashboard, pages, requests(authType), universities, announcements, toDoList];
     } else if (authType === 'Admin') {
         // TODO: update this list
-        list = [dashboard, student, pages, universities, announcements, toDoList, adminUsersPage];
+        list = [dashboard, adminUsersPage];
     }
     return list;
 };

@@ -32,13 +32,13 @@ function* getApplicationRequest({ payload: { id } }) {
     try {
         const { data: application } = yield call(getApplication, id);
 
-        if(application?.outgoingStudent?.isErasmus) {
+        if(application?.admittedStatus !== "NOT ADMITTED" && application?.outgoingStudent?.isErasmus) {
           const { data: university } = yield call(getAcceptedErasmusUniversity, id);
           const { data: department } = yield call(getAcceptedErasmusDepartment, id);
 
           application.acceptedUniversity = university;
           application.acceptedDepartment = department;
-        } else {
+        } else if(application?.admittedStatus !== "NOT ADMITTED" && !application?.outgoingStudent?.isErasmus) {
           const { data: university } = yield call(getAcceptedExchangeUniversity, id);
           const { data: department } = yield call(getAcceptedExchangeDepartment, id);
 
