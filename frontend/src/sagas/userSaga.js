@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { GET_APPLICATION_FAIL, GET_APPLICATION_REQUEST, GET_APPLICATION_SUCCESS, GET_NOTIFICATIONS_FAIL, GET_NOTIFICATIONS_REQUEST, GET_NOTIFICATIONS_SUCCESS, GET_USER_FAIL, GET_USER_REQUEST, GET_USER_SUCCESS, MARK_NOTIFICATION_READ_FAIL, MARK_NOTIFICATION_READ_REQUEST, MARK_NOTIFICATION_READ_SUCCESS } from '../constants/actionTypes';
-import { getAcceptedErasmusUniversity, getApplication, getNotifications, getUser, markAsReadNotification } from '../lib/api/unsplashService';
+import { getAcceptedErasmusDepartment, getAcceptedErasmusUniversity, getAcceptedExchangeDepartment, getAcceptedExchangeUniversity, getApplication, getNotifications, getUser, markAsReadNotification } from '../lib/api/unsplashService';
 
 function* getUserRequest({ payload: { id, typeForReq } }) {
   console.log(`Get user `);
@@ -30,12 +30,20 @@ function* getApplicationRequest({ payload: { id } }) {
     console.log(`Get application`);
   
     try {
-        // TODO: send Post request here
         const { data: application } = yield call(getApplication, id);
 
         if(application?.outgoingStudent?.isErasmus) {
-          const { data } = yield call(getAcceptedErasmusUniversity, id);
-          application.acceptedUniversity = data;
+          const { data: university } = yield call(getAcceptedErasmusUniversity, id);
+          const { data: department } = yield call(getAcceptedErasmusDepartment, id);
+
+          application.acceptedUniversity = university;
+          application.acceptedDepartment = department;
+        } else {
+          const { data: university } = yield call(getAcceptedExchangeUniversity, id);
+          const { data: department } = yield call(getAcceptedExchangeDepartment, id);
+
+          application.acceptedUniversity = university;
+          application.acceptedDepartment = department;
         }
   
         const status = 200;

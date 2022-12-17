@@ -15,7 +15,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
     
     const [departmentValue, setDepartmentValue] = React.useState(0);
     const [courseValue, setCourseValue] = React.useState(0);
-    const [isElective, setIsElective] = React.useState(false);
+    const [isElective, setIsElective] = React.useState("");
     const [courseName, setCourseName] = React.useState("");
     const [description, setDescription] = React.useState("");
     const [ects, setEcts] = React.useState(0);
@@ -59,7 +59,7 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                 id: Number(userId)
             }
         };
-        createCourseApprovalRequestRequest(courseRequest, (isElective ? 'Elective' : 'Mandatory'), syllabus);
+        createCourseApprovalRequestRequest(courseRequest, (isElective==="1" ? 'Elective' : 'Mandatory'), syllabus);
         handleClose();
     };
 
@@ -140,13 +140,13 @@ const CourseRequests = ({ deleteCourseApprovalRequestRequest, courseRequests, cr
                                                 <RadioGroup
                                                     row
                                                     aria-labelledby="demo-radio-buttons-group-label"
-                                                    defaultValue={false}
+                                                    defaultValue={0}
                                                     name="radio-buttons-group"
                                                     value={isElective}
                                                     onChange={handleElectiveChange}
                                                 >
-                                                    <FormControlLabel value={false} control={<Radio />} label="Must" />
-                                                    <FormControlLabel value={true} control={<Radio />} label="Elective" />
+                                                    <FormControlLabel value={0} control={<Radio />} label="Mandatory" />
+                                                    <FormControlLabel value={1} control={<Radio />} label="Elective" />
                                                 </RadioGroup>
                                             </FormControl>
                                         </MDBCol>
@@ -266,7 +266,6 @@ CourseRequests.propTypes = {
     deleteCourseApprovalRequestRequest: PropTypes.func,
     createCourseApprovalRequestRequest: PropTypes.func,
     getCoursesByDepartment: PropTypes.func,
-    getDepartments: PropTypes.func,
     hostUniDepartments: PropTypes.array,
     userId: PropTypes.number,
 };

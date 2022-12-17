@@ -13,4 +13,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ExchangeUniversity extends ContractedUniversity {
     private int universityQuota;
+    private int maxUniversityQuota;
 }

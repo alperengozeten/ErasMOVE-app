@@ -60,6 +60,8 @@ public class ExchangeUniversityService {
             throw new IllegalStateException("Exchange University with name:" + universityName + " already exists!");
         }
 
+        exchangeUniversity.setMaxUniversityQuota(exchangeUniversity.getUniversityQuota()); // set the maximum!
+
         exchangeUniversityRepository.save(exchangeUniversity);
     }
 

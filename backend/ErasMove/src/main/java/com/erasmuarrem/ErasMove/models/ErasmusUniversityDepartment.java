@@ -16,6 +16,7 @@ public class ErasmusUniversityDepartment extends Department {
 
     // maybe put here id as well???
     private int quota;
+    private int maxQuota;
 
     @OneToOne
     private ErasmusUniversity erasmusUniversity;

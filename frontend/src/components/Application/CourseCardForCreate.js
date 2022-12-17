@@ -6,9 +6,6 @@ import { IconButton } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const CourseCardForCreate = ({ courseIndex, approvedCourses, mergedCourses, index, handleCourseChange, filterCourse }) => {
-    console.log('index', index);
-    console.log('courseIndex', courseIndex);
-    
 
     return (
         <>
