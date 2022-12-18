@@ -61,8 +61,10 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
     const handleCreatePreApprovalForm = () => {
 
         var missingInfo = false;
+        var totalCredits = 0;
 
         for(var i = 0; i < mergedCourses.length; i++){
+
             for(var k = 0; k < mergedCourses[i].courses.length; k++){
                 if(mergedCourses[i].courses[k] === ''){
                     missingInfo = true;
@@ -70,8 +72,11 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                 }
             }
 
-            if(!(mergedCourses[i].equivalentCourse > -1))
+            if(!(mergedCourses[i].equivalentCourse > 0)){
                 missingInfo = true;
+            }else{
+                // hostDepartment
+            }
 
             if(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective")
                 missingInfo = true;
