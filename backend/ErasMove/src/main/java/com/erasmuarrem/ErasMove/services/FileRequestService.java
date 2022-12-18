@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,14 +22,16 @@ public class FileRequestService {
     private final AdministrativeStaffRepository administrativeStaffRepository;
     private final AdministrativeStaffService administrativeStaffService;
     private final NotificationService notificationService;
+    private final DocumentService documentService;
 
     @Autowired
-    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdministrativeStaffService administrativeStaffService, NotificationService notificationService) {
+    public FileRequestService(FileRequestRepository fileRequestRepository, OutgoingStudentRepository outgoingStudentRepository, AdministrativeStaffRepository administrativeStaffRepository, AdministrativeStaffService administrativeStaffService, NotificationService notificationService, DocumentService documentService) {
         this.fileRequestRepository = fileRequestRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.administrativeStaffService = administrativeStaffService;
         this.notificationService = notificationService;
+        this.documentService = documentService;
     }
 
     public List<FileRequest> getFileRequests() {
@@ -116,7 +119,7 @@ public class FileRequestService {
         return fileRequestRepository.findByAdministrativeStaffIDAndStudentID(administrativeStaffID, outgoingStudentID);
     }
 
-    public ResponseEntity<String> respondToFileRequestByFileRequestID(Long id) {
+    public ResponseEntity<String> respondToFileRequestByFileRequestID(Long id, String type, MultipartFile file) {
         Optional<FileRequest> fileRequestOptional = fileRequestRepository.findById(id);
 
         if ( !fileRequestOptional.isPresent() ) {
@@ -128,6 +131,9 @@ public class FileRequestService {
         if ( fileRequest.getStatus().equals("RESPONDED") ) {
             return new ResponseEntity<>("File Request with id:" + id + " has already been responded!", HttpStatus.BAD_REQUEST);
         }
+
+        // save the document
+        documentService.saveDocument(file, "fileRequest", type, id);
 
         OutgoingStudent outgoingStudent = fileRequest.getStudent();
         AdministrativeStaff administrativeStaff = fileRequest.getAdministrativeStaff();
@@ -145,6 +151,6 @@ public class FileRequestService {
         fileRequest.setStatus("RESPONDED");
         fileRequestRepository.save(fileRequest);
 
-        return new ResponseEntity<>("Succesfully responded to the File Request!", HttpStatus.OK);
+        return new ResponseEntity<>("Successfully responded to the File Request!", HttpStatus.OK);
     }
 }

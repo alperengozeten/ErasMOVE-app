@@ -6,6 +6,7 @@ import com.erasmuarrem.ErasMove.services.FileRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -54,9 +55,11 @@ public class FileRequestController {
         return fileRequestService.addFileRequest(fileRequest);
     }
 
-    @PostMapping("/respond/{id}")
-    public ResponseEntity<String> respondToFileRequestByFileRequestID(@PathVariable("id") Long id) {
-        return fileRequestService.respondToFileRequestByFileRequestID(id);
+    @PostMapping("/respond/{id}/{type}")
+    public ResponseEntity<String> respondToFileRequestByFileRequestID(@PathVariable("id") Long id,
+                                                                      @PathVariable("type") String type,
+                                                                      @RequestParam("file") MultipartFile file) {
+        return fileRequestService.respondToFileRequestByFileRequestID(id, type, file);
     }
 
     @DeleteMapping("/delete/{id}")
