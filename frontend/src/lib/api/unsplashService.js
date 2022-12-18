@@ -314,3 +314,11 @@ export const uploadStudentList = (type, department, list) => (
     body: JSON.stringify(list)
   })
 );
+
+export const placeStudentsErasmus = id => (
+  axios.post(`${baseURL}/administrativeStaff/erasmus/place?departmentID=${id}`)
+);
+
+export const placeStudentsExchange = () => (
+  axios.post(`${baseURL}/administrativeStaff/exchange/place`)
+);
