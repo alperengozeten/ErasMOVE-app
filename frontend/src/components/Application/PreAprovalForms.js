@@ -11,6 +11,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
  
     const [open, setOpen] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState("");
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
     const handleOpen = () => setOpen(true);
@@ -71,11 +72,21 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                     break;
                 }
             }
-
+            
+            var tempId = mergedCourses[i].equivalentCourse;
+            
             if(!(mergedCourses[i].equivalentCourse > 0)){
                 missingInfo = true;
             }else{
-                // hostDepartment
+                hostDepartment.courseList.map((course, key) => {
+                    if(course.id === tempId)
+                        totalCredits += course.ects;
+                });
+
+                hostDepartment.electiveCourseList.map((course, key) => {
+                    if(course.id === tempId)
+                        totalCredits += course.ects;
+                });
             }
 
             if(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective")
@@ -86,8 +97,14 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
 
         }
 
-        if(missingInfo){
+        console.log(totalCredits);
+
+        if(missingInfo || totalCredits < 30){
             setError(true);
+            if(totalCredits < 30)
+                setErrorMessage("Total credits of the equivalent courses cannot be less than 30.");
+            else
+                setErrorMessage("Required places must be filled!");
         }
         else{
         const preApprovalForm = {
@@ -99,6 +116,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
     };
 
     console.log(mergedCourses);
+    console.log(hostDepartment);
     return (
         <Stack spacing={2}>
             <Grid container spacing={2}>
@@ -145,7 +163,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                                 </Button>
                                 {error ? (
                                     <Alert severity="error">
-                                      Required places must be filled!
+                                      {errorMessage}
                                     </Alert>
                                 ) : null}
                                 <Grid container justifyContent={'center'} spacing={3}>
