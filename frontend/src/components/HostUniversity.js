@@ -17,6 +17,7 @@ import {
 import {
   Box,
   Button,
+  Alert,
   Tab,
   FormControl,
   Grid,
@@ -34,6 +35,9 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
   useEffect(() => {
     getDepartments();
 }, [ getDepartments]);
+const [error, setError] = React.useState(false);
+const [errorDepartment, setErrorDepartment] = React.useState(false);
+
   const [value, setValue] = React.useState("0");
   const [open, setOpen] = React.useState(false);
   const [courseOpen, setCourseOpen] = React.useState(false);
@@ -60,6 +64,7 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
   };
 
   const handleClose = () => {
+  setErrorDepartment(false);
     setOpen(false);
   };
   const handleCourseClickOpen = type => {
@@ -73,6 +78,7 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
     setCourseName("");
     setDescription("");
     setEcts(0);
+    setError(false);
   };
   const dummyUni = {
     id: 1,
@@ -98,19 +104,35 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
   };
 
   const handleAddDepartment = () => {
+    if (
+      departmentName === "" 
+    ) {setErrorDepartment(true);}
+      else{
     addHostDepartment(departmentName);
     setDepartmentName('');
     handleClose();
+    setErrorDepartment(false);
+
+      }
   };
 
   const handleAddCourse = () => {
+    if (
+      courseName === "" ||
+      description === "" ||
+      ects === 0
+    ) {setError(true);}
+      else{
     const course = {
       courseName,
       description,
       ects,
+    
     };
     addCourseToDepartmentRequest(course, departmentSelected, type);
     handleCourseClose();
+    setError(false);
+  }
   };
   return (
     <Stack spacing={2}>
@@ -338,21 +360,21 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                     <MDBCardBody>
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Course Name</MDBCardText>
+                          <MDBCardText>Course Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
                             id="outlined-multiline-flexible"
                             value={courseName}
                             onChange={handleCourseNameChange}
-                            disabled={departmentSelected ? false : true}
+                            error={error}
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Description</MDBCardText>
+                          <MDBCardText>Description*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -360,14 +382,15 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                             fullWidth
                             value={description}
                             onChange={handleDescriptionChange}
-                            disabled={departmentSelected ? false : true}
+                            error={error}
+
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>ECTS</MDBCardText>
+                          <MDBCardText>ECTS*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -375,10 +398,16 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                             type={"number"}
                             value={ects}
                             onChange={handleEctsChange}
-                            disabled={departmentSelected ? false : true}
+                            error={error}
+
                           />
                         </MDBCol>
                       </MDBRow>
+                      {error ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -392,7 +421,6 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                     color="success"
                     size="medium"
                     onClick={handleAddCourse}
-                    disabled={ects === 0 || description ==="" || courseName ==="" }
                   >
                     Add
                   </Button>
@@ -443,7 +471,7 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Department Name</MDBCardText>
+                          <MDBCardText>Department Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -453,6 +481,11 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                           />
                         </MDBCol>
                       </MDBRow>
+                      {errorDepartment ? (
+                        <Alert severity="error">
+                          Required places must be filled!
+                        </Alert>
+                      ) : null}
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -466,7 +499,6 @@ const Universities = ({ getDepartments, departments, addHostDepartment, addCours
                     color="success"
                     size="medium"
                     onClick={handleAddDepartment}
-                    disabled={departmentName ===""}
                   >
                     Add
                   </Button>
