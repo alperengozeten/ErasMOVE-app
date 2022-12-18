@@ -237,7 +237,7 @@ PreApprovalRequestDetail.propTypes = {
     preApprovalForm: PropTypes.object,
     acceptPreApprovalFormRequest: PropTypes.func,
     declinePreApprovalFormRequest: PropTypes.func,
-    userId: PropTypes.string,
+    userId: PropTypes.number,
 };
   
 PreApprovalRequestDetail.defaultProps = {

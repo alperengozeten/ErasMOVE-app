@@ -32,7 +32,7 @@ const INITIAL_STATE = {
   const notificationReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
       case GET_NOTIFICATIONS_SUCCESS:
-        return { ...state, notifications: action.payload };
+        return { ...state, notifications: [...action.payload.filter(not => not.read === false), ...action.payload.filter(not => not.read !== false)] };
       case MARK_NOTIFICATION_READ_SUCCESS:
           return { 
             ...state, 

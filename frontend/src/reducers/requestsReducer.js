@@ -2,7 +2,7 @@ import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DE
 
 const INITIAL_STATE = {
     courseRequests: [], 
-    acceptanceLetterRequests: [], 
+    fileRequests: [], 
     preApprovalForms: [],
     replacementOffers: [{
         from: "Eray Tüzün",

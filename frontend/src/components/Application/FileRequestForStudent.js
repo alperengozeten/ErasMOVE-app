@@ -131,7 +131,7 @@ FileRequestsForStudent.propTypes = {
     fileRequests: PropTypes.array,
     deleteFileRequestRequest: PropTypes.func,
     createFileRequestRequest: PropTypes.func,
-    userId: PropTypes.string,
+    userId: PropTypes.number,
 };
   
 FileRequestsForStudent.defaultProps = {
