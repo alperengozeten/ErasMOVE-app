@@ -515,11 +515,68 @@ public class InitializationController {
         // EPFL CS DEPARTMENT
         ErasmusUniversityDepartment epflCS = new ErasmusUniversityDepartment();
         epflCS.setDepartmentName("CS");
-        epflCS.setQuota(2);
-        epflCS.setMaxQuota(2);
+        epflCS.setQuota(3);
+        epflCS.setMaxQuota(3);
         epflCS.setErasmusUniversity(epfl);
-        // might add courses later on
+
+        Course epflCS1 = new Course();
+        epflCS1.setCourseName("CS-231");
+        epflCS1.setDescription("Computer Organization");
+        epflCS1.setEcts(7.0);
+
+        Course epflCS2 = new Course();
+        epflCS2.setCourseName("CS-312");
+        epflCS2.setDescription("Automata Theory and Formal Languages");
+        epflCS2.setEcts(6.0);
+
+        Course epflCS3 = new Course();
+        epflCS3.setCourseName("CS-231");
+        epflCS3.setDescription("Computer Architecture");
+        epflCS3.setEcts(8.0);
+
+        Course epflCS4 = new Course();
+        epflCS4.setCourseName("CS-400");
+        epflCS4.setDescription("Senior Project");
+        epflCS4.setEcts(9.0);
+
         erasmusUniversityDepartmentService.addErasmusUniversityDepartment(epflCS);
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflCS1, epflCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflCS2, epflCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflCS3, epflCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflCS4, epflCS.getID());
+
+        //EPFL IE DEP
+        ErasmusUniversityDepartment epflIE = new ErasmusUniversityDepartment();
+        epflIE.setDepartmentName("IE");
+        epflIE.setQuota(5);
+        epflIE.setMaxQuota(5);
+        epflIE.setErasmusUniversity(epfl);
+
+        Course epflIE1 = new Course();
+        epflIE1.setCourseName("IE-131");
+        epflIE1.setDescription("Modeling and Organization");
+        epflIE1.setEcts(7.0);
+
+        Course epflIE2 = new Course();
+        epflIE2.setCourseName("IE-300");
+        epflIE2.setDescription("Optimization Theory");
+        epflIE2.setEcts(6.0);
+
+        Course epflIE3 = new Course();
+        epflIE3.setCourseName("IE-231");
+        epflIE3.setDescription("Industrial Architecture");
+        epflIE3.setEcts(8.0);
+
+        Course epflIE4 = new Course();
+        epflIE4.setCourseName("IE-400");
+        epflIE4.setDescription("Senior Project");
+        epflIE4.setEcts(9.0);
+
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(epflIE);
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflIE1, epflIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflIE2, epflIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflIE3, epflIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( epflIE4, epflIE.getID());
 
         //ETH
         Course ethCS1  = new Course();
@@ -571,6 +628,38 @@ public class InitializationController {
 
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS4,ethCS.getID());
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS5,ethCS.getID());
+        //ETH IE DEP
+        ErasmusUniversityDepartment ethIE = new ErasmusUniversityDepartment();
+        ethIE.setDepartmentName("IE");
+        ethIE.setQuota(5);
+        ethIE.setMaxQuota(5);
+        ethIE.setErasmusUniversity(eth);
+
+        Course ethIE1 = new Course();
+        ethIE1.setCourseName("IE-131");
+        ethIE1.setDescription("Modeling and Organization");
+        ethIE1.setEcts(7.0);
+
+        Course ethIE2 = new Course();
+        ethIE2.setCourseName("IE-300");
+        ethIE2.setDescription("Optimization Theory");
+        ethIE2.setEcts(6.0);
+
+        Course ethIE3 = new Course();
+        ethIE3.setCourseName("IE-231");
+        ethIE3.setDescription("Industrial Architecture");
+        ethIE3.setEcts(8.0);
+
+        Course ethIE4 = new Course();
+        ethIE4.setCourseName("IE-400");
+        ethIE4.setDescription("Senior Project");
+        ethIE4.setEcts(9.0);
+
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(ethIE);
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethIE4, ethIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethIE3, ethIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethIE2, ethIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethIE1, ethIE.getID());
 
         //Vrije
         Course vrijeCS1  = new Course();
@@ -633,6 +722,41 @@ public class InitializationController {
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrijeCS5,vrijeCS.getID());
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS7, vrijeCS.getID() );
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS6, vrijeCS.getID() );
+
+        //Vrije IE DEP
+        ErasmusUniversityDepartment vrIE = new ErasmusUniversityDepartment();
+        vrIE.setDepartmentName("IE");
+        vrIE.setQuota(5);
+        vrIE.setMaxQuota(5);
+        vrIE.setErasmusUniversity(vrije);
+
+        Course vrIE1 = new Course();
+        vrIE1.setCourseName("IE-131");
+        vrIE1.setDescription("Modeling and Organization");
+        vrIE1.setEcts(7.0);
+
+        Course vrIE2 = new Course();
+        vrIE2.setCourseName("IE-300");
+        vrIE2.setDescription("Optimization Theory");
+        vrIE2.setEcts(6.0);
+
+        Course vrIE3 = new Course();
+        vrIE3.setCourseName("IE-231");
+        vrIE3.setDescription("Industrial Architecture");
+        vrIE3.setEcts(8.0);
+
+        Course vrIE4 = new Course();
+        vrIE4.setCourseName("IE-400");
+        vrIE4.setDescription("Senior Project");
+        vrIE4.setEcts(9.0);
+
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(vrIE);
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrIE4, vrIE.getID() );
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrIE1, vrIE.getID() );
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrIE2, vrIE.getID() );
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrIE3, vrIE.getID() );
+
+
         //Roskilde University
         Course roskCS1  = new Course();
         roskCS1.setCourseName("CS-101");
@@ -764,7 +888,7 @@ public class InitializationController {
         dortmund.setRejectedCourses(dortCourses);
         dortmund.setAcceptedStudents(new ArrayList<>());
         erasmusUniversityService.addErasmusUniversity(dortmund);
-        //Roskilde CS
+        //Dortmund CS
         ErasmusUniversityDepartment dortCS = new ErasmusUniversityDepartment();
         dortCS.setQuota(4);
         dortCS.setErasmusUniversity(dortmund);
@@ -820,6 +944,91 @@ public class InitializationController {
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE2, dortIE.getID());
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE3, dortIE.getID());
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( dortIE4,  dortIE.getID() );
+
+        //Kingston University
+        Course kingCS1  = new Course();
+        kingCS1.setCourseName("CS-100");
+        kingCS1.setDescription("Programming");
+        kingCS1.setEcts(6.0);
+
+        Course kingCS2 = new Course();
+        kingCS2.setCourseName("CS-102");
+        kingCS2.setDescription("Algorithms");
+        kingCS2.setEcts(6.0);
+        courseService.addNewCourse(kingCS2);
+
+
+
+        Course kingCS3 = new Course();
+        kingCS3.setCourseName("CS-461");
+        kingCS3.setDescription("Operating Systems");
+        kingCS3.setEcts(5.5);
+
+        ErasmusUniversity kingston = new ErasmusUniversity();
+        kingston.setUniversityName("Kingston");
+        kingston.setCountry("England");
+
+        List<Course> kingCourses = new ArrayList<>();
+        kingCourses.add(kingCS2);
+        kingston.setRejectedCourses(kingCourses);
+        kingston.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(kingston);
+        //Kingston CS
+        ErasmusUniversityDepartment kingstonCS = new ErasmusUniversityDepartment();
+        kingstonCS.setQuota(4);
+        kingstonCS.setErasmusUniversity(kingston);
+        kingstonCS.setDepartmentName("CS");
+        kingstonCS.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(kingstonCS);
+
+        Course kingstonCS4 = new Course();
+        kingstonCS4.setCourseName("CS-331");
+        kingstonCS4.setDescription("Programming Languages");
+        kingstonCS4.setEcts(5.5);
+
+        Course kingstonCS5 = new Course();
+        kingstonCS5.setCourseName("CS-403");
+        kingstonCS5.setDescription("Data Structures");
+        kingstonCS5.setEcts(5.0);
+
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(kingCS3, kingstonCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( kingCS1, kingstonCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( kingstonCS4,kingstonCS.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( kingstonCS5, kingstonCS.getID());
+
+        //Kıngston IE
+        ErasmusUniversityDepartment kingIE = new ErasmusUniversityDepartment();
+        kingIE.setQuota(4);
+        kingIE.setErasmusUniversity(kingston);
+        kingIE.setDepartmentName("IE");
+        kingIE.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(kingIE);
+
+        Course kingIE1 = new Course();
+        kingIE1.setCourseName("IE-331");
+        kingIE1.setDescription("Industrial Architecture");
+        kingIE1.setEcts(5.5);
+
+        Course kingIE2 = new Course();
+        kingIE2.setCourseName("IE-400");
+        kingIE2.setDescription("Data Optimization");
+        kingIE2.setEcts(5.0);
+
+        Course kingIE3 = new Course();
+        kingIE3.setCourseName("IE-105");
+        kingIE3.setDescription("Excel for Beginners");
+        kingIE3.setEcts(5.0);
+
+        Course kingIE4 = new Course();
+        kingIE4.setCourseName("IE-440");
+        kingIE4.setDescription("Data Science");
+        kingIE4.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(kingIE2, kingIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( kingIE3, kingIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( kingIE1, kingIE.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( kingIE4,  kingIE.getID() );
 
 
 
@@ -1081,6 +1290,7 @@ public class InitializationController {
         prefOfKendall.add(course9);
         kendall.setPreferredCourses(prefOfKendall);
         incomingStudentService.addIncomingStudent(kendall);
+
 
         return "Initialized Successfully!";
     }
