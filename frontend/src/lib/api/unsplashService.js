@@ -223,7 +223,7 @@ export const createFileRequest = fileReq => (
 export const respondFileRequest = (id, file) => (
   fetch(`${baseURL}/fileRequest/respond/${id}`, {
     method: 'POST',
-    body: file
+    body: file,
   })
 );
 

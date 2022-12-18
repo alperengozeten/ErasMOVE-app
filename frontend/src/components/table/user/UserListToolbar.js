@@ -34,9 +34,11 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setDepartment, department, user }) => {
+const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setDepartment, department, user, type, setType }) => {
 
   const handleChange = e => setDepartment(e.target.value);
+
+  const handleTypeChange = e => setType(e.target.value);
 
   return (
     <StyledRoot
@@ -60,7 +62,24 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setD
             }
           />
         </Grid>
-        <Grid item xs={5}></Grid>
+        <Grid item xs={1}></Grid>
+        <Grid item xs={3}>
+         {setType ? ( <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={type}
+              label="Type"
+              onChange={handleTypeChange}
+            >
+              <MenuItem value={''}>None</MenuItem>
+              <MenuItem value={'Erasmus'}>Erasmus</MenuItem>
+              <MenuItem value={'Exchange'}>Exchange</MenuItem>
+            </Select>
+          </FormControl>): null}
+        </Grid>
+        <Grid item xs={1}></Grid>
         <Grid item xs={3}>
             {
               authType === 'Administrative Staff' ? (
@@ -102,6 +121,8 @@ UserListToolbar.propTypes = {
   department: PropTypes.string,
   authType: PropTypes.string,
   user: PropTypes.object,
+  type: PropTypes.string, 
+  setType: PropTypes.func, 
 };
 
 UserListToolbar.defaultProps = {

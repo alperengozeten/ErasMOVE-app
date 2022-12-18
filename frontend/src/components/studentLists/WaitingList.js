@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import WaitingStudentsTable from '../table/WaitingStudentsTable';
 import { sendReplacementOffer, getApplicationsByDepartment } from '../../actions';
 
-const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq }) => {
+const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq, contractedUniDepartments }) => {
     useEffect(() => {
         getApplicationsByDepartment(user, typeForReq);
     }, [user, getApplicationsByDepartment, typeForReq]);
@@ -17,7 +17,7 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForR
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <WaitingStudentsTable typeForReq={typeForReq} applications={applications} sendReplacementOffer={sendReplacementOffer}  />
+                    <WaitingStudentsTable contractedUniDepartments={contractedUniDepartments} typeForReq={typeForReq} applications={applications} sendReplacementOffer={sendReplacementOffer}  />
                 </Grid>
             </Grid>
         </Stack>
@@ -28,10 +28,12 @@ const mapStateToProps = state => {
     const applications = state.applications.waitingApplications;
     const user = state.user.user;
     const typeForReq = state.auth.authTypeForReq;
+    const contractedUniDepartments = state.universities.erasmusUniversities;
     return {
         applications,
         user,
         typeForReq,
+        contractedUniDepartments,
     };
 };
 
@@ -45,6 +47,7 @@ WaitingList.propTypes = {
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
     typeForReq: PropTypes.string,
+    contractedUniDepartments: PropTypes.array,
 };
   
 WaitingList.defaultProps = {

@@ -67,7 +67,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, _user => _user.outgoingStudent.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map(el => el[0]);
 }
@@ -85,6 +85,9 @@ const PlacedStudentsTable = ({ applications }) => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [department, setDepartment] = useState('');
+
+  const [type, setType] = useState('');
+
 
   // const handleOpenApplication = id => {
   //   console.log("id: ", id);
@@ -112,7 +115,9 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
-  const filterDepartments = department === '' ? applications : applications.filter(application => application.outgoingStudent.department.departmentName === department);
+  const filterType = type === '' ? applications : ( type === 'Erasmus' ? applications?.filter(application => application.outgoingStudent.isErasmus) : applications.filter(application => !application.outgoingStudent.isErasmus));
+
+  const filterDepartments = department === '' ? filterType : filterType.filter(application => application.outgoingStudent.department.departmentName === department);
 
   const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 
@@ -135,7 +140,7 @@ const PlacedStudentsTable = ({ applications }) => {
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
+          <UserListToolbar filterName={filterName} type={type} setType={setType} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>

@@ -62,7 +62,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      _user => _user.title.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map(el => el[0]);

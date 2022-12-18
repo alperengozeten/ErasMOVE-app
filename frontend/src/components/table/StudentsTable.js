@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   if (query) {
     return filter(
       array,
-      _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      _user => _user.outgoingStudent.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
     );
   }
   return stabilizedThis.map(el => el[0]);
@@ -93,6 +93,8 @@ const StudentsTable = ({ applications }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const [department, setDepartment] = useState("");
+
+  const [type, setType] = useState('');
 
   const [hoveredId, setHoveredId] = useState(0);
 
@@ -131,10 +133,13 @@ const StudentsTable = ({ applications }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
+  const filterType = type === '' ? applications : ( type === 'Erasmus' ? applications?.filter(application => application.outgoingStudent.isErasmus) : applications.filter(application => !application.outgoingStudent.isErasmus));
+  
+
   const filterDepartments =
     department === ""
-      ? applications
-      : applications.filter(
+      ? filterType
+      : filterType.filter(
           application => application?.outgoingStudent.department?.departmentName === department
         );
 
@@ -168,6 +173,8 @@ const StudentsTable = ({ applications }) => {
             onFilterName={handleFilterByName}
             setDepartment={setDepartment}
             department={department}
+            type={type}
+            setType={setType}
           />
 
           <Scrollbar>

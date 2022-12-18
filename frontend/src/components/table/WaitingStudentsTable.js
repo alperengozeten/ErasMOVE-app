@@ -81,12 +81,12 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, _user => _user.outgoingStudent.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }) => {
+const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, contractedUniDepartments }) => {
 
   const [page, setPage] = useState(0);
 
@@ -101,6 +101,8 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
 
 
   const [department, setDepartment] = useState('');
+  const [type, setType] = useState('');
+
   const [isModalOpen, setModalOpen] = useState(false);
 
 
@@ -140,7 +142,9 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
-  const filterDepartments = department === '' ? applications : applications.filter(application => application.outgoingStudent.department.departmentName === department);
+  const filterType = type === '' ? applications : ( type === 'Erasmus' ? applications?.filter(application => application.outgoingStudent.isErasmus) : applications.filter(application => !application.outgoingStudent.isErasmus));
+  
+  const filterDepartments = department === '' ? filterType : filterType.filter(application => application.outgoingStudent.department.departmentName === department);
 
   const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 
@@ -163,7 +167,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} type={type} setType={setType} setDepartment={setDepartment} department={department} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -321,6 +325,12 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq }
                               <MenuItem disabled value={0}>
                                 Select
                               </MenuItem>
+                              {contractedUniDepartments
+                                ?.filter(dep => dep.departmentName === applications[0]?.outgoingStudent?.department?.departmentName)
+                                ?.filter(dep => dep.quota > 0)
+                                ?.map(department => <MenuItem key={department.id} value={department.id}>
+                                department.erasmusUniversity.universityName
+                              </MenuItem>)}
                             </Select>
                           </FormControl>
                         </MDBCol>
@@ -412,6 +422,7 @@ WaitingStudentsTable.propTypes = {
     applications: PropTypes.array,
     sendReplacementOffer: PropTypes.func,
     typeForReq: PropTypes.string,
+    contractedUniDepartments: PropTypes.array,
 };
   
 WaitingStudentsTable.defaultProps = {
