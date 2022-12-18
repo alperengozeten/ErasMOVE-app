@@ -6,8 +6,9 @@ import { sentenceCase } from 'change-case';
 import Label from '../label';
 import { Button, Grid, Modal, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ProposalDetail from './detailModals/ProposalDetail';
+
 // @mui
 import {
   Card,
@@ -28,7 +29,7 @@ import Scrollbar from './scrollbar';
 import DescriptionIcon from '@mui/icons-material/Description';
 
 // sections
-import { ProposalPageListHead, ProposalPageListToolbar } from './proposal';
+import { ProposalPageListHead } from './proposal';
 
 // ----------------------------------------------------------------------
 
@@ -76,7 +77,7 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
 
   const [orderBy, setOrderBy] = useState('name');
 
-  const [filterName, setFilterName] = useState('');
+    const [filterName, setFilterName] = useState('');
   
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -97,11 +98,6 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = event => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - courseRequests.length) : 0;
 
   const filteredUsers = applySortFilter(courseRequests, getComparator(order, orderBy), filterName);
@@ -111,7 +107,7 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
   const [openDetails, setOpenDetails] = React.useState(false);
   const [openAccept, setOpenAccept] = React.useState(false);
   const [openDecline, setOpenDecline] = React.useState(false);
-  const [requestType, setRequestType] = React.useState("");
+//   const [requestType, setRequestType] = React.useState("");
 
   const handleOpenDetails = id => { 
     setRequesDetailsID(id);
@@ -124,7 +120,6 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
     setOpenDecline(true);
   };
   const handleCloseDetails = () => { 
-    setRequesDetailsID(0);
     setOpenDetails(false);
   };
   const handleCloseAcceptAndDecline = () => { 
@@ -183,109 +178,15 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
 
                    
                         <TableCell align="right">
-                       
-                         { status==="WAITING" ? <><Tooltip describeChild title="Accept proposal">
-                            <Button variant="contained" size="small" color="success" onClick={() => handleOpenAccept(id) }>
-                              Accept
-                            </Button>
-                          </Tooltip>
-                          <Tooltip describeChild title="Accept proposal">
-                            <Button variant="contained" size="small"color="error" onClick={() => handleOpenDecline(id) }>
-                              Decline
-                            </Button>
-                          </Tooltip></> : <></>}
                           <Tooltip describeChild title="Open details">
                             <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-
-                        <Modal
-            open={openAccept}
-            onClose={handleCloseAcceptAndDecline}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.2)" } }}
-        >
-            <Box sx={style}>
-                <Stack spacing={6}>
-                    <Typography id="modal-modal-title" textAlign={"center"}
-                        variant="h2" component="h1">
-                        Accept {name}
-                    </Typography>
-                    <Stack alignItems={"center"} spacing={3}>
-                        <Typography id="modal-modal-title" textAlign={"center"}
-                            variant="body1" fontSize={18} component="h1">
-                            You can not take it back after you accept it. Do you want to accept {name}?
-                        </Typography>
-                    </Stack>
-                    <Stack alignItems={"flex-end"}>
-                        <Grid container justifyContent={"flex-end"} spacing={2}>
-                            <Grid item xs={4}></Grid>
-                            <Grid justifyContent={"flex-end"} item xs={4}>
-                            </Grid>
-                            <Grid item container spacing={5}   xs={4}>
-                                <Grid item xs={4}>
-                                    <Button variant="contained" startIcon={<ArrowBackIcon /> } color="primary" size="medium" onClick={handleCloseAcceptAndDecline} >
-                                        Back
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Button variant="contained"  color="success" size="medium" onClick={handleAccept} >
-                                        Accept
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>   
-                    </Stack>
-                </Stack>
-            </Box>
-        </Modal>
-        <Modal
-            open={openDecline}
-            onClose={handleCloseAcceptAndDecline}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-            BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.2)" } }}
-        >
-            <Box sx={style}>
-                <Stack spacing={6}>
-                    <Typography id="modal-modal-title" textAlign={"center"}
-                        variant="h2" component="h1">
-                        Decline {name}
-                    </Typography>
-                    <Stack alignItems={"center"} spacing={3}>
-                        <Typography id="modal-modal-title" textAlign={"center"}
-                            variant="body1" fontSize={18} component="h1">
-                            You can not take it back after you accept it. Do you want to decline {name}?
-                        </Typography>
-                    </Stack>
-                    <Stack alignItems={"flex-end"}>
-                        <Grid container justifyContent={"flex-end"} spacing={2}>
-                            <Grid item xs={4}></Grid>
-                            <Grid justifyContent={"flex-end"} item xs={4}>
-                            </Grid>
-                            <Grid item container spacing={5}   xs={4}>
-                                <Grid item xs={4}>
-                                    <Button variant="contained" startIcon={<ArrowBackIcon /> } color="primary" size="medium" onClick={handleCloseAcceptAndDecline} >
-                                        Back
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <Button variant="contained" color="error" size="medium" onClick={handleDecline} >
-                                        Decline
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </Grid>   
-                    </Stack>
-                </Stack>
-            </Box>
-        </Modal>
+                        <ProposalDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} status={status} name={name}/>
+                       
                       </TableRow>
-
-
                     );
                   })}
                   {emptyRows > 0 && (

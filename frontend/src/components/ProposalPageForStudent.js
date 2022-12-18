@@ -2,13 +2,9 @@ import { Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import ProposalTableForStudent from './table/ProposalTableForStudent';
 
-
-
 const ProposalPageForStudent = () => {
-
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -35,7 +31,7 @@ const mapStateToProps = state => {
 
 
 
-ProposalTableForStudent.propTypes = {
+ProposalPageForStudent.propTypes = {
     courseRequests: PropTypes.array,
     userId: PropTypes.number,
     getCourseApprovalRequestsRequest: PropTypes.func,
@@ -47,4 +43,4 @@ ProposalTableForStudent.defaultProps = {
     courseRequests: [],
 };
 
-export default connect(mapStateToProps)(ProposalTableForStudent);
+export default connect(mapStateToProps)(ProposalPageForStudent);

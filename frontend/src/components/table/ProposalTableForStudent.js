@@ -22,6 +22,7 @@ import {
   Stack,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ProposalDetailForStudent from './detailModals/ProposalDetailForStudent';
 
 // components
 import Scrollbar from './scrollbar';
@@ -190,6 +191,8 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
                           </Tooltip> </>: null}
                         </TableCell>
                     <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={name}/>
+                    <ProposalDetailForStudent handleOpenDetails={handleOpenDetails} openDetails={openDetails} handleCloseDetails={handleCloseDetails}/>
+
                                        </TableRow>
                     );
                   })}
