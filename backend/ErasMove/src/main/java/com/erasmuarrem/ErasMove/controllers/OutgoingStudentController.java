@@ -77,8 +77,8 @@ public class OutgoingStudentController {
     }
 
     @PostMapping("/language/add")
-    public void addLanguage(@RequestBody Language language) {
-        languageService.addLanguage(language);
+    public ResponseEntity<String> addLanguage(@RequestBody Language language) {
+        return languageService.addLanguage(language);
     }
 
     @DeleteMapping("/language/delete/{id}")

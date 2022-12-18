@@ -172,6 +172,13 @@ public class ExchangeUniversityService {
             return "Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!";
         }
 
+        if ( exchangeUniversity.getLanguageRequirement() == null ) {
+            application.setLanguageStatus("No Language Requirement For The University: " + exchangeUniversity.getUniversityName());
+        }
+        else {
+            application.setLanguageStatus("Language Requirement Is Not Met");
+        }
+
         application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
         applicationRepository.save(application);
         acceptedStudents.add(outgoingStudent);

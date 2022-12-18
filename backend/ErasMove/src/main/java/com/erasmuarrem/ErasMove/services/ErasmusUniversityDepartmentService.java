@@ -167,6 +167,13 @@ public class ErasmusUniversityDepartmentService {
             return "Student with id:" + outgoingStudent.getID() + " doesn't currently have an application!";
         }
 
+        if ( erasmusUniversity.getLanguageRequirement() == null ) {
+            application.setLanguageStatus("No Language Requirement For The University: " + erasmusUniversity.getUniversityName());
+        }
+        else {
+            application.setLanguageStatus("Language Requirement Is Not Met");
+        }
+
         application.setAdmittedStatus("Admitted to " + erasmusUniversity.getUniversityName()); // set application status
         applicationRepository.save(application);
 

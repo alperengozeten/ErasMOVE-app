@@ -24,7 +24,7 @@ public class Application implements Comparable<Application> {
     private String selectedSemester;
     private String admittedStatus;
     private String preApprovalFormStatus;
-    // language status???
+    private String languageStatus;
 
     @ManyToMany
     private List<ContractedUniversity> selectedUniversities;
