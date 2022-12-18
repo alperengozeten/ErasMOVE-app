@@ -210,7 +210,7 @@ public class AdministrativeStaffService {
                 }
             });
 
-            for ( int i = erasmusApplications.size() -1; i > 0; i-- ) {
+            for ( int i = erasmusApplications.size() -1; i >= 0; i-- ) {
                 for ( int k = 0; k < erasmusApplications.get(i).getSelectedUniversities().size(); k++ ) {
                     ErasmusUniversity erasmusUniversity = (ErasmusUniversity) erasmusApplications.get(i).getSelectedUniversities().get(k);
                     ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService.getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(erasmusUniversity.getID(), departmentName);
@@ -243,7 +243,7 @@ public class AdministrativeStaffService {
             }
         });
 
-        for ( int i = exchangeApplications.size() -1; i > 0; i-- ) {
+        for ( int i = exchangeApplications.size() -1; i >= 0; i-- ) {
             for ( int k = 0; k < exchangeApplications.get(i).getSelectedUniversities().size(); k++ ) {
                 ExchangeUniversity exchangeUniv = (ExchangeUniversity) exchangeApplications.get(i).getSelectedUniversities().get(k);
                 if ( exchangeUniv.getUniversityQuota() != 0 ) {
