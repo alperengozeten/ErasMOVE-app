@@ -204,6 +204,7 @@ public class ErasmusReplacementRequestService {
         return erasmusReplacementRequest;
     }
 
+    @Transactional
     public ErasmusReplacementRequest declineErasmusReplacementRequestByErasmusReplacementRequestID(Long erasmusReplacementRequestID) {
 
         Optional<ErasmusReplacementRequest> erasmusReplacementRequestOptional = erasmusReplacementRequestRepository
@@ -251,6 +252,9 @@ public class ErasmusReplacementRequestService {
                 outgoingStudent.getName() + "!");
 
         notificationService.saveNotification(newNotification); // save the notification
+
+        // refresh the proposals
+        makeErasmusProposalsToDepartmentCoordinator(outgoingStudent.getDepartment().getID());
 
         erasmusReplacementRequest.setStatus("DECLINED");
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);

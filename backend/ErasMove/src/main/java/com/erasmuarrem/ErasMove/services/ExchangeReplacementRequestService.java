@@ -185,6 +185,7 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequest;
     }
 
+    @Transactional
     public ExchangeReplacementRequest declineExchangeReplacementRequestByExchangeReplacementRequestID(Long exchangeReplacementRequestID) {
 
         Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository
@@ -226,6 +227,9 @@ public class ExchangeReplacementRequestService {
                 outgoingStudent.getName() + "!");
 
         notificationService.saveNotification(newNotification);
+
+        // refresh the proposals
+        makeExchangeProposalsToDepartmentCoordinators();
 
         exchangeReplacementRequest.setStatus("DECLINED");
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest);
