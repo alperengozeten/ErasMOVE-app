@@ -85,6 +85,9 @@ public class ExchangeReplacementRequestService {
         DepartmentCoordinator departmentCoordinator = departmentCoordinatorRepository.findById(departmentCoordinatorID).get();
         ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByID(exchangeReplacementRequest.getExchangeUniversity().getID());
 
+        // decrease the quota by 1 until the request is responded
+        exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
+
         // send notification to the outgoing student
         Notification newNotification = new Notification();
         newNotification.setRead(false);
@@ -205,6 +208,9 @@ public class ExchangeReplacementRequestService {
         ExchangeUniversity exchangeUniversity = exchangeReplacementRequest.getExchangeUniversity();
         OutgoingStudent outgoingStudent = exchangeReplacementRequest.getStudent();
         DepartmentCoordinator departmentCoordinator = exchangeReplacementRequest.getDepartmentCoordinator();
+
+        // increase the quota by 1 since the request is declined
+        exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() + 1);
 
         // send notification to the department coordinator
         Notification newNotification = new Notification();

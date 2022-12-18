@@ -87,6 +87,14 @@ public class ErasmusReplacementRequestService {
         DepartmentCoordinator departmentCoordinator = departmentCoordinatorRepository.findById(departmentCoordinatorID).get();
         ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByID(erasmusReplacementRequest.getErasmusUniversity().getID());
 
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                        erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                );
+
+        // decrease the quota when the request is waiting!
+        erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);
+
         // send notification to the outgoing student
         Notification newNotification = new Notification();
         newNotification.setRead(false);
@@ -214,6 +222,15 @@ public class ErasmusReplacementRequestService {
         ErasmusUniversity erasmusUniversity = erasmusReplacementRequest.getErasmusUniversity();
         OutgoingStudent outgoingStudent = erasmusReplacementRequest.getStudent();
         DepartmentCoordinator departmentCoordinator = erasmusReplacementRequest.getDepartmentCoordinator();
+
+        // increase the quota by 1 since the request is declined
+        ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                        erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                );
+
+        // decrease the quota when the request is waiting!
+        erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() + 1);
 
         // send notification to the department coordinator
         Notification newNotification = new Notification();
