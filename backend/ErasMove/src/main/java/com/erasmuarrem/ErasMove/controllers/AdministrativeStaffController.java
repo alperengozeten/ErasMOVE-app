@@ -65,8 +65,8 @@ public class AdministrativeStaffController {
     }
 
     @PostMapping("/erasmus/place")
-    public void placeErasmusStudents(@RequestParam String departmentName ) {
-        administrativeStaffService.placeErasmusStudents(departmentName);
+    public void placeErasmusStudents(@RequestParam Long departmentID ) {
+        administrativeStaffService.placeErasmusStudents(departmentID);
     }
 
     @PostMapping("/exchange/place")
