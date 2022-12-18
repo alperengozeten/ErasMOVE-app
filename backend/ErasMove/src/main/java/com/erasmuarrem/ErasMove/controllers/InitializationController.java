@@ -216,6 +216,7 @@ public class InitializationController {
         manDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
         manDepartmentCoordinator.setDepartment(man);
         departmentCoordinatorService.addDepartmentCoordinator(manDepartmentCoordinator);
+
         // IE DEPARTMENT
         Course ie1 = new Course();
         ie1.setCourseName("IE-102");
@@ -285,7 +286,7 @@ public class InitializationController {
         ieElectiveCourseList.add(ieEl1);
         ieElectiveCourseList.add(ieEl2);
 
-        // add the ie department
+        // ADD THE IE DEPARTMENT
         Department ie = new Department();
         ie.setDepartmentName("IE");
         ie.setCourseList(ieCourseList);
@@ -301,6 +302,97 @@ public class InitializationController {
         ieDepartmentCoordinator.setDepartment(ie);
         departmentCoordinatorService.addDepartmentCoordinator(ieDepartmentCoordinator);
 
+        // EEE courses
+        Course eee1 = new Course();
+        eee1.setCourseName("EEE-102");
+        eee1.setDescription("Introduction to Digital Circuit Design");
+        eee1.setEcts(6.5);
+        courseService.addNewCourse(eee1);
+
+        Course eee2 = new Course();
+        eee2.setCourseName("EEE-211");
+        eee2.setDescription("Analog Electronics");
+        eee2.setEcts(6.5);
+        courseService.addNewCourse(eee2);
+
+        Course eee3 = new Course();
+        eee3.setCourseName("MATH-241");
+        eee3.setDescription("Engineering Mathematics I");
+        eee3.setEcts(6.5);
+        courseService.addNewCourse(eee3);
+
+        Course eee4 = new Course();
+        eee4.setCourseName("EEE-202");
+        eee4.setDescription("Circuit Theory");
+        eee4.setEcts(6.5);
+        courseService.addNewCourse(eee4);
+
+        Course eee5 = new Course();
+        eee5.setCourseName("EEE-212");
+        eee5.setDescription("Microprocessors");
+        eee5.setEcts(6.5);
+        courseService.addNewCourse(eee5);
+
+        Course eee6 = new Course();
+        eee6.setCourseName("MATH-242");
+        eee6.setDescription("Engineering Mathematics II");
+        eee6.setEcts(6.5);
+        courseService.addNewCourse(eee6);
+
+        Course eee7 = new Course();
+        eee7.setCourseName("EEE-313");
+        eee7.setDescription("Electronic Circuit Design");
+        eee7.setEcts(6.5);
+        courseService.addNewCourse(eee7);
+
+        Course eee8 = new Course();
+        eee8.setCourseName("EEE-351");
+        eee8.setDescription("Engineering Electromagnetics");
+        eee8.setEcts(5.0);
+        courseService.addNewCourse(eee8);
+
+        // EEE ELECTIVES
+        Course eeeEl1 = new Course();
+        eeeEl1.setCourseName("ADA-265");
+        eeeEl1.setDescription("How Houses Build People");
+        eeeEl1.setEcts(5.0);
+        courseService.addNewCourse(eeeEl1);
+
+        Course eeeEl2 = new Course();
+        eeeEl2.setCourseName("PSYC-100");
+        eeeEl2.setDescription("Introduction to Psychology");
+        eeeEl2.setEcts(5.0);
+        courseService.addNewCourse(eeeEl2);
+
+        // ADD THE EEE COURSES
+        List<Course> eeeCourseList = new ArrayList<>();
+        eeeCourseList.add(eee1);
+        eeeCourseList.add(eee2);
+        eeeCourseList.add(eee3);
+        eeeCourseList.add(eee4);
+        eeeCourseList.add(eee5);
+        eeeCourseList.add(eee6);
+        eeeCourseList.add(eee7);
+        eeeCourseList.add(eee8);
+        List<Course> eeeElectiveCourseList = new ArrayList<>();
+        eeeElectiveCourseList.add(eeeEl1);
+        eeeElectiveCourseList.add(eeeEl2);
+
+        // ADD THE EEE DEPARTMENT
+        Department eee = new Department();
+        eee.setDepartmentName("EEE");
+        eee.setCourseList(eeeCourseList);
+        eee.setElectiveCourseList(eeeElectiveCourseList);
+        departmentService.addDepartment(eee);
+
+        // ADD DEPARTMENT COORDINATOR FOR EEE
+        DepartmentCoordinator eeeDepartmentCoordinator = new DepartmentCoordinator();
+        eeeDepartmentCoordinator.setName("Tolga Çukur");
+        eeeDepartmentCoordinator.setEmail("cukur@ee.bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        eeeDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+        eeeDepartmentCoordinator.setDepartment(eee);
+        departmentCoordinatorService.addDepartmentCoordinator(eeeDepartmentCoordinator);
 
         // erasmus universities
 
@@ -709,8 +801,8 @@ public class InitializationController {
         applications.add(awp2);
         administrativeStaffService.addStudents(true, 1L, applications); // CS Applications
 
-        OutgoingStudent student1 = outgoingStudentRepository.findById(3L).get();
-        OutgoingStudent student2 = outgoingStudentRepository.findById(4L).get();
+        OutgoingStudent student1 = outgoingStudentRepository.findById(5L).get();
+        OutgoingStudent student2 = outgoingStudentRepository.findById(6L).get();
 
         hashingPasswordHelper.setPassword("123");
         student1.setHashedPassword(hashingPasswordHelper.Hash()); // make passwords 123
