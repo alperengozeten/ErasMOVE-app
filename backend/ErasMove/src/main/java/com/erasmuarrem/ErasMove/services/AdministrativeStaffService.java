@@ -203,7 +203,7 @@ public class AdministrativeStaffService {
                     }
                 }
                 if ( erasmusApplications.get(i).getAdmittedStatus().equals("NOT ADMITTED") ) {
-                    hostUniversityService.addStudentToWaitingBinById(erasmusApplications.get(i).getOutgoingStudent().getStudentId());
+                    hostUniversityService.addStudentToWaitingBinById(erasmusApplications.get(i).getOutgoingStudent().getID());
                 }
             }
     }
