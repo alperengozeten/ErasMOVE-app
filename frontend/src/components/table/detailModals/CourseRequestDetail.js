@@ -5,6 +5,8 @@ import PropTypes  from 'prop-types';
 import { MDBCard, MDBCardBody, MDBCardText, MDBCol, MDBContainer, MDBRow } from "mdb-react-ui-kit";
 import { connect } from "react-redux";
 import { sentenceCase } from 'change-case';
+import axios from "axios";
+import FileDownload from "js-file-download";
 //import download from 'downloadjs';
 
 import Label from '../../label';
@@ -29,15 +31,17 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
         handleCloseDetails();
     };
 
-    const handleDownloadSyllabus = () => {
-        const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-            JSON.stringify(courseRequest.syllabus)
-          )}`;
-          const link = document.createElement("a");
-          link.href = jsonString;
-          link.download = "data.json";
-      
-          link.click();
+    const baseURL = 'http://localhost:8080';
+
+    const handleDownloadSyllabus = id => {
+        const folder = courseRequest.info === 'Elective' ? 'electiveCourseApproval' : 'mandatoryCourseApproval';
+        axios({
+            url: `${baseURL}/document/${folder}/${id}`,
+            method: 'GET',
+            responseType: 'blob'
+        }).then(res => {
+            FileDownload(res.data, 'syllabus.pdf');
+        });
     };
 
     return (
@@ -97,7 +101,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                             <MDBCardText>Type</MDBCardText>
                                         </MDBCol>
                                         <MDBCol sm="9">
-                                            <MDBCardText className="text-muted">Must Course</MDBCardText>
+                                            <MDBCardText className="text-muted">{courseRequest.info} Course</MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
                                         <hr />
@@ -116,7 +120,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                         </MDBCol>
                                         <MDBCol sm="9">
                                             <MDBCardText className="text-muted">
-                                                <Button variant="contained" onClick={handleDownloadSyllabus}>Download Syllabus</Button>
+                                                <Button variant="contained" onClick={() => handleDownloadSyllabus(courseRequest.id)}>Download Syllabus</Button>
                                             </MDBCardText>
                                         </MDBCol>
                                         </MDBRow>
