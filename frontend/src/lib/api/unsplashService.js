@@ -177,7 +177,7 @@ export const declinePreApprovalForm = (id, feedback) => (
 
 // Replacement request exchange
 export const sendExchangeReplacementRequest = replacementRequest => (
-  fetch(`${baseURL}/exchangeReplacementRequest/add/`, {
+  fetch(`${baseURL}/exchangeReplacementRequest/add`, {
     method: 'POST',
     headers: {
       'Content-type' : 'application/json'
