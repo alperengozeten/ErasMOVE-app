@@ -18,14 +18,16 @@ public class OutgoingStudentService {
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final ExchangeUniversityService exchangeUniversityService;
     private final PreApprovalFormRequestService preApprovalFormRequestService;
+    private final ApplicationService applicationService;
 
     @Autowired
-    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, PreApprovalFormRequestService preApprovalFormRequestService) {
+    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, PreApprovalFormRequestService preApprovalFormRequestService, ApplicationService applicationService) {
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityService = erasmusUniversityService;
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.exchangeUniversityService = exchangeUniversityService;
         this.preApprovalFormRequestService = preApprovalFormRequestService;
+        this.applicationService = applicationService;
     }
 
     public List<OutgoingStudent> getStudents() {
@@ -54,6 +56,14 @@ public class OutgoingStudentService {
         }
 
         OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudentID);
+
+        if ( application == null ) {
+            return "The Outgoing Student with id:" + outgoingStudentID + " doesn't currently have an application!";
+        }
+
+        application.setAdmittedStatus("CANCELLED");
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
