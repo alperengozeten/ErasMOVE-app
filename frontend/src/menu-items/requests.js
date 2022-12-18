@@ -61,6 +61,14 @@ const requests = authType => {
                 icon: icons.IconDashboard,
                 breadcrumbs: false
             },
+            {
+                id: 'proposal',
+                title: 'Course Proposals',
+                type: 'item',
+                url: '/main/proposal',
+                icon: icons.IconDashboard,
+                breadcrumbs: false
+            },
         ]
     };
 
