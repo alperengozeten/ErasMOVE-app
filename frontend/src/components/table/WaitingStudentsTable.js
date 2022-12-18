@@ -87,7 +87,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, erasmusDepartments, exchangeDepartments }) => {
+const WaitingStudentsTable = ({ userId, applications, sendReplacementOffer, typeForReq, erasmusDepartments, exchangeDepartments }) => {
 
   const [page, setPage] = useState(0);
 
@@ -161,13 +161,19 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
         info: 'Erasmus Replacement Request',
         student:{ id: applications.filter(app => app.id === applicationDetailsID)[0]?.outgoingStudent.id},
         erasmusUniversity: {id: selectedDep.erasmusUniversity.id},
+        departmentCoordinator: {
+          id: userId
+        },
       };
       type = 'Erasmus';
     } else {
       replacementRequest = {
         info: 'Exchange Replacement Request',
-        student: applications.filter(app => app.id === applicationDetailsID)[0]?.outgoingStudent.id,
-        exchangeUniversity: selectedDep.exchangeUniversity,
+        student: {id: applications.filter(app => app.id === applicationDetailsID)[0]?.outgoingStudent.id},
+        exchangeUniversity: { id: selectedDep.exchangeUniversity},
+        departmentCoordinator: {
+          id: userId
+        },
       };
       type = 'Exchange';
     }
@@ -467,6 +473,7 @@ WaitingStudentsTable.propTypes = {
     contractedUniDepartments: PropTypes.array,
     erasmusDepartments: PropTypes.array,
     exchangeDepartments: PropTypes.array,
+    userId: PropTypes.string,
 };
   
 WaitingStudentsTable.defaultProps = {
