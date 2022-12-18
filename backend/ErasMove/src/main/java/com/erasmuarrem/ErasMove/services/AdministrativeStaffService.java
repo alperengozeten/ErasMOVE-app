@@ -202,7 +202,7 @@ public class AdministrativeStaffService {
                         break;
                     }
                 }
-                if ( erasmusApplications.get(i).getAdmittedStatus().equals("Not admitted") ) {
+                if ( erasmusApplications.get(i).getAdmittedStatus().equals("NOT ADMITTED") ) {
                     hostUniversityService.addStudentToWaitingBinById(erasmusApplications.get(i).getOutgoingStudent().getStudentId());
                 }
             }
@@ -234,7 +234,7 @@ public class AdministrativeStaffService {
                     break;
                 }
             }
-            if ( exchangeApplications.get(i).getAdmittedStatus().equals("Not admitted") ) {
+            if ( exchangeApplications.get(i).getAdmittedStatus().equals("NOT ADMITTED") ) {
                 hostUniversityService.addStudentToWaitingBinById(exchangeApplications.get(i).getOutgoingStudent().getStudentId());
             }
         }
