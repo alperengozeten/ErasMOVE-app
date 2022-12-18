@@ -134,7 +134,7 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
   };
 
   const handleRespondFileReq = () => {
-    respondFileRequestRequest(requesDetailsID, file, userId);
+    respondFileRequestRequest(requesDetailsID, file, userId, requests.filter(req => req.id === requesDetailsID)[0]?.info);
     handleClose();
     setFile(null);
   };
@@ -321,7 +321,7 @@ RequestsTable.propTypes = {
     deleteFileRequestRequest: PropTypes.func,
     isStaff: PropTypes.bool,
     respondFileRequestRequest: PropTypes.func,
-    userId: PropTypes.string,
+    userId: PropTypes.number,
 };
   
 RequestsTable.defaultProps = {

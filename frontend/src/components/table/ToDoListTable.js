@@ -30,7 +30,6 @@ const ToDoListTable = ({ toDoLists }) => {
                   {toDoLists.map(row => {
                     const { id, toDo } =
                       row;
-
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
                         <TableCell padding="checkbox"><HourglassBottomIcon /> </TableCell>

@@ -60,6 +60,9 @@ const ApplicationDetails = ({ application, languageEditable }) => {
     );
   };
 
+  var selectedUniversitiesNames = [];
+  application.selectedUniversities.map( uni => selectedUniversitiesNames.push(uni.universityName));
+
   return (
     <>
       <Typography id="modal-modal-title" variant="h3" component="h2" textAlign={"center"}>
@@ -166,7 +169,7 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="uni"
         fullWidth
         variant="standard"
-        defaultValue={application.selectedUniversities}
+        defaultValue={selectedUniversitiesNames}
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
