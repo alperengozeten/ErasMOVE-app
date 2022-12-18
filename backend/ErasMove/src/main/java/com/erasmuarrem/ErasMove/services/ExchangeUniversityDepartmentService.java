@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +80,13 @@ public class ExchangeUniversityDepartmentService {
         }
 
         ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentOptional.get();
-        List<Course> courseList = exchangeUniversityDepartment.getCourseList();
+        List<Course> courseList;
+        if ( exchangeUniversityDepartment.getCourseList() == null ) {
+            courseList = new ArrayList<>();
+        }
+        else {
+            courseList = exchangeUniversityDepartment.getCourseList();
+        }
 
         for (Course departmentCourse : courseList) {
             if ( departmentCourse.getCourseName().equals(course.getCourseName()) ) {
@@ -174,7 +181,13 @@ public class ExchangeUniversityDepartmentService {
         }
 
         ExchangeUniversityDepartment exchangeUniversityDepartment = exchangeUniversityDepartmentOptional.get();
-        List<Course> electiveCourseList = exchangeUniversityDepartment.getElectiveCourseList();
+        List<Course> electiveCourseList;
+        if (exchangeUniversityDepartment.getElectiveCourseList() == null ) {
+            electiveCourseList = new ArrayList<>();
+        }
+        else {
+            electiveCourseList = exchangeUniversityDepartment.getElectiveCourseList();
+        }
 
         for (Course electiveCourse : electiveCourseList) {
             if ( electiveCourse.getCourseName().equals(course.getCourseName()) ) {
