@@ -196,7 +196,7 @@ export const declineExchangeReplacementRequest = id => (
 
 // Replacement request erasmus
 export const sendErasmusReplacementRequest = replacementRequest => (
-  fetch(`${baseURL}/erasmusReplacementRequest/add/`, {
+  fetch(`${baseURL}/erasmusReplacementRequest/add`, {
     method: 'POST',
     headers: {
       'Content-type' : 'application/json'
