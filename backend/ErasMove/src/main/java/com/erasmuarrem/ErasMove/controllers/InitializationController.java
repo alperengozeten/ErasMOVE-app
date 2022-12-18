@@ -225,9 +225,9 @@ public class InitializationController {
         courseService.addNewCourse(ie1);
 
         Course ie2 = new Course();
-        ie1.setCourseName("IE-272");
-        ie1.setDescription("Manufacturing Processes and Operations Analysis");
-        ie1.setEcts(6.5);
+        ie2.setCourseName("IE-272");
+        ie2.setDescription("Manufacturing Processes and Operations Analysis");
+        ie2.setEcts(6.5);
         courseService.addNewCourse(ie2);
 
         Course ie3 = new Course();
@@ -237,15 +237,15 @@ public class InitializationController {
         courseService.addNewCourse(ie3);
 
         Course ie4 = new Course();
-        ie1.setCourseName("IE-342");
-        ie1.setDescription("Engineering Economic Analysis");
-        ie1.setEcts(5.0);
+        ie4.setCourseName("IE-342");
+        ie4.setDescription("Engineering Economic Analysis");
+        ie4.setEcts(5.0);
         courseService.addNewCourse(ie4);
 
         Course ie5 = new Course();
-        ie5.setCourseName("IE-342");
-        ie5.setDescription("Engineering Economic Analysis");
-        ie5.setEcts(5.0);
+        ie5.setCourseName("IE-324");
+        ie5.setDescription("Simulation");
+        ie5.setEcts(6.5);
         courseService.addNewCourse(ie5);
 
         Course ie6 = new Course();
@@ -394,6 +394,99 @@ public class InitializationController {
         eeeDepartmentCoordinator.setDepartment(eee);
         departmentCoordinatorService.addDepartmentCoordinator(eeeDepartmentCoordinator);
 
+        // ME courses
+        Course me1 = new Course();
+        me1.setCourseName("ME-102");
+        me1.setDescription("Introduction to Systems Engineering");
+        me1.setEcts(5.0);
+        courseService.addNewCourse(me1);
+
+        Course me2 = new Course();
+        me2.setCourseName("ME-211");
+        me2.setDescription("Thermo-Fluids Engineering I");
+        me2.setEcts(6.5);
+        courseService.addNewCourse(me2);
+
+        Course me3 = new Course();
+        me3.setCourseName("ME-231");
+        me3.setDescription("Mechanics and Materials I");
+        me3.setEcts(6.5);
+        courseService.addNewCourse(me3);
+
+        Course me4 = new Course();
+        me4.setCourseName("ME-212");
+        me4.setDescription("Thermo-Fluids Engineering II");
+        me4.setEcts(6.5);
+        courseService.addNewCourse(me4);
+
+        Course me5 = new Course();
+        me5.setCourseName("ME-232");
+        me5.setDescription("Mechanics and Materials II");
+        me5.setEcts(6.5);
+        courseService.addNewCourse(me5);
+
+        Course me6 = new Course();
+        me6.setCourseName("ME-341");
+        me6.setDescription("Dynamics and Control I");
+        me6.setEcts(6.5);
+        courseService.addNewCourse(me6);
+
+        Course me7 = new Course();
+        me7.setCourseName("ME-342");
+        me7.setDescription("Dynamics and Control II");
+        me7.setEcts(6.5);
+        courseService.addNewCourse(me7);
+
+        Course me8 = new Course();
+        me8.setCourseName("ME-381");
+        me8.setDescription("Design and Manufacturing");
+        me8.setEcts(6.5);
+        courseService.addNewCourse(me8);
+
+        // ME ELECTIVES
+        Course meEl1 = new Course();
+        meEl1.setCourseName("ADA-265");
+        meEl1.setDescription("How Houses Build People");
+        meEl1.setEcts(5.0);
+        courseService.addNewCourse(meEl1);
+
+        Course meEl2 = new Course();
+        meEl2.setCourseName("PSYC-100");
+        meEl2.setDescription("Introduction to Psychology");
+        meEl2.setEcts(5.0);
+        courseService.addNewCourse(meEl2);
+
+        // ADD THE ME COURSES
+        List<Course> meCourseList = new ArrayList<>();
+        meCourseList.add(me1);
+        meCourseList.add(me2);
+        meCourseList.add(me3);
+        meCourseList.add(me4);
+        meCourseList.add(me5);
+        meCourseList.add(me6);
+        meCourseList.add(me7);
+        meCourseList.add(me8);
+
+        List<Course> meElectiveCourseList = new ArrayList<>();
+        meElectiveCourseList.add(meEl1);
+        meElectiveCourseList.add(meEl2);
+
+        // ADD THE ME DEPARTMENT
+        Department me = new Department();
+        me.setDepartmentName("ME");
+        me.setCourseList(meCourseList);
+        me.setElectiveCourseList(meElectiveCourseList);
+        departmentService.addDepartment(me);
+
+        // ADD DEPARTMENT COORDINATOR FOR ME
+        DepartmentCoordinator meDepartmentCoordinator = new DepartmentCoordinator();
+        meDepartmentCoordinator.setName("Gökberk Kabacaoğlu");
+        meDepartmentCoordinator.setEmail("gkabacaoglu@bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        meDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+        meDepartmentCoordinator.setDepartment(me);
+        departmentCoordinatorService.addDepartmentCoordinator(meDepartmentCoordinator);
+
         // erasmus universities
 
         // EPFL
@@ -449,7 +542,7 @@ public class InitializationController {
         courseService.addNewCourse(ethCS3);
 
         ErasmusUniversity eth = new ErasmusUniversity();
-        eth.setUniversityName("ETH Zurich");
+        eth.setUniversityName("ETH");
         eth.setCountry("Switzerland");
         List<Course> ethCourses = new ArrayList<>();
         ethCourses.add(ethCS1);
@@ -499,7 +592,7 @@ public class InitializationController {
         courseService.addNewCourse(vrijeCS3);
 
         ErasmusUniversity vrije = new ErasmusUniversity();
-        vrije.setUniversityName("Vrije University");
+        vrije.setUniversityName("Vrije");
         vrije.setCountry("Holland");
         List<Course> vrijeCourses = new ArrayList<>();
         vrijeCourses.add(vrijeCS2);
@@ -560,7 +653,7 @@ public class InitializationController {
         courseService.addNewCourse(roskCS3);
 
         ErasmusUniversity roskilde = new ErasmusUniversity();
-        vrije.setUniversityName("Roskilde University");
+        roskilde.setUniversityName("Roskilde");
         roskilde.setCountry("Denmark");
         Language Danish = new Language();
         Danish.setLanguage("Danish");
@@ -659,13 +752,13 @@ public class InitializationController {
         courseService.addNewCourse(dortCS3);
 
         ErasmusUniversity dortmund = new ErasmusUniversity();
-        dortmund.setUniversityName("Dortmund University");
-        dortmund.setCountry("Denmark");
+        dortmund.setUniversityName("Dortmund");
+        dortmund.setCountry("Germany");
         Language German = new Language();
         German.setLanguage("German");
         German.setLevel("B1");
         languageRepository.save(German);
-        roskilde.setLanguageRequirement(German);
+        dortmund.setLanguageRequirement(German);
         List<Course> dortCourses = new ArrayList<>();
         dortCourses.add(dortCS3);
         dortmund.setRejectedCourses(dortCourses);
@@ -734,7 +827,7 @@ public class InitializationController {
         //Queen's Univ
         ExchangeUniversity queens = new ExchangeUniversity();
         queens.setCountry("Canada");
-        queens.setUniversityName("Queen's University, Kingston");
+        queens.setUniversityName("Queen's");
         queens.setMaxUniversityQuota(4);
         queens.setUniversityQuota(4);
         queens.setAcceptedStudents(new ArrayList<>() );
@@ -781,7 +874,7 @@ public class InitializationController {
         //Seoul University
         ExchangeUniversity seoul = new ExchangeUniversity();
         seoul.setCountry("South Korea");
-        seoul.setUniversityName("Seoul National University");
+        seoul.setUniversityName("Seoul");
         seoul.setUniversityQuota(7);
         seoul.setMaxUniversityQuota(7);
         seoul.setAcceptedStudents(new ArrayList<>());
@@ -846,17 +939,17 @@ public class InitializationController {
         seoulEEE2.setDescription("Signals and Systems");
 
 
-        Course seoulEEEE = new Course();
-        seoulEEEE.setEcts(5.0);
-        seoulEEE2.setCourseName("EEE-391");
-        seoulEEE2.setDescription("Signals and Systems for Computer Scientists");
+        Course seoulEEE3 = new Course();
+        seoulEEE3.setEcts(5.0);
+        seoulEEE3.setCourseName("EEE-391");
+        seoulEEE3.setDescription("Signals and Systems for Computer Scientists");
 
 
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulME1,seoulME.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulME2,seoulME.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE1,seoulEEE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE2,seoulEEE.getID());
-        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(seoulEEEE, seoulEEE.getID());
+        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(seoulEEE3, seoulEEE.getID());
 
         // applications
         ApplicationWrapper awp1 = new ApplicationWrapper();
@@ -888,8 +981,8 @@ public class InitializationController {
         applications.add(awp2);
         administrativeStaffService.addStudents(true, 1L, applications); // CS Applications
 
-        OutgoingStudent student1 = outgoingStudentRepository.findById(5L).get();
-        OutgoingStudent student2 = outgoingStudentRepository.findById(6L).get();
+        OutgoingStudent student1 = outgoingStudentRepository.findById(6L).get();
+        OutgoingStudent student2 = outgoingStudentRepository.findById(7L).get();
 
         hashingPasswordHelper.setPassword("123");
         student1.setHashedPassword(hashingPasswordHelper.Hash()); // make passwords 123
