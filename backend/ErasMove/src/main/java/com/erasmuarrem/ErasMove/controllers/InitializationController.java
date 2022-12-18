@@ -217,6 +217,182 @@ public class InitializationController {
         manDepartmentCoordinator.setDepartment(man);
         departmentCoordinatorService.addDepartmentCoordinator(manDepartmentCoordinator);
 
+        // IE DEPARTMENT
+        Course ie1 = new Course();
+        ie1.setCourseName("IE-102");
+        ie1.setDescription("A Process Outlook for Industrial Engineering");
+        ie1.setEcts(5.0);
+        courseService.addNewCourse(ie1);
+
+        Course ie2 = new Course();
+        ie1.setCourseName("IE-272");
+        ie1.setDescription("Manufacturing Processes and Operations Analysis");
+        ie1.setEcts(6.5);
+        courseService.addNewCourse(ie2);
+
+        Course ie3 = new Course();
+        ie3.setCourseName("IE-202");
+        ie3.setDescription("Introduction to Modeling and Optimization");
+        ie3.setEcts(6.5);
+        courseService.addNewCourse(ie3);
+
+        Course ie4 = new Course();
+        ie1.setCourseName("IE-342");
+        ie1.setDescription("Engineering Economic Analysis");
+        ie1.setEcts(5.0);
+        courseService.addNewCourse(ie4);
+
+        Course ie5 = new Course();
+        ie5.setCourseName("IE-342");
+        ie5.setDescription("Engineering Economic Analysis");
+        ie5.setEcts(5.0);
+        courseService.addNewCourse(ie5);
+
+        Course ie6 = new Course();
+        ie6.setCourseName("IE-303");
+        ie6.setDescription("Modeling and Methods in Optimization");
+        ie6.setEcts(5.0);
+        courseService.addNewCourse(ie6);
+
+        Course ie7 = new Course();
+        ie7.setCourseName("IE-325");
+        ie7.setDescription("Stochastic Models");
+        ie7.setEcts(5.0);
+        courseService.addNewCourse(ie7);
+
+        // IE ELECTIVES
+        Course ieEl1 = new Course();
+        ieEl1.setCourseName("ADA-265");
+        ieEl1.setDescription("How Houses Build People");
+        ieEl1.setEcts(5.0);
+        courseService.addNewCourse(ieEl1);
+
+        Course ieEl2 = new Course();
+        ieEl2.setCourseName("PSYC-100");
+        ieEl2.setDescription("Introduction to Psychology");
+        ieEl2.setEcts(5.0);
+        courseService.addNewCourse(ieEl2);
+
+        // add the ie courses
+        List<Course> ieCourseList = new ArrayList<>();
+        ieCourseList.add(ie1);
+        ieCourseList.add(ie2);
+        ieCourseList.add(ie3);
+        ieCourseList.add(ie4);
+        ieCourseList.add(ie5);
+        ieCourseList.add(ie6);
+        ieCourseList.add(ie7);
+        List<Course> ieElectiveCourseList = new ArrayList<>();
+        ieElectiveCourseList.add(ieEl1);
+        ieElectiveCourseList.add(ieEl2);
+
+        // ADD THE IE DEPARTMENT
+        Department ie = new Department();
+        ie.setDepartmentName("IE");
+        ie.setCourseList(ieCourseList);
+        ie.setElectiveCourseList(ieElectiveCourseList);
+        departmentService.addDepartment(ie);
+
+        // ADD DEPARTMENT COORDINATOR FOR IE
+        DepartmentCoordinator ieDepartmentCoordinator = new DepartmentCoordinator();
+        ieDepartmentCoordinator.setName("Emre Uzun");
+        ieDepartmentCoordinator.setEmail("emreu@bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        ieDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+        ieDepartmentCoordinator.setDepartment(ie);
+        departmentCoordinatorService.addDepartmentCoordinator(ieDepartmentCoordinator);
+
+        // EEE courses
+        Course eee1 = new Course();
+        eee1.setCourseName("EEE-102");
+        eee1.setDescription("Introduction to Digital Circuit Design");
+        eee1.setEcts(6.5);
+        courseService.addNewCourse(eee1);
+
+        Course eee2 = new Course();
+        eee2.setCourseName("EEE-211");
+        eee2.setDescription("Analog Electronics");
+        eee2.setEcts(6.5);
+        courseService.addNewCourse(eee2);
+
+        Course eee3 = new Course();
+        eee3.setCourseName("MATH-241");
+        eee3.setDescription("Engineering Mathematics I");
+        eee3.setEcts(6.5);
+        courseService.addNewCourse(eee3);
+
+        Course eee4 = new Course();
+        eee4.setCourseName("EEE-202");
+        eee4.setDescription("Circuit Theory");
+        eee4.setEcts(6.5);
+        courseService.addNewCourse(eee4);
+
+        Course eee5 = new Course();
+        eee5.setCourseName("EEE-212");
+        eee5.setDescription("Microprocessors");
+        eee5.setEcts(6.5);
+        courseService.addNewCourse(eee5);
+
+        Course eee6 = new Course();
+        eee6.setCourseName("MATH-242");
+        eee6.setDescription("Engineering Mathematics II");
+        eee6.setEcts(6.5);
+        courseService.addNewCourse(eee6);
+
+        Course eee7 = new Course();
+        eee7.setCourseName("EEE-313");
+        eee7.setDescription("Electronic Circuit Design");
+        eee7.setEcts(6.5);
+        courseService.addNewCourse(eee7);
+
+        Course eee8 = new Course();
+        eee8.setCourseName("EEE-351");
+        eee8.setDescription("Engineering Electromagnetics");
+        eee8.setEcts(5.0);
+        courseService.addNewCourse(eee8);
+
+        // EEE ELECTIVES
+        Course eeeEl1 = new Course();
+        eeeEl1.setCourseName("ADA-265");
+        eeeEl1.setDescription("How Houses Build People");
+        eeeEl1.setEcts(5.0);
+        courseService.addNewCourse(eeeEl1);
+
+        Course eeeEl2 = new Course();
+        eeeEl2.setCourseName("PSYC-100");
+        eeeEl2.setDescription("Introduction to Psychology");
+        eeeEl2.setEcts(5.0);
+        courseService.addNewCourse(eeeEl2);
+
+        // ADD THE EEE COURSES
+        List<Course> eeeCourseList = new ArrayList<>();
+        eeeCourseList.add(eee1);
+        eeeCourseList.add(eee2);
+        eeeCourseList.add(eee3);
+        eeeCourseList.add(eee4);
+        eeeCourseList.add(eee5);
+        eeeCourseList.add(eee6);
+        eeeCourseList.add(eee7);
+        eeeCourseList.add(eee8);
+        List<Course> eeeElectiveCourseList = new ArrayList<>();
+        eeeElectiveCourseList.add(eeeEl1);
+        eeeElectiveCourseList.add(eeeEl2);
+
+        // ADD THE EEE DEPARTMENT
+        Department eee = new Department();
+        eee.setDepartmentName("EEE");
+        eee.setCourseList(eeeCourseList);
+        eee.setElectiveCourseList(eeeElectiveCourseList);
+        departmentService.addDepartment(eee);
+
+        // ADD DEPARTMENT COORDINATOR FOR EEE
+        DepartmentCoordinator eeeDepartmentCoordinator = new DepartmentCoordinator();
+        eeeDepartmentCoordinator.setName("Tolga Çukur");
+        eeeDepartmentCoordinator.setEmail("cukur@ee.bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        eeeDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+        eeeDepartmentCoordinator.setDepartment(eee);
+        departmentCoordinatorService.addDepartmentCoordinator(eeeDepartmentCoordinator);
 
         // erasmus universities
 
@@ -303,6 +479,257 @@ public class InitializationController {
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS4,ethCS.getID());
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS5,ethCS.getID());
 
+        //Vrije
+        Course vrijeCS1  = new Course();
+        vrijeCS1.setCourseName("CS-101");
+        vrijeCS1.setDescription("Introduction to Programming");
+        vrijeCS1.setEcts(6.0);
+
+        Course vrijeCS2 = new Course();
+        vrijeCS2.setCourseName("CS-102");
+        vrijeCS2.setDescription("Algorithms");
+        vrijeCS2.setEcts(6.0);
+        courseService.addNewCourse(vrijeCS2);
+
+
+        Course vrijeCS3 = new Course();
+        vrijeCS3.setCourseName("CS-461");
+        vrijeCS3.setDescription("Machine Learning");
+        vrijeCS3.setEcts(5.5);
+        courseService.addNewCourse(vrijeCS3);
+
+        ErasmusUniversity vrije = new ErasmusUniversity();
+        vrije.setUniversityName("Vrije University");
+        vrije.setCountry("Holland");
+        List<Course> vrijeCourses = new ArrayList<>();
+        vrijeCourses.add(vrijeCS2);
+        vrijeCourses.add(vrijeCS3);
+        vrije.setRejectedCourses(vrijeCourses);
+        eth.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(vrije);
+
+        ErasmusUniversityDepartment vrijeCS = new ErasmusUniversityDepartment();
+        vrijeCS.setQuota(3);
+        vrijeCS.setErasmusUniversity(vrije);
+        vrijeCS.setDepartmentName("CS");
+        vrijeCS.setMaxQuota(3);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(vrijeCS);
+
+        Course vrijeCS4 = new Course();
+        vrijeCS4.setCourseName("CS-331");
+        vrijeCS4.setDescription("Computer Architecture");
+        vrijeCS4.setEcts(5.5);
+
+        Course vrijeCS5 = new Course();
+        vrijeCS5.setCourseName("CS-400");
+        vrijeCS5.setDescription("Data Structures");
+        vrijeCS5.setEcts(5.0);
+
+        Course vrijeCS6 = new Course();
+        vrijeCS6.setCourseName("CS-105");
+        vrijeCS6.setDescription("Python for Beginners");
+        vrijeCS6.setEcts(5.0);
+
+        Course vrijeCS7 = new Course();
+        vrijeCS7.setCourseName("CS-400");
+        vrijeCS7.setDescription("Data Engineering for Social Sciences");
+        vrijeCS7.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(vrijeCS1, vrijeCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrijeCS4,vrijeCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( vrijeCS5,vrijeCS.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS7, vrijeCS.getID() );
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS6, vrijeCS.getID() );
+        //Roskilde University
+        Course roskCS1  = new Course();
+        roskCS1.setCourseName("CS-101");
+        roskCS1.setDescription("How to Be a Programmer");
+        roskCS1.setEcts(6.0);
+
+        Course roskCS2 = new Course();
+        roskCS2.setCourseName("CS-102");
+        roskCS2.setDescription("Algorithms of Life");
+        roskCS2.setEcts(6.0);
+        courseService.addNewCourse(roskCS2);
+
+
+        Course roskCS3 = new Course();
+        roskCS3.setCourseName("CS-461");
+        roskCS3.setDescription("Deep Learning");
+        roskCS3.setEcts(5.5);
+        courseService.addNewCourse(roskCS3);
+
+        ErasmusUniversity roskilde = new ErasmusUniversity();
+        vrije.setUniversityName("Roskilde University");
+        roskilde.setCountry("Denmark");
+        Language Danish = new Language();
+        Danish.setLanguage("Danish");
+        Danish.setLevel("B2");
+        languageRepository.save(Danish);
+        roskilde.setLanguageRequirement(Danish);
+        List<Course> roskildeCourses = new ArrayList<>();
+        roskildeCourses.add(roskCS2);
+        roskildeCourses.add(roskCS3);
+        roskilde.setRejectedCourses(roskildeCourses);
+        roskilde.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(roskilde);
+        //Roskilde CS
+        ErasmusUniversityDepartment roskCS = new ErasmusUniversityDepartment();
+        roskCS.setQuota(4);
+        roskCS.setErasmusUniversity(roskilde);
+        roskCS.setDepartmentName("CS");
+        roskCS.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(roskCS);
+
+        Course roskCS4 = new Course();
+        roskCS4.setCourseName("CS-331");
+        roskCS4.setDescription("Computer Architecture");
+        roskCS4.setEcts(5.5);
+
+        Course roskCS5 = new Course();
+        roskCS5.setCourseName("CS-400");
+        roskCS5.setDescription("Data Structures");
+        roskCS5.setEcts(5.0);
+
+        Course roskCS6 = new Course();
+        roskCS6.setCourseName("CS-105");
+        roskCS6.setDescription("Python for Beginners");
+        roskCS6.setEcts(5.0);
+
+        Course roskCS7 = new Course();
+        roskCS7.setCourseName("CS-400");
+        roskCS7.setDescription("Data Engineering for Social Sciences");
+        roskCS7.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(roskCS1, roskCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskCS4,roskCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskCS5,roskCS.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( roskCS7, roskCS.getID() );
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( roskCS6, roskCS.getID() );
+
+        //Roskilde IE
+        ErasmusUniversityDepartment roskIE = new ErasmusUniversityDepartment();
+        roskIE.setQuota(4);
+        roskIE.setErasmusUniversity(roskilde);
+        roskIE.setDepartmentName("IE");
+        roskIE.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(roskIE);
+
+        Course roskIE1 = new Course();
+        roskIE1.setCourseName("IE-331");
+        roskIE1.setDescription("Industrial Architecture");
+        roskIE1.setEcts(5.5);
+
+        Course roskIE2 = new Course();
+        roskIE2.setCourseName("IE-400");
+        roskIE2.setDescription("Data Optimization");
+        roskIE2.setEcts(5.0);
+
+        Course roskIE3 = new Course();
+        roskIE3.setCourseName("IE-105");
+        roskIE3.setDescription("Excel for Beginners");
+        roskIE3.setEcts(5.0);
+
+        Course roskIE4 = new Course();
+        roskIE4.setCourseName("IE-440");
+        roskIE4.setDescription("Data Science");
+        roskIE4.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(roskIE3, roskIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskIE4,roskIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskIE1,roskIE.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( roskIE2, roskIE.getID() );
+
+        //Dortmund University
+        Course dortCS1  = new Course();
+        dortCS1.setCourseName("CS-100");
+        dortCS1.setDescription("Programming");
+        dortCS1.setEcts(6.0);
+
+        Course dortCS2 = new Course();
+        dortCS2.setCourseName("CS-102");
+        dortCS2.setDescription("Algorithms");
+        dortCS2.setEcts(6.0);
+
+
+        Course dortCS3 = new Course();
+        dortCS3.setCourseName("CS-461");
+        dortCS3.setDescription("Operating Systems");
+        dortCS3.setEcts(5.5);
+        courseService.addNewCourse(dortCS3);
+
+        ErasmusUniversity dortmund = new ErasmusUniversity();
+        dortmund.setUniversityName("Dortmund University");
+        dortmund.setCountry("Denmark");
+        Language German = new Language();
+        German.setLanguage("German");
+        German.setLevel("B1");
+        languageRepository.save(German);
+        roskilde.setLanguageRequirement(German);
+        List<Course> dortCourses = new ArrayList<>();
+        dortCourses.add(dortCS3);
+        dortmund.setRejectedCourses(dortCourses);
+        dortmund.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(dortmund);
+        //Roskilde CS
+        ErasmusUniversityDepartment dortCS = new ErasmusUniversityDepartment();
+        dortCS.setQuota(4);
+        dortCS.setErasmusUniversity(dortmund);
+        dortCS.setDepartmentName("CS");
+        dortCS.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(dortCS);
+
+        Course dortCS4 = new Course();
+        dortCS4.setCourseName("CS-331");
+        dortCS4.setDescription("Programming Languages");
+        dortCS4.setEcts(5.5);
+
+        Course dortCS5 = new Course();
+        dortCS5.setCourseName("CS-403");
+        dortCS5.setDescription("Data Structures");
+        dortCS5.setEcts(5.0);
+
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(dortCS1, dortCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortCS2,dortCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortCS4,dortCS.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( dortCS5, dortCS.getID() );
+
+        //Dort IE
+        ErasmusUniversityDepartment dortIE = new ErasmusUniversityDepartment();
+        dortIE.setQuota(4);
+        dortIE.setErasmusUniversity(dortmund);
+        dortIE.setDepartmentName("IE");
+        dortIE.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(dortIE);
+
+        Course dortIE1 = new Course();
+        dortIE1.setCourseName("IE-331");
+        dortIE1.setDescription("Industrial Architecture");
+        dortIE1.setEcts(5.5);
+
+        Course dortIE2 = new Course();
+        dortIE2.setCourseName("IE-400");
+        dortIE2.setDescription("Data Optimization");
+        dortIE2.setEcts(5.0);
+
+        Course dortIE3 = new Course();
+        dortIE3.setCourseName("IE-105");
+        dortIE3.setDescription("Excel for Beginners");
+        dortIE3.setEcts(5.0);
+
+        Course dortIE4 = new Course();
+        dortIE4.setCourseName("IE-440");
+        dortIE4.setDescription("Data Science");
+        dortIE4.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(dortIE1, dortIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE2, dortIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE3, dortIE.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( dortIE4,  dortIE.getID() );
+
+
+
         //Exchange University
         //Queen's Univ
         ExchangeUniversity queens = new ExchangeUniversity();
@@ -333,7 +760,7 @@ public class InitializationController {
         exchangeUniversityService.addExchangeUniversity(queens);
 
         ExchangeUniversityDepartment queensIE = new ExchangeUniversityDepartment();
-        queensIE.setDepartmentName("Industrial Engineering");
+        queensIE.setDepartmentName("IE");
         queensIE.setExchangeUniversity(queens);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(queensIE);
 
@@ -388,12 +815,12 @@ public class InitializationController {
         exchangeUniversityService.addLanguageRequirementToExchangeUniversityByExchangeUniversityID(seoul.getID(), Korean);
 
         ExchangeUniversityDepartment seoulME = new ExchangeUniversityDepartment();
-        seoulME.setDepartmentName("Mechanical Engineering");
+        seoulME.setDepartmentName("ME");
         seoulME.setExchangeUniversity(seoul);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulME);
 
         ExchangeUniversityDepartment seoulEEE = new ExchangeUniversityDepartment();
-        seoulEEE.setDepartmentName("Electrical and Electronical Engineering");
+        seoulEEE.setDepartmentName("EEE");
         seoulEEE.setExchangeUniversity(seoul);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulEEE);
 
@@ -461,8 +888,8 @@ public class InitializationController {
         applications.add(awp2);
         administrativeStaffService.addStudents(true, 1L, applications); // CS Applications
 
-        OutgoingStudent student1 = outgoingStudentRepository.findById(3L).get();
-        OutgoingStudent student2 = outgoingStudentRepository.findById(4L).get();
+        OutgoingStudent student1 = outgoingStudentRepository.findById(5L).get();
+        OutgoingStudent student2 = outgoingStudentRepository.findById(6L).get();
 
         hashingPasswordHelper.setPassword("123");
         student1.setHashedPassword(hashingPasswordHelper.Hash()); // make passwords 123
