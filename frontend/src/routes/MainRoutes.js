@@ -17,6 +17,8 @@ import PreApprovalsPage from '../components/PreApprovalsPage';
 import ToDoListPage from '../components/ToDoListPage';
 import AdminUsersPage from '../components/AdminUsersPage';
 import ProposalPage from '../components/ProposalPage';
+import ProposalPageForStudent from '../components/ProposalPageForStudent';
+
 
 
 
@@ -43,6 +45,10 @@ const MainRoutes = {
         {
             path: '/main/proposal',
             element: <ProposalPage />
+        },
+        {
+            path: '/main/proposalForStudent',
+            element: <ProposalPageForStudent />
         },
         {
             path: '/main/universities',

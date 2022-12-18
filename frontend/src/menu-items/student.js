@@ -24,10 +24,10 @@ const student = authType => {
                 breadcrumbs: false
             },
             {
-                id: 'proposal',
+                id: 'proposalForStudent',
                 title: 'Proposal',
                 type: 'item',
-                url: '/main/proposal',
+                url: '/main/proposalForStudent',
                 icon: icons.IconDashboard,
                 breadcrumbs: false
             }

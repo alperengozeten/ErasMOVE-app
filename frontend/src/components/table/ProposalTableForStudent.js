@@ -10,7 +10,6 @@ import {
   Card,
   Table,
   Paper,
-  Avatar,
   TableRow,
   TableBody,
   TableCell,
@@ -29,15 +28,13 @@ import Scrollbar from './scrollbar';
 import DescriptionIcon from '@mui/icons-material/Description';
 
 // sections
-import { UserListHead, UserListToolbar } from './user';
-import CourseRequestDetail from './detailModals/CourseRequestDetail';
+import { ProposalPageListHead, ProposalPageListToolbar } from './proposal';
 import DeleteModal from '../DeleteModal';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Student Name', alignRight: false },
-  { id: 'courseName', label: 'Course Name', alignRight: false },
+  { id: 'name', label: 'Proposal Number', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
 ];
 
@@ -67,11 +64,11 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, _user => _user.student.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map(el => el[0]);
 }
-const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
+const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
 
   const [page, setPage] = useState(0);
 
@@ -129,7 +126,6 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
 
   const handleOpenDelete = id => {
     setRequesDetailsID(id);
-    setRequestType(courseRequests.filter(req => req.id === id)[0].departmentCoordinator ? 'Elective' : 'Mandatory');
     setOpenDelete(true);
   };
   const handleCloseDelete = () => {
@@ -137,33 +133,32 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
     setRequestType("");
     setOpenDelete(false);
   };
-
   
   const handleDelete = () => {
+    handleCloseDelete();
     deleteCourseApprovalRequestRequest(requesDetailsID, requestType);
     setRequesDetailsID(0);
-    handleCloseDelete();
   };
-
+  const proposals= [{name:"Proposal 1", status: "WAITING"},{name:"Proposal 2", status:"DECLINED"},{name:"Proposal 3", status:"ACCEPTED"} ];
 
   return (
     <>
       <Container>
         <Card>
-          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
+          <ProposalPageListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <UserListHead
+                <ProposalPageListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, student, status, avatarUrl, courseName } = row;
+                  {proposals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                    const { id, name,status } = row;
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -171,14 +166,11 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {student.name}
+                              {name}
                             </Typography>
                           </Stack>
                         </TableCell>
-
-                        <TableCell align='center' component="th" scope="row" padding="none">{courseName}</TableCell>
 
                         <TableCell align="center">
                           <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
@@ -191,13 +183,14 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
-                          <Tooltip describeChild title="Delete request">
+                          { status==="WAITING" ? <><Tooltip describeChild title="Delete">
                             <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />
                             </IconButton>
-                          </Tooltip>
+                          </Tooltip> </>: null}
                         </TableCell>
-                      </TableRow>
+                    <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={name}/>
+                                       </TableRow>
                     );
                   })}
                   {emptyRows > 0 && (
@@ -244,21 +237,19 @@ const CourseRequestTable = ({ deleteCourseApprovalRequestRequest, courseRequests
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-        <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"Course Request"}/>
-        {requesDetailsID ? <CourseRequestDetail courseRequest={courseRequests.filter(req => req.id === requesDetailsID)[0]} id={requesDetailsID} openDetails={openDetails} handleCloseDetails={handleCloseDetails} />: null }
       </Container>
     </>
   );
 };
 
-CourseRequestTable.propTypes = {
+ProposalTableForStudent.propTypes = {
     courseRequests: PropTypes.array,
     deleteCourseApprovalRequestRequest: PropTypes.func
 };
   
-CourseRequestTable.defaultProps = {
+ProposalTableForStudent.defaultProps = {
     courseRequests: [],
 };
 
 
-export default CourseRequestTable;
+export default ProposalTableForStudent;

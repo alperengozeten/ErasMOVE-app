@@ -274,8 +274,8 @@ public class ErasmusReplacementRequestService {
             switch (replacementRequest.getStatus()) {
                 case "ACCEPTED":
                     return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already accepted an offer!", HttpStatus.BAD_REQUEST);
-                case "PROPOSAL":
-                    return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a proposal!", HttpStatus.BAD_REQUEST);
+                //case "PROPOSAL":
+                //    return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a proposal!", HttpStatus.BAD_REQUEST);
                 case "WAITING":
                     return new ResponseEntity<>("The Outgoing Student with id: " + outgoingStudentID + " has already a waiting replacement offer!", HttpStatus.BAD_REQUEST);
             }

@@ -3,9 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import ProposalTable from './table/ProposalTable';
+import ProposalTableForStudent from './table/ProposalTableForStudent';
 
-const ProposalPage = () => {
+
+
+const ProposalPageForStudent = () => {
 
     return (
         <Stack spacing={2}>
@@ -14,7 +16,7 @@ const ProposalPage = () => {
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <ProposalTable />
+                    <ProposalTableForStudent />
                 </Grid>
             </Grid>
         </Stack>
@@ -33,7 +35,7 @@ const mapStateToProps = state => {
 
 
 
-ProposalPage.propTypes = {
+ProposalTableForStudent.propTypes = {
     courseRequests: PropTypes.array,
     userId: PropTypes.number,
     getCourseApprovalRequestsRequest: PropTypes.func,
@@ -41,8 +43,8 @@ ProposalPage.propTypes = {
     typeForReq: PropTypes.string,
 };
   
-ProposalPage.defaultProps = {
+ProposalTableForStudent.defaultProps = {
     courseRequests: [],
 };
 
-export default connect(mapStateToProps)(ProposalPage);
+export default connect(mapStateToProps)(ProposalTableForStudent);
