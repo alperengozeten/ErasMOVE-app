@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +21,12 @@ public class ErasmusUniversityDepartmentService {
     private final ApplicationService applicationService;
     private final ApplicationRepository applicationRepository;
     private final ErasmusUniversityService erasmusUniversityService;
+    private final NotificationService notificationService;
 
     @Autowired
     public ErasmusUniversityDepartmentService(ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository, CourseRepository courseRepository,
                                               OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityRepository erasmusUniversityRepository,
-                                              ApplicationService applicationService, ApplicationRepository applicationRepository, ErasmusUniversityService erasmusUniversityService) {
+                                              ApplicationService applicationService, ApplicationRepository applicationRepository, ErasmusUniversityService erasmusUniversityService, NotificationService notificationService) {
         this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
@@ -32,6 +34,7 @@ public class ErasmusUniversityDepartmentService {
         this.applicationService = applicationService;
         this.applicationRepository = applicationRepository;
         this.erasmusUniversityService = erasmusUniversityService;
+        this.notificationService = notificationService;
     }
 
     public List<ErasmusUniversityDepartment> getErasmusUniversityDepartments() {
@@ -176,6 +179,16 @@ public class ErasmusUniversityDepartmentService {
 
         application.setAdmittedStatus("Admitted to " + erasmusUniversity.getUniversityName()); // set application status
         applicationRepository.save(application);
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have been accepted to the Erasmus University: " +
+                erasmusUniversity.getUniversityName() + "!");
+
+        notificationService.saveNotification(newNotification);
 
         acceptedStudents.add(outgoingStudent);
         erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);

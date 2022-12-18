@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,17 +22,19 @@ public class ExchangeUniversityService {
     private final ApplicationService applicationService;
     private final ApplicationRepository applicationRepository;
     private final LanguageRepository languageRepository;
+    private final NotificationService notificationService;
 
     @Autowired
     public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository,
                                      OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService,
-                                     ApplicationRepository applicationRepository, LanguageRepository languageRepository) {
+                                     ApplicationRepository applicationRepository, LanguageRepository languageRepository, NotificationService notificationService) {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.applicationService = applicationService;
         this.applicationRepository = applicationRepository;
         this.languageRepository = languageRepository;
+        this.notificationService = notificationService;
     }
 
     public List<ExchangeUniversity> getExchangeUniversities() {
@@ -181,6 +184,17 @@ public class ExchangeUniversityService {
 
         application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
         applicationRepository.save(application);
+
+        // send notification to the outgoing student
+        Notification newNotification = new Notification();
+        newNotification.setRead(false);
+        newNotification.setApplicationUser(outgoingStudent);
+        newNotification.setDate(LocalDate.now());
+        newNotification.setContent("You have been accepted to the Exchange University: " +
+                exchangeUniversity.getUniversityName() + "!");
+
+        notificationService.saveNotification(newNotification);
+
         acceptedStudents.add(outgoingStudent);
         exchangeUniversity.setAcceptedStudents(acceptedStudents);
         exchangeUniversity.setUniversityQuota(exchangeUniversity.getUniversityQuota() - 1);
