@@ -397,6 +397,8 @@ function* createCourseApprovalRequestRequest({ payload: { courseRequest, type, f
 
           const formData = new FormData();
           formData.append('syllabus', file);
+          console.log(file);
+          console.log(formData);
 
           const res2 = yield call(sendSyllabusElective, requestId, formData);
           console.log('res2: ', res2);
@@ -532,11 +534,17 @@ function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
   console.log(`create file request `);
 
   try {
-      const { data } = yield call(respondFileRequest, id, file);  
-      console.log(data);
+      const formData = new FormData();
+      formData.append('file', file);
 
-      const { dat } = yield call(respondFileRequestSendFile, id, file, type);  
-      console.log(dat);
+      console.log(file);
+      console.log(formData);
+
+      const response = yield call(respondFileRequest, id, file);  
+      console.log(response);
+
+      //const { dat } = yield call(respondFileRequestSendFile, id, file, type);  
+      //console.log(dat);
 
       const status = 200;
       if (status !== 200) {

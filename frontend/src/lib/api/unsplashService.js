@@ -233,7 +233,7 @@ export const createFileRequest = fileReq => (
 );
 
 export const respondFileRequest = (id, file) => (
-  fetch(`${baseURL}/fileRequest/respond/${id}`, {
+  fetch(`${baseURL}/fileRequest/respond/${id}/acceptanceLetter`, {
     method: 'POST',
     body: file,
   })
@@ -303,4 +303,14 @@ export const getExchangeUniversities = () => (
 
 export const getErasmusUniversities = () => (
   axios.get(`${baseURL}/erasmusUniversity`)
+);
+
+export const uploadStudentList = (type, department, list) => (
+  fetch(`${baseURL}/administrativeStaff/addOutgoingStudents?departmentId=${department}&isErasmus=${type==='Erasmus'}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(list)
+  })
 );
