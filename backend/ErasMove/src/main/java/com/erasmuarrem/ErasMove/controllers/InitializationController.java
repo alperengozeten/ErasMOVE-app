@@ -25,13 +25,16 @@ public class InitializationController {
     private final OutgoingStudentRepository outgoingStudentRepository;
     private final ExchangeUniversityService exchangeUniversityService;
     private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
+    private final IncomingStudentService incomingStudentService;
+    private  final CourseCoordinatorService courseCoordinatorService;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
     @Autowired
     public InitializationController(CourseService courseService, DepartmentService departmentService, DepartmentCoordinatorService departmentCoordinatorService,
                                     ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
                                     AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
-                                    ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService) {
+                                    ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService,
+                                    IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -41,11 +44,14 @@ public class InitializationController {
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.exchangeUniversityService = exchangeUniversityService;
         this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
+        this.incomingStudentService = incomingStudentService;
+        this.courseCoordinatorService = courseCoordinatorService;
     }
 
     @GetMapping
     public String initialize() {
 
+        //CS Courses
         Course course1 = new Course();
         course1.setCourseName("CS-101");
         course1.setDescription("Algorithms and Programming I");
@@ -123,8 +129,74 @@ public class InitializationController {
         DepartmentCoordinator csDepartmentCoordinator = new DepartmentCoordinator();
         csDepartmentCoordinator.setName("Can Alkan");
         csDepartmentCoordinator.setEmail("calkan@cs.bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        csDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
         csDepartmentCoordinator.setDepartment(cs);
         departmentCoordinatorService.addDepartmentCoordinator(csDepartmentCoordinator);
+
+        //MAN Courses
+        Course man1 = new Course();
+        man1.setCourseName("MAN-101");
+        man1.setDescription("Introduction to Management");
+        man1.setEcts(6.0);
+        courseService.addNewCourse(man1);
+
+        Course man2 = new Course();
+        man2.setCourseName("MAN-231");
+        man2.setDescription("Accounting Principles");
+        man2.setEcts(6.0);
+        courseService.addNewCourse(man2);
+
+        Course man3 = new Course();
+        man3.setCourseName("MAN-102");
+        man3.setDescription("Fundamentals of Management");
+        man3.setEcts(5.0);
+        courseService.addNewCourse(man3);
+
+        Course man4 = new Course();
+        man4.setCourseName("MAN-211");
+        man4.setDescription("Financial Management");
+        man4.setEcts(4.0);
+        courseService.addNewCourse(man4);
+
+        Course man5 = new Course();
+        man5.setCourseName("MAN-311");
+        man5.setDescription("Assets and Profit");
+        man5.setEcts(6.0);
+        courseService.addNewCourse(man5);
+
+        Course man6 = new Course();
+        man6.setCourseName("MAN-401");
+        man6.setDescription("Banks & Accounting");
+        man6.setEcts(5.5);
+        courseService.addNewCourse(man6);
+        //MAN Department
+        List<Course> manCourseList = new ArrayList<>();
+        manCourseList.add(man1);
+        manCourseList.add(man2);
+        manCourseList.add(man3);
+        manCourseList.add(man4);
+        manCourseList.add(man5);
+        manCourseList.add(man6);
+        List<Course> manElectives = new ArrayList<>();
+        manElectives.add(course8);
+        manElectives.add(course9);
+
+        Department man = new Department();
+        man.setDepartmentName("Management");
+        man.setCourseList(manCourseList);
+        man.setElectiveCourseList(manElectives);
+        departmentService.addDepartment(man);
+
+        //Department Coordinator of Man
+        DepartmentCoordinator manDepartmentCoordinator = new DepartmentCoordinator();
+        manDepartmentCoordinator.setName("Ceren Aydogmus");
+        manDepartmentCoordinator.setEmail("caydogmus@bilkent.edu.tr ");
+        hashingPasswordHelper.setPassword("123");
+        manDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
+        manDepartmentCoordinator.setDepartment(man);
+        departmentCoordinatorService.addDepartmentCoordinator(manDepartmentCoordinator);
+
 
         // erasmus universities
 
@@ -373,9 +445,94 @@ public class InitializationController {
         hashingPasswordHelper.setPassword("123");
         student2.setHashedPassword(hashingPasswordHelper.Hash());
 
-        erasmusUniversityDepartmentService.addOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(
-                epflCS.getID(), 2L
-        );
+        //Administrative Staff
+        AdministrativeStaff yelda  = new AdministrativeStaff();
+        yelda.setEmail("yeldaates@bilkent.edu.tr");
+        yelda.setName("Yelda Irem Ates");
+        hashingPasswordHelper.setPassword("123");
+        List<Department> departmentsOfYelda = new ArrayList<>();
+        departmentsOfYelda.add(cs);
+        departmentsOfYelda.add(man);
+        yelda.setHashedPassword(hashingPasswordHelper.Hash());
+        yelda.setDepartments(departmentsOfYelda);
+
+        //Course Coordinator
+        CourseCoordinator eray = new CourseCoordinator();
+        eray.setName("Eray Tuzun");
+        eray.setDepartment(cs);
+        List<Course> erayCourses = new ArrayList<>();
+        erayCourses.add(course5);
+        eray.setCourseList(erayCourses);
+        eray.setEmail("eraytuzun@cs.bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        eray.setHashedPassword(hashingPasswordHelper.Hash());
+        courseCoordinatorService.addCourseCoordinator(eray);
+
+        CourseCoordinator selim = new CourseCoordinator();
+        selim.setName("Selim Aksoy");
+        selim.setDepartment(cs);
+        List<Course> selimCourses = new ArrayList<>();
+        selimCourses.add(course3);
+        selimCourses.add(course4);
+        selim.setCourseList(selimCourses);
+        selim.setEmail("saksoy@cs.bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        selim.setHashedPassword(hashingPasswordHelper.Hash());
+        courseCoordinatorService.addCourseCoordinator(selim);
+
+        CourseCoordinator orsan = new CourseCoordinator();
+        orsan.setName("Orsan Orge");
+        orsan.setDepartment(man);
+        List<Course> orsanCourses = new ArrayList<>();
+        orsanCourses.add(man1);
+        orsanCourses.add(man4);
+        orsanCourses.add(man6);
+        orsan.setCourseList(orsanCourses);
+        orsan.setEmail("orsan@bilkent.edu.tr");
+        hashingPasswordHelper.setPassword("123");
+        orsan.setHashedPassword(hashingPasswordHelper.Hash());
+        courseCoordinatorService.addCourseCoordinator(orsan);
+
+       //Incoming Students
+        IncomingStudent bond = new IncomingStudent();
+        bond.setName("James Bond");
+
+        bond.setEmail("james@mail.com");
+        hashingPasswordHelper.setPassword("123");
+        bond.setHashedPassword(hashingPasswordHelper.Hash());
+
+        bond.setContractedUniversity(epfl);
+        bond.setSemester("Spring");
+        bond.setDepartment(cs);
+
+        List<Course> prefOfBond = new ArrayList<>();
+        prefOfBond.add(course1);
+        prefOfBond.add(course3);
+        prefOfBond.add(course5);
+        prefOfBond.add(course8);
+        bond.setPreferredCourses(prefOfBond);
+        incomingStudentService.addIncomingStudent(bond);
+        //Kendall
+        IncomingStudent kendall = new IncomingStudent();
+        kendall.setName("Kendall Jenner");
+
+        kendall.setEmail("kendal@mail.com");
+
+        hashingPasswordHelper.setPassword("123");
+        kendall.setHashedPassword(hashingPasswordHelper.Hash());
+
+        kendall.setContractedUniversity(queens);
+        kendall.setSemester("Fall");
+        kendall.setDepartment(man);
+
+        List<Course> prefOfKendall = new ArrayList<>();
+        prefOfKendall.add(man1);
+        prefOfKendall.add(man2);
+        prefOfKendall.add(man3);
+        prefOfKendall.add(man6);
+        prefOfKendall.add(course9);
+        kendall.setPreferredCourses(prefOfKendall);
+        incomingStudentService.addIncomingStudent(kendall);
 
         return "Initialized Successfully!";
     }
