@@ -29,6 +29,7 @@ public class InitializationController {
     private final IncomingStudentService incomingStudentService;
     private  final CourseCoordinatorService courseCoordinatorService;
     private final LanguageRepository languageRepository;
+    private final AdminService adminService;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
     @Autowired
@@ -36,7 +37,8 @@ public class InitializationController {
                                     ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
                                     AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
                                     ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService,
-                                    IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService, LanguageRepository languageRepository) {
+                                    IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService, LanguageRepository languageRepository,
+                                    AdminService adminService) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -49,10 +51,17 @@ public class InitializationController {
         this.incomingStudentService = incomingStudentService;
         this.courseCoordinatorService = courseCoordinatorService;
         this.languageRepository = languageRepository;
+        this.adminService = adminService;
     }
 
     @GetMapping
     public String initialize() {
+        //Admin
+        Admin admin = new Admin();
+        admin.setEmail("korhan@gmail.com");
+        hashingPasswordHelper.setPassword("admin");
+        admin.setHashedPassword(hashingPasswordHelper.Hash());
+        adminService.addAdmin(admin);
 
         //CS Courses
         Course course1 = new Course();
@@ -463,6 +472,7 @@ public class InitializationController {
         departmentsOfYelda.add(man);
         yelda.setHashedPassword(hashingPasswordHelper.Hash());
         yelda.setDepartments(departmentsOfYelda);
+        administrativeStaffService.addAdministrativeStaff(yelda);
 
         //Course Coordinator
         CourseCoordinator eray = new CourseCoordinator();
