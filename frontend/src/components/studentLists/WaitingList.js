@@ -16,12 +16,12 @@ import {
   } from "@mui/material";
   // components
 import WaitingStudentsTable from '../table/WaitingStudentsTable';
-import { sendReplacementOffer, getApplicationsByDepartment } from '../../actions';
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import { sendReplacementOffer, getApplicationsByDepartment, getDepartments } from '../../actions';
 
-const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq, contractedUniDepartments }) => {
+const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq, exchangeDepartments, getDepartments, erasmusDepartments }) => {
     useEffect(() => {
         getApplicationsByDepartment(user, typeForReq);
+        getDepartments();
     }, [user, getApplicationsByDepartment, typeForReq]);
 
     //----DUMMY DATA----
@@ -39,7 +39,6 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForR
                   {propose.map(( proposeItem,id ) => {
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
-                        <TableCell padding="checkbox"><PriorityHighIcon /> </TableCell>
                         <TableCell align="left">{proposeItem.quota} available quota for {proposeItem.universityName}. Send replacement offer to {proposeItem.studentName}</TableCell>
                         <Grid sx={{ p: 2 }}>
 
@@ -66,7 +65,7 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForR
       </Container>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <WaitingStudentsTable contractedUniDepartments={contractedUniDepartments} typeForReq={typeForReq} applications={applications} sendReplacementOffer={sendReplacementOffer}  />
+                    <WaitingStudentsTable userId={user.id} erasmusDepartments={erasmusDepartments} exchangeDepartments={exchangeDepartments} typeForReq={typeForReq} applications={applications} sendReplacementOffer={sendReplacementOffer}  />
                 </Grid>
             </Grid>
         </Stack>
@@ -77,18 +76,21 @@ const mapStateToProps = state => {
     const applications = state.applications.waitingApplications;
     const user = state.user.user;
     const typeForReq = state.auth.authTypeForReq;
-    const contractedUniDepartments = state.universities.erasmusUniversities;
+    const erasmusDepartments = state.universities.erasmusDepartments;
+    const exchangeDepartments = state.universities.exchangeDepartments;
     return {
         applications,
         user,
         typeForReq,
-        contractedUniDepartments,
+        erasmusDepartments,
+        exchangeDepartments,
     };
 };
 
 const mapActionsToProps = {
     sendReplacementOffer,
-    getApplicationsByDepartment
+    getApplicationsByDepartment,
+    getDepartments,
 };
 
 WaitingList.propTypes = {
@@ -96,7 +98,9 @@ WaitingList.propTypes = {
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
     typeForReq: PropTypes.string,
-    contractedUniDepartments: PropTypes.array,
+    exchangeDepartments: PropTypes.array,
+    erasmusDepartments: PropTypes.array,
+    getDepartments: PropTypes.func,
 };
   
 WaitingList.defaultProps = {

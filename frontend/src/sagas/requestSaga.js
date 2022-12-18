@@ -16,12 +16,39 @@ import {
   deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
   getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
   respondFileRequest,
+  respondFileRequestSendFile,
+  sendErasmusReplacementRequest,
+  sendExchangeReplacementRequest,
   sendSyllabusElective, sendSyllabusMandatory
 } from '../lib/api/unsplashService';
 
 
-function sendReplacementOffer({ payload: { id } }) {
-  console.log(`Replacement offerd to student with id ${id}`);
+function* sendReplacementOffer({ payload: { replacementRequest, type } }) {
+  console.log(`Replacement req`);
+
+  try {
+
+    if (type === 'Erasmus') {
+      const { data } = yield call(sendErasmusReplacementRequest, replacementRequest);
+    } else {
+      const { data } = yield call(sendExchangeReplacementRequest, replacementRequest);
+    }
+
+    const status = 200;
+    if (status !== 200) {
+      throw Error('Request failed for preApproval forms');
+    }
+
+    yield put({
+      type: GET_PREAPPROVAL_FORMS_SUCCESS,
+      payload: {},
+    });
+  } catch (error) {
+    yield put({
+      type: GET_PREAPPROVAL_FORMS_FAIL,
+      payload: error.message,
+    });
+  }
 }
 
 
@@ -501,12 +528,15 @@ function* createFileRequestRequest({ payload: { info, userId } }) {
   }
 }
 
-function* respondFileRequestRequest({ payload: { id, file, userId } }) {
+function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
   console.log(`create file request `);
 
   try {
       const { data } = yield call(respondFileRequest, id, file);  
       console.log(data);
+
+      const { dat } = yield call(respondFileRequestSendFile, id, file, type);  
+      console.log(dat);
 
       const status = 200;
       if (status !== 200) {

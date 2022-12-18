@@ -177,7 +177,13 @@ export const declinePreApprovalForm = (id, feedback) => (
 
 // Replacement request exchange
 export const sendExchangeReplacementRequest = replacementRequest => (
-  axios.post(`${baseURL}/exchangeReplacementRequest/add/`, replacementRequest)
+  fetch(`${baseURL}/exchangeReplacementRequest/add/`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(replacementRequest)
+  })
 );
 
 export const acceptExchangeReplacementRequest = id => (
@@ -190,7 +196,13 @@ export const declineExchangeReplacementRequest = id => (
 
 // Replacement request erasmus
 export const sendErasmusReplacementRequest = replacementRequest => (
-  axios.post(`${baseURL}/erasmusReplacementRequest/add/`, replacementRequest)
+  fetch(`${baseURL}/erasmusReplacementRequest/add/`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(replacementRequest)
+  })
 );
 
 export const acceptErasmusReplacementRequest = id => (
@@ -222,6 +234,13 @@ export const createFileRequest = fileReq => (
 
 export const respondFileRequest = (id, file) => (
   fetch(`${baseURL}/fileRequest/respond/${id}`, {
+    method: 'POST',
+    body: file,
+  })
+);
+
+export const respondFileRequestSendFile = (id, file) => (
+  fetch(`${baseURL}/document/fileRequest/acceptanceLetter/${id}`, {
     method: 'POST',
     body: file,
   })

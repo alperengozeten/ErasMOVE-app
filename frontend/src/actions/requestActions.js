@@ -1,9 +1,9 @@
 import { ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST, ACCEPT_PREAPPROVAL_FORM_REQUEST, CREATE_COURSE_APPROVAL_REQUEST_REQUEST, CREATE_FILE_REQUEST_REQUEST, CREATE_PREAPPROVAL_FORM_REQUEST, DECLINE_COURSE_APPROVAL_REQUEST_REQUEST, DECLINE_PREAPPROVAL_FORM_REQUEST, DELETE_COURSE_APPROVAL_REQUEST_REQUEST, DELETE_FILE_REQUEST_REQUEST, DELETE_PREAPPROVAL_FORM_REQUEST, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_FILE_REQUESTS_REQUEST, GET_PREAPPROVAL_FORMS_REQUEST, RESPOND_FILE_REQUEST_REQUEST, SEND_REPLACEMENT_OFFER_REQUEST } from "../constants/actionTypes";
 
-export const sendReplacementOffer = id => 
+export const sendReplacementOffer = (replacementRequest, type) => 
     ({
         type: SEND_REPLACEMENT_OFFER_REQUEST,
-        payload: { id },
+        payload: { replacementRequest, type },
     });
 
 export const getPreApprovalFormsRequest = (id, typeForReq) => 
@@ -74,7 +74,7 @@ export const createFileRequestRequest = (info, userId) => ({
         payload: { info, userId },
     });
 
-export const respondFileRequestRequest = (id, file, userId) => ({
+export const respondFileRequestRequest = (id, file, userId, type) => ({
         type: RESPOND_FILE_REQUEST_REQUEST,
-        payload: { id, file, userId },
+        payload: { id, file, userId, type },
     });

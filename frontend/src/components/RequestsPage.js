@@ -44,7 +44,7 @@ RequestsPage.propTypes = {
     getFileRequestsRequest: PropTypes.func,
     deleteFileRequestRequest: PropTypes.func,
     typeForReq: PropTypes.string,
-    userId: PropTypes.string,
+    userId: PropTypes.number,
     respondFileRequestRequest: PropTypes.func,
 };
   
