@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -29,9 +29,10 @@ import {
   TextField,
 } from "@mui/material";
 
-import { getDepartments, addHostDepartment, addCourseToDepartmentRequest } from '../actions';
+import { getDepartments, addHostDepartment, addCourseToDepartmentRequest, uploadStudentsRequest } from '../actions';
+import { UPLOAD_STUDENTS_LIST_REQUEST } from "../constants/actionTypes";
 
-const Universities = ({ getDepartments, departments, addHostDepartment, addCourseToDepartmentRequest }) => {
+const Universities = ({ getDepartments, departments, addHostDepartment, addCourseToDepartmentRequest, uploadStudentsRequest }) => {
   useEffect(() => {
     getDepartments();
 }, [ getDepartments]);
@@ -47,6 +48,12 @@ const [errorDepartment, setErrorDepartment] = React.useState(false);
   const [ects, setEcts] = React.useState(0);
   const [departmentSelected, setDepartmentSelected] = React.useState(0);
   const [type, setType] = React.useState('');
+  const [excelDepartment, setExcelDepartment] = React.useState(0);
+  const [excelType, setExcelType] = React.useState("");
+
+  const handleExcelDepChange = e => setExcelDepartment(e.target.value);
+
+  const handleExcelTypeChange = e => setExcelType(e.target.value);
 
   const handleDepartmentSelectedChange = e => {
     setDepartmentSelected(e.target.value);
@@ -70,6 +77,13 @@ const [errorDepartment, setErrorDepartment] = React.useState(false);
   const handleCourseClickOpen = type => {
     setCourseOpen(true);
     setType(type);
+  };
+
+  const dispatch = useDispatch();
+  const submitExcel = data => {
+    console.log(excelType);
+    
+    dispatch({ type: UPLOAD_STUDENTS_LIST_REQUEST, payload: {type: excelType, department: excelDepartment, list: data}});
   };
 
   const handleCourseClose = () => {
@@ -326,7 +340,49 @@ const [errorDepartment, setErrorDepartment] = React.useState(false);
             </TabPanel>
             <TabPanel value="1" index={1}>
               <Box sx={{ flexGrow: 1 }}>
-                <ExcelReader />
+                  <FormControl
+                    sx={{
+                      m: 1,
+                      minWidth: 250,
+                    }}
+                  >
+                    <Select
+                      required
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={excelType}
+                      size="small"
+                      onChange={handleExcelTypeChange}
+                    >
+                      <MenuItem disabled value={""}>
+                        Type
+                      </MenuItem>
+                      <MenuItem value={"Erasmus"}>Erasmus</MenuItem>
+                      <MenuItem value={"Exchange"}>Exchange</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <FormControl
+                    sx={{
+                      m: 1,
+                      minWidth: 250,
+                    }}
+                  >
+                    <Select
+                      required
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={excelDepartment}
+                      size="small"
+                      onChange={handleExcelDepChange}
+                    >
+                      <MenuItem disabled value={0}>
+                        Department
+                      </MenuItem>
+                      {departments.map((department,index) => (<MenuItem key={index} value={department.id}>{department.departmentName}</MenuItem>))}
+          
+                    </Select>
+                  </FormControl>
+                <ExcelReader submitExcel={submitExcel} />
               </Box>
             </TabPanel>
           </TabContext>
@@ -536,6 +592,7 @@ const mapActionsToProps = {
   getDepartments,
   addHostDepartment,
   addCourseToDepartmentRequest,
+  uploadStudentsRequest,
 };
 
 Universities.propTypes = {
@@ -544,6 +601,7 @@ Universities.propTypes = {
   departments: PropTypes.array,
   addHostDepartment: PropTypes.func,
   addCourseToDepartmentRequest: PropTypes.func,
+  uploadStudentsRequest: PropTypes.func,
 };
 
 Universities.defaultProps = {

@@ -3,9 +3,10 @@ import { Alert } from '@mui/material';
 import React, {useState} from 'react';
 import { useDispatch } from 'react-redux';
 import * as XLSX from 'xlsx';
+import PropTypes from 'prop-types';
 import { CREATE_APPLICATIONS_FROM_EXCEL_REQUEST } from '../constants/actionTypes';
 
-function App() {
+function ExcelReader({ submitExcel }) {
   
   // on change states
   const [excelFile, setExcelFile]=useState(null);
@@ -56,9 +57,9 @@ function App() {
           studentID: student["Student ID Number"],
           selectedSemester: student["Duration Preferred"],
           department: student["Department"],
-          CGPA: student["UECGPA"],
+          cgpa: student["UECGPA"],
           totalPoint: student["Total Points"],
-          preferredUniversities: [
+          selectedUniversities: [
             student["Preferred University #1"],
             student["Preferred University #2"],
             student["Preferred University #3"],
@@ -67,8 +68,8 @@ function App() {
           ]
         };
       });
-      dispatch({ type: CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, payload: applications});
       console.log(applications);
+      submitExcel(applications);
     } else if(excelFileError) {
       setAlert(true);
     }
@@ -93,4 +94,8 @@ function App() {
   );
 }
 
-export default App;
+ExcelReader.propTypes = {
+  submitExcel: PropTypes.func,
+};
+
+export default ExcelReader;
