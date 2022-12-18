@@ -93,6 +93,12 @@ public class LanguageService {
 
         Language universityLanguage = acceptedUniversity.getLanguageRequirement();
 
+        // check the language names if they are matching
+        if ( !universityLanguage.getLanguage().equalsIgnoreCase(language.getLanguage()) ) {
+            return new ResponseEntity<>("The required language for the university: " + acceptedUniversity.getUniversityName()
+            + " is: " + universityLanguage.getLanguage() + "!", HttpStatus.BAD_REQUEST);
+        }
+
         if ( universityLanguage.getLevel().charAt(0) > languageLevel.charAt(0) ) {
             application.setLanguageStatus("Your language level:" + languageLevel + " is below the requirement:" + universityLanguage.getLevel());
             language.setIsSatisfactory(false);
