@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.services;
 import com.erasmuarrem.ErasMove.models.HostUniversity;
 import com.erasmuarrem.ErasMove.models.OutgoingStudent;
 import com.erasmuarrem.ErasMove.repositories.HostUniversityRepository;
+import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,14 @@ import java.util.Optional;
 public class HostUniversityService {
 
     private final HostUniversityRepository hostUniversityRepository;
-    private final OutgoingStudentService outgoingStudentService;
+    private final OutgoingStudentRepository outgoingStudentRepository;
     private final ErasmusUniversityService erasmusUniversityService;
     private final ExchangeUniversityService exchangeUniversityService;
 
     @Autowired
-    public HostUniversityService(HostUniversityRepository hostUniversityRepository, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
+    public HostUniversityService(HostUniversityRepository hostUniversityRepository, OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ExchangeUniversityService exchangeUniversityService) {
         this.hostUniversityRepository = hostUniversityRepository;
-        this.outgoingStudentService = outgoingStudentService;
+        this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityService = erasmusUniversityService;
         this.exchangeUniversityService = exchangeUniversityService;
     }
@@ -44,7 +45,7 @@ public class HostUniversityService {
 
     public void addStudentToWaitingBinById( Long id ) {
         HostUniversity hostUniversity = hostUniversityRepository.findAll().get(0);
-        Optional<OutgoingStudent> outgoingStudent = outgoingStudentService.getStudentByID( id );
+        Optional<OutgoingStudent> outgoingStudent = outgoingStudentRepository.findById(id);
         if (!outgoingStudent.isPresent()) { throw new IllegalStateException("Student with id " + id+ " doesn't exist!"); }
 
         List<OutgoingStudent> outList = hostUniversity.getWaitingQueue();
@@ -57,12 +58,12 @@ public class HostUniversityService {
     public void removeStudentFromWaitingBinById( Long id ) {
         HostUniversity hostUniversity = hostUniversityRepository.findAll().get(0);
 
-        if ( !(hostUniversity.getWaitingQueue().contains( outgoingStudentService.getStudentByID(id).get() ) ) ) {
+        if ( !(hostUniversity.getWaitingQueue().contains( outgoingStudentRepository.findById(id).get() ) ) ) {
             throw new IllegalStateException("Student with id " + id + " doesn't exist in waiting queue of host university.");
         }
 
         List<OutgoingStudent> newList = hostUniversity.getWaitingQueue();
-        newList.remove(outgoingStudentService.getStudentByID(id).get());
+        newList.remove(outgoingStudentRepository.findById(id).get());
         hostUniversity.setWaitingQueue(newList);
 
         hostUniversityRepository.save(hostUniversity);

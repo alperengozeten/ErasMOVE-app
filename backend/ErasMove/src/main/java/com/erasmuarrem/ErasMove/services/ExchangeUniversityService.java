@@ -23,11 +23,12 @@ public class ExchangeUniversityService {
     private final ApplicationRepository applicationRepository;
     private final LanguageRepository languageRepository;
     private final NotificationService notificationService;
+    private final HostUniversityRepository hostUniversityRepository;
 
     @Autowired
     public ExchangeUniversityService(ExchangeUniversityRepository exchangeUniversityRepository, CourseRepository courseRepository,
                                      OutgoingStudentRepository outgoingStudentRepository, ApplicationService applicationService,
-                                     ApplicationRepository applicationRepository, LanguageRepository languageRepository, NotificationService notificationService) {
+                                     ApplicationRepository applicationRepository, LanguageRepository languageRepository, NotificationService notificationService, HostUniversityRepository hostUniversityRepository) {
         this.exchangeUniversityRepository = exchangeUniversityRepository;
         this.courseRepository = courseRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
@@ -35,6 +36,7 @@ public class ExchangeUniversityService {
         this.applicationRepository = applicationRepository;
         this.languageRepository = languageRepository;
         this.notificationService = notificationService;
+        this.hostUniversityRepository = hostUniversityRepository;
     }
 
     public List<ExchangeUniversity> getExchangeUniversities() {
@@ -184,6 +186,20 @@ public class ExchangeUniversityService {
 
         application.setAdmittedStatus("Admitted to " + exchangeUniversity.getUniversityName()); // set application status
         applicationRepository.save(application);
+
+        // remove the student from the waiting bin if they're in
+        Optional<HostUniversity> hostUniversityOptional = hostUniversityRepository.findById(1L);
+
+        if ( hostUniversityOptional.isPresent() ) {
+            HostUniversity hostUniversity = hostUniversityOptional.get();
+
+            List<OutgoingStudent> waitingQueue = hostUniversity.getWaitingQueue();
+            waitingQueue.remove(outgoingStudent);
+
+            System.out.println(waitingQueue);
+
+            hostUniversityRepository.save(hostUniversity);
+        }
 
         // send notification to the outgoing student
         Notification newNotification = new Notification();
