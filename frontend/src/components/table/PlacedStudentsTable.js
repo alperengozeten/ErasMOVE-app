@@ -112,7 +112,7 @@ const PlacedStudentsTable = ({ applications }) => {
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
 
-  const filterDepartments = department === '' ? applications : applications.filter(application => application.department === department);
+  const filterDepartments = department === '' ? applications : applications.filter(application => application.outgoingStudent.department.departmentName === department);
 
   const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 

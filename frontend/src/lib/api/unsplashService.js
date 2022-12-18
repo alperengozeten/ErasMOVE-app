@@ -172,7 +172,7 @@ export const acceptPreApprvalForm = (id, feedback) => (
 );
 
 export const declinePreApprovalForm = (id, feedback) => (
-  axios.post(`${baseURL}/preApprovalForm/accept/${id}?feedback=${feedback}`)
+  axios.post(`${baseURL}/preApprovalForm/decline/${id}?feedback=${feedback}`)
 );
 
 // Replacement request exchange

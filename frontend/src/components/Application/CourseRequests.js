@@ -50,8 +50,6 @@ const CourseRequests = ({
   const [syllabus, setSyllabus] = React.useState(null);
   const [error, setError] = React.useState(false);
 
-  console.log(syllabus);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setCourseName("");

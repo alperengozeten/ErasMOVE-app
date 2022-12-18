@@ -135,7 +135,7 @@ const StudentsTable = ({ applications }) => {
     department === ""
       ? applications
       : applications.filter(
-          application => application.department === department
+          application => application?.outgoingStudent.department?.departmentName === department
         );
 
   const filteredUsers = applySortFilter(

@@ -152,7 +152,7 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
   };
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - requests.length) : 0;
 
-  const filterDepartments = department === '' ? requests : requests.filter(application => application.department === department);
+  const filterDepartments = department === '' ? requests : requests.filter(application => application.outgoingStudent.department.departmentName === department);
 
   const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
 
