@@ -247,6 +247,36 @@ export const getDepartments = () => (
   axios.get(`${baseURL}/department`)
 );
 
+export const addDepartment = department => (
+  fetch(`${baseURL}/department/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(department)
+  })
+);
+
+export const addMandatoryCourseToDepartment = (id, course) => (
+  fetch(`${baseURL}/department/addCourse/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(course)
+  })
+);
+
+export const addElectiveCourseToDepartment = (id, course) => (
+  fetch(`${baseURL}/department/addElectiveCourse/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(course)
+  })
+);
+
 // Universities
 export const getExchangeUniversities = () => (
   axios.get(`${baseURL}/exchangeUniversity`)

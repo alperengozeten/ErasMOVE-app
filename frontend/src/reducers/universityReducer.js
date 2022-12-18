@@ -1,4 +1,4 @@
-import { GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_SUCCESS } from "../constants/actionTypes";
+import { ADD_HOST_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_SUCCESS } from "../constants/actionTypes";
 import { DELETE_UNIVERSITY_SUCCESS } from "../constants/actionTypes";
 
 
@@ -69,7 +69,8 @@ const INITIAL_STATE = {
           };
       case DELETE_UNIVERSITY_SUCCESS:
         return;
-
+      case ADD_HOST_DEPARTMENT_SUCCESS:
+        return {...state, hostUniDepartments: [...state.hostUniDepartments, action.payload]};
       default:
         return state;
     }

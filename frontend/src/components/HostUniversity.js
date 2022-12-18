@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import TabContext from "@mui/lab/TabContext";
@@ -28,18 +28,24 @@ import {
   TextField,
 } from "@mui/material";
 
-const Universities = () => {
+import { getDepartments, addHostDepartment, addCourseToDepartmentRequest } from '../actions';
+
+const Universities = ({ getDepartments, departments, addHostDepartment, addCourseToDepartmentRequest }) => {
+  useEffect(() => {
+    getDepartments();
+}, [ getDepartments]);
   const [value, setValue] = React.useState("0");
   const [open, setOpen] = React.useState(false);
   const [courseOpen, setCourseOpen] = React.useState(false);
   const [courseName, setCourseName] = React.useState("");
   const [departmentName, setDepartmentName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [departmentValue, setDepartmentValue] = React.useState(0);
   const [ects, setEcts] = React.useState(0);
+  const [departmentSelected, setDepartmentSelected] = React.useState(0);
+  const [type, setType] = React.useState('');
 
-  const handleDepartmentChange = e => {
-    setDepartmentValue(e.target.value);
+  const handleDepartmentSelectedChange = e => {
+    setDepartmentSelected(e.target.value);
   };
   const handleEctsChange = e => setEcts(e.target.value);
 
@@ -56,12 +62,17 @@ const Universities = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const handleCourseClickOpen = () => {
+  const handleCourseClickOpen = type => {
     setCourseOpen(true);
+    setType(type);
   };
 
   const handleCourseClose = () => {
     setCourseOpen(false);
+    setType("");
+    setCourseName("");
+    setDescription("");
+    setEcts(0);
   };
   const dummyUni = {
     id: 1,
@@ -84,6 +95,22 @@ const Universities = () => {
 
   const handleChange = (event, newValue) => {
     setValue(`${newValue}`);
+  };
+
+  const handleAddDepartment = () => {
+    addHostDepartment(departmentName);
+    setDepartmentName('');
+    handleClose();
+  };
+
+  const handleAddCourse = () => {
+    const course = {
+      courseName,
+      description,
+      ects,
+    };
+    addCourseToDepartmentRequest(course, departmentSelected, type);
+    handleCourseClose();
   };
   return (
     <Stack spacing={2}>
@@ -134,8 +161,8 @@ const Universities = () => {
                                 <MDBCardText>Departments</MDBCardText>
                               </MDBCol>
                               <MDBCol sm="6">
-                              {dummyUni.departments.map((department,index) => (<MDBCardText key={index} className="text-muted">
-                                  {department}
+                              {departments.map((department,index) => (<MDBCardText key={index} className="text-muted">
+                                  {department.departmentName}
                                 </MDBCardText>))}
                               </MDBCol>
                               <MDBCol sm="3">
@@ -148,10 +175,45 @@ const Universities = () => {
                                 </Button>
                               </MDBCol>
                             </MDBRow>
+                            </MDBCardBody>
+                        </MDBCard>
+                        <MDBCard className="mb-4">
+                          <MDBCardBody>
+                            <MDBRow>
+                              <MDBCol sm="12">
+                                <MDBCardText>Courses</MDBCardText>
+                              </MDBCol>
+                            </MDBRow>
+                            <hr />
+                            <MDBRow>
+                              <MDBCol sm="6">
+                                <FormControl
+                                  sx={{
+                                    m: 1,
+                                    minWidth: 250,
+                                  }}
+                                >
+                                  <Select
+                                    required
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={departmentSelected}
+                                    size="small"
+                                    onChange={handleDepartmentSelectedChange}
+                                  >
+                                    <MenuItem disabled value={0}>
+                                      Department
+                                    </MenuItem>
+                                    {departments.map((department,index) => (<MenuItem key={index} value={department.id}>{department.departmentName}</MenuItem>))}
+                       
+                                  </Select>
+                                </FormControl>
+                              </MDBCol>
+                            </MDBRow>
                             <hr />
                             <MDBRow>
                               <MDBCol sm="3">
-                                <MDBCardText>Courses</MDBCardText>
+                                <MDBCardText>Mandatory Courses</MDBCardText>
                               </MDBCol>
                               <MDBCol sm="6">
                                 <FormControl
@@ -164,14 +226,15 @@ const Universities = () => {
                                     required
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={departmentValue}
+                                    value={departmentSelected}
                                     size="small"
-                                    onChange={handleDepartmentChange}
+                                    onChange={handleDepartmentSelectedChange}
+                                    disabled={departmentSelected ? false : true}
                                   >
                                     <MenuItem disabled value={0}>
                                       Courses
                                     </MenuItem>
-                                    {dummyUni.courses.map((course,index) => (<MenuItem key={index} disabled value={(index+1)*10}>{course}</MenuItem>))}
+                                    {departments.filter(dep => dep.id === departmentSelected)[0]?.courseList?.map((course,index) => (<MenuItem key={index} disabled value={(index+1)*10}>{course.courseName}</MenuItem>))}
                        
                                   </Select>
                                 </FormControl>
@@ -180,7 +243,48 @@ const Universities = () => {
                                 <Button
                                   variant="contained"
                                   size="medium"
-                                  onClick={handleCourseClickOpen}
+                                  onClick={() => handleCourseClickOpen("Mandatory")}
+                                >
+                                  Add Course
+                                </Button>
+                              </MDBCol>
+                              <MDBCol sm="9">
+                                <MDBCardText></MDBCardText>
+                              </MDBCol>
+                            </MDBRow>
+                            <hr />
+                            <MDBRow>
+                              <MDBCol sm="3">
+                                <MDBCardText>Elective Courses</MDBCardText>
+                              </MDBCol>
+                              <MDBCol sm="6">
+                                <FormControl
+                                  sx={{
+                                    m: 1,
+                                    minWidth: 250,
+                                  }}
+                                >
+                                  <Select
+                                    required
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={departmentSelected}
+                                    size="small"
+                                    onChange={handleDepartmentSelectedChange}
+                                    disabled={departmentSelected ? false : true}
+                                  >
+                                    <MenuItem disabled value={0}>
+                                      Courses
+                                    </MenuItem>
+                                    {departments.filter(dep => dep.id === departmentSelected)[0]?.electiveCourseList?.map((course,index) => (<MenuItem key={index} disabled value={(index+1)*10}>{course.courseName}</MenuItem>))}
+                                  </Select>
+                                </FormControl>
+                              </MDBCol>
+                              <MDBCol sm="3">
+                                <Button
+                                  variant="contained"
+                                  size="medium"
+                                  onClick={() => handleCourseClickOpen("Elective")}
                                 >
                                   Add Course
                                 </Button>
@@ -232,36 +336,6 @@ const Universities = () => {
                 <MDBContainer className="py-5">
                   <MDBCard className="mb-4">
                     <MDBCardBody>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Department</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <FormControl
-                            sx={{
-                              minWidth: 250,
-                            }}
-                          >
-                            <Select
-                              required
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={departmentValue}
-                              size="small"
-                              onChange={handleDepartmentChange}
-                            >
-                              <MenuItem disabled value={0}>
-                                Select
-                              </MenuItem>
-                              {dummyUni.departments.map((department,index) =>
-                              <MenuItem key={index} value={(index+1)*10}>{department}</MenuItem>)}
-                          
-                            </Select>
-                          </FormControl>
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
                       <MDBRow>
                         <MDBCol sm="3">
                           <MDBCardText>Course Name</MDBCardText>
@@ -271,7 +345,7 @@ const Universities = () => {
                             id="outlined-multiline-flexible"
                             value={courseName}
                             onChange={handleCourseNameChange}
-                            disabled={departmentValue ? false : true}
+                            disabled={departmentSelected ? false : true}
                           />
                         </MDBCol>
                       </MDBRow>
@@ -286,7 +360,7 @@ const Universities = () => {
                             fullWidth
                             value={description}
                             onChange={handleDescriptionChange}
-                            disabled={departmentValue ? false : true}
+                            disabled={departmentSelected ? false : true}
                           />
                         </MDBCol>
                       </MDBRow>
@@ -301,7 +375,7 @@ const Universities = () => {
                             type={"number"}
                             value={ects}
                             onChange={handleEctsChange}
-                            disabled={departmentValue ? false : true}
+                            disabled={departmentSelected ? false : true}
                           />
                         </MDBCol>
                       </MDBRow>
@@ -317,7 +391,7 @@ const Universities = () => {
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleCourseClose}
+                    onClick={handleAddCourse}
                     disabled={ects === 0 || description ==="" || courseName ==="" }
                   >
                     Add
@@ -391,7 +465,7 @@ const Universities = () => {
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleClose}
+                    onClick={handleAddDepartment}
                     disabled={departmentName ===""}
                   >
                     Add
@@ -419,13 +493,25 @@ const Universities = () => {
 };
 const mapStateToProps = state => {
   const universities = state.universities.universities;
+  const departments = state.universities.hostUniDepartments;
   return {
     universities,
+    departments,
   };
+};
+
+const mapActionsToProps = {
+  getDepartments,
+  addHostDepartment,
+  addCourseToDepartmentRequest,
 };
 
 Universities.propTypes = {
   universities: PropTypes.array,
+  getDepartments: PropTypes.func,
+  departments: PropTypes.array,
+  addHostDepartment: PropTypes.func,
+  addCourseToDepartmentRequest: PropTypes.func,
 };
 
 Universities.defaultProps = {
@@ -450,6 +536,6 @@ const style = {
   overflowY: "scroll",
 };
 
-export default connect(mapStateToProps, {})(Universities);
+export default connect(mapStateToProps, mapActionsToProps)(Universities);
 
 
