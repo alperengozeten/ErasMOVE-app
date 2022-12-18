@@ -30,6 +30,7 @@ public class InitializationController {
     private  final CourseCoordinatorService courseCoordinatorService;
     private final LanguageRepository languageRepository;
     private final AdminService adminService;
+    private final HostUniversityService hostUniversityService;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
     @Autowired
@@ -38,7 +39,7 @@ public class InitializationController {
                                     AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
                                     ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService,
                                     IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService, LanguageRepository languageRepository,
-                                    AdminService adminService) {
+                                    AdminService adminService, HostUniversityService hostUniversityService) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -52,10 +53,17 @@ public class InitializationController {
         this.courseCoordinatorService = courseCoordinatorService;
         this.languageRepository = languageRepository;
         this.adminService = adminService;
+        this.hostUniversityService = hostUniversityService;
     }
 
     @GetMapping
     public String initialize() {
+
+        //Host University
+        HostUniversity BilkentUniv = new HostUniversity();
+        BilkentUniv.setWaitingQueue(new ArrayList<>());
+        BilkentUniv.setUniversityName("Bilkent University");
+        hostUniversityService.addHostUniversity(BilkentUniv);
         //Admin
         Admin admin = new Admin();
         admin.setEmail("korhan@gmail.com");

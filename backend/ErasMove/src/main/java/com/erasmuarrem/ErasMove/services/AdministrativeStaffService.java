@@ -194,7 +194,9 @@ public class AdministrativeStaffService {
         return salt.toString();
     }
 
-    public void placeErasmusStudents( String departmentName ) {
+    public void placeErasmusStudents(Long departmentID ) {
+            String departmentName = departmentService.getDepartmentById(departmentID).getDepartmentName();
+
             List<Application> erasmusApplications = new ArrayList<>();
             List<Application>  allDepartmentApplications = new ArrayList<>( applicationService.getApplicationsByDepartmentName( departmentName )  );
             for (Application application : allDepartmentApplications) {
@@ -223,6 +225,8 @@ public class AdministrativeStaffService {
                     hostUniversityService.addStudentToWaitingBinById(erasmusApplications.get(i).getOutgoingStudent().getID());
                 }
             }
+
+            makeErasmusProposalsToDepartmentCoordinator(departmentID);
     }
 
     public void placeExchangeStudents( ) {
