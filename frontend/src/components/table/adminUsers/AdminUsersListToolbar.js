@@ -81,6 +81,10 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
   };
 
   const handleClose = () => {
+    setActorValue(0);
+    setDescription("");
+    setName("");
+    setError(false);
     setOpen(false);
   };
   
@@ -159,30 +163,32 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                     <MDBCardBody>
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Name</MDBCardText>
+                          <MDBCardText>Name*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
                             id="outlined-multiline-flexible"
                             value={name}
                             onChange={handleNameChange}
+                            error={error}
                           />
                         </MDBCol>
                       </MDBRow>
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>Actor Type</MDBCardText>
+                          <MDBCardText>Actor Type*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <FormControl sx={{ minWidth: 250 }}>
                             <Select
-                              required
                               labelId="demo-simple-select-label"
                               id="demo-simple-select"
                               value={actorValue}
                               size="small"
                               onChange={handleActorChange}
+                            error={error}
+
                             >
                               <MenuItem disabled value={0}>
                                 Select
@@ -203,7 +209,7 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
-                          <MDBCardText>E-Mail</MDBCardText>
+                          <MDBCardText>E-Mail*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
                           <TextField
@@ -211,6 +217,8 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                             fullWidth
                             value={description}
                             onChange={handleDescriptionChange}
+                            error={error}
+
                           />
                         </MDBCol>
                       </MDBRow>
