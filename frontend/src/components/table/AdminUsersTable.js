@@ -1,9 +1,9 @@
-import React from 'react';
-import { filter } from 'lodash';
-import { useState } from 'react';
-import PropTypes from 'prop-types';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteModal from '../DeleteModal';
+import React from "react";
+import { filter } from "lodash";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteModal from "../DeleteModal";
 import {
   MDBCard,
   MDBCardBody,
@@ -31,18 +31,18 @@ import {
   Tooltip,
   Grid,
   Modal,
-  Button
-} from '@mui/material';
+  Button,
+} from "@mui/material";
 // components
-import Scrollbar from './scrollbar';
+import Scrollbar from "./scrollbar";
 // sections
-import { AdminUsersListHead, AdminUsersListToolbar } from './adminUsers';
+import { AdminUsersListHead, AdminUsersListToolbar } from "./adminUsers";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'actorType', label: 'Actor Type', alignRight: true },
+  { id: "name", label: "Name", alignRight: false },
+  { id: "actorType", label: "Actor Type", alignRight: true },
 ];
 
 // ----------------------------------------------------------------------
@@ -58,7 +58,7 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-  return order === 'desc'
+  return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
@@ -71,52 +71,53 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(
+      array,
+      _user => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+    );
   }
   return stabilizedThis.map(el => el[0]);
 }
 
 const AdminUsersTable = ({ allUsers }) => {
-    const [openDelete, setOpenDelete] = React.useState(false);
+  const [openDelete, setOpenDelete] = React.useState(false);
 
-    const [openDetails, setOpenDetails] = React.useState(false);
-    const [page, setPage] = useState(0);
+  const [openDetails, setOpenDetails] = React.useState(false);
+  const [page, setPage] = useState(0);
 
-    const [order, setOrder] = useState('asc');
-  
-    const [orderBy, setOrderBy] = useState('name');
-  
-    const [filterName, setFilterName] = useState('');
-    
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    
-    // const [anchorEl, setAnchorEl] = React.useState(null);
-  
-    const [department, setDepartment] = useState('');
+  const [order, setOrder] = useState("asc");
 
-    const handleOpenDelete = () => {
-        setOpenDelete(true);
-      };
-      const handleCloseDelete = () => {
+  const [orderBy, setOrderBy] = useState("name");
 
-        setOpenDelete(false);
-      };
-    
-       const handleOpenDetails = () => {
-         setOpenDetails(true);
-       };
-       const handleCloseDetails = () => { 
-         setOpenDetails(false);
-       };
-    
-      const handleDelete = () => {
-        handleCloseDelete();
-      };
+  const [filterName, setFilterName] = useState("");
 
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const [department, setDepartment] = useState("");
+
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  };
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const handleOpenDetails = () => {
+    setOpenDetails(true);
+  };
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+  };
+
+  const handleDelete = () => {
+    handleCloseDelete();
+  };
 
   const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
@@ -134,21 +135,29 @@ const AdminUsersTable = ({ allUsers }) => {
     setFilterName(event.target.value);
   };
 
-//   const handlePopoverOpen = event => {
-//     setAnchorEl(event.currentTarget);
-//   };
+  //   const handlePopoverOpen = event => {
+  //     setAnchorEl(event.currentTarget);
+  //   };
 
-//   const handlePopoverClose = () => {
-//     setAnchorEl(null);
-//   };
+  //   const handlePopoverClose = () => {
+  //     setAnchorEl(null);
+  //   };
 
-//   const openPopover = Boolean(anchorEl);
+  //   const openPopover = Boolean(anchorEl);
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUsers.length) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - allUsers.length) : 0;
 
-  const filterDepartments = department === '' ? allUsers : allUsers.filter(application => application.department === department);
+  const filterDepartments =
+    department === ""
+      ? allUsers
+      : allUsers.filter(application => application.department === department);
 
-  const filteredUsers = applySortFilter(filterDepartments, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(
+    filterDepartments,
+    getComparator(order, orderBy),
+    filterName
+  );
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -156,7 +165,12 @@ const AdminUsersTable = ({ allUsers }) => {
     <>
       <Container>
         <Card>
-          <AdminUsersListToolbar filterName={filterName} onFilterName={handleFilterByName} setDepartment={setDepartment} department={department} />
+          <AdminUsersListToolbar
+            filterName={filterName}
+            onFilterName={handleFilterByName}
+            setDepartment={setDepartment}
+            department={department}
+          />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -168,124 +182,140 @@ const AdminUsersTable = ({ allUsers }) => {
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name, actorType, avatarUrl } = row;
+                  {filteredUsers
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(row => {
+                      const { id, name, actorType, avatarUrl } = row;
 
-                    return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" >
-                        <TableCell padding="checkbox"></TableCell>
+                      return (
+                        <TableRow hover key={id} tabIndex={-1} role="checkbox">
+                          <TableCell padding="checkbox"></TableCell>
 
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              spacing={2}
+                            >
+                              <Avatar alt={name} src={avatarUrl} />
+                              <Typography variant="subtitle2" noWrap>
+                                {name}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
 
-                        <TableCell align="center">{actorType}</TableCell>
+                          <TableCell align="center">{actorType}</TableCell>
 
-                    
+                          <TableCell align="center"></TableCell>
 
-                        <TableCell align="center"> 
-                        </TableCell>
-
-                        <TableCell align="right">
-                         
-                        </TableCell>
-                        <TableCell align="right">
-                        <Tooltip describeChild title="Open user details">
-                            <Button variant="contained" color="inherit" size="small" onClick={() => handleOpenDetails() }>
-                              Details
-                            </Button>
-                          </Tooltip>
-                          <Tooltip describeChild title="Delete user">
-                            <IconButton size="large" color="error" onClick={() => handleOpenDelete() }>
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                        <Modal
-        open={openDetails}
-        onClose={handleCloseDetails}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Stack spacing={6}>
-            <Typography
-              id="modal-modal-title"
-              textAlign={"center"}
-              variant="h2"
-              component="h1"
-            >
-              User Details
-            </Typography>
-            <Stack alignItems={"center"} spacing={3}>
-              <section style={{ width: "100%", backgroundColor: "#eee" }}>
-                <MDBContainer className="py-5">
-                  <MDBCard className="mb-4">
-                    <MDBCardBody>
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Name</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                        <MDBCardText className="text-muted">
-                                  {name}
-                                </MDBCardText>
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Actor Type</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                        <MDBCardText className="text-muted">
-                                  {actorType}
-                                </MDBCardText>
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>E-mail</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                        <MDBCardText className="text-muted">
-                                  xxx@gmail.com
-                                </MDBCardText>
-                        </MDBCol>
-                      </MDBRow>
-                    </MDBCardBody>
-                  </MDBCard>
-                </MDBContainer>
-              </section>
-              <Grid container justifyContent={"center"}>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={4}>
-                  <Button
-                    sx={{ margin: "auto" }}
-                    variant="contained"
-                    color="error"
-                    size="medium"
-                    onClick={handleCloseDetails}
-                  >
-                    Close
-                  </Button>
-                </Grid>
-                <Grid item xs={1}></Grid>
-              </Grid>
-            </Stack>
-          </Stack>
-        </Box>
-      </Modal>
-                      </TableRow>
-                      
-                    );
-                  })}
+                          <TableCell align="right"></TableCell>
+                          <TableCell align="right">
+                            <Tooltip describeChild title="Open user details">
+                              <Button
+                                variant="contained"
+                                color="inherit"
+                                size="small"
+                                onClick={() => handleOpenDetails()}
+                              >
+                                Details
+                              </Button>
+                            </Tooltip>
+                            <Tooltip describeChild title="Delete user">
+                              <IconButton
+                                size="large"
+                                color="error"
+                                onClick={() => handleOpenDelete()}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </TableCell>
+                          <Modal
+                            open={openDetails}
+                            onClose={handleCloseDetails}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <Stack spacing={6}>
+                                <Typography
+                                  id="modal-modal-title"
+                                  textAlign={"center"}
+                                  variant="h2"
+                                  component="h1"
+                                >
+                                  User Details
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                  <section
+                                    style={{
+                                      width: "100%",
+                                      backgroundColor: "#eee",
+                                    }}
+                                  >
+                                    <MDBContainer className="py-5">
+                                      <MDBCard className="mb-4">
+                                        <MDBCardBody>
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>Name</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <MDBCardText className="text-muted">
+                                                {name}
+                                              </MDBCardText>
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Actor Type
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <MDBCardText className="text-muted">
+                                                {actorType}
+                                              </MDBCardText>
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>E-mail</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <MDBCardText className="text-muted">
+                                                xxx@gmail.com
+                                              </MDBCardText>
+                                            </MDBCol>
+                                          </MDBRow>
+                                        </MDBCardBody>
+                                      </MDBCard>
+                                    </MDBContainer>
+                                  </section>
+                                  <Grid container justifyContent={"center"}>
+                                    <Grid item xs={3}></Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="error"
+                                        size="medium"
+                                        onClick={handleCloseDetails}
+                                      >
+                                        Close
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={1}></Grid>
+                                  </Grid>
+                                </Stack>
+                              </Stack>
+                            </Box>
+                          </Modal>
+                        </TableRow>
+                      );
+                    })}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
@@ -299,7 +329,7 @@ const AdminUsersTable = ({ allUsers }) => {
                       <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
                         <Paper
                           sx={{
-                            textAlign: 'center',
+                            textAlign: "center",
                           }}
                         >
                           <Typography variant="h6" paragraph>
@@ -309,7 +339,8 @@ const AdminUsersTable = ({ allUsers }) => {
                           <Typography variant="body2">
                             No results found for &nbsp;
                             <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Try checking for typos or using complete words.
+                            <br /> Try checking for typos or using complete
+                            words.
                           </Typography>
                         </Paper>
                       </TableCell>
@@ -330,19 +361,23 @@ const AdminUsersTable = ({ allUsers }) => {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
-        <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={"User"}/>
-       
+        <DeleteModal
+          handleDelete={handleDelete}
+          openDelete={openDelete}
+          handleCloseDelete={handleCloseDelete}
+          name={"User"}
+        />
       </Container>
     </>
   );
 };
 
 AdminUsersTable.propTypes = {
-    allUsers: PropTypes.array,
+  allUsers: PropTypes.array,
 };
-  
+
 AdminUsersTable.defaultProps = {
-    allUsers: [],
+  allUsers: [],
 };
 
 const style = {

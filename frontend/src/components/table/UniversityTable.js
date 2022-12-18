@@ -28,6 +28,7 @@ import {
   IconButton,
   Tooltip,
   Button,
+  Divider,
 } from "@mui/material";
 
 import {
@@ -53,9 +54,11 @@ const TABLE_HEAD = [
   { id: "country", label: "Country", alignRight: false },
   { id: "departments", label: "Departments", alignRight: false },
 ];
-const departments = [
+var departments = [
   {
     departmentName: "CS",
+    maxQuota: 10,
+    quota: 5,
     courseList: [
       {
         courseName: "CS-101",
@@ -79,9 +82,12 @@ const departments = [
       },
       { courseName: "CS-315", description: "Programming Languages", ects: 5 },
     ],
+    electiveCourseList: [],
   },
   {
     departmentName: "EEE",
+    maxQuota: 10,
+    quota: 5,
     courseList: [
       {
         courseName: "EEE-101",
@@ -105,6 +111,7 @@ const departments = [
       },
       { courseName: "EEE-315", description: "Programming Languages", ects: 5 },
     ],
+    electiveCourseList: [],
   },
 ];
 // ----------------------------------------------------------------------
@@ -126,7 +133,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-  console.log('array: ', array);
+  console.log("array: ", array);
   const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -152,6 +159,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const [openAddDepartment, setOpenAddDepartment] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
   const [departmentName, setDepartmentName] = React.useState("");
+  const [departmentQuota, setDepartmentQuota] = React.useState(0);
   const [courseOpen, setCourseOpen] = React.useState(false);
   const [courseName, setCourseName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -160,7 +168,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const [error, setError] = React.useState(false);
   const [courseError, setCourseError] = React.useState(false);
 
-  const [isExchange, setIsExchange] = useState('Erasmus');
+  const [isExchange, setIsExchange] = useState("Erasmus");
 
   const handleDepartmentChange = e => {
     setDepartmentValue(e.target.value);
@@ -170,6 +178,8 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const handleDescriptionChange = e => setDescription(e.target.value);
 
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
+
+  const handleDepartmentQuotaChange = e => setDepartmentQuota(e.target.value);
 
   const handleCourseNameChange = e => setCourseName(e.target.value);
 
@@ -191,7 +201,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
     setOpenAddDepartment(true);
   };
   const handleAddDepartmentClose = () => {
-     setDepartmentName("");
+    setDepartmentName("");
     setError(false);
     setOpenAddDepartment(false);
   };
@@ -208,18 +218,22 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   };
 
   const handleCourseClose = () => {
-    if(courseName===""|| description===""|| departmentValue===0||ects===0){
+    if (
+      courseName === "" ||
+      description === "" ||
+      departmentValue === 0 ||
+      ects === 0
+    ) {
       setCourseError(true);
-      
-    }
-    else{
+    } else {
       setCourseName("");
       setDescription("");
       setDepartmentValue("");
       setEcts(0);
       setCourseError(false);
 
-    setCourseOpen(false);}
+      setCourseOpen(false);
+    }
   };
   const handleCourseBack = () => {
     setCourseName("");
@@ -250,17 +264,17 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
     setFilterName(event.target.value);
   };
 
-  const universities = isExchange === 'Exchange' ? exchangeUniversities : erasmusUniversities;
+  const universities =
+    isExchange === "Exchange" ? exchangeUniversities : erasmusUniversities;
 
   console.log(erasmusUniversities);
- 
-  const filteredUsers = universities.length>0 ? applySortFilter(
-    universities,
-    getComparator(order, orderBy),
-    filterName
-  ): [];
 
-  console.log('filterxx: ', filteredUsers);
+  const filteredUsers =
+    universities.length > 0
+      ? applySortFilter(universities, getComparator(order, orderBy), filterName)
+      : [];
+
+  console.log("filterxx: ", filteredUsers);
 
   const [open, setOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
@@ -274,15 +288,18 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
     setDisabled(true);
   };
 
-  
   const handleAddDepartmentRequest = () => {
-    if(departmentName===""){
+    if (departmentName === "" || departmentQuota === 0) {
       setError(true);
-    }
-    else{
+    } else {
+
+      const newDep = {departmentName: departmentName, maxQuota: departmentQuota, quota: departmentQuota, courseList: [], electiveCourseList: []};
+      departments.push(newDep);
       setDepartmentName("");
+      setDepartmentQuota(0);
       setError(false);
-    setOpenAddDepartment(false);}
+      setOpenAddDepartment(false);
+    }
   };
   return (
     <>
@@ -306,11 +323,11 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                 />
 
                 <TableBody>
-                  {console.log('filtered: ', filteredUsers)}
+                  {console.log("filtered: ", filteredUsers)}
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      console.log('row: ', row);
+                      console.log("row: ", row);
                       const {
                         id,
                         universityName,
@@ -407,7 +424,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                               <TextField
                                                 id="outlined-multiline-flexible"
                                                 defaultValue={name}
-                                                disabled={disabled}
+                                                disabled={!isEdit}
                                               />
                                             </MDBCol>
                                           </MDBRow>
@@ -420,39 +437,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                               <TextField
                                                 id="outlined-multiline-flexible"
                                                 //defaultValue={type}
-                                                disabled={disabled}
-                                              />
-                                            </MDBCol>
-                                          </MDBRow>
-                                          <hr />
-                                          <MDBRow>
-                                            <MDBCol sm="3">
-                                              <MDBCardText>
-                                                Empty Quota
-                                              </MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                              <TextField
-                                                id="outlined-multiline-flexible"
-                                                type={"number"}
-                                                //defaultValue={emptyQuota}
                                                 disabled={!isEdit}
-                                              />
-                                            </MDBCol>
-                                          </MDBRow>
-                                          <hr />
-                                          <MDBRow>
-                                            <MDBCol sm="3">
-                                              <MDBCardText>
-                                                Total Quota
-                                              </MDBCardText>
-                                            </MDBCol>
-                                            <MDBCol sm="9">
-                                              <TextField
-                                                id="outlined-multiline-flexible"
-                                                type={"number"}
-                                                //defaultValue={totalQuota}
-                                                disabled={disabled}
                                               />
                                             </MDBCol>
                                           </MDBRow>
@@ -463,76 +448,92 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                                 Departments
                                               </MDBCardText>
                                             </MDBCol>
-                                           {isEdit ? <MDBCol sm="3">
-                                              {departments.map(
-                                                (department, index) => (<section key={index}>
-                                                  <MDBCardText
-                                                    
-                                                    className="text-muted"
-                                                  >
-                                                    {
-                                                      department.departmentName
-                                                    }
-                                                  </MDBCardText>
-                                                  
-                                                         {department.courseList.map(
-                                                           (courses, index_) => (
-                                                            <FormControl
-                                                            key={index_}
+                                            {isEdit ? (
+                                              <MDBCol sm="3">
+                                                {departments.map(
+                                                  (department, index) => (
+                                                    <section key={index}>
+                                                      <MDBCardText className="text-muted">
+                                                        {
+                                                          department.departmentName
+                                                        }
+                                                      </MDBCardText>
 
+                                                      {department.courseList.map(
+                                                        (courses, index_) => (
+                                                          <FormControl
+                                                            key={index_}
                                                             sx={{
                                                               m: 2,
                                                               minWidth: 250,
                                                             }}
                                                           >
-                                                             <MDBCardText
-                                                               className="text-muted"
-                                                             >
-                                                               -{courses.courseName}
-                                                             </MDBCardText>
-                                                  
-                                                             </FormControl>
-                                                           )
-                                                         )}
-                                                </section>)
-                                              )}
-                                            </MDBCol> : <MDBCol sm="3">
-                                              {departments.map(
-                                                (department, index) => (<section key={index}>
-                                                  <MDBCardText
-                                                    
-                                                    className="text-muted"
-                                                  >
-                                                    {
-                                                      department.departmentName
-                                                    }
-                                                  </MDBCardText>
-                                                
-                                                </section>)
-                                              )}
-                                            </MDBCol> }
+                                                            <MDBCardText className="text-muted">
+                                                              -
+                                                              {
+                                                                courses.courseName
+                                                              }
+                                                            </MDBCardText>
+                                                          </FormControl>
+                                                        )
+                                                      )}
+                                                    </section>
+                                                  )
+                                                )}
+                                              </MDBCol>
+                                            ) : (
+                                              <MDBCol sm="3">
+                                                {departments.map(
+                                                  (department, index) => (
+                                                    <section key={index}>
+                                                      <MDBCardText className="text-muted"> Department Name: 
+                                                        {
+                                                          department.departmentName
+                                                        }
+                                                      </MDBCardText>
+                                                      <MDBCardText className="text-muted"> Max Quota: 
+                                                        {
+                                                          department.maxQuota
+                                                        }
+                                                      </MDBCardText>
+                                                      <MDBCardText className="text-muted"> Empty Quota: 
+                                                        {
+                                                          department.quota
+                                                        }
+                                                      </MDBCardText>
+                                                      <hr />
+                                                    </section>
+                                                  )
+                                                )}
+                                              </MDBCol>
+                                            )}
 
                                             {isEdit ? (
                                               <>
-                                              <MDBCol sm="3">
-                                                <Button
-                                                  sx={{ margin: "auto" }}
-                                                  variant="contained"
-                                                  size="medium"
-                                                  onClick={handleOpenAddDepartment}
-                                                >
-                                                  Add Department
-                                                </Button>
-                                              </MDBCol>
-                                              <MDBCol sm="3">
-                                              <Button
-                                                variant="contained"
-                                                size="medium"
-                                                onClick={handleCourseClickOpen}
-                                              >
-                                                Add Course
-                                              </Button>
-                                            </MDBCol></>
+                                                <MDBCol sm="3">
+                                                  <Button
+                                                    sx={{ margin: "auto" }}
+                                                    variant="contained"
+                                                    size="medium"
+                                                    onClick={
+                                                      handleOpenAddDepartment
+                                                    }
+                                                  >
+                                                    Add Department
+                                                  </Button>
+                                                </MDBCol>
+                                                <MDBCol sm="3">
+                                                  <Button
+                                                    variant="contained"
+                                                    size="medium"
+                                                    onClick={
+                                                      handleCourseClickOpen
+                                                    }
+                                                  >
+                                                    Add Course
+                                                  </Button>
+                                                </MDBCol>
+                                              </>
                                             ) : (
                                               <></>
                                             )}
@@ -601,226 +602,273 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                           </Modal>
 
                           <Modal
-        open={courseOpen}
-        onClose={handleCourseClose}
-        aria-labelledby="modal-modal-title"
-        BackdropProps={{ style: { backgroundColor: "rgba(0, 0, 0, 0.2)" } }}
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Stack spacing={6}>
-            <Typography
-              id="modal-modal-title"
-              textAlign={"center"}
-              variant="h2"
-              component="h1"
-            >
-              Add Course
-            </Typography>
-            <Stack alignItems={"center"} spacing={3}>
-              <section
-                style={{
-                  width: "100%",
-                  backgroundColor: "#eee",
-                }}
-              >
-                <MDBContainer className="py-5">
-                  <MDBCard className="mb-4">
-                    <MDBCardBody>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Department*</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <FormControl
-                            sx={{
-                              minWidth: 250,
+                            open={courseOpen}
+                            onClose={handleCourseClose}
+                            aria-labelledby="modal-modal-title"
+                            BackdropProps={{
+                              style: { backgroundColor: "rgba(0, 0, 0, 0.2)" },
                             }}
+                            aria-describedby="modal-modal-description"
                           >
-                            <Select
-                              required
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={departmentValue}
-                              size="small"
-                              error={courseError}
-                              onChange={handleDepartmentChange}
-                            >
-                              <MenuItem disabled value={0}>
-                                Select
-                              </MenuItem>
+                            <Box sx={style}>
+                              <Stack spacing={6}>
+                                <Typography
+                                  id="modal-modal-title"
+                                  textAlign={"center"}
+                                  variant="h2"
+                                  component="h1"
+                                >
+                                  Add Course
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                  <section
+                                    style={{
+                                      width: "100%",
+                                      backgroundColor: "#eee",
+                                    }}
+                                  >
+                                    <MDBContainer className="py-5">
+                                      <MDBCard className="mb-4">
+                                        <MDBCardBody>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Department*
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <FormControl
+                                                sx={{
+                                                  minWidth: 250,
+                                                }}
+                                              >
+                                                <Select
+                                                  required
+                                                  labelId="demo-simple-select-label"
+                                                  id="demo-simple-select"
+                                                  value={departmentValue}
+                                                  size="small"
+                                                  error={courseError}
+                                                  onChange={
+                                                    handleDepartmentChange
+                                                  }
+                                                >
+                                                  <MenuItem disabled value={0}>
+                                                    Select
+                                                  </MenuItem>
 
-                              {departments.map((department,index)=>(<MenuItem key={index} value={(index+1)*10}>{department.departmentName}</MenuItem>))}
-                         
-                            </Select>
-                          </FormControl>
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Course Name*</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            value={courseName}
-                            onChange={handleCourseNameChange}
-                            error={courseError}
-
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Description*</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            fullWidth
-                            value={description}
-                            onChange={handleDescriptionChange}
-                            error ={courseError}
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>ECTS*</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            type={"number"}
-                            value={ects}
-                            onChange={handleEctsChange}
-                            error={courseError}
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      {courseError ? (
-                        <Alert severity="error">
-                          Required places must be filled!
-                        </Alert>
-                      ) : null}
-                    </MDBCardBody>
-                  </MDBCard>
-                </MDBContainer>
-              </section>
-              <Grid container justifyContent={"center"}>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={4}>
-                  <Button
-                    sx={{ margin: "auto" }}
-                    variant="contained"
-                    color="success"
-                    size="medium"
-                    onClick={handleCourseClose}
-                  >
-                    Add
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    sx={{ margin: "auto" }}
-                    variant="contained"
-                    color="error"
-                    size="medium"
-                    onClick={handleCourseBack}
-                  >
-                    Back
-                  </Button>
-                </Grid>
-                <Grid item xs={1}></Grid>
-              </Grid>
-            </Stack>
-          </Stack>
-        </Box>
-      </Modal>
-         <Modal
-        open={openAddDepartment}
-        onClose={handleAddDepartmentClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Stack spacing={6}>
-            <Typography
-              id="modal-modal-title"
-              textAlign={"center"}
-              variant="h2"
-              component="h1"
-            >
-              Add Department
-            </Typography>
-            <Stack alignItems={"center"} spacing={3}>
-              <section
-                style={{
-                  width: "100%",
-                  backgroundColor: "#eee",
-                }}
-              >
-                <MDBContainer className="py-5">
-                  <MDBCard className="mb-4">
-                    <MDBCardBody>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Department Name*</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <TextField
-                            id="outlined-multiline-flexible"
-                            value={departmentName}
-                            onChange={handleDepartmentNameChange}
-                            error={error}
-                          />
-                        </MDBCol>
-                      </MDBRow>
-                      {error ? (
-                        <Alert severity="error">
-                          Required places must be filled!
-                        </Alert>
-                      ) : null}
-                    </MDBCardBody>
-                  </MDBCard>
-                </MDBContainer>
-              </section>
-              <Grid container justifyContent={"center"}>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={4}>
-                  <Button
-                    sx={{ margin: "auto" }}
-                    variant="contained"
-                    color="success"
-                    size="medium"
-                    onClick={handleAddDepartmentRequest}
-                  >
-                    Add
-                  </Button>
-                </Grid>
-                <Grid item xs={4}>
-                  <Button
-                    sx={{ margin: "auto" }}
-                    variant="contained"
-                    color="error"
-                    size="medium"
-                    onClick={handleAddDepartmentClose}
-                  >
-                    Back
-                  </Button>
-                </Grid>
-                <Grid item xs={1}></Grid>
-              </Grid>
-            </Stack>
-          </Stack>
-        </Box>
-      </Modal>
-
+                                                  {departments.map(
+                                                    (department, index) => (
+                                                      <MenuItem
+                                                        key={index}
+                                                        value={(index + 1) * 10}
+                                                      >
+                                                        {
+                                                          department.departmentName
+                                                        }
+                                                      </MenuItem>
+                                                    )
+                                                  )}
+                                                </Select>
+                                              </FormControl>
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Course Name*
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <TextField
+                                                id="outlined-multiline-flexible"
+                                                value={courseName}
+                                                onChange={
+                                                  handleCourseNameChange
+                                                }
+                                                error={courseError}
+                                              />
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Description*
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <TextField
+                                                id="outlined-multiline-flexible"
+                                                fullWidth
+                                                value={description}
+                                                onChange={
+                                                  handleDescriptionChange
+                                                }
+                                                error={courseError}
+                                              />
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>ECTS*</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <TextField
+                                                id="outlined-multiline-flexible"
+                                                type={"number"}
+                                                value={ects}
+                                                onChange={handleEctsChange}
+                                                error={courseError}
+                                              />
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          {courseError ? (
+                                            <Alert severity="error">
+                                              Required places must be filled!
+                                            </Alert>
+                                          ) : null}
+                                        </MDBCardBody>
+                                      </MDBCard>
+                                    </MDBContainer>
+                                  </section>
+                                  <Grid container justifyContent={"center"}>
+                                    <Grid item xs={3}></Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="success"
+                                        size="medium"
+                                        onClick={handleCourseClose}
+                                      >
+                                        Add
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="error"
+                                        size="medium"
+                                        onClick={handleCourseBack}
+                                      >
+                                        Back
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={1}></Grid>
+                                  </Grid>
+                                </Stack>
+                              </Stack>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            open={openAddDepartment}
+                            onClose={handleAddDepartmentClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <Stack spacing={6}>
+                                <Typography
+                                  id="modal-modal-title"
+                                  textAlign={"center"}
+                                  variant="h2"
+                                  component="h1"
+                                >
+                                  Add Department
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                  <section
+                                    style={{
+                                      width: "100%",
+                                      backgroundColor: "#eee",
+                                    }}
+                                  >
+                                    <MDBContainer className="py-5">
+                                      <MDBCard className="mb-4">
+                                        <MDBCardBody>
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Department Name*
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <TextField
+                                                id="outlined-multiline-flexible"
+                                                value={departmentName}
+                                                onChange={
+                                                  handleDepartmentNameChange
+                                                }
+                                                error={error}
+                                              />
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>
+                                                Total Quota*
+                                              </MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="9">
+                                              <TextField
+                                                id="outlined-multiline-flexible"
+                                                value={departmentQuota}
+                                                type={"number"}
+                                                onChange={
+                                                  handleDepartmentQuotaChange
+                                                }
+                                                error={error}
+                                              />
+                                            </MDBCol>
+                                          </MDBRow>
+                                          <hr />
+                                          {error ? (
+                                            <Alert severity="error">
+                                              Required places must be filled!
+                                            </Alert>
+                                          ) : null}
+                                          
+                                        </MDBCardBody>
+                                      </MDBCard>
+                                    </MDBContainer>
+                                  </section>
+                                  <Grid container justifyContent={"center"}>
+                                    <Grid item xs={3}></Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="success"
+                                        size="medium"
+                                        onClick={handleAddDepartmentRequest}
+                                      >
+                                        Add
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="error"
+                                        size="medium"
+                                        onClick={handleAddDepartmentClose}
+                                      >
+                                        Back
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={1}></Grid>
+                                  </Grid>
+                                </Stack>
+                              </Stack>
+                            </Box>
+                          </Modal>
                         </TableRow>
                       );
                     })}
@@ -845,7 +893,6 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
           handleCloseDelete={handleCloseDelete}
           name={"University"}
         />
-        
       </Container>
     </>
   );
@@ -871,13 +918,13 @@ const style = {
 };
 UniversityTable.propTypes = {
   universities: PropTypes.array,
-  erasmusUniversities: PropTypes.array, 
+  erasmusUniversities: PropTypes.array,
   exchangeUniversities: PropTypes.array,
 };
 
 UniversityTable.defaultProps = {
   universities: [],
-  erasmusUniversities: [], 
+  erasmusUniversities: [],
   exchangeUniversities: [],
 };
 
