@@ -19,17 +19,19 @@ public class OutgoingStudentService {
     private final ExchangeUniversityService exchangeUniversityService;
     private final PreApprovalFormRequestService preApprovalFormRequestService;
     private final ApplicationService applicationService;
-    private final ProposalService proposalService;
+    private final ExchangeReplacementRequestService exchangeReplacementRequestService;
+    private final ErasmusReplacementRequestService erasmusReplacementRequestService;
 
     @Autowired
-    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, PreApprovalFormRequestService preApprovalFormRequestService, ApplicationService applicationService, ProposalService proposalService) {
+    public OutgoingStudentService(OutgoingStudentRepository outgoingStudentRepository, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ExchangeUniversityService exchangeUniversityService, PreApprovalFormRequestService preApprovalFormRequestService, ApplicationService applicationService, ExchangeReplacementRequestService exchangeReplacementRequestService, ErasmusReplacementRequestService erasmusReplacementRequestService) {
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.erasmusUniversityService = erasmusUniversityService;
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.exchangeUniversityService = exchangeUniversityService;
         this.preApprovalFormRequestService = preApprovalFormRequestService;
         this.applicationService = applicationService;
-        this.proposalService = proposalService;
+        this.exchangeReplacementRequestService = exchangeReplacementRequestService;
+        this.erasmusReplacementRequestService = erasmusReplacementRequestService;
     }
 
     public List<OutgoingStudent> getStudents() {
@@ -84,7 +86,7 @@ public class OutgoingStudentService {
             );
 
             // refresh proposals
-            proposalService.makeErasmusProposalsToDepartmentCoordinator(outgoingStudent.getDepartment().getID());
+            erasmusReplacementRequestService.makeErasmusProposalsToDepartmentCoordinator(outgoingStudent.getDepartment().getID());
         }
         else {
             ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
@@ -98,7 +100,7 @@ public class OutgoingStudentService {
             );
 
             // refresh proposals
-            proposalService.makeExchangeProposalsToDepartmentCoordinators();
+            exchangeReplacementRequestService.makeExchangeProposalsToDepartmentCoordinators();
         }
 
         // delete the Pre-Approval forms of the student!

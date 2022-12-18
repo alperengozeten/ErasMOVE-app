@@ -1,9 +1,8 @@
 package com.erasmuarrem.ErasMove.services;
 
 import com.erasmuarrem.ErasMove.models.*;
-import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
-import com.erasmuarrem.ErasMove.repositories.ErasmusReplacementRequestRepository;
-import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
+import com.erasmuarrem.ErasMove.repositories.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +23,23 @@ public class ErasmusReplacementRequestService {
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final ErasmusUniversityService erasmusUniversityService;
     private final NotificationService notificationService;
+    private final ApplicationRepository applicationRepository;
+    private final DepartmentRepository departmentRepository;
+    private final DepartmentCoordinatorService departmentCoordinatorService;
+    private final ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository;
 
     @Autowired
-    public ErasmusReplacementRequestService(ErasmusReplacementRequestRepository erasmusReplacementRequestRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ErasmusUniversityService erasmusUniversityService, NotificationService notificationService) {
+    public ErasmusReplacementRequestService(ErasmusReplacementRequestRepository erasmusReplacementRequestRepository, OutgoingStudentRepository outgoingStudentRepository, DepartmentCoordinatorRepository departmentCoordinatorRepository, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, ErasmusUniversityService erasmusUniversityService, NotificationService notificationService, ApplicationRepository applicationRepository, DepartmentRepository departmentRepository, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityDepartmentRepository erasmusUniversityDepartmentRepository) {
         this.erasmusReplacementRequestRepository = erasmusReplacementRequestRepository;
         this.outgoingStudentRepository = outgoingStudentRepository;
         this.departmentCoordinatorRepository = departmentCoordinatorRepository;
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.erasmusUniversityService = erasmusUniversityService;
         this.notificationService = notificationService;
+        this.applicationRepository = applicationRepository;
+        this.departmentRepository = departmentRepository;
+        this.departmentCoordinatorService = departmentCoordinatorService;
+        this.erasmusUniversityDepartmentRepository = erasmusUniversityDepartmentRepository;
     }
 
     public List<ErasmusReplacementRequest> getErasmusReplacementRequests() {
@@ -320,5 +327,79 @@ public class ErasmusReplacementRequestService {
         }
 
         return erasmusReplacementRequestRepository.findByStatusAndDepartmentCoordinator_ID("PROPOSAL", departmentCoordinatorID);
+    }
+
+    @Transactional
+    public String makeErasmusProposalsToDepartmentCoordinator(Long departmentID) {
+
+        Optional<Department> departmentOptional = departmentRepository.findById(departmentID);
+
+        if ( !departmentOptional.isPresent() ) {
+            return "Department with id:" + departmentID + " doesn't exist!";
+        }
+
+        Department department = departmentOptional.get();
+        DepartmentCoordinator departmentCoordinator = departmentCoordinatorService
+                .getDepartmentCoordinatorByDepartmentId(departmentID);
+
+        List<ErasmusUniversityDepartment> erasmusUniversityDepartmentList = erasmusUniversityDepartmentRepository
+                .findByDepartmentName(department.getDepartmentName());
+        List<Application> erasmusApplicationList = applicationRepository.findByOutgoingStudent_IsErasmusAndOutgoingStudent_Department_ID(
+                true, departmentID
+        );
+
+        erasmusReplacementRequestRepository.deleteAllByStatusAndDepartmentCoordinator_ID(
+                "PROPOSAL", departmentCoordinator.getID()
+        );
+
+        for (ErasmusUniversityDepartment erasmusUniversityDepartment : erasmusUniversityDepartmentList) {
+            if ( erasmusUniversityDepartment.getQuota() > 0 ) {
+
+                ErasmusUniversity erasmusUniversity = erasmusUniversityDepartment.getErasmusUniversity();
+                double maxScore = -1;
+                double maxNonSelectedScore = -1;
+                Application maxApplication = null;
+                Application maxNonSelectedApplication = null;
+
+                for (Application application : erasmusApplicationList) {
+                    // check if the student already has a waiting proposal??
+                    Optional<ErasmusReplacementRequest> erasmusReplacementRequestOptional = erasmusReplacementRequestRepository.findByStatusAndStudent_ID(
+                            "WAITING", application.getOutgoingStudent().getID()
+                    );
+                    if ( erasmusReplacementRequestOptional.isPresent() ) {
+                        continue;
+                    }
+                    if ( application.getAdmittedStatus().equalsIgnoreCase("NOT ADMITTED") ) {
+                        if ( application.getSelectedUniversities().contains(erasmusUniversity) ) {
+                            if ( maxScore < application.getApplicationScore() ) {
+                                maxScore = application.getApplicationScore();
+                                maxApplication = application;
+                            }
+                        }
+                        else if ( maxApplication == null ) {
+                            if ( maxNonSelectedScore < application.getApplicationScore() ) {
+                                maxNonSelectedScore = application.getApplicationScore();
+                                maxNonSelectedApplication = application;
+                            }
+                        }
+                    }
+                }
+
+                // send proposal to department coordinator
+                if ( maxApplication == null ) {
+                    maxApplication = maxNonSelectedApplication;
+                }
+
+                if ( maxApplication != null ) {
+                    ErasmusReplacementRequest newReplacementRequest = new ErasmusReplacementRequest();
+                    newReplacementRequest.setStudent(maxApplication.getOutgoingStudent());
+                    newReplacementRequest.setErasmusUniversity(erasmusUniversity);
+                    newReplacementRequest.setInfo("Replacement Request for the university: " + erasmusUniversity.getUniversityName());
+                    proposeErasmusReplacementRequest(newReplacementRequest);
+                }
+            }
+        }
+
+        return "Successfully created the proposals!";
     }
 }

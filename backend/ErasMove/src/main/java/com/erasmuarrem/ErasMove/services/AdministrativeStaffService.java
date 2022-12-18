@@ -23,13 +23,14 @@ public class AdministrativeStaffService {
     private final ExchangeUniversityService exchangeUniversityService;
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final HostUniversityService hostUniversityService;
-    private final ProposalService proposalService;
+    private final ErasmusReplacementRequestService erasmusReplacementRequestService;
+    private final ExchangeReplacementRequestService exchangeReplacementRequestService;
 
     @Autowired
     public AdministrativeStaffService(AdministrativeStaffRepository administrativeStaffRepository, DepartmentService departmentService, EmailService emailService,
                                       ApplicationService applicationService, OutgoingStudentService outgoingStudentService, ErasmusUniversityService erasmusUniversityService,
                                       ExchangeUniversityService exchangeUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
-                                      HostUniversityService hostUniversityService, ProposalService proposalService) {
+                                      HostUniversityService hostUniversityService, ErasmusReplacementRequestService erasmusReplacementRequestService, ExchangeReplacementRequestService exchangeReplacementRequestService) {
         this.administrativeStaffRepository = administrativeStaffRepository;
         this.departmentService = departmentService;
         this.emailService = emailService;
@@ -39,7 +40,8 @@ public class AdministrativeStaffService {
         this.exchangeUniversityService = exchangeUniversityService;
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.hostUniversityService = hostUniversityService;
-        this.proposalService = proposalService;
+        this.erasmusReplacementRequestService = erasmusReplacementRequestService;
+        this.exchangeReplacementRequestService = exchangeReplacementRequestService;
     }
 
     public List<AdministrativeStaff> getAdministrativeStaffs() {
@@ -210,7 +212,7 @@ public class AdministrativeStaffService {
                 }
             }
 
-            proposalService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
+            erasmusReplacementRequestService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
     }
 
     public void placeExchangeStudents( ) {
@@ -244,7 +246,7 @@ public class AdministrativeStaffService {
             }
         }
 
-        proposalService.makeExchangeProposalsToDepartmentCoordinators();
+        exchangeReplacementRequestService.makeExchangeProposalsToDepartmentCoordinators();
     }
 
 }

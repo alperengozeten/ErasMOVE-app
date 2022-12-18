@@ -3,7 +3,8 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.ApplicationWrapper;
 import com.erasmuarrem.ErasMove.services.AdministrativeStaffService;
-import com.erasmuarrem.ErasMove.services.ProposalService;
+import com.erasmuarrem.ErasMove.services.ErasmusReplacementRequestService;
+import com.erasmuarrem.ErasMove.services.ExchangeReplacementRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +16,13 @@ import java.util.List;
 @CrossOrigin
 public class AdministrativeStaffController {
     private final AdministrativeStaffService administrativeStaffService;
-    private final ProposalService proposalService;
+    private final ExchangeReplacementRequestService exchangeReplacementRequestService;
+    private final ErasmusReplacementRequestService erasmusReplacementRequestService;
     @Autowired
-    public AdministrativeStaffController(AdministrativeStaffService administrativeStaffService, ProposalService proposalService) {
+    public AdministrativeStaffController(AdministrativeStaffService administrativeStaffService, ExchangeReplacementRequestService exchangeReplacementRequestService, ErasmusReplacementRequestService erasmusReplacementRequestService) {
         this.administrativeStaffService = administrativeStaffService;
-        this.proposalService = proposalService;
+        this.exchangeReplacementRequestService = exchangeReplacementRequestService;
+        this.erasmusReplacementRequestService = erasmusReplacementRequestService;
     }
 
     @GetMapping()
@@ -49,12 +52,12 @@ public class AdministrativeStaffController {
 
     @PostMapping("/makeErasmusProposal/{departmentID}")
     public void makeProposals(@PathVariable("departmentID") Long departmentID) {
-        proposalService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
+        erasmusReplacementRequestService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
     }
 
     @PostMapping("/makeExchangeProposal")
     public void makeProposals() {
-        proposalService.makeExchangeProposalsToDepartmentCoordinators();
+        exchangeReplacementRequestService.makeExchangeProposalsToDepartmentCoordinators();
     }
 
     @DeleteMapping("/delete/{id}")
