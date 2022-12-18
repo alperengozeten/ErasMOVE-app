@@ -50,6 +50,7 @@ public class ExchangeReplacementRequestService {
         return exchangeReplacementRequestOptional.get();
     }
 
+    @Transactional
     public ResponseEntity<String> addExchangeReplacementRequest(ExchangeReplacementRequest exchangeReplacementRequest) {
 
         Long outgoingStudentID = exchangeReplacementRequest.getStudent().getID();
@@ -105,6 +106,10 @@ public class ExchangeReplacementRequestService {
 
         exchangeReplacementRequest.setStatus("WAITING");
         exchangeReplacementRequestRepository.save(exchangeReplacementRequest); // save to the database
+
+        // refresh the proposals
+        makeExchangeProposalsToDepartmentCoordinators();
+
         return new ResponseEntity<>("Replacement Request has been sent!", HttpStatus.OK);
     }
 

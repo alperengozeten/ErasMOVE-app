@@ -57,6 +57,7 @@ public class ErasmusReplacementRequestService {
         return erasmusReplacementRequestOptional.get();
     }
 
+    @Transactional
     public ResponseEntity<String> addErasmusReplacementRequest(ErasmusReplacementRequest erasmusReplacementRequest) {
 
         Long outgoingStudentID = erasmusReplacementRequest.getStudent().getID();
@@ -117,6 +118,10 @@ public class ErasmusReplacementRequestService {
 
         erasmusReplacementRequest.setStatus("WAITING");
         erasmusReplacementRequestRepository.save(erasmusReplacementRequest);
+
+        // refresh the proposals
+        makeErasmusProposalsToDepartmentCoordinator(outgoingStudent.getDepartment().getID());
+
         return new ResponseEntity<>("Replacement Request has been sent!", HttpStatus.OK);
     }
 
