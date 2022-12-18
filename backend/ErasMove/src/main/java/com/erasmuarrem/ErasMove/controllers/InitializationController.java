@@ -541,7 +541,6 @@ public class InitializationController {
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS7, vrijeCS.getID() );
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( vrijeCS6, vrijeCS.getID() );
         //Roskilde University
-        //Vrije
         Course roskCS1  = new Course();
         roskCS1.setCourseName("CS-101");
         roskCS1.setDescription("How to Be a Programmer");
@@ -640,6 +639,94 @@ public class InitializationController {
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskIE4,roskIE.getID());
         erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( roskIE1,roskIE.getID());
         erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( roskIE2, roskIE.getID() );
+
+        //Dortmund University
+        Course dortCS1  = new Course();
+        dortCS1.setCourseName("CS-100");
+        dortCS1.setDescription("Programming");
+        dortCS1.setEcts(6.0);
+
+        Course dortCS2 = new Course();
+        dortCS2.setCourseName("CS-102");
+        dortCS2.setDescription("Algorithms");
+        dortCS2.setEcts(6.0);
+
+
+        Course dortCS3 = new Course();
+        dortCS3.setCourseName("CS-461");
+        dortCS3.setDescription("Operating Systems");
+        dortCS3.setEcts(5.5);
+        courseService.addNewCourse(dortCS3);
+
+        ErasmusUniversity dortmund = new ErasmusUniversity();
+        dortmund.setUniversityName("Dortmund University");
+        dortmund.setCountry("Denmark");
+        Language German = new Language();
+        German.setLanguage("German");
+        German.setLevel("B1");
+        languageRepository.save(German);
+        roskilde.setLanguageRequirement(German);
+        List<Course> dortCourses = new ArrayList<>();
+        dortCourses.add(dortCS3);
+        dortmund.setRejectedCourses(dortCourses);
+        dortmund.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(dortmund);
+        //Roskilde CS
+        ErasmusUniversityDepartment dortCS = new ErasmusUniversityDepartment();
+        dortCS.setQuota(4);
+        dortCS.setErasmusUniversity(dortmund);
+        dortCS.setDepartmentName("CS");
+        dortCS.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(dortCS);
+
+        Course dortCS4 = new Course();
+        dortCS4.setCourseName("CS-331");
+        dortCS4.setDescription("Programming Languages");
+        dortCS4.setEcts(5.5);
+
+        Course dortCS5 = new Course();
+        dortCS5.setCourseName("CS-403");
+        dortCS5.setDescription("Data Structures");
+        dortCS5.setEcts(5.0);
+
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(dortCS1, dortCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortCS2,dortCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortCS4,dortCS.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( dortCS5, dortCS.getID() );
+
+        //Dort IE
+        ErasmusUniversityDepartment dortIE = new ErasmusUniversityDepartment();
+        dortIE.setQuota(4);
+        dortIE.setErasmusUniversity(dortmund);
+        dortIE.setDepartmentName("IE");
+        dortIE.setMaxQuota(4);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(dortIE);
+
+        Course dortIE1 = new Course();
+        dortIE1.setCourseName("IE-331");
+        dortIE1.setDescription("Industrial Architecture");
+        dortIE1.setEcts(5.5);
+
+        Course dortIE2 = new Course();
+        dortIE2.setCourseName("IE-400");
+        dortIE2.setDescription("Data Optimization");
+        dortIE2.setEcts(5.0);
+
+        Course dortIE3 = new Course();
+        dortIE3.setCourseName("IE-105");
+        dortIE3.setDescription("Excel for Beginners");
+        dortIE3.setEcts(5.0);
+
+        Course dortIE4 = new Course();
+        dortIE4.setCourseName("IE-440");
+        dortIE4.setDescription("Data Science");
+        dortIE4.setEcts(3.5);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID(dortIE1, dortIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE2, dortIE.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( dortIE3, dortIE.getID());
+        erasmusUniversityDepartmentService.addElectiveCourseByErasmusDepartmentID( dortIE4,  dortIE.getID() );
 
 
 
