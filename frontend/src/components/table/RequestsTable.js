@@ -26,12 +26,16 @@ import {
   Button,
   IconButton
 } from '@mui/material';
+import axios from 'axios';
+import FileDownload from "js-file-download";
+
 // components
 import Scrollbar from './scrollbar';
 
 // sections
 import { UserListHead, UserListToolbar } from './user';
 import DeleteModal from '../DeleteModal';
+
 
 // ----------------------------------------------------------------------
 const TABLE_HEAD = [
@@ -154,6 +158,19 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const baseURL = 'http://localhost:8080';
+
+
+  const handleDownloadFile = id => {
+    axios({
+        url: `${baseURL}/document/fileRequest/${id}`,
+        method: 'GET',
+        responseType: 'blob'
+    }).then(res => {
+        FileDownload(res.data, 'document.pdf');
+    });
+};
+
   return (
     <>
       <Container>
@@ -198,7 +215,7 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
                             </Button>
                           </Tooltip>) : null}
                           {(!isStaff && status!=='WAITING') ? (<Tooltip describeChild title="Download document">
-                            <Button variant="contained" color="inherit" size="small" onClick={() => handleClickOpen(id)}>
+                            <Button variant="contained" color="inherit" size="small" onClick={() => handleDownloadFile(id)}>
                                 Download Document
                             </Button>
                           </Tooltip>) : null}

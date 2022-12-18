@@ -98,6 +98,7 @@ const CourseRequests = ({
       setError(true);
     } else {
       const courseRequest = {
+        info: isElective === "1" ? "Elective" : "Mandatory",
         courseName,
         description,
         ects: Number(ects),
