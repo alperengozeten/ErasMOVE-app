@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExchangeReplacementRequestRepository extends JpaRepository<ExchangeReplacementRequest, Long> {
@@ -12,4 +13,5 @@ public interface ExchangeReplacementRequestRepository extends JpaRepository<Exch
     List<ExchangeReplacementRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
     List<ExchangeReplacementRequest> findByStatusAndDepartmentCoordinator_ID(String status, Long departmentCoordinatorID);
     void deleteAllByStatus(String status);
+    Optional<ExchangeReplacementRequest> findByStatusAndStudent_ID(String status, Long outgoingStudentID);
 }

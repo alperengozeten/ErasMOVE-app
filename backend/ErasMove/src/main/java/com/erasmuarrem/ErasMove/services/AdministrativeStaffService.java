@@ -290,6 +290,13 @@ public class AdministrativeStaffService {
                 Application maxNonSelectedApplication = null;
 
                 for (Application application : erasmusApplicationList) {
+                    // check if the student already has a waiting proposal??
+                    Optional<ErasmusReplacementRequest> erasmusReplacementRequestOptional = erasmusReplacementRequestRepository.findByStatusAndStudent_ID(
+                            "WAITING", application.getOutgoingStudent().getID()
+                    );
+                    if ( erasmusReplacementRequestOptional.isPresent() ) {
+                        continue;
+                    }
                     if ( application.getAdmittedStatus().equalsIgnoreCase("NOT ADMITTED") ) {
                         if ( application.getSelectedUniversities().contains(erasmusUniversity) ) {
                             if ( maxScore < application.getApplicationScore() ) {
@@ -340,6 +347,13 @@ public class AdministrativeStaffService {
             Application maxNonSelectedApplication = null;
 
             for (Application application : exchangeApplicationList) {
+                // check if the student already has a waiting proposal??
+                Optional<ExchangeReplacementRequest> exchangeReplacementRequestOptional = exchangeReplacementRequestRepository.findByStatusAndStudent_ID(
+                        "WAITING", application.getOutgoingStudent().getID()
+                );
+                if ( exchangeReplacementRequestOptional.isPresent() ) {
+                    continue;
+                }
                 if ( application.getAdmittedStatus().equalsIgnoreCase("NOT ADMITTED") ) {
                     if ( application.getSelectedUniversities().contains(exchangeUniversity) ) {
                         if ( maxScore < application.getApplicationScore() ) {
