@@ -11,4 +11,5 @@ public interface ErasmusReplacementRequestRepository extends JpaRepository<Erasm
     List<ErasmusReplacementRequest> findByStudentID(Long outgoingStudentID);
     List<ErasmusReplacementRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
     List<ErasmusReplacementRequest> findByStatusAndDepartmentCoordinator_ID(String status, Long departmentCoordinatorID);
+    void deleteAllByStatusAndDepartmentCoordinator_ID(String status, Long departmentCoordinatorID);
 }

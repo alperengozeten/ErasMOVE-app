@@ -11,4 +11,5 @@ public interface ExchangeReplacementRequestRepository extends JpaRepository<Exch
     List<ExchangeReplacementRequest> findByStudentID(Long outgoingStudentID);
     List<ExchangeReplacementRequest> findByDepartmentCoordinatorID(Long departmentCoordinatorID);
     List<ExchangeReplacementRequest> findByStatusAndDepartmentCoordinator_ID(String status, Long departmentCoordinatorID);
+    void deleteAllByStatus(String status);
 }

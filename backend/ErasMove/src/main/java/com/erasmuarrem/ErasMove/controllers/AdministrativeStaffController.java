@@ -44,6 +44,16 @@ public class AdministrativeStaffController {
         return administrativeStaffService.addAdministrativeStaff(administrativeStaff);
     }
 
+    @PostMapping("/makeErasmusProposal/{departmentID}")
+    public void makeProposals(@PathVariable("departmentID") Long departmentID) {
+        administrativeStaffService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
+    }
+
+    @PostMapping("/makeExchangeProposal")
+    public void makeProposals() {
+        administrativeStaffService.makeExchangeProposalsToDepartmentCoordinators();
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteAdministrativeStaff(@PathVariable("id") Long id) {
         administrativeStaffService.deleteAdministrativeStaff(id);
