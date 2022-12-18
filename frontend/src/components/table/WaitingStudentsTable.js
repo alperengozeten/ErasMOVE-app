@@ -34,7 +34,8 @@ import {
   Grid,
   Tooltip,
   Box,
-  Modal
+  Modal,
+  Alert
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -90,6 +91,8 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
 
   const [page, setPage] = useState(0);
 
+  const [error, setError] = useState(false);
+
   const [order, setOrder] = useState('asc');
 
   const [orderBy, setOrderBy] = useState('name');
@@ -117,6 +120,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
     setPage(newPage);
   };
   const handleModalClose = () => {
+    setError(false);
     setModalOpen(false);
     setApplicationDetailsID(0);
     setSelectedDep({});
@@ -147,6 +151,9 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
   };
 
   const sendReplaceOffer = () => {
+    if(universityValue === 0){
+      setError(true);
+    }else{
     let replacementRequest = '';
     let type = '';
     if (applications?.filter(app => app.id === applicationDetailsID)[0]?.outgoingStudent.isErasmus) {
@@ -167,6 +174,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
     
     dispatch(sendReplacementOffer(replacementRequest, type));
     handleModalClose();
+  }
   };
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - applications.length) : 0;
@@ -376,6 +384,11 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
                       </MDBRow>
                     </MDBCardBody>
                   </MDBCard>
+                  {error ? (
+                    <Alert severity="error">
+                      University must be selected!
+                    </Alert>
+                  ) : null}
                 </MDBContainer>
               </section>
               <Grid container justifyContent={"center"}>

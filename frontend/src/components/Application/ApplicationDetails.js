@@ -35,7 +35,7 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application, languageEditable }) => {
+const ApplicationDetails = ({ application, languageEditable, language }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
 
@@ -62,6 +62,8 @@ const ApplicationDetails = ({ application, languageEditable }) => {
 
   var selectedUniversitiesNames = [];
   application.selectedUniversities.map( uni => selectedUniversitiesNames.push(uni.universityName));
+
+  console.log(application);
 
   return (
     <>
@@ -182,7 +184,7 @@ const ApplicationDetails = ({ application, languageEditable }) => {
         id="lng"
         fullWidth
         variant="standard"
-        defaultValue={application.languages}
+        defaultValue={application.languageStatus}
         disabled
       />
       {languageEditable ? (<Button onClick={handleClickOpen}>Add Language</Button>) : null}
@@ -266,11 +268,13 @@ const style = {
 ApplicationDetails.propTypes = {
   application: PropTypes.object,
   languageEditable: PropTypes.bool,
+  language: PropTypes.object,
 };
 
 ApplicationDetails.defaultProps = {
   application: {},
   languageEditable: false,
+  language: {}
 };
 
 export default ApplicationDetails;

@@ -294,6 +294,7 @@ const StudentsTable = ({ applications }) => {
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
+                                      // language={}
                                       languageEditable={true}
                                       application={
                                         applications.filter(
