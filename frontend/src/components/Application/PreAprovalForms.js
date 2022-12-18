@@ -15,7 +15,11 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
     const [mergedCourses, setMergedCourses] = React.useState([{ courses: ['']}]);
 
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setMergedCourses([{ courses: ['']}]);
+        setError(false);
+        setOpen(false);
+    };
 
     const handleCourseChange = (e, courseIndex, i) => {
         const newMergedCourses = mergedCourses.map((mergedCourse, index) => {
@@ -73,6 +77,9 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                 }
             }
             
+            if(missingInfo)
+                break;
+
             var tempId = mergedCourses[i].equivalentCourse;
             
             if(!(mergedCourses[i].equivalentCourse > 0)){
@@ -89,7 +96,7 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                 });
             }
 
-            if(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective")
+            if(!(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective"))
                 missingInfo = true;
 
             if(missingInfo)
