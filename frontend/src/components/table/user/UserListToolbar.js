@@ -34,7 +34,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setDepartment, department }) => {
+const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setDepartment, department, user }) => {
 
   const handleChange = e => setDepartment(e.target.value);
 
@@ -74,9 +74,7 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setD
                     onChange={handleChange}
                   >
                     <MenuItem value={''}>None</MenuItem>
-                    <MenuItem value={'Computer Science'}>Computer Science</MenuItem>
-                    <MenuItem value={'Mechanical Engineering'}>Mechanical Engineering</MenuItem>
-                    <MenuItem value={'Electrical Engineering'}>Electrical Engineering</MenuItem>
+                    {user.departments.map(department => (<MenuItem key={department.id} value={department.departmentName}>{department.departmentName}</MenuItem>))}
                   </Select>
                 </FormControl>
               ) : null
@@ -89,8 +87,10 @@ const UserListToolbar = ({ numSelected, filterName, onFilterName, authType, setD
 
 const mapStateToProps = state => {
   const authType = state.auth.authType;
+  const user = state.user.user;
   return {
     authType,
+    user,
   };
 };
 
@@ -101,6 +101,7 @@ UserListToolbar.propTypes = {
   setDepartment: PropTypes.func,
   department: PropTypes.string,
   authType: PropTypes.string,
+  user: PropTypes.object,
 };
 
 UserListToolbar.defaultProps = {
