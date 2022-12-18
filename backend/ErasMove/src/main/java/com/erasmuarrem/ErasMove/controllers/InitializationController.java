@@ -195,7 +195,7 @@ public class InitializationController {
        // manElectives.add(course9);
 
         Department man = new Department();
-        man.setDepartmentName("Management");
+        man.setDepartmentName("MAN");
         man.setCourseList(manCourseList);
         man.setElectiveCourseList(manElectives);
         departmentService.addDepartment(man);
@@ -433,7 +433,7 @@ public class InitializationController {
         awp1.setTotalPoint(99);
         List<String> unis1 = new ArrayList<>();
         unis1.add("EPFL");
-        unis1.add("ETH");
+        unis1.add("ETH Zurich");
         awp1.setSelectedUniversities(unis1);
 
         ApplicationWrapper awp2 = new ApplicationWrapper();
@@ -444,7 +444,7 @@ public class InitializationController {
         awp2.setStudentId(21902464L);
         awp2.setTotalPoint(98);
         List<String> unis2 = new ArrayList<>();
-        unis2.add("ETH");
+        unis2.add("ETH Zurich");
         awp2.setSelectedUniversities(unis2);
 
         // Erasmus CS
@@ -514,6 +514,7 @@ public class InitializationController {
        //Incoming Students
         IncomingStudent bond = new IncomingStudent();
         bond.setName("James Bond");
+        bond.setStudentId(22101456L);
 
         bond.setEmail("james@mail.com");
         hashingPasswordHelper.setPassword("123");
@@ -533,6 +534,7 @@ public class InitializationController {
         //Kendall
         IncomingStudent kendall = new IncomingStudent();
         kendall.setName("Kendall Jenner");
+        kendall.setStudentId(22103357L);
 
         kendall.setEmail("kendal@mail.com");
 
