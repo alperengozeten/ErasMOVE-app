@@ -3,6 +3,7 @@ package com.erasmuarrem.ErasMove.controllers;
 import com.erasmuarrem.ErasMove.models.AdministrativeStaff;
 import com.erasmuarrem.ErasMove.models.ApplicationWrapper;
 import com.erasmuarrem.ErasMove.services.AdministrativeStaffService;
+import com.erasmuarrem.ErasMove.services.ProposalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import java.util.List;
 @CrossOrigin
 public class AdministrativeStaffController {
     private final AdministrativeStaffService administrativeStaffService;
+    private final ProposalService proposalService;
     @Autowired
-    public AdministrativeStaffController( AdministrativeStaffService administrativeStaffService ) {
+    public AdministrativeStaffController(AdministrativeStaffService administrativeStaffService, ProposalService proposalService) {
         this.administrativeStaffService = administrativeStaffService;
+        this.proposalService = proposalService;
     }
 
     @GetMapping()
@@ -46,12 +49,12 @@ public class AdministrativeStaffController {
 
     @PostMapping("/makeErasmusProposal/{departmentID}")
     public void makeProposals(@PathVariable("departmentID") Long departmentID) {
-        administrativeStaffService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
+        proposalService.makeErasmusProposalsToDepartmentCoordinator(departmentID);
     }
 
     @PostMapping("/makeExchangeProposal")
     public void makeProposals() {
-        administrativeStaffService.makeExchangeProposalsToDepartmentCoordinators();
+        proposalService.makeExchangeProposalsToDepartmentCoordinators();
     }
 
     @DeleteMapping("/delete/{id}")
