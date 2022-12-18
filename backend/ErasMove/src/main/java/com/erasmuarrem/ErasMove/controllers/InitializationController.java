@@ -472,6 +472,7 @@ public class InitializationController {
         departmentsOfYelda.add(man);
         yelda.setHashedPassword(hashingPasswordHelper.Hash());
         yelda.setDepartments(departmentsOfYelda);
+        administrativeStaffService.addAdministrativeStaff(yelda);
 
         //Course Coordinator
         CourseCoordinator eray = new CourseCoordinator();
