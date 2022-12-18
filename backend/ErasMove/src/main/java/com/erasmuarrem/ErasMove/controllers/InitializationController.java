@@ -2,6 +2,7 @@ package com.erasmuarrem.ErasMove.controllers;
 
 import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
 import com.erasmuarrem.ErasMove.models.*;
+import com.erasmuarrem.ErasMove.repositories.LanguageRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class InitializationController {
     private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final IncomingStudentService incomingStudentService;
     private  final CourseCoordinatorService courseCoordinatorService;
+    private final LanguageRepository languageRepository;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
     @Autowired
@@ -34,7 +36,7 @@ public class InitializationController {
                                     ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
                                     AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
                                     ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService,
-                                    IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService) {
+                                    IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService, LanguageRepository languageRepository) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -46,6 +48,7 @@ public class InitializationController {
         this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
         this.incomingStudentService = incomingStudentService;
         this.courseCoordinatorService = courseCoordinatorService;
+        this.languageRepository = languageRepository;
     }
 
     @GetMapping
@@ -179,8 +182,8 @@ public class InitializationController {
         manCourseList.add(man5);
         manCourseList.add(man6);
         List<Course> manElectives = new ArrayList<>();
-        manElectives.add(course8);
-        manElectives.add(course9);
+       // manElectives.add(course8);
+       // manElectives.add(course9);
 
         Department man = new Department();
         man.setDepartmentName("Management");
@@ -327,6 +330,7 @@ public class InitializationController {
         acceptedQueen2.setCourseName("IE-341");
         acceptedQueen2.setDescription("Industrial Revolution");
 
+
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen1,queensIE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen2,queensIE.getID());
 
@@ -338,7 +342,10 @@ public class InitializationController {
         seoul.setMaxUniversityQuota(7);
         seoul.setAcceptedStudents(new ArrayList<>());
         Language Korean = new Language();
+
         Korean.setLanguage("Korean");
+        Korean.setLevel("B1");
+        languageRepository.save(Korean);
 
         seoul.setLanguageRequirement(Korean);
 
@@ -358,6 +365,7 @@ public class InitializationController {
         rejectedSeoul.add(rejectSeoul1);
         rejectedSeoul.add(rejectSeoul2);
         seoul.setRejectedCourses(rejectedSeoul);
+
 
         exchangeUniversityService.addExchangeUniversity(seoul);
         exchangeUniversityService.addLanguageRequirementToExchangeUniversityByExchangeUniversityID(seoul.getID(), Korean);
@@ -436,8 +444,8 @@ public class InitializationController {
         applications.add(awp2);
         administrativeStaffService.addStudents(true, 1L, applications); // CS Applications
 
-        OutgoingStudent student1 = outgoingStudentRepository.findById(2L).get();
-        OutgoingStudent student2 = outgoingStudentRepository.findById(3L).get();
+        OutgoingStudent student1 = outgoingStudentRepository.findById(3L).get();
+        OutgoingStudent student2 = outgoingStudentRepository.findById(4L).get();
 
         hashingPasswordHelper.setPassword("123");
         student1.setHashedPassword(hashingPasswordHelper.Hash()); // make passwords 123

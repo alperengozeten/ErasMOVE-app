@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +90,14 @@ public class ErasmusUniversityDepartmentService {
         }
 
         ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
-        List<Course> courseList = erasmusUniversityDepartment.getCourseList();
+        List<Course> courseList;
+        if ( erasmusUniversityDepartment.getCourseList() == null ) {
+             courseList = new ArrayList<>();
+        }
+        else {
+            courseList = erasmusUniversityDepartment.getCourseList();
+
+        }
 
         for (Course departmentCourse : courseList) {
             if ( departmentCourse.getCourseName().equals(course.getCourseName()) ) {
@@ -269,7 +277,13 @@ public class ErasmusUniversityDepartmentService {
         }
 
         ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentOptional.get();
-        List<Course> electiveCourseList = erasmusUniversityDepartment.getElectiveCourseList();
+        List<Course> electiveCourseList;
+        if ( erasmusUniversityDepartment.getElectiveCourseList() == null ) {
+            electiveCourseList = new ArrayList<>();
+        }
+        else {
+            electiveCourseList = erasmusUniversityDepartment.getElectiveCourseList();
+        }
 
         for (Course electiveCourse : electiveCourseList) {
             if ( electiveCourse.getCourseName().equals(course.getCourseName()) ) {
