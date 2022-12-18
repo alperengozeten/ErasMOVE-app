@@ -116,7 +116,7 @@ const WaitingStudentsTable = ({ applications, sendReplacementOffer, typeForReq, 
     setPage(newPage);
   };
   const handleModalClose = () => {
-    isModalOpen(false);
+    setModalOpen(false);
   };
 
   const handleChangeRowsPerPage = event => {
