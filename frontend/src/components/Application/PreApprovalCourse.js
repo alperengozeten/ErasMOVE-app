@@ -17,13 +17,15 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
     const handleElectiveChange = e => {
         setIsElective(e.target.value);
         if (e.target.value === "0") {
+            setIsElective(0);
             setHostCourses(hostDepartment.courseList);
         } else {
+            setIsElective(1);
             setHostCourses(hostDepartment.electiveCourseList);
         }
 
         const newMergedCourses = [...mergedCourses];
-        newMergedCourses[index] = {...mergedCourses[index], type: (isElective==="0" ? "Mandatory" : "Elective") };
+        newMergedCourses[index] = {...mergedCourses[index], type: ((e.target.value === "0") ? "Mandatory" : "Elective") };
         setMergedCourses(newMergedCourses);
     };
 
@@ -73,7 +75,7 @@ const PreApprovalCourse = ({ setMergedCourses, mergedCourses, handleCourseEquiva
                                 <RadioGroup
                                     row
                                     aria-labelledby="demo-radio-buttons-group-label"
-                                    defaultValue={false}
+                                    defaultValue={0}
                                     name="radio-buttons-group"
                                     value={isElective}
                                     onChange={handleElectiveChange}

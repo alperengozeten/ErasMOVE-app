@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Modal, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Modal, Stack, Typography, Alert } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import SendIcon from '@mui/icons-material/Send';
 import React from 'react';
@@ -62,21 +62,27 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
 
         var missingInfo = false;
 
-        // mergedCourses.map((mergedCourse, index) => {
-        //    mergedCourse.courses.map(course => {
-        //         if(course === ''){
-        //             missingInfo = true;
-        //         }
-        //    });   
-        //     if (mergedCourse.equivalentCourse === null) {
-        //        missingInfo = true; 
-        //     }
-        //     if(missingInfo)
-        //         break;
-        // });
+        for(var i = 0; i < mergedCourses.length; i++){
+            for(var k = 0; k < mergedCourses[i].courses.length; k++){
+                if(mergedCourses[i].courses[k] === ''){
+                    missingInfo = true;
+                    break;
+                }
+            }
+
+            if(!(mergedCourses[i].equivalentCourse > 0))
+                missingInfo = true;
+
+            if(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective")
+                missingInfo = true;
+
+            if(missingInfo)
+                break;
+
+        }
 
         if(missingInfo){
-            //gdhdgfs
+            setError(true);
         }
         else{
         const preApprovalForm = {
@@ -132,6 +138,11 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                                 >
                                     Add Mobility Course
                                 </Button>
+                                {error ? (
+                                    <Alert severity="error">
+                                      Required places must be filled!
+                                    </Alert>
+                                ) : null}
                                 <Grid container justifyContent={'center'} spacing={3}>
                                     <Grid item container justifyContent={'center'} xs={4}>
                                         <Button

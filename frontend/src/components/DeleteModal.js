@@ -29,11 +29,8 @@ const DeleteModal = ({ handleDelete, openDelete, handleCloseDelete, name }) => {
                         </Typography>
                     </Stack>
                     <Stack alignItems={"flex-end"}>
-                        <Grid container justifyContent={"flex-end"} spacing={2}>
-                            <Grid item xs={4}></Grid>
-                            <Grid justifyContent={"flex-end"} item xs={4}>
-                            </Grid>
-                            <Grid item container spacing={5}   xs={4}>
+                        <Grid container justifyContent={"flex-end"} spacing={0}>
+                            <Grid item container spacing={8}  xs={6}>
                                 <Grid item xs={4}>
                                     <Button variant="contained" startIcon={<ArrowBackIcon /> } color="primary" size="medium" onClick={handleCloseDelete} >
                                         Back
