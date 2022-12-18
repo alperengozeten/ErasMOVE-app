@@ -21,6 +21,7 @@ import {
   MenuItem,
   Modal,
   Stack,
+  Alert,
   TextField,
 } from "@mui/material";
 
@@ -62,6 +63,7 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
   const [actorValue, setActorValue] = React.useState(0);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -80,6 +82,19 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+  
+  const handleClickAdd = () => {
+
+    if(name === "" || description === "" || actorValue === 0){
+      setError(true);
+    }else{
+      setActorValue(0);
+      setDescription("");
+      setName("");
+      setError(false);
+      setOpen(false);
+    }
   };
 
   return (
@@ -199,6 +214,12 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                           />
                         </MDBCol>
                       </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="12">
+                        {error ? (<Alert severity="error">Required places must be filled!</Alert>) : null}
+                        </MDBCol>
+                      </MDBRow>
                     </MDBCardBody>
                   </MDBCard>
                 </MDBContainer>
@@ -211,7 +232,7 @@ const AdminUsersListToolbar = ({ numSelected, filterName, onFilterName }) => {
                     variant="contained"
                     color="success"
                     size="medium"
-                    onClick={handleClose}
+                    onClick={handleClickAdd}
                   >
                     Add
                   </Button>
