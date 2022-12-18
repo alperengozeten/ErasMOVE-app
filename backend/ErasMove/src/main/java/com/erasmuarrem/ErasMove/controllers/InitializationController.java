@@ -4,6 +4,7 @@ import com.erasmuarrem.ErasMove.helpers.HashingPasswordHelper;
 import com.erasmuarrem.ErasMove.models.*;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,9 +23,15 @@ public class InitializationController {
     private final ErasmusUniversityDepartmentService erasmusUniversityDepartmentService;
     private final AdministrativeStaffService administrativeStaffService;
     private final OutgoingStudentRepository outgoingStudentRepository;
+    private final ExchangeUniversityService exchangeUniversityService;
+    private final ExchangeUniversityDepartmentService exchangeUniversityDepartmentService;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
 
-    public InitializationController(CourseService courseService, DepartmentService departmentService, DepartmentCoordinatorService departmentCoordinatorService, ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService, AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository) {
+    @Autowired
+    public InitializationController(CourseService courseService, DepartmentService departmentService, DepartmentCoordinatorService departmentCoordinatorService,
+                                    ErasmusUniversityService erasmusUniversityService, ErasmusUniversityDepartmentService erasmusUniversityDepartmentService,
+                                    AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
+                                    ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -32,6 +39,8 @@ public class InitializationController {
         this.erasmusUniversityDepartmentService = erasmusUniversityDepartmentService;
         this.administrativeStaffService = administrativeStaffService;
         this.outgoingStudentRepository = outgoingStudentRepository;
+        this.exchangeUniversityService = exchangeUniversityService;
+        this.exchangeUniversityDepartmentService = exchangeUniversityDepartmentService;
     }
 
     @GetMapping
@@ -107,6 +116,7 @@ public class InitializationController {
         Department cs = new Department();
         cs.setDepartmentName("CS");
         cs.setCourseList(csCourseList);
+        cs.setElectiveCourseList(csElectiveCourseList);
         departmentService.addDepartment(cs);
 
         // ADD DEPARTMENT COORDINATOR FOR CS
@@ -145,9 +155,184 @@ public class InitializationController {
         ErasmusUniversityDepartment epflCS = new ErasmusUniversityDepartment();
         epflCS.setDepartmentName("CS");
         epflCS.setQuota(2);
+        epflCS.setMaxQuota(2);
         epflCS.setErasmusUniversity(epfl);
         // might add courses later on
         erasmusUniversityDepartmentService.addErasmusUniversityDepartment(epflCS);
+
+        //ETH
+        Course ethCS1  = new Course();
+        ethCS1.setCourseName("CS-101");
+        ethCS1.setDescription("Introduction to Programming");
+        ethCS1.setEcts(6.0);
+        courseService.addNewCourse(ethCS1);
+
+        Course ethCS2  = new Course();
+        ethCS2.setCourseName("CS-102");
+        ethCS2.setDescription("Programming and Algorithms");
+        ethCS2.setEcts(6.0);
+        courseService.addNewCourse(ethCS2);
+
+
+        Course ethCS3 = new Course();
+        ethCS3.setCourseName("CS-461");
+        ethCS3.setDescription("Computer Vision");
+        ethCS3.setEcts(5.5);
+        courseService.addNewCourse(ethCS3);
+
+        ErasmusUniversity eth = new ErasmusUniversity();
+        eth.setUniversityName("ETH Zurich");
+        eth.setCountry("Switzerland");
+        List<Course> ethCourses = new ArrayList<>();
+        ethCourses.add(ethCS1);
+        ethCourses.add(ethCS2);
+        ethCourses.add(ethCS3);
+        eth.setRejectedCourses(ethCourses);
+        eth.setAcceptedStudents(new ArrayList<>());
+        erasmusUniversityService.addErasmusUniversity(eth);
+
+        ErasmusUniversityDepartment ethCS = new ErasmusUniversityDepartment();
+        ethCS.setQuota(2);
+        ethCS.setErasmusUniversity(eth);
+        ethCS.setDepartmentName("CS");
+        ethCS.setMaxQuota(2);
+        erasmusUniversityDepartmentService.addErasmusUniversityDepartment(ethCS);
+
+        Course ethCS4 = new Course();
+        ethCS4.setCourseName("CS-331");
+        ethCS4.setDescription("Computer Networks");
+        ethCS4.setEcts(5.5);
+
+        Course ethCS5 = new Course();
+        ethCS5.setCourseName("CS-400");
+        ethCS5.setDescription("Automata Theory and Turing Machines");
+        ethCS5.setEcts(5.0);
+
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS4,ethCS.getID());
+        erasmusUniversityDepartmentService.addCourseByErasmusDepartmentID( ethCS5,ethCS.getID());
+
+        //Exchange University
+        //Queen's Univ
+        ExchangeUniversity queens = new ExchangeUniversity();
+        queens.setCountry("Canada");
+        queens.setUniversityName("Queen's University, Kingston");
+        queens.setMaxUniversityQuota(4);
+        queens.setUniversityQuota(4);
+        queens.setAcceptedStudents(new ArrayList<>() );
+
+        Course rejectQueen1 = new Course();
+        rejectQueen1.setEcts(5.0);
+        rejectQueen1.setCourseName("IE-202");
+        rejectQueen1.setDescription("Optimization");
+        courseService.addNewCourse(rejectQueen1);
+
+
+        Course rejectQueen2 = new Course();
+        rejectQueen2.setEcts(3.0);
+        rejectQueen2.setCourseName("IE-303");
+        rejectQueen2.setDescription("Stochastic Models");
+        courseService.addNewCourse(rejectQueen2);
+
+        List<Course> rejectedQueen = new ArrayList<>();
+        rejectedQueen.add(rejectQueen1);
+        rejectedQueen.add(rejectQueen2);
+
+        queens.setRejectedCourses(rejectedQueen);
+        exchangeUniversityService.addExchangeUniversity(queens);
+
+        ExchangeUniversityDepartment queensIE = new ExchangeUniversityDepartment();
+        queensIE.setDepartmentName("Industrial Engineering");
+        queensIE.setExchangeUniversity(queens);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(queensIE);
+
+        Course acceptedQueen1 = new Course();
+        acceptedQueen1.setEcts(4.5);
+        acceptedQueen1.setCourseName("IE-410");
+        acceptedQueen1.setDescription("Game Theory");
+
+        Course acceptedQueen2 = new Course();
+        acceptedQueen2.setEcts(5.0);
+        acceptedQueen2.setCourseName("IE-341");
+        acceptedQueen2.setDescription("Industrial Revolution");
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen1,queensIE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen2,queensIE.getID());
+
+        //Seoul University
+        ExchangeUniversity seoul = new ExchangeUniversity();
+        seoul.setCountry("South Korea");
+        seoul.setUniversityName("Seoul National University");
+        seoul.setUniversityQuota(7);
+        seoul.setMaxUniversityQuota(7);
+        seoul.setAcceptedStudents(new ArrayList<>());
+        Language Korean = new Language();
+        Korean.setLanguage("Korean");
+
+        seoul.setLanguageRequirement(Korean);
+
+        Course rejectSeoul1 = new Course();
+        rejectSeoul1.setEcts(6.0);
+        rejectSeoul1.setCourseName("ME-101");
+        rejectSeoul1.setDescription("Introduction to Machines");
+        courseService.addNewCourse(rejectSeoul1);
+
+        Course rejectSeoul2 = new Course();
+        rejectSeoul2.setEcts(6.0);
+        rejectSeoul2.setCourseName("ME-311");
+        rejectSeoul2.setDescription("Fluid Things");
+        courseService.addNewCourse(rejectSeoul2);
+
+        List<Course> rejectedSeoul = new ArrayList<>();
+        rejectedSeoul.add(rejectSeoul1);
+        rejectedSeoul.add(rejectSeoul2);
+        seoul.setRejectedCourses(rejectedSeoul);
+
+        exchangeUniversityService.addExchangeUniversity(seoul);
+        exchangeUniversityService.addLanguageRequirementToExchangeUniversityByExchangeUniversityID(seoul.getID(), Korean);
+
+        ExchangeUniversityDepartment seoulME = new ExchangeUniversityDepartment();
+        seoulME.setDepartmentName("Mechanical Engineering");
+        seoulME.setExchangeUniversity(seoul);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulME);
+
+        ExchangeUniversityDepartment seoulEEE = new ExchangeUniversityDepartment();
+        seoulEEE.setDepartmentName("Electrical and Electronical Engineering");
+        seoulEEE.setExchangeUniversity(seoul);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulEEE);
+
+
+        Course seoulME1 = new Course();
+        seoulME1.setEcts(4.5);
+        seoulME1.setCourseName("ME-303");
+        seoulME1.setDescription("Robotics");
+
+        Course seoulME2 = new Course();
+        seoulME2.setEcts(5.5);
+        seoulME2.setCourseName("ME-444");
+        seoulME2.setDescription("Humandroids");
+
+        Course seoulEEE1 = new Course();
+        seoulEEE1.setEcts(4.5);
+        seoulEEE1.setCourseName("EEE-102");
+        seoulEEE1.setDescription("Analog Circuits");
+
+        Course seoulEEE2 = new Course();
+        seoulEEE2.setEcts(5.0);
+        seoulEEE2.setCourseName("EEE-312");
+        seoulEEE2.setDescription("Signals and Systems");
+
+
+        Course seoulEEEE = new Course();
+        seoulEEEE.setEcts(5.0);
+        seoulEEE2.setCourseName("EEE-391");
+        seoulEEE2.setDescription("Signals and Systems for Computer Scientists");
+
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulME1,seoulME.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulME2,seoulME.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE1,seoulEEE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE2,seoulEEE.getID());
+        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(seoulEEEE, seoulEEE.getID());
 
         // applications
         ApplicationWrapper awp1 = new ApplicationWrapper();
