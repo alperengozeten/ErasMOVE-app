@@ -1,9 +1,10 @@
-import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS } from "../constants/actionTypes";
+import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS, GET_PROPOSED_REQUEST_SUCCESS, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     courseRequests: [], 
     fileRequests: [], 
     preApprovalForms: [],
+    proposedRequests: [],
     replacementOffer: {
         from: "Eray Tüzün",
         student: "Alperen Gözeten",
@@ -31,6 +32,8 @@ const requestsReducer = (state = INITIAL_STATE, action) => {
             return { ...state, fileRequests: state.fileRequests.filter(fileRequest => fileRequest.id !== action.payload) };
         case GET_REPLACEMENT_OFFER_SUCCESS:
             return { ...state, replacementOffer: action.payload};
+        case GET_PROPOSED_REQUEST_SUCCESS:
+            return { ...state, proposedRequests: action.payload};
     }
   };
   

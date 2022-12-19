@@ -14,7 +14,9 @@ import {
     MDBRow,
   } from "mdb-react-ui-kit";
 
-const ProposalDetail = ({ openDetails, handleCloseDetails,status,name }) => {
+const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }) => {
+  const baseURL = 'http://localhost:8080';
+
     const [openAccept, setOpenAccept] = React.useState(false);
     const [openDecline, setOpenDecline] = React.useState(false);
     const handleOpenAccept = () => { 
@@ -29,11 +31,23 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name }) => {
       };
       const handleAccept= () => { 
         //TODO
-    
+        fetch(`${baseURL}/incomingStudent/acceptProposal/${proposal.id}`, {
+          method: 'POST',
+          headers: {
+          'Content-type' : 'application/json'
+         }, 
+         body: {}
+    });
         setOpenAccept(false);
       };
       const handleDecline= () => { 
-        //TODO
+        fetch(`${baseURL}/incomingStudent/declineProposal/${proposal.id}`, {
+          method: 'POST',
+          headers: {
+          'Content-type' : 'application/json'
+         }, 
+         body: {}
+    });
         setOpenDecline(false);
       };
     const obj = {
@@ -94,7 +108,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name }) => {
                   <MDBCol lg="12">
                     <MDBCard className="mb-4">
                       <MDBCardBody>
-                        {obj.courseList.map((courses,index)=>
+                        {proposal.plannedCourses.map((courses,index)=>
                         (<section key={index}><MDBRow >
                           <MDBCol sm="3">
                           <FormControl
@@ -314,6 +328,7 @@ const style = {
     name: PropTypes.string,
 
     handleCloseDetails: PropTypes.func,
+    proposal: PropTypes.object
 
 };
   
