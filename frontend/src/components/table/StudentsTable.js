@@ -79,7 +79,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const StudentsTable = ({ applications }) => {
+const StudentsTable = ({ applications, getLanguageByStudentId }) => {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -155,6 +155,7 @@ const StudentsTable = ({ applications }) => {
   const [applicationDetailsID, setApplicationDetailsID] = React.useState(0);
 
   const handleClickOpen = id => {
+    getLanguageByStudentId(id, "outgoingStudent");
     setApplicationDetailsID(id);
     setOpen(true);
   };
@@ -294,7 +295,7 @@ const StudentsTable = ({ applications }) => {
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
-                                      // language={}
+                                      language={["Turkish", "German", "English"]}
                                       languageEditable={true}
                                       application={
                                         applications.filter(
@@ -383,10 +384,13 @@ const boxStyle = {
 
 StudentsTable.propTypes = {
   applications: PropTypes.array,
+  language: PropTypes.object,
+  getLanguageByStudentId: PropTypes.func,
 };
 
 StudentsTable.defaultProps = {
   applications: [],
+  language: {},
 };
 
 export default StudentsTable;

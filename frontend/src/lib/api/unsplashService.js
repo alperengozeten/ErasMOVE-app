@@ -49,6 +49,10 @@ export const getApplicationsByDepartment = id => (
   axios.get(`${baseURL}/application/departmentID/${id}`)
 );
 
+export const getLanguageByStudentId = id => ( //TO BE CHANGED
+  axios.get(`${baseURL}/outgoingStudent/language/outgoingStudent/${id}`)
+);
+
 // Notifications
 export const getNotifications = id => (
   axios.get(`${baseURL}/notification/user/${id}`)

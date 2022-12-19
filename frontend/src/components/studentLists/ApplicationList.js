@@ -4,9 +4,11 @@ import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import StudentsTable from '../table/StudentsTable';
+import { getApplicationsByDepartment, getLanguageByStudentId } from '../../actions';
 import { getApplicationsByDepartment } from '../../actions';
 import { PLACE_STUDENTS_REQUEST } from '../../constants/actionTypes';
 
+const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, user, typeForReq }) => {
 const ApplicationList = ({ applications, getApplicationsByDepartment, user, typeForReq }) => {
     const [department, setDepartment] = useState(0);
     const [type, setType] = useState('');
@@ -22,6 +24,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, user, type
     useEffect(() => {
         getApplicationsByDepartment(user, typeForReq);
     }, [user, getApplicationsByDepartment]);
+    
     return (
         <Stack spacing={2}>
             <Typography gutterBottom variant="h1" textAlign={ "center" } component="div">
@@ -76,7 +79,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, user, type
 
                 </>) : null}
                 <Grid item xs={12}>
-                    { applications[0] ? <StudentsTable applications={applications} /> : null}
+                    { applications[0] ? <StudentsTable getLanguageByStudentId={getLanguageByStudentId} applications={applications} /> : null}
                 </Grid>
             </Grid>
         </Stack>
@@ -85,6 +88,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, user, type
 
 const mapStateToProps = state => {
     const applications = state.applications.applications;
+    // const language = state.language.language;
     const user = state.user.user;
     const typeForReq = state.auth.authTypeForReq;
     return {
@@ -96,11 +100,14 @@ const mapStateToProps = state => {
 
 const mapActionsToProps = {
     getApplicationsByDepartment,
+    getLanguageByStudentId,
 };
 
 ApplicationList.propTypes = {
     applications: PropTypes.array,
+    language: PropTypes.object,
     getApplicationsByDepartment: PropTypes.func,
+    getLanguageByStudentId: PropTypes.func,
     user: PropTypes.object,
     typeForReq: PropTypes.string,
 };

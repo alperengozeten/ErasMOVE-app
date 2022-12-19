@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { connect } from 'react-redux';
 // @mui
 import {
   Container,
@@ -15,7 +16,6 @@ import {
   InputLabel,
   OutlinedInput,
   MenuItem,
-  List
 } from "@mui/material";
 
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
     setOpen(false);
   };
 
-  const [langAdded, setLangAdded] = useState(application.languages);
+  const [langAdded, setLangAdded] = useState(language);
 
   const handleChange = event => {
     const {
@@ -62,8 +62,6 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
 
   var selectedUniversitiesNames = [];
   application.selectedUniversities.map( uni => selectedUniversitiesNames.push(uni.universityName));
-
-  console.log(application);
 
   return (
     <>
@@ -247,34 +245,28 @@ const style = {
   p: 4,
 };
 
-// const boxStyle = {
-//   position: "absolute",
-//   top: "50%",
-//   left: "50%",
-//   transform: "translate(-50%, -50%)",
-//   width: '80%',
-//   bgcolor: "background.paper",
-//   border: "none",
-//   borderRadius: "6px",
-//   boxShadow: 24,
-//   p: 4,
-//   maxHeight: "90%",
-//   mb: 2,
-//   display: "flex",
-//   flexDirection: "column",
-//   overflowY: "scroll",
+// const mapStateToProps = state => {
+//   const language = state.language.language;
+//   const user = state.user.user;
+//   const typeForReq = state.auth.authTypeForReq;
+//   return {
+//       language,
+//       user,
+//       typeForReq,
+//   };
 // };
 
 ApplicationDetails.propTypes = {
   application: PropTypes.object,
+  language: PropTypes.array,
   languageEditable: PropTypes.bool,
-  language: PropTypes.object,
+  getLanguageByStudentId: PropTypes.func,
 };
 
 ApplicationDetails.defaultProps = {
   application: {},
+  language: {},
   languageEditable: false,
-  language: {}
 };
 
 export default ApplicationDetails;

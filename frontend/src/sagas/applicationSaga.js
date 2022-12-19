@@ -23,7 +23,7 @@ function* getApplicationsByDepartmentReq({ payload: { user, typeForReq } }) {
   
         const status = 200;
         if (status !== 200) {
-          throw Error('Accept request failed for  course approval request ');
+          throw Error('Accept request failed for course approval request ');
         }
   
         yield put({
