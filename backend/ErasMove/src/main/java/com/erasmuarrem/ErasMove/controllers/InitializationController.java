@@ -32,6 +32,7 @@ public class InitializationController {
     private final AdminService adminService;
     private final HostUniversityService hostUniversityService;
     private final HashingPasswordHelper hashingPasswordHelper = HashingPasswordHelper.getInstance();
+    private final AnnouncementService announcementService;
 
     @Autowired
     public InitializationController(CourseService courseService, DepartmentService departmentService, DepartmentCoordinatorService departmentCoordinatorService,
@@ -39,7 +40,7 @@ public class InitializationController {
                                     AdministrativeStaffService administrativeStaffService, OutgoingStudentRepository outgoingStudentRepository,
                                     ExchangeUniversityService exchangeUniversityService, ExchangeUniversityDepartmentService exchangeUniversityDepartmentService,
                                     IncomingStudentService incomingStudentService, CourseCoordinatorService courseCoordinatorService, LanguageRepository languageRepository,
-                                    AdminService adminService, HostUniversityService hostUniversityService) {
+                                    AdminService adminService, HostUniversityService hostUniversityService, AnnouncementService announcementService) {
         this.courseService = courseService;
         this.departmentService = departmentService;
         this.departmentCoordinatorService = departmentCoordinatorService;
@@ -54,6 +55,7 @@ public class InitializationController {
         this.languageRepository = languageRepository;
         this.adminService = adminService;
         this.hostUniversityService = hostUniversityService;
+        this.announcementService = announcementService;
     }
 
     @GetMapping
@@ -154,6 +156,19 @@ public class InitializationController {
         csDepartmentCoordinator.setDepartment(cs);
         departmentCoordinatorService.addDepartmentCoordinator(csDepartmentCoordinator);
 
+        Announcement csAnnouncement1 = new Announcement();
+        csAnnouncement1.setTitle("Applications Period Has Completed!");
+        csAnnouncement1.setDescription("The period for the Erasmus/Exchange applications has en" +
+                "ded, the placements will be done in a week!");
+        csAnnouncement1.setDepartmentCoordinator(csDepartmentCoordinator);
+        announcementService.addAnnouncement(csAnnouncement1);
+
+        Announcement csAnnouncement2 = new Announcement();
+        csAnnouncement2.setTitle("24 hrs For The Placements!");
+        csAnnouncement2.setDescription("The placements will be determined in 24 hrs, please be patient meanwhile!");
+        csAnnouncement2.setDepartmentCoordinator(csDepartmentCoordinator);
+        announcementService.addAnnouncement(csAnnouncement2);
+
         //MAN Courses
         Course man1 = new Course();
         man1.setCourseName("MAN-101");
@@ -216,6 +231,14 @@ public class InitializationController {
         manDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
         manDepartmentCoordinator.setDepartment(man);
         departmentCoordinatorService.addDepartmentCoordinator(manDepartmentCoordinator);
+
+        // Add a new announcement for MAN
+        Announcement manAnnouncement1 = new Announcement();
+        manAnnouncement1.setTitle("Applications Period Has Completed!");
+        manAnnouncement1.setDescription("The period for the Erasmus/Exchange applications has en" +
+                "ded, the placements will be done in a week!");
+        manAnnouncement1.setDepartmentCoordinator(manDepartmentCoordinator);
+        announcementService.addAnnouncement(manAnnouncement1);
 
         // IE DEPARTMENT
         Course ie1 = new Course();
@@ -301,6 +324,20 @@ public class InitializationController {
         ieDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
         ieDepartmentCoordinator.setDepartment(ie);
         departmentCoordinatorService.addDepartmentCoordinator(ieDepartmentCoordinator);
+
+        // Add a new announcement for IE
+        Announcement ieAnnouncement1 = new Announcement();
+        ieAnnouncement1.setTitle("Applications Period Has Completed!");
+        ieAnnouncement1.setDescription("The period for the Erasmus/Exchange applications has en" +
+                "ded, the placements will be done in a week!");
+        ieAnnouncement1.setDepartmentCoordinator(ieDepartmentCoordinator);
+        announcementService.addAnnouncement(ieAnnouncement1);
+
+        Announcement ieAnnouncement2 = new Announcement();
+        ieAnnouncement2.setTitle("24 hrs For The Placements!");
+        ieAnnouncement2.setDescription("The placements will be determined in 24 hrs, please be patient meanwhile!");
+        ieAnnouncement2.setDepartmentCoordinator(ieDepartmentCoordinator);
+        announcementService.addAnnouncement(ieAnnouncement2);
 
         // EEE courses
         Course eee1 = new Course();
@@ -394,6 +431,14 @@ public class InitializationController {
         eeeDepartmentCoordinator.setDepartment(eee);
         departmentCoordinatorService.addDepartmentCoordinator(eeeDepartmentCoordinator);
 
+        // Add a new announcement for EEE
+        Announcement eeeAnnouncement1 = new Announcement();
+        eeeAnnouncement1.setTitle("Applications Period Has Completed!");
+        eeeAnnouncement1.setDescription("The period for the Erasmus/Exchange applications has en" +
+                "ded, the placements will be done in a week!");
+        eeeAnnouncement1.setDepartmentCoordinator(eeeDepartmentCoordinator);
+        announcementService.addAnnouncement(eeeAnnouncement1);
+
         // ME courses
         Course me1 = new Course();
         me1.setCourseName("ME-102");
@@ -486,6 +531,14 @@ public class InitializationController {
         meDepartmentCoordinator.setHashedPassword(hashingPasswordHelper.Hash());
         meDepartmentCoordinator.setDepartment(me);
         departmentCoordinatorService.addDepartmentCoordinator(meDepartmentCoordinator);
+
+        // Add a new announcement for ME
+        Announcement meAnnouncement1 = new Announcement();
+        meAnnouncement1.setTitle("Applications Period Has Completed!");
+        meAnnouncement1.setDescription("The period for the Erasmus/Exchange applications has en" +
+                "ded, the placements will be done in a week!");
+        meAnnouncement1.setDepartmentCoordinator(meDepartmentCoordinator);
+        announcementService.addAnnouncement(meAnnouncement1);
 
         // erasmus universities
 
