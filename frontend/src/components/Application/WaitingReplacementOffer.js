@@ -22,11 +22,11 @@ export const WaitingReplacementOffer = ({acceptReplacementRequest, declineReplac
 //   };
 
   const handleAccept = () => {
-    acceptReplacementRequest(offer.id, offer.student.isErasmus);
+    acceptReplacementRequest(offer.id, offer.student.isErasmus, offer.student.id);
   };
 
   const handleDecline = () => {
-    declineReplacementRequest(offer.id, offer.student.isErasmus);
+    declineReplacementRequest(offer.id, offer.student.isErasmus, offer.student.id);
   };
 
   return (

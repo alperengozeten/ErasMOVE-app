@@ -31,7 +31,7 @@ import {
 } from '../lib/api/unsplashService';
 
 
-function* sendReplacementOffer({ payload: { replacementRequest, type } }) {
+function* sendReplacementOffer({ payload: { replacementRequest, type, userId } }) {
   console.log(`Replacement req`);
 
   try {
@@ -48,8 +48,8 @@ function* sendReplacementOffer({ payload: { replacementRequest, type } }) {
     }
 
     yield put({
-      type: GET_PREAPPROVAL_FORMS_SUCCESS,
-      payload: {},
+      type: GET_PROPOSED_REQUEST_REQUEST,
+      payload: { userId },
     });
   } catch (error) {
     yield put({
@@ -609,7 +609,7 @@ function* getReplacementRequests({ payload: { id, typeForReq, isErasmus } }) {
   }
 }
 
-function* acceptReplacementRequest({ payload: { id, isErasmus } }) {
+function* acceptReplacementRequest({ payload: { id, isErasmus, userId } }) {
   console.log(`create file request `);
 
   try {
@@ -633,7 +633,7 @@ function* acceptReplacementRequest({ payload: { id, isErasmus } }) {
 
       yield put({
         type: GET_APPLICATION_REQUEST,
-        payload: { id },
+        payload: { userId },
     });
   } catch (error) {
     yield put({
@@ -643,7 +643,7 @@ function* acceptReplacementRequest({ payload: { id, isErasmus } }) {
   }
 }
 
-function* declineReplacementRequest({ payload: { id, isErasmus } }) {
+function* declineReplacementRequest({ payload: { id, isErasmus, userId } }) {
   console.log(`create file request `);
 
   try {
@@ -664,6 +664,11 @@ function* declineReplacementRequest({ payload: { id, isErasmus } }) {
           type: DECLINE_REPLACEMENT_OFFER_SUCCESS,
           payload: {},
       });
+
+      yield put({
+        type: GET_APPLICATION_REQUEST,
+        payload: { userId },
+    });
   } catch (error) {
     yield put({
       type: DECLINE_REPLACEMENT_OFFER_FAIL,

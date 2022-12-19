@@ -56,7 +56,7 @@ const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests
         type = 'Exchange';
         }
     
-        dispatch(sendReplacementOffer(replacementRequest, type));
+        dispatch(sendReplacementOffer(replacementRequest, type, user.id));
     };
 
     const handleDecline = id => {

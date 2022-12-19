@@ -178,7 +178,7 @@ const WaitingStudentsTable = ({ userId, applications, sendReplacementOffer, type
       type = 'Exchange';
     }
     
-    dispatch(sendReplacementOffer(replacementRequest, type));
+    dispatch(sendReplacementOffer(replacementRequest, type, userId));
     handleModalClose();
   }
   };
