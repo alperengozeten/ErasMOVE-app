@@ -305,6 +305,16 @@ public class PreApprovalFormRequestService {
         if ( !preApprovalFormRequestOptional.isPresent() ) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+        PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+        OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
+
+        ContractedUniversity contractedUniversity = null;
+        if ( outgoingStudent.getIsErasmus() ) {
+            contractedUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudent.getID());
+        }
+        else {
+            contractedUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudent.getID());
+        }
 
         // Create a new PDF document
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -318,7 +328,7 @@ public class PreApprovalFormRequestService {
         try {
             ImageData imageData = ImageDataFactory.create(root.toString());
             Image image = new Image(imageData);
-            image.scale(0.5F, 0.5F);
+            image.scale(0.4F, 0.4F);
             image.setHorizontalAlignment(HorizontalAlignment.CENTER);
             document.add(image);
         } catch (MalformedURLException e) {
@@ -328,22 +338,38 @@ public class PreApprovalFormRequestService {
         try {
             Paragraph header = new Paragraph("Pre-Approval Form")
                     .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
-                    .setFontSize(14);
-            header.setHorizontalAlignment(HorizontalAlignment.CENTER);
+                    .setFontSize(14).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header2 = new Paragraph("Host Institution: " + contractedUniversity.getUniversityName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header3 = new Paragraph("Student: " + preApprovalFormRequest.getStudent().getName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header4 = new Paragraph("Department: " + preApprovalFormRequest.getStudent().getDepartment().getDepartmentName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
 
             document.add(header);
+            document.add(header2);
+            document.add(header3);
+            document.add(header4);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         List<MobilityCourse> mobilityCourseList = mobilityCourseService.getMobilityCoursesByPreApprovalFormRequestID(id);
-        Table table = new Table(UnitValue.createPercentArray(6)).useAllAvailableWidth();
+        Table table = new Table(UnitValue.createPercentArray(7)).useAllAvailableWidth();
 
         table.addCell("");
         table.addCell("Course Code");
         table.addCell("Course Name");
         table.addCell("Credits");
         table.addCell("Corresponding Course Code");
+        table.addCell("Corresponding Course Name");
         table.addCell("Credits");
         int outerCount = 1;
 
@@ -363,8 +389,12 @@ public class PreApprovalFormRequestService {
                     table.addCell(cell1);
 
                     Cell cell2 = new Cell(mergedCourses.size(), 1);
-                    cell2.add(new Paragraph(mobilityCourse.getCorrespondingCourse().getCourseName()));
+                    cell2.add(new Paragraph(mobilityCourse.getCorrespondingCourse().getDescription()));
                     table.addCell(cell2);
+
+                    Cell cell3 = new Cell(mergedCourses.size(), 1);
+                    cell3.add(new Paragraph(String.valueOf(mobilityCourse.getCorrespondingCourse().getEcts())));
+                    table.addCell(cell3);
                 }
 
                 outerCount++;
