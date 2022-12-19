@@ -50,33 +50,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
     });
         setOpenDecline(false);
       };
-    const obj = {
-        departmentName: "CS",
-        courseList: [
-          {
-            courseName: "CS-101",
-            description: "Algorithms and Programming I",
-            ects: 6.5,
-          },
-          {
-            courseName: "CS-102",
-            description: "Algorithms and Programming II",
-            ects: 6.5,
-          },
-          {
-            courseName: "CS-121",
-            description: "Fundamentals of Algorithms",
-            ects: 6.5,
-          },
-          {
-            courseName: "CS-319",
-            description: "Object Oriented Software Engineering",
-            ects: 6.5,
-          },
-          { courseName: "CS-315", description: "Programming Languages", ects: 5 },
-        ],
-      };
-
+    
     return (
         <Modal
         open={openDetails}
@@ -188,7 +162,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
                   
                   <Grid item xs={4}>
                     
-                <Tooltip describeChild title="Accept proposal">
+                { status==="WAITING" ? <><Tooltip describeChild title="Accept proposal">
                             <Button variant="contained" size="small" color="success" onClick={() => handleOpenAccept() }>
                               Accept
                             </Button>
@@ -197,7 +171,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
                             <Button variant="contained" size="small"color="error" onClick={() => handleOpenDecline() }>
                               Decline
                             </Button>
-                          </Tooltip>
+                          </Tooltip></>: <></>}
                   <Button
                     sx={{ margin: "auto" }}
                     variant="contained"
