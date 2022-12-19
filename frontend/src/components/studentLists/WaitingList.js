@@ -75,7 +75,7 @@ const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <TableBody>
-                  {proposedRequests.map(( proposeItem,id ) => {
+                  {typeForReq==="departmentCoordinator" ? proposedRequests.map(( proposeItem,id ) => {
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
                         <TableCell align="left">There is available quota for {proposeItem?.student?.isErasmus ? proposeItem?.erasmusUniversity?.universityName : proposeItem?.exchangeUniversity?.universityName }, send replacement offer to {proposeItem?.student?.name}</TableCell>
@@ -98,7 +98,7 @@ const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests
                         </Grid>
                       </TableRow>
                     );
-                    })}
+                    }) : null}
                 </TableBody>
               </Table>
             </TableContainer>
