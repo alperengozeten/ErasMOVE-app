@@ -242,7 +242,7 @@ public class AdministrativeStaffService {
                 }
             }
             if ( exchangeApplications.get(i).getAdmittedStatus().equals("NOT ADMITTED") ) {
-                hostUniversityService.addStudentToWaitingBinById(exchangeApplications.get(i).getOutgoingStudent().getStudentId());
+                hostUniversityService.addStudentToWaitingBinById(exchangeApplications.get(i).getOutgoingStudent().getID());
             }
         }
 
