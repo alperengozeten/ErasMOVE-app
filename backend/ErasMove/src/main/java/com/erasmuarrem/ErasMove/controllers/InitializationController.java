@@ -530,7 +530,7 @@ public class InitializationController {
         epflCS2.setEcts(6.0);
 
         Course epflCS3 = new Course();
-        epflCS3.setCourseName("CS-231");
+        epflCS3.setCourseName("CS-331");
         epflCS3.setDescription("Computer Architecture");
         epflCS3.setEcts(8.0);
 
