@@ -7,11 +7,12 @@ import {
   Divider,
   Grid,
   TextField,
+  Typography,
 } from "@mui/material";
 import PropTypes from 'prop-types';
 
 
-export const WaitingReplacementOffer = ({offer}) => {
+export const WaitingReplacementOffer = ({acceptReplacementRequest, declineReplacementRequest, offer}) => {
 //   const offer = {
 //     from: "Eray Tüzün",
 //     student: "Alperen Gözeten",
@@ -20,8 +21,16 @@ export const WaitingReplacementOffer = ({offer}) => {
 //     info: "You have a replacement offer for the Exchange Program.",
 //   };
 
+  const handleAccept = () => {
+    acceptReplacementRequest(offer.id, offer.student.isErasmus);
+  };
+
+  const handleDecline = () => {
+    declineReplacementRequest(offer.id, offer.student.isErasmus);
+  };
+
   return (
-    <form autoComplete="off">
+    offer ? (<form autoComplete="off">
       <Card>
         <CardHeader
           subheader="You have a replacement offer to be answered."
@@ -81,12 +90,12 @@ export const WaitingReplacementOffer = ({offer}) => {
               />
             </Grid>
             <Grid item md={6} xs={12}>
-              <Button color="success" variant="contained">
+              <Button color="success" variant="contained" onClick={handleAccept}>
                 Accept
               </Button>
             </Grid>
             <Grid item md={6} xs={12}>
-              <Button color="error" variant="contained">
+              <Button color="error" variant="contained" onClick={handleDecline}>
                 Decline
               </Button>
             </Grid>
@@ -94,10 +103,19 @@ export const WaitingReplacementOffer = ({offer}) => {
         </CardContent>
         <Divider />
       </Card>
-    </form>
+    </form>) : <Typography
+        gutterBottom
+        variant="h3"
+        textAlign={"center"}
+        component="div"
+      >
+        {"You don't have any replacement request"} 
+      </Typography>
   );
 };
 
 WaitingReplacementOffer.propTypes = {
   offer: PropTypes.object,
+  acceptReplacementRequest: PropTypes.func,
+  declineReplacementRequest: PropTypes.func,
 };

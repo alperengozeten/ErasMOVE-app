@@ -26,6 +26,8 @@ import {
     createFileRequestRequest,
     getFileRequestsRequest,
     getReplacementRequests,
+    acceptReplacementRequest,
+    declineReplacementRequest,
 } from "../../actions";
 import FileRequestsForStudent from "./FileRequestForStudent";
 
@@ -52,6 +54,8 @@ const Application = ({
     createFileRequestRequest,
     getFileRequestsRequest,
     getReplacementRequests,
+    acceptReplacementRequest,
+    declineReplacementRequest,
 }) => {
 
   useEffect(() => {
@@ -136,7 +140,7 @@ const Application = ({
                     </TabPanel>
                     <TabPanel value="4" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <WaitingReplacementOffer offer={replacementOffers}/>
+                            <WaitingReplacementOffer acceptReplacementRequest={acceptReplacementRequest} declineReplacementRequest={declineReplacementRequest} offer={replacementOffers}/>
                         </Box>
                     </TabPanel>
                 </TabContext>
@@ -187,6 +191,8 @@ const mapActionsToProps = {
     createFileRequestRequest,
     getFileRequestsRequest,
     getReplacementRequests,
+    acceptReplacementRequest,
+    declineReplacementRequest,
 };
 
 Application.propTypes = {
@@ -213,6 +219,8 @@ Application.propTypes = {
     createFileRequestRequest: PropTypes.func,
     getFileRequestsRequest: PropTypes.func,
     getReplacementRequests: PropTypes.func,
+    acceptReplacementRequest: PropTypes.func,
+    declineReplacementRequest: PropTypes.func,
 };
   
 Application.defaultProps = {

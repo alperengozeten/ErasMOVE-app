@@ -195,11 +195,11 @@ export const sendExchangeReplacementRequest = replacementRequest => (
 );
 
 export const acceptExchangeReplacementRequest = id => (
-  axios.post(`${baseURL}/exchangeReplacementRequest/outgoingStudent/${id}/accept`, )
+  axios.post(`${baseURL}/exchangeReplacementRequest/accept/${id}`,)
 );
 
 export const declineExchangeReplacementRequest = id => (
-  axios.post(`${baseURL}/exchangeReplacementRequest/outgoingStudent/${id}/decline`, )
+  axios.post(`${baseURL}/exchangeReplacementRequest/decline/${id}`,)
 );
 
 // Replacement request erasmus
@@ -218,11 +218,11 @@ export const sendErasmusReplacementRequest = replacementRequest => (
 );
 
 export const acceptErasmusReplacementRequest = id => (
-  axios.post(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}/accept`, )
+  axios.post(`${baseURL}/erasmusReplacementRequest/accept/${id}`,)
 );
 
 export const declineErasmusReplacementRequest = id => (
-  axios.post(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}/decline`, )
+  axios.post(`${baseURL}/erasmusReplacementRequest/decline/${id}`,)
 );
 
 // File requests
