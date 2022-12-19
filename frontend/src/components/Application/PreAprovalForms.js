@@ -106,9 +106,9 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
 
         console.log(totalCredits);
 
-        if(missingInfo || totalCredits < 30){
+        if(missingInfo || totalCredits < 3){
             setError(true);
-            if(totalCredits < 30)
+            if(totalCredits < 3)
                 setErrorMessage("Total credits of the equivalent courses cannot be less than 30.");
             else
                 setErrorMessage("Required places must be filled!");

@@ -11,6 +11,8 @@ import Label from '../../label';
 import { connect } from "react-redux";
 import MobilityCourseCard from "./MobilityCourseCard";
 import { acceptPreApprovalFormRequest, declinePreApprovalFormRequest } from '../../../actions';
+import axios from "axios";
+import FileDownload from "js-file-download";
 
 
 const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, preApprovalForm, acceptPreApprovalFormRequest, declinePreApprovalFormRequest, userId }) => {
@@ -35,6 +37,18 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
 
     const generatePDF = () => {
         //savePDF(preAppRef.current, { paperSize: "A4"});
+    };
+
+      const baseURL = 'http://localhost:8080';
+
+    const handleDownloadFile = () => {
+        axios({
+            url: `${baseURL}/preApprovalForm/pdf/${preApprovalForm.id}`,
+            method: 'GET',
+            responseType: 'blob'
+        }).then(res => {
+            FileDownload(res.data, 'preApproval.pdf');
+        });
     };
 
     return (
@@ -184,7 +198,7 @@ const PreApprovalRequestDetail = ({ openDetails, handleCloseDetails, authType, p
                             </section>
                     </Stack>
                     <Grid container sx={{marginTop: '0px'}} alignItems={"flex-end"}>
-                        <Button variant="contained" onClick={generatePDF} startIcon={<SaveIcon />}>Save PDF</Button>
+                        <Button variant="contained" onClick={handleDownloadFile} startIcon={<SaveIcon />}>Save PDF</Button>
                         <Button sx={{margin: 'auto'}} variant="contained" color="error" size="medium" onClick={handleCloseDetails} >
                             Close
                         </Button>
