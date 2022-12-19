@@ -629,6 +629,11 @@ function* acceptReplacementRequest({ payload: { id, isErasmus } }) {
           type: ACCEPT_REPLACEMENT_OFFER_SUCCESS,
           payload: {},
       });
+
+      yield put({
+        type: GET_REPLACEMENT_OFFER_REQUEST,
+        payload: { id, isErasmus },
+    });
   } catch (error) {
     yield put({
       type: ACCEPT_REPLACEMENT_OFFER_FAIL,

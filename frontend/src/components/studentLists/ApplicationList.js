@@ -16,7 +16,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguag
 
     const dispatch = useDispatch();
     const handlePlace = () => {
-        dispatch({ type: PLACE_STUDENTS_REQUEST, payload: { type, department }});
+        dispatch({ type: PLACE_STUDENTS_REQUEST, payload: { type, department, user, typeForReq }});
     };
 
     useEffect(() => {

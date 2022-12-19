@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { ADD_COURSE_TO_DEPARTMENT_FAIL, ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_COURSE_TO_DEPARTMENT_SUCCESS, ADD_HOST_DEPARTMENT_FAIL, ADD_HOST_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_SUCCESS, CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_FAIL, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_FAIL, GET_UNIVERSITIES_REQUEST, GET_UNIVERSITIES_SUCCESS, PLACE_STUDENTS_REQUEST, UPLOAD_STUDENTS_LIST_FAIL, UPLOAD_STUDENTS_LIST_REQUEST, UPLOAD_STUDENTS_LIST_SUCCESS } from '../constants/actionTypes';
+import { ADD_COURSE_TO_DEPARTMENT_FAIL, ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_COURSE_TO_DEPARTMENT_SUCCESS, ADD_HOST_DEPARTMENT_FAIL, ADD_HOST_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_SUCCESS, CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_APPLICATIONS_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_FAIL, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_FAIL, GET_UNIVERSITIES_REQUEST, GET_UNIVERSITIES_SUCCESS, PLACE_STUDENTS_REQUEST, UPLOAD_STUDENTS_LIST_FAIL, UPLOAD_STUDENTS_LIST_REQUEST, UPLOAD_STUDENTS_LIST_SUCCESS } from '../constants/actionTypes';
 import { addDepartment, addElectiveCourseToDepartment, addMandatoryCourseToDepartment, getDepartments, getErasmusUniversities, getExchangeUniversities, placeStudentsErasmus, placeStudentsExchange, uploadStudentList } from '../lib/api/unsplashService';
 
 
@@ -174,7 +174,7 @@ function* uploadStudentsRequest({ payload:{ type, department, list}}) {
   }
 }
 
-function* placeStudentsRequest({ payload:{ type, department}}) {
+function* placeStudentsRequest({ payload:{ type, department, user, typeForReq}}) {
   console.log(`Upload stud ${department}`);
   console.log(department);
 
@@ -189,6 +189,10 @@ function* placeStudentsRequest({ payload:{ type, department}}) {
       if (status !== 200) {
         throw Error('Accept request failed for  course approval request ');
       }
+        yield put({
+          type: GET_APPLICATIONS_BY_DEPARTMENT_REQUEST,
+          payload: { user, typeForReq },
+      });
   } catch (error) {
     console.log(error);
   }
