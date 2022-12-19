@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -34,7 +34,7 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application, languageEditable, languages }) => {
+const ApplicationDetails = ({ application, languageEditable, languages, addLanguageByStudentId }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
 
@@ -49,6 +49,11 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
     setLangAdded([]);
     setEditable(false);
     setOpen(false);
+  };
+
+  const handleClickAdd = () => {
+    //addLanguageByStudentId(langAdded, application.outgoingStudent.id);
+    handleClose();
   };
 
   var languageList = [];
@@ -270,7 +275,7 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
             </FormControl>
           </Container>
           {languageEditable ? (
-            <Button onClick={handleClose}>Add Languages</Button>
+            <Button onClick={handleClickAdd}>Add Languages</Button>
           ) : null}
         </Box>
       </Modal>
@@ -297,6 +302,7 @@ ApplicationDetails.propTypes = {
   languages: PropTypes.array,
   languageEditable: PropTypes.bool,
   getLanguageByStudentId: PropTypes.func,
+  addLanguageByStudentId: PropTypes.func,
 };
 
 ApplicationDetails.defaultProps = {

@@ -53,6 +53,16 @@ export const getLanguageByStudentId = id => ( //TO BE CHANGED
   axios.get(`${baseURL}/outgoingStudent/language/outgoingStudent/${id}`)
 );
 
+export const addLanguage = (languages, id) => (
+  fetch(`${baseURL}/language/outgoingStudent/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(languages)
+  })
+);
+
 // Notifications
 export const getNotifications = id => (
   axios.get(`${baseURL}/notification/user/${id}`)
