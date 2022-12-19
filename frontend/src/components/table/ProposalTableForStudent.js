@@ -1,9 +1,12 @@
 import React from 'react';
 import { filter } from 'lodash';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sentenceCase } from 'change-case';
 import Label from '../label';
+import axios from 'axios';
+import { connect } from 'react-redux';
+
 
 // @mui
 import {
@@ -11,6 +14,8 @@ import {
   Table,
   Paper,
   TableRow,
+  Alert,
+  Snackbar,
   TableBody,
   TableCell,
   Container,
@@ -69,7 +74,7 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
+const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseRequests,user }) => {
 
   const [page, setPage] = useState(0);
 
@@ -114,6 +119,17 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
   const [openDelete, setOpenDelete] = React.useState(false);
 
   const [requestType, setRequestType] = React.useState("");
+  
+  const [openSnackBar,setOpenSnackBar] = React.useState(false);
+  const [snackBarMsg,setSnackBarMsg] = React.useState("");
+  const [severity,setSeverity] = React.useState("");
+  const baseURL = 'http://localhost:8080';
+
+  const handleCloseSnackBar = ()=>{
+    setSnackBarMsg("");
+    setSeverity("");
+    setOpenSnackBar(false);
+  };
 
   const handleOpenDetails = id => { 
     setRequesDetailsID(id);
@@ -134,20 +150,50 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
     setRequestType("");
     setOpenDelete(false);
   };
+  const[proposals,setProposals] = React.useState([]);
   
-  const handleDelete = () => {
+  const handleDelete = id => {
+
+    axios.delete(`${baseURL}/incomingStudent/courseProposal/delete/${id}`).then(response => {if(response.status===400){
+      setSeverity("error");
+  
+          setSnackBarMsg("Proposal is not deleted!");
+           setOpenSnackBar(true);
+         }
+         else if(response.status===200){
+      setSeverity("success");
+  
+               setSnackBarMsg("Proposal is successfully deleted!");
+              setOpenSnackBar(true);
+  
+              
+              }
+          }
+      );
+    setRequestType("");
     handleCloseDelete();
-    deleteCourseApprovalRequestRequest(requesDetailsID, requestType);
-    setRequesDetailsID(0);
   };
-  const proposals= [{name:"Proposal 1", status: "WAITING"},{name:"Proposal 2", status:"DECLINED"},{name:"Proposal 3", status:"ACCEPTED"} ];
+  //const proposals= [{name:"Proposal 1", status: "WAITING"},{name:"Proposal 2", status:"DECLINED"},{name:"Proposal 3", status:"ACCEPTED"} ];
+
+   function getProposal(incomingStudentID) {
+    axios.get(`${baseURL}/incomingStudent/courseProposal/incomingStudent/${incomingStudentID}`).then(response => response.data)
+    .then(result => {
+      setProposals(result);
+    });
+}
+
+useEffect(() => {
+  getProposal(user.id);
+}, []);
+
+
+console.log("proposal " + proposals);
 
   return (
     <>
       <Container>
         <Card>
-          <ProposalPageListToolbar filterName={filterName} onFilterName={handleFilterByName} />
-
+          <ProposalPageListToolbar filterName={filterName} onFilterName={handleFilterByName} user={user} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
@@ -158,8 +204,7 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {proposals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id, name,status } = row;
+                  {proposals.map((proposal,id) => {
 
                     return (
                       <TableRow hover key={id} tabIndex={-1} role="checkbox" >
@@ -168,13 +213,13 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {proposal.incomingStudent.name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(proposal.status === 'WAITING' && 'warning') || (proposal.status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(proposal.status)}</Label>
                         </TableCell>
 
                    
@@ -184,13 +229,13 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
-                          { status==="WAITING" ? <><Tooltip describeChild title="Delete">
+                          { proposal.status==="WAITING" ? <><Tooltip describeChild title="Delete">
                             <IconButton size="large" color="error" onClick={() => handleOpenDelete(id) }>
                               <DeleteIcon />
                             </IconButton>
                           </Tooltip> </>: null}
                         </TableCell>
-                    <DeleteModal handleDelete={handleDelete} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={name}/>
+                    <DeleteModal handleDelete={()=>handleDelete(proposal.id)} openDelete={openDelete} handleCloseDelete={handleCloseDelete} name={proposal.incomingStudentID }/>
                     <ProposalDetailForStudent handleOpenDetails={handleOpenDetails} openDetails={openDetails} handleCloseDetails={handleCloseDetails}/>
 
                                        </TableRow>
@@ -240,14 +285,28 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Card>
+        <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+  <Alert onClose={handleCloseSnackBar} severity={severity} sx={{ width: '100%' }}>
+    {snackBarMsg}
+  </Alert>
+</Snackbar>
       </Container>
     </>
   );
 };
 
+const mapStateToProps = state => {
+  const user = state.user.user;
+
+  return {
+      user,
+  };
+};
+
 ProposalTableForStudent.propTypes = {
     courseRequests: PropTypes.array,
-    deleteCourseApprovalRequestRequest: PropTypes.func
+    deleteCourseApprovalRequestRequest: PropTypes.func,
+    user: PropTypes.object
 };
   
 ProposalTableForStudent.defaultProps = {
@@ -255,4 +314,4 @@ ProposalTableForStudent.defaultProps = {
 };
 
 
-export default ProposalTableForStudent;
+export default connect(mapStateToProps)(ProposalTableForStudent); 
