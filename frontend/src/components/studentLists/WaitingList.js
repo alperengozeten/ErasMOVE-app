@@ -78,7 +78,7 @@ const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests
                   {proposedRequests.map(( proposeItem,id ) => {
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
-                        <TableCell align="left">There is available quota for {proposeItem.erasmusUniversity.universityName}, send replacement offer to {proposeItem.student.name}</TableCell>
+                        <TableCell align="left">There is available quota for {proposeItem?.student?.isErasmus ? proposeItem?.erasmusUniversity?.universityName : proposeItem?.exchangeUniversity?.universityName }, send replacement offer to {proposeItem?.student?.name}</TableCell>
                         <Grid sx={{ p: 2 }}>
 
                             <Button
