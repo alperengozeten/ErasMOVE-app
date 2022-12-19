@@ -50,6 +50,11 @@ public class OutgoingStudentController {
         return outgoingStudentService.cancelPlacementByOutgoingStudentID(outgoingStudentID);
     }
 
+    @DeleteMapping("/cancelApplication/{outgoingStudentID}")
+    public String cancelApplicationByOutgoingStudentID(@PathVariable("outgoingStudentID") Long outgoingStudentID) {
+        return outgoingStudentService.cancelApplicationByOutgoingStudentID(outgoingStudentID);
+    }
+
     // LANGUAGES
     @GetMapping("/language")
     public List<Language> getLanguages() {
