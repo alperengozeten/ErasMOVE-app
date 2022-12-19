@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @Controller for outgoingStudent,
+ * specifying end points and connecting related functionalities
+ */
 @RestController
 @RequestMapping("/outgoingStudent")
 @CrossOrigin

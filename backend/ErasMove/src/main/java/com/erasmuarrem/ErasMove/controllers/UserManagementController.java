@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @Controller class for user management purposes
+ * Mainly for add, login, logout, change and forgot password attributes
+ */
 @RestController
 @RequestMapping("/user")
 @CrossOrigin

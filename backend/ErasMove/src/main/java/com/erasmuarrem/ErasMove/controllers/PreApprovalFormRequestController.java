@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @Controller class for PreApprovalFormRequest,
+ * specifying end points and related functions
+ */
 @RestController
 @RequestMapping("/preApprovalForm")
 @CrossOrigin
