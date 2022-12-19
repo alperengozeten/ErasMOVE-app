@@ -101,7 +101,7 @@
     
 -   We plan to provide them with the ability to create a proposal for their planned courses in Bilkent, which will then be approved by the department coordinator.
 
-⚙️ Build Instructions
+## :gear: Build Instructions
 1.  Install PostgreSQL. Use the default instructions and the port number (which is 5432). In this process, you will be asked to create a password for the superuser (postgres), remember this password.
 2.  Clone our repository https://github.com/alperengozeten/ErasMOVE-app
 3.  Add the psql to the path to be able to run the psql from the terminal and create a new database.
