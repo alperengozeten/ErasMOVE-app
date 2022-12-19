@@ -163,7 +163,7 @@ const RequestsTable = ({ requests, deleteFileRequestRequest, isStaff, respondFil
 
   const handleDownloadFile = id => {
     axios({
-        url: `${baseURL}/document/fileRequest/${id}`,
+        url: `${baseURL}/document/mandatoryCourseApproval/${id}`,
         method: 'GET',
         responseType: 'blob'
     }).then(res => {

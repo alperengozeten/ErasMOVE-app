@@ -1159,6 +1159,174 @@ public class InitializationController {
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE1,seoulEEE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE2,seoulEEE.getID());
         exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(seoulEEE3, seoulEEE.getID());
+        //Austin Texas at University
+        ExchangeUniversity austin = new ExchangeUniversity();
+        austin.setCountry("America");
+        austin.setUniversityName("Austin Texas");
+        austin.setMaxUniversityQuota(25);
+        austin.setUniversityQuota(25);
+        austin.setAcceptedStudents(new ArrayList<>() );
+
+        Course rejectAus1 = new Course();
+        rejectAus1.setEcts(8.0);
+        rejectAus1.setCourseName("IE-333");
+        rejectAus1.setDescription("Optimization of Machines");
+        courseService.addNewCourse(rejectAus1);
+
+
+        Course rejectAus2 = new Course();
+        rejectAus2.setEcts(9.0);
+        rejectAus2.setCourseName("IE-101");
+        rejectAus2.setDescription("Introduction to Industrial Thinking");
+        courseService.addNewCourse(rejectAus2);
+
+        List<Course> rejectedAustin = new ArrayList<>();
+        rejectedAustin.add(rejectAus2);
+        rejectedQueen.add(rejectAus1);
+
+        austin.setRejectedCourses(rejectedAustin);
+        exchangeUniversityService.addExchangeUniversity(austin);
+
+        ExchangeUniversityDepartment austinIE = new ExchangeUniversityDepartment();
+        austinIE.setDepartmentName("IE");
+        austinIE.setExchangeUniversity(austin);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(austinIE);
+
+        ExchangeUniversityDepartment austinCS = new ExchangeUniversityDepartment();
+        austinCS.setDepartmentName("CS");
+        austinCS.setExchangeUniversity(austin);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(austinCS);
+
+
+
+        Course acceptedAustin1 = new Course();
+        acceptedAustin1.setEcts(15.0);
+        acceptedAustin1.setCourseName("IE-410");
+        acceptedAustin1.setDescription("Gaming Industry");
+
+        Course acceptedAustin2 = new Course();
+        acceptedAustin2.setEcts(16.0);
+        acceptedAustin2.setCourseName("IE-341");
+        acceptedAustin2.setDescription("Industry 4.0");
+
+
+        Course acceptedAustin3 = new Course();
+        acceptedAustin3.setEcts(8.0);
+        acceptedAustin3.setCourseName("CS-410");
+        acceptedAustin3.setDescription("Object Oriented Programming");
+
+        Course acceptedAustin4 = new Course();
+        acceptedAustin4.setEcts(9.0);
+        acceptedAustin4.setCourseName("CS-341");
+        acceptedAustin4.setDescription("Operating Systems");
+
+        Course acceptedAustin5 = new Course();
+        acceptedAustin5.setEcts(11.0);
+        acceptedAustin5.setCourseName("CS-281");
+        acceptedAustin5.setDescription("Database Systems");
+
+        Course acceptedAustin6 = new Course();
+        acceptedAustin6.setEcts(8.0);
+        acceptedAustin6.setCourseName("CS-121");
+        acceptedAustin6.setDescription("Word, Excel and More");
+
+        Course acceptedAustin7 = new Course();
+        acceptedAustin7.setEcts(8.0);
+        acceptedAustin7.setCourseName("CS-131");
+        acceptedAustin7.setDescription("Programming for Social Sciences");
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin1,austinIE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin2,austinIE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin4,austinCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin5,austinCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin3,austinCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedAustin6,austinCS.getID());
+        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(acceptedAustin7, austinCS.getID());
+
+        //NUS
+        ExchangeUniversity nus = new ExchangeUniversity();
+        nus.setCountry("Singapore");
+        nus.setUniversityName("NUS");
+        nus.setMaxUniversityQuota(15);
+        nus.setUniversityQuota(15);
+        nus.setAcceptedStudents(new ArrayList<>() );
+
+        Course rejectNus1 = new Course();
+        rejectNus1.setEcts(8.0);
+        rejectNus1.setCourseName("IE-333");
+        rejectNus1.setDescription("Optimization of Machines");
+        courseService.addNewCourse(rejectNus1);
+
+
+        Course rejectNus2 = new Course();
+        rejectNus2.setEcts(9.0);
+        rejectNus2.setCourseName("IE-101");
+        rejectNus2.setDescription("Introduction to Industrial Thinking");
+        courseService.addNewCourse(rejectNus2);
+
+        List<Course> rejectedNUS = new ArrayList<>();
+        rejectedNUS.add(rejectNus1);
+        rejectedNUS.add(rejectNus2);
+
+        nus.setRejectedCourses(rejectedNUS);
+        exchangeUniversityService.addExchangeUniversity(nus);
+
+        ExchangeUniversityDepartment nusIE = new ExchangeUniversityDepartment();
+        nusIE.setDepartmentName("IE");
+        nusIE.setExchangeUniversity(nus);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(nusIE);
+
+        ExchangeUniversityDepartment nusCS = new ExchangeUniversityDepartment();
+        nusCS.setDepartmentName("CS");
+        nusCS.setExchangeUniversity(nus);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(nusCS);
+
+
+
+        Course nusIE1 = new Course();
+        nusIE1.setEcts(11.0);
+        nusIE1.setCourseName("IE-410");
+        nusIE1.setDescription("Gaming Industry");
+
+        Course nusIE2 = new Course();
+        nusIE2.setEcts(16.0);
+        nusIE2.setCourseName("IE-341");
+        nusIE2.setDescription("Industry 4.0");
+
+
+        Course nusCS1 = new Course();
+        nusCS1.setEcts(8.0);
+        nusCS1.setCourseName("CS-410");
+        nusCS1.setDescription("Object Oriented Programming");
+
+        Course nusCS2 = new Course();
+        nusCS2.setEcts(9.0);
+        nusCS2.setCourseName("CS-341");
+        nusCS2.setDescription("Operating Systems");
+
+        Course nusCS3 = new Course();
+        nusCS3.setEcts(11.0);
+        nusCS3.setCourseName("CS-281");
+        nusCS3.setDescription("Database Systems");
+
+        Course nusCS4 = new Course();
+        nusCS4.setEcts(8.0);
+        nusCS4.setCourseName("CS-121");
+        nusCS4.setDescription("Word, Excel and More");
+
+        Course nusCS5 = new Course();
+        nusCS5.setEcts(8.0);
+        nusCS5.setCourseName("CS-131");
+        nusCS5.setDescription("Programming for Social Sciences");
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusIE2,nusIE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusIE1,nusIE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS1,nusCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS3,nusCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS4,nusCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS2,nusCS.getID());
+        exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(nusCS5, nusCS.getID());
+
 
         // applications
         ApplicationWrapper awp1 = new ApplicationWrapper();
@@ -1170,7 +1338,7 @@ public class InitializationController {
         awp1.setTotalPoint(99);
         List<String> unis1 = new ArrayList<>();
         unis1.add("EPFL");
-        unis1.add("ETH Zurich");
+        unis1.add("ETH");
         awp1.setSelectedUniversities(unis1);
 
         ApplicationWrapper awp2 = new ApplicationWrapper();
@@ -1181,7 +1349,7 @@ public class InitializationController {
         awp2.setStudentId(21902464L);
         awp2.setTotalPoint(98);
         List<String> unis2 = new ArrayList<>();
-        unis2.add("ETH Zurich");
+        unis2.add("ETH");
         awp2.setSelectedUniversities(unis2);
 
         // Erasmus CS
@@ -1207,6 +1375,9 @@ public class InitializationController {
         List<Department> departmentsOfYelda = new ArrayList<>();
         departmentsOfYelda.add(cs);
         departmentsOfYelda.add(man);
+        departmentsOfYelda.add(me);
+        departmentsOfYelda.add(ie);
+        departmentsOfYelda.add(eee);
         yelda.setHashedPassword(hashingPasswordHelper.Hash());
         yelda.setDepartments(departmentsOfYelda);
         administrativeStaffService.addAdministrativeStaff(yelda);

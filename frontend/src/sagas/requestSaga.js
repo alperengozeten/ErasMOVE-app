@@ -1,19 +1,23 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
 import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQUEST, ACCEPT_COURSE_APPROVAL_REQUEST_SUCCESS,
-  ACCEPT_PREAPPROVAL_FORM_FAIL, ACCEPT_PREAPPROVAL_FORM_REQUEST, ACCEPT_PREAPPROVAL_FORM_SUCCESS, CREATE_COURSE_APPROVAL_REQUEST_FAIL,
+  ACCEPT_PREAPPROVAL_FORM_FAIL, ACCEPT_PREAPPROVAL_FORM_REQUEST, ACCEPT_PREAPPROVAL_FORM_SUCCESS, ACCEPT_REPLACEMENT_OFFER_FAIL, ACCEPT_REPLACEMENT_OFFER_REQUEST, ACCEPT_REPLACEMENT_OFFER_SUCCESS, CREATE_COURSE_APPROVAL_REQUEST_FAIL,
   CREATE_COURSE_APPROVAL_REQUEST_REQUEST, CREATE_COURSE_APPROVAL_REQUEST_SUCCESS, CREATE_FILE_REQUEST_FAIL, CREATE_FILE_REQUEST_REQUEST, CREATE_FILE_REQUEST_SUCCESS, CREATE_PREAPPROVAL_FORM_FAIL,
   CREATE_PREAPPROVAL_FORM_REQUEST, CREATE_PREAPPROVAL_FORM_SUCCES, DECLINE_COURSE_APPROVAL_REQUEST_FAIL, DECLINE_COURSE_APPROVAL_REQUEST_REQUEST,
   DECLINE_COURSE_APPROVAL_REQUEST_SUCCESS, DECLINE_PREAPPROVAL_FORM_FAIL, DECLINE_PREAPPROVAL_FORM_REQUEST,
-  DECLINE_PREAPPROVAL_FORM_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
+  DECLINE_PREAPPROVAL_FORM_SUCCESS, DECLINE_REPLACEMENT_OFFER_FAIL, DECLINE_REPLACEMENT_OFFER_REQUEST, DECLINE_REPLACEMENT_OFFER_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_FAIL, DELETE_FILE_REQUEST_REQUEST, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_FAIL, GET_FILE_REQUESTS_REQUEST, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
-  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, GET_REPLACEMENT_OFFER_FAIL, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 import {
-  acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
+  acceptElectiveCourseApproval, acceptErasmusReplacementRequest, acceptExchangeReplacementRequest, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
   createElectiveCourseApproval,  createFileRequest,  createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval,
+  declineErasmusReplacementRequest,
+  declineExchangeReplacementRequest,
   declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteFileRequest,
   deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
+  getErasmusReplacementRequest,
+  getExchangeReplacementRequest,
   getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
   respondFileRequest,
   respondFileRequestSendFile,
@@ -535,13 +539,15 @@ function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
 
   try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('syllabus', file);
 
       console.log(file);
       console.log(formData);
 
       const response = yield call(respondFileRequest, id, file);  
       console.log(response);
+
+      const res2 = yield call(sendSyllabusMandatory, id, formData);
 
       //const { dat } = yield call(respondFileRequestSendFile, id, file, type);  
       //console.log(dat);
@@ -568,6 +574,95 @@ function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
   }
 }
 
+function* getReplacementRequests({ payload: { id, typeForReq, isErasmus } }) {
+  console.log(`create file request `);
+
+  try {
+      let response = '';
+      if (isErasmus) {
+         response = yield call(getErasmusReplacementRequest, id);  
+      } else {
+        response = yield call(getExchangeReplacementRequest, id);  
+      }
+      console.log(response);
+      const offer = response.data.filter(form => form.status === "WAITING")[0];
+      console.log(offer);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: GET_REPLACEMENT_OFFER_SUCCESS,
+          payload: offer,
+      });
+  } catch (error) {
+    yield put({
+      type: GET_REPLACEMENT_OFFER_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* acceptReplacementRequest({ payload: { id, isErasmus } }) {
+  console.log(`create file request `);
+
+  try {
+      let response = '';
+      if (isErasmus) {
+         response = yield call(acceptErasmusReplacementRequest, id);  
+      } else {
+        response = yield call(acceptExchangeReplacementRequest, id);  
+      }
+      console.log(response);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: ACCEPT_REPLACEMENT_OFFER_SUCCESS,
+          payload: {},
+      });
+  } catch (error) {
+    yield put({
+      type: ACCEPT_REPLACEMENT_OFFER_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* declineReplacementRequest({ payload: { id, isErasmus } }) {
+  console.log(`create file request `);
+
+  try {
+      let response = '';
+      if (isErasmus) {
+         response = yield call(declineErasmusReplacementRequest, id);  
+      } else {
+        response = yield call(declineExchangeReplacementRequest, id);  
+      }
+      console.log(response);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: DECLINE_REPLACEMENT_OFFER_SUCCESS,
+          payload: {},
+      });
+  } catch (error) {
+    yield put({
+      type: DECLINE_REPLACEMENT_OFFER_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
@@ -584,6 +679,10 @@ const requestSaga = [
   takeEvery(DELETE_FILE_REQUEST_REQUEST, deleteFileRequestReq),
   takeEvery(CREATE_FILE_REQUEST_REQUEST, createFileRequestRequest),
   takeEvery(RESPOND_FILE_REQUEST_REQUEST, respondFileRequestRequest),
+  takeEvery(GET_REPLACEMENT_OFFER_REQUEST, getReplacementRequests),
+  takeEvery(ACCEPT_REPLACEMENT_OFFER_REQUEST, acceptReplacementRequest),
+  takeEvery(DECLINE_REPLACEMENT_OFFER_REQUEST, declineReplacementRequest),
+
 ];
 
 export default requestSaga;

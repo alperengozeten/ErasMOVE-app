@@ -5,12 +5,29 @@ import com.erasmuarrem.ErasMove.repositories.DepartmentCoordinatorRepository;
 import com.erasmuarrem.ErasMove.repositories.DepartmentRepository;
 import com.erasmuarrem.ErasMove.repositories.OutgoingStudentRepository;
 import com.erasmuarrem.ErasMove.repositories.PreApprovalFormRequestRepository;
+import com.itextpdf.io.font.constants.StandardFonts;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.property.HorizontalAlignment;
+import com.itextpdf.layout.property.UnitValue;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -279,5 +296,124 @@ public class PreApprovalFormRequestService {
         }
 
         return preApprovalFormRequestRepository.findByStudent_Department_ID(departmentID);
+    }
+
+    public ResponseEntity<Resource> getPDFPreApprovalFormByID(Long id) {
+
+        Optional<PreApprovalFormRequest> preApprovalFormRequestOptional = preApprovalFormRequestRepository.findById(id);
+
+        if ( !preApprovalFormRequestOptional.isPresent() ) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        PreApprovalFormRequest preApprovalFormRequest = preApprovalFormRequestOptional.get();
+        OutgoingStudent outgoingStudent = preApprovalFormRequest.getStudent();
+
+        ContractedUniversity contractedUniversity = null;
+        if ( outgoingStudent.getIsErasmus() ) {
+            contractedUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudent.getID());
+        }
+        else {
+            contractedUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudent.getID());
+        }
+
+        // Create a new PDF document
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PdfDocument pdf = new PdfDocument(new PdfWriter(baos));
+        Document document = new Document(pdf);
+
+        String path = new FileSystemResource("").getFile().getAbsolutePath();
+        Path root = Path.of(path);
+        root = root.resolve("documents").resolve("bilkent.png");
+
+        try {
+            ImageData imageData = ImageDataFactory.create(root.toString());
+            Image image = new Image(imageData);
+            image.scale(0.4F, 0.4F);
+            image.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            document.add(image);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
+            Paragraph header = new Paragraph("Pre-Approval Form")
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(14).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header2 = new Paragraph("Host Institution: " + contractedUniversity.getUniversityName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header3 = new Paragraph("Student: " + preApprovalFormRequest.getStudent().getName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+            Paragraph header4 = new Paragraph("Department: " + preApprovalFormRequest.getStudent().getDepartment().getDepartmentName())
+                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD))
+                    .setFontSize(12).setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+
+            document.add(header);
+            document.add(header2);
+            document.add(header3);
+            document.add(header4);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<MobilityCourse> mobilityCourseList = mobilityCourseService.getMobilityCoursesByPreApprovalFormRequestID(id);
+        Table table = new Table(UnitValue.createPercentArray(7)).useAllAvailableWidth();
+
+        table.addCell("");
+        table.addCell("Course Code");
+        table.addCell("Course Name");
+        table.addCell("Credits");
+        table.addCell("Corresponding Course Code");
+        table.addCell("Corresponding Course Name");
+        table.addCell("Credits");
+        int outerCount = 1;
+
+        for (MobilityCourse mobilityCourse : mobilityCourseList) {
+            List<Course> mergedCourses = mobilityCourse.getMergedCourses();
+            int count = 1;
+
+            for (Course course : mergedCourses) {
+                table.addCell(String.valueOf(outerCount));
+                table.addCell(course.getCourseName());
+                table.addCell(course.getDescription());
+                table.addCell(String.valueOf(course.getEcts()));
+
+                if ( count == 1 ) {
+                    Cell cell1 = new Cell(mergedCourses.size(), 1);
+                    cell1.add(new Paragraph(mobilityCourse.getCorrespondingCourse().getCourseName()));
+                    table.addCell(cell1);
+
+                    Cell cell2 = new Cell(mergedCourses.size(), 1);
+                    cell2.add(new Paragraph(mobilityCourse.getCorrespondingCourse().getDescription()));
+                    table.addCell(cell2);
+
+                    Cell cell3 = new Cell(mergedCourses.size(), 1);
+                    cell3.add(new Paragraph(String.valueOf(mobilityCourse.getCorrespondingCourse().getEcts())));
+                    table.addCell(cell3);
+                }
+
+                outerCount++;
+                count++;
+            }
+        }
+
+        // Add the table to the document
+        document.add(table);
+
+        // Close the document
+        document.close();
+
+        // Convert the PDF document to a byte array
+        byte[] contents = baos.toByteArray();
+
+        // Create a Resource object for the PDF file
+        Resource resource = new ByteArrayResource(contents);
+
+        return new ResponseEntity<>(resource, HttpStatus.OK);
     }
 }
