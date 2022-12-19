@@ -54,7 +54,7 @@ function ExcelReader({ submitExcel }) {
         return {
           firstName: student["First Name"],
           lastName: student["Lastname"],
-          studentID: student["Student ID Number"],
+          studentId: student["Student ID Number"],
           selectedSemester: student["Duration Preferred"],
           department: student["Department"],
           cgpa: student["UECGPA"],
