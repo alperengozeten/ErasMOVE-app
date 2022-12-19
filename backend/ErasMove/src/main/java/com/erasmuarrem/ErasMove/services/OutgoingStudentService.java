@@ -67,7 +67,7 @@ public class OutgoingStudentService {
             return "The Outgoing Student with id:" + outgoingStudentID + " doesn't currently have an application!";
         }
 
-        application.setAdmittedStatus("CANCELLED");
+        application.setAdmittedStatus("NOT ADMITTED");
 
         if ( outgoingStudent.getIsErasmus() ) {
             ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
@@ -136,5 +136,61 @@ public class OutgoingStudentService {
 
             return new ResponseEntity<>(exchangeUniversity, HttpStatus.OK);
         }
+    }
+
+    public String cancelApplicationByOutgoingStudentID(Long outgoingStudentID) {
+        Optional<OutgoingStudent> outgoingStudentOptional = outgoingStudentRepository.findById(outgoingStudentID);
+
+        if ( !outgoingStudentOptional.isPresent() ) {
+            return "Outgoing Student with id:" + outgoingStudentID + " doesn't exist!";
+        }
+
+        OutgoingStudent outgoingStudent = outgoingStudentOptional.get();
+
+        Application application = applicationService.getByOutgoingStudentID(outgoingStudentID);
+
+        if ( application == null ) {
+            return "The Outgoing Student with id:" + outgoingStudentID + " doesn't currently have an application!";
+        }
+
+        application.setAdmittedStatus("CANCELLED");
+
+        if ( outgoingStudent.getIsErasmus() ) {
+            ErasmusUniversity erasmusUniversity = erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( erasmusUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+            }
+
+            ErasmusUniversityDepartment erasmusUniversityDepartment = erasmusUniversityDepartmentService
+                    .getErasmusUniversityDepartmentByErasmusUniversityIDAndDepartmentName(
+                            erasmusUniversity.getID(), outgoingStudent.getDepartment().getDepartmentName()
+                    );
+
+            erasmusUniversityDepartmentService.deleteOutgoingStudentByErasmusDepartmentIDAndOutgoingStudentID(
+                    erasmusUniversityDepartment.getID(), outgoingStudentID
+            );
+
+            // refresh proposals
+            erasmusReplacementRequestService.makeErasmusProposalsToDepartmentCoordinator(outgoingStudent.getDepartment().getID());
+        }
+        else {
+            ExchangeUniversity exchangeUniversity = exchangeUniversityService.getExchangeUniversityByAcceptedStudentID(outgoingStudentID);
+
+            if ( exchangeUniversity == null ) {
+                return "Outgoing Student with id:" + outgoingStudentID + " is not currently admitted!";
+            }
+
+            exchangeUniversityService.deleteOutgoingStudentByIDAndOutgoingStudentID(
+                    exchangeUniversity.getID(), outgoingStudentID
+            );
+
+            // refresh proposals
+            exchangeReplacementRequestService.makeExchangeProposalsToDepartmentCoordinators();
+        }
+
+        // delete the Pre-Approval forms of the student!
+        String output = preApprovalFormRequestService.deletePreApprovalFormRequestByOutgoingStudentID(outgoingStudentID);
+        return output + "\nPlacement of the Outgoing Student with id:" + outgoingStudentID + " has been cancelled!";
     }
 }
