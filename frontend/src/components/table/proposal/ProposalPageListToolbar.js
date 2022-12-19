@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import axios from 'axios';
+
 // @mui
 import { styled } from "@mui/material/styles";
 import {
@@ -7,6 +9,7 @@ import {
   Grid,
   Button,
   Alert,
+  Snackbar,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -44,7 +47,7 @@ const StyledRoot = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const ProposalPageListToolbar = () => {
+const ProposalPageListToolbar = ({user}) => {
   const [open, setOpen] = useState(false);
   const [courseOne, setCourseOne] = React.useState(0);
   const [courseTwo, setCourseTwo] = React.useState(0);
@@ -52,8 +55,22 @@ const ProposalPageListToolbar = () => {
   const [courseFour, setCourseFour] = React.useState(0);
   const [courseFive, setCourseFive] = React.useState(0);
   const [error,setError] = React.useState(false);
+  const [empty,setEmpty] = React.useState(false);
+  const [openSnackBar,setOpenSnackBar] = React.useState(false);
+  const [snackBarMsg,setSnackBarMsg] = React.useState("");
+  const [severity,setSeverity] = React.useState("");
 
-  
+
+
+
+  const baseURL = 'http://localhost:8080';
+
+  const handleCloseSnackBar = ()=>{
+    setSnackBarMsg("");
+    setSeverity("");
+    setOpenSnackBar(false);
+  };
+
   const handleCreateProposal = () => {
     if (
       courseOne === 0 ||
@@ -63,37 +80,66 @@ const ProposalPageListToolbar = () => {
       courseFive === 0
     ) {
       setError(true);
-    } else{
-    setError(false);
+    } else
+    {
+        const proposalObject ={
+            incomingStudent:{
+                id: user.id
+            },
+            plannedCourses:[
+                {
+                    id: user.department.courseList[(courseOne/10) -1].id
+                },
+                {
+                    id: user.department.courseList[(courseTwo/10) -1].id
+                    
+                },
+                {
+                    id: user.department.courseList[(courseThree/10) -1].id
+                    
+                },
+                {
+                    id: user.department.courseList[(courseFour/10) -1].id
+                    
+                },
+                {
+                    id: user.department.courseList[(courseFive/10) -1].id
+                }
+            ],
+            status:""
+        };
+        fetch(`${baseURL}/incomingStudent/addCourseProposal`, {
+             method: 'POST',
+             headers: {
+             'Content-type' : 'application/json'
+            }, 
+            body: JSON.stringify(proposalObject)
+       }).then(response => {if(response.status===400){
+    setSeverity("error");
+
+        setSnackBarMsg("Proposal is not created!");
+         setOpenSnackBar(true);
+       }
+       else if(response.status===200){
+    setSeverity("success");
+
+             setSnackBarMsg("Proposal successfully created!");
+            setOpenSnackBar(true);
+
+            
+            }
+        }
+    );
+
+
+     setError(false);
+     setEmpty(true);
+     setEmpty(false);
+    setEmpty(true);
+
     }
   };
 
-  const obj = {
-    departmentName: "CS",
-    courseList: [
-      {
-        courseName: "CS-101",
-        description: "Algorithms and Programming I",
-        ects: 6.5,
-      },
-      {
-        courseName: "CS-102",
-        description: "Algorithms and Programming II",
-        ects: 6.5,
-      },
-      {
-        courseName: "CS-121",
-        description: "Fundamentals of Algorithms",
-        ects: 6.5,
-      },
-      {
-        courseName: "CS-319",
-        description: "Object Oriented Software Engineering",
-        ects: 6.5,
-      },
-      { courseName: "CS-315", description: "Programming Languages", ects: 5 },
-    ],
-  };
 
   const handleCourseOneChange = e => {
     setCourseOne(e.target.value);
@@ -118,7 +164,11 @@ const ProposalPageListToolbar = () => {
   };
 
   const handleClose = () => {
+    setEmpty(false);
+    setEmpty(true);
     setOpen(false);
+    setEmpty(true);
+
   };
 
   return (
@@ -204,8 +254,8 @@ const ProposalPageListToolbar = () => {
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                {obj.courseList.map((course,index)=> (
-                                <MenuItem key = {index}value={(index+1)*10}>
+                                {user.department.courseList.map((course,index)=> (
+                                <MenuItem key = {index} value={(index+1)*10}>
                                   {course.courseName}
                                 </MenuItem>))}
                               </Select>
@@ -236,7 +286,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseOne === 0
                                       ? ""
-                                      : obj.courseList[(courseOne - 10) / 10]
+                                      : user.department.courseList[(courseOne - 10) / 10]
                                           .description}
                                   </MDBCardText>
                                 </FormControl>
@@ -261,7 +311,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseOne === 0
                                       ? ""
-                                      : obj.courseList[(courseOne - 10) / 10]
+                                      : user.department.courseList[(courseOne - 10) / 10]
                                           .ects}
                                   </MDBCardText>
                                 </FormControl>
@@ -295,7 +345,7 @@ const ProposalPageListToolbar = () => {
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                {obj.courseList.map((course,index)=> (
+                                {user.department.courseList.map((course,index)=> (
                                 <MenuItem key = {index}value={(index+1)*10}>
                                   {course.courseName}
                                 </MenuItem>))}
@@ -327,7 +377,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseTwo === 0
                                       ? ""
-                                      : obj.courseList[(courseTwo - 10) / 10]
+                                      : user.department.courseList[(courseTwo - 10) / 10]
                                           .description}
                                   </MDBCardText>
                                 </FormControl>
@@ -352,7 +402,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseTwo === 0
                                       ? ""
-                                      : obj.courseList[(courseTwo - 10) / 10]
+                                      : user.department.courseList[(courseTwo - 10) / 10]
                                           .ects}
                                   </MDBCardText>
                                 </FormControl>
@@ -385,7 +435,7 @@ const ProposalPageListToolbar = () => {
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                {obj.courseList.map((course,index)=> (
+                                {user.department.courseList.map((course,index)=> (
                                 <MenuItem key = {index}value={(index+1)*10}>
                                   {course.courseName}
                                 </MenuItem>))}
@@ -417,7 +467,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseThree === 0
                                       ? ""
-                                      : obj.courseList[(courseThree - 10) / 10]
+                                      : user.department.courseList[(courseThree - 10) / 10]
                                           .description}
                                   </MDBCardText>
                                 </FormControl>
@@ -442,7 +492,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseThree === 0
                                       ? ""
-                                      : obj.courseList[(courseThree - 10) / 10]
+                                      : user.department.courseList[(courseThree - 10) / 10]
                                           .ects}
                                   </MDBCardText>
                                 </FormControl>
@@ -475,7 +525,7 @@ const ProposalPageListToolbar = () => {
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                {obj.courseList.map((course,index)=> (
+                                {user.department.courseList.map((course,index)=> (
                                 <MenuItem key = {index}value={(index+1)*10}>
                                   {course.courseName}
                                 </MenuItem>))}
@@ -507,7 +557,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseFour === 0
                                       ? ""
-                                      : obj.courseList[(courseFour - 10) / 10]
+                                      : user.department.courseList[(courseFour - 10) / 10]
                                           .description}
                                   </MDBCardText>
                                 </FormControl>
@@ -532,7 +582,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseFour === 0
                                       ? ""
-                                      : obj.courseList[(courseFour - 10) / 10]
+                                      : user.department.courseList[(courseFour - 10) / 10]
                                           .ects}
                                   </MDBCardText>
                                 </FormControl>
@@ -564,7 +614,7 @@ const ProposalPageListToolbar = () => {
                                 <MenuItem disabled value={0}>
                                   Select
                                 </MenuItem>
-                                {obj.courseList.map((course,index)=> (
+                                {user.department.courseList.map((course,index)=> (
                                 <MenuItem key = {index}value={(index+1)*10}>
                                   {course.courseName}
                                 </MenuItem>))}
@@ -596,7 +646,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseFive === 0
                                       ? ""
-                                      : obj.courseList[(courseFive - 10) / 10]
+                                      : user.department.courseList[(courseFive - 10) / 10]
                                           .description}
                                   </MDBCardText>
                                 </FormControl>
@@ -621,7 +671,7 @@ const ProposalPageListToolbar = () => {
                                   <MDBCardText>
                                     {courseFive === 0
                                       ? ""
-                                      : obj.courseList[(courseFive - 10) / 10]
+                                      : user.department.courseList[(courseFive - 10) / 10]
                                           .ects}
                                   </MDBCardText>
                                 </FormControl>
@@ -676,14 +726,23 @@ const ProposalPageListToolbar = () => {
                          </Stack>
         </Box>
       </Modal>
+
+<Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleCloseSnackBar}>
+  <Alert onClose={handleCloseSnackBar} severity={severity} sx={{ width: '100%' }}>
+    {snackBarMsg}
+  </Alert>
+</Snackbar>
     </StyledRoot>
   );
 };
 
 const mapStateToProps = state => {
   const authType = state.auth.authType;
+  const user = state.user.user;
+
   return {
     authType,
+    user,
   };
 };
 
@@ -691,6 +750,7 @@ ProposalPageListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  user: PropTypes.object
 };
 
 
