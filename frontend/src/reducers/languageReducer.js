@@ -1,7 +1,7 @@
 import { GET_LANGUAGE_BY_STUDENTID_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
-  language: {}
+  languages: []
 };
 
 const languageReducer = (state = INITIAL_STATE, action) => {
@@ -9,7 +9,7 @@ const languageReducer = (state = INITIAL_STATE, action) => {
     case GET_LANGUAGE_BY_STUDENTID_SUCCESS:
         return {
           ...state,
-          language: action.payload,
+          languages: action.payload,
         };
     default:
         return state;

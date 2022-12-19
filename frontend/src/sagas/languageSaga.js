@@ -8,13 +8,13 @@ function* getLanguageByStudentIdReq({ payload: { id } }) {
 
     try {
 
-        let language = {};
-        console.log(language);
+        let languages = [];
+        console.log(languages);
         
         const { data } = yield call(getLanguageByStudentId, id);
-        language = data;
-        
-        console.log(language);
+        languages = [...languages, ...data];
+
+        console.log(languages);
   
         const status = 200;
         if (status !== 200) {
@@ -23,7 +23,7 @@ function* getLanguageByStudentIdReq({ payload: { id } }) {
   
         yield put({
             type: GET_LANGUAGE_BY_STUDENTID_SUCCESS,
-            payload: language,
+            payload: languages,
         });
 
     } catch (error) {

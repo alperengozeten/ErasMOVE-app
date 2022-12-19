@@ -7,7 +7,7 @@ import StudentsTable from '../table/StudentsTable';
 import { getApplicationsByDepartment, getLanguageByStudentId } from '../../actions';
 import { PLACE_STUDENTS_REQUEST } from '../../constants/actionTypes';
 
-const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, user, typeForReq }) => {
+const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, user, typeForReq, languages }) => {
     const [department, setDepartment] = useState(0);
     const [type, setType] = useState('');
 
@@ -77,7 +77,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguag
 
                 </>) : null}
                 <Grid item xs={12}>
-                    { applications[0] ? <StudentsTable getLanguageByStudentId={getLanguageByStudentId} applications={applications} /> : null}
+                    { applications[0] ? <StudentsTable languages={languages} getLanguageByStudentId={getLanguageByStudentId} applications={applications} /> : null}
                 </Grid>
             </Grid>
         </Stack>
@@ -86,11 +86,12 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguag
 
 const mapStateToProps = state => {
     const applications = state.applications.applications;
-    // const language = state.language.language;
+    const languages = state.languages.languages;
     const user = state.user.user;
     const typeForReq = state.auth.authTypeForReq;
     return {
         applications,
+        languages,
         user,
         typeForReq,
     };
@@ -103,7 +104,7 @@ const mapActionsToProps = {
 
 ApplicationList.propTypes = {
     applications: PropTypes.array,
-    language: PropTypes.object,
+    languages: PropTypes.array,
     getApplicationsByDepartment: PropTypes.func,
     getLanguageByStudentId: PropTypes.func,
     user: PropTypes.object,

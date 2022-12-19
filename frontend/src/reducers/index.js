@@ -13,6 +13,7 @@ import toDoLists from './toDoListReducer';
 import user from './userReducer';
 import allUsers from './adminUserReducer';
 import notifications from './notificationReducer';
+import languages from './languageReducer';
 
 
 
@@ -26,6 +27,7 @@ const reducers = {
   universities,
   requests,
   announcements,
+  languages,
   notifications,
   courses,
   toDoLists,
