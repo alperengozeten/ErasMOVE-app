@@ -7,16 +7,19 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DECLINE_COURSE_APPROVAL_REQUEST_SUCCESS, DECLINE_PREAPPROVAL_FORM_FAIL, DECLINE_PREAPPROVAL_FORM_REQUEST,
   DECLINE_PREAPPROVAL_FORM_SUCCESS, DECLINE_REPLACEMENT_OFFER_FAIL, DECLINE_REPLACEMENT_OFFER_REQUEST, DECLINE_REPLACEMENT_OFFER_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_FAIL, DELETE_FILE_REQUEST_REQUEST, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
+  DELETE_PROPOSED_REQUEST_REQUEST,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_FAIL, GET_FILE_REQUESTS_REQUEST, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
-  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, GET_REPLACEMENT_OFFER_FAIL, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, GET_PROPOSED_REQUEST_FAIL, GET_PROPOSED_REQUEST_REQUEST, GET_PROPOSED_REQUEST_SUCCESS, GET_REPLACEMENT_OFFER_FAIL, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 import {
   acceptElectiveCourseApproval, acceptErasmusReplacementRequest, acceptExchangeReplacementRequest, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
   createElectiveCourseApproval,  createFileRequest,  createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval,
   declineErasmusReplacementRequest,
   declineExchangeReplacementRequest,
-  declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteFileRequest,
+  declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteErasmusReplacementRequest, deleteExchangeProposedReplacementRequest, deleteFileRequest,
   deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
+  getErasmusProposedReplacementRequest,
   getErasmusReplacementRequest,
+  getExchangeProposedReplacementRequest,
   getExchangeReplacementRequest,
   getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
   respondFileRequest,
@@ -663,6 +666,56 @@ function* declineReplacementRequest({ payload: { id, isErasmus } }) {
   }
 }
 
+function* getProposedRequestReq({ payload: { id } }) {
+  console.log(`create file request `);
+
+  try {
+      
+      const {data: erasmus} = yield call(getErasmusProposedReplacementRequest, id);  
+
+      const {data: exchange} = yield call(getExchangeProposedReplacementRequest, id);  
+
+      const proposed = [...erasmus,...exchange];
+      console.log(proposed);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: GET_PROPOSED_REQUEST_SUCCESS,
+          payload: proposed,
+      });
+  } catch (error) {
+    yield put({
+      type: GET_PROPOSED_REQUEST_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
+function* deleteReplacementRequest({ payload: { id, type } }) {
+  console.log(`create file request `);
+
+  try {
+      
+      if(type === 'Erasmus'){
+        const {data: erasmus} = yield call(deleteErasmusReplacementRequest, id);  
+      } else {
+        const {data: erasmus} = yield call(deleteExchangeProposedReplacementRequest, id);  
+      }
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
@@ -682,7 +735,8 @@ const requestSaga = [
   takeEvery(GET_REPLACEMENT_OFFER_REQUEST, getReplacementRequests),
   takeEvery(ACCEPT_REPLACEMENT_OFFER_REQUEST, acceptReplacementRequest),
   takeEvery(DECLINE_REPLACEMENT_OFFER_REQUEST, declineReplacementRequest),
-
+  takeEvery(GET_PROPOSED_REQUEST_REQUEST, getProposedRequestReq),
+  takeEvery(DELETE_PROPOSED_REQUEST_REQUEST, deleteReplacementRequest),
 ];
 
 export default requestSaga;

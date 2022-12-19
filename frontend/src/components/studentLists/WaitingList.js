@@ -1,6 +1,6 @@
 import { Grid, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
     Card,
@@ -16,14 +16,53 @@ import {
   } from "@mui/material";
   // components
 import WaitingStudentsTable from '../table/WaitingStudentsTable';
-import { sendReplacementOffer, getApplicationsByDepartment, getDepartments } from '../../actions';
+import { sendReplacementOffer, getApplicationsByDepartment, getDepartments, getProposedRequestRequest } from '../../actions';
+import { DELETE_PROPOSED_REQUEST_REQUEST } from '../../constants/actionTypes';
 
-const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForReq, exchangeDepartments, getDepartments, erasmusDepartments }) => {
+const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests, getApplicationsByDepartment, user, typeForReq, exchangeDepartments, getDepartments, erasmusDepartments }) => {
     useEffect(() => {
         getApplicationsByDepartment(user, typeForReq);
         getDepartments();
+
+        if(typeForReq==="departmentCoordinator") {
+            getProposedRequestRequest(user.id);
+        }
     }, [user, getApplicationsByDepartment, typeForReq]);
 
+    const dispatch = useDispatch(); 
+
+    const handleSend = id => {
+        let replacementRequest = '';
+        let type = '';
+        if (proposedRequests?.filter(app => app.id === id)[0]?.student.isErasmus) {
+        replacementRequest = {
+            info: 'Erasmus Replacement Request',
+            student:{ id: proposedRequests.filter(app => app.id === id)[0]?.student.id},
+            erasmusUniversity: {id: proposedRequests?.filter(app => app.id === id)[0].erasmusUniversity.id},
+            departmentCoordinator: {
+                id: user.id
+            },
+        };
+        type = 'Erasmus';
+        } else {
+        replacementRequest = {
+            info: 'Exchange Replacement Request',
+            student:{ id: proposedRequests.filter(app => app.id === id)[0]?.student.id},
+            exchangeUniversity: {id: proposedRequests?.filter(app => app.id === id)[0].exchangeUniversity.id},
+            departmentCoordinator: {
+                id: user.id
+            },
+        };
+        type = 'Exchange';
+        }
+    
+        dispatch(sendReplacementOffer(replacementRequest, type));
+    };
+
+    const handleDecline = id => {
+        const type = proposedRequests?.filter(app => app.id === id)[0]?.student.isErasmus ? 'Erasmus' : 'Exchange';
+        dispatch({ type: DELETE_PROPOSED_REQUEST_REQUEST, payload: { id, type }});
+    };
     //----DUMMY DATA----
     const propose = [{universityName: "EPFL", quota: 1, studentName: "Kürşad Güzelkaya"},{universityName: "Harvard", quota: 1, studentName: "Alperen Gözeten"}];
     return (
@@ -36,22 +75,24 @@ const WaitingList = ({ applications, getApplicationsByDepartment, user, typeForR
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
                 <TableBody>
-                  {propose.map(( proposeItem,id ) => {
+                  {proposedRequests.map(( proposeItem,id ) => {
                     return (
                       <TableRow hover key={id} tabIndex={-1}>
-                        <TableCell align="left">{proposeItem.quota} available quota for {proposeItem.universityName}. Send replacement offer to {proposeItem.studentName}</TableCell>
+                        <TableCell align="left">There is available quota for {proposeItem.erasmusUniversity.universityName}, send replacement offer to {proposeItem.student.name}</TableCell>
                         <Grid sx={{ p: 2 }}>
 
                             <Button
                                    variant="contained"
                                    color="success"
                                    size="small"
+                                   onClick={() => handleSend(proposeItem.id)}
                             >Send</Button>
 
                             <Button
                             variant="contained"
                             color="error"
                             size="small"
+                            onClick={() => handleDecline(proposeItem.id)}
                             >Reject</Button>
 
                         </Grid>
@@ -78,12 +119,14 @@ const mapStateToProps = state => {
     const typeForReq = state.auth.authTypeForReq;
     const erasmusDepartments = state.universities.erasmusDepartments;
     const exchangeDepartments = state.universities.exchangeDepartments;
+    const proposedRequests = state.requests.proposedRequests;
     return {
         applications,
         user,
         typeForReq,
         erasmusDepartments,
         exchangeDepartments,
+        proposedRequests,
     };
 };
 
@@ -91,6 +134,7 @@ const mapActionsToProps = {
     sendReplacementOffer,
     getApplicationsByDepartment,
     getDepartments,
+    getProposedRequestRequest,
 };
 
 WaitingList.propTypes = {
@@ -101,6 +145,8 @@ WaitingList.propTypes = {
     exchangeDepartments: PropTypes.array,
     erasmusDepartments: PropTypes.array,
     getDepartments: PropTypes.func,
+    getProposedRequestRequest: PropTypes.func,
+    proposedRequests: PropTypes.array,
 };
   
 WaitingList.defaultProps = {
