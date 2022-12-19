@@ -36,7 +36,7 @@ export const WaitingReplacementOffer = ({offer}) => {
                 disabled
                 label="From"
                 name="from"
-                value={offer.from}
+                value={offer?.departmentCoordinator?.name}
                 variant="outlined"
               />
             </Grid>
@@ -46,7 +46,7 @@ export const WaitingReplacementOffer = ({offer}) => {
                 disabled
                 label="To"
                 name="to"
-                value={offer.student}
+                value={offer?.student?.name}
                 variant="outlined"
               />
             </Grid>
@@ -56,7 +56,7 @@ export const WaitingReplacementOffer = ({offer}) => {
                 disabled
                 label="New University"
                 name="uni"
-                value={offer.university}
+                value={offer.student.isErasmus ? offer.erasmusUniversity.universityName : offer.exchangeUniversity.universityName}
                 variant="outlined"
               />
             </Grid>
@@ -66,7 +66,7 @@ export const WaitingReplacementOffer = ({offer}) => {
                 disabled
                 label="Status"
                 name="status"
-                value={offer.status}
+                value={offer?.status}
                 variant="outlined"
               />
             </Grid>
@@ -76,7 +76,7 @@ export const WaitingReplacementOffer = ({offer}) => {
                 disabled
                 label="Info"
                 name="info"
-                value={offer.info}
+                value={offer?.info}
                 variant="outlined"
               />
             </Grid>
