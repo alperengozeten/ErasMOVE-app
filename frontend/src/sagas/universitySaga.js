@@ -149,7 +149,7 @@ function* getUniversitiesFunc() {
   }
 }
 
-function* uploadStudentsRequest({ payload:{ type, department, list}}) {
+function* uploadStudentsRequest({ payload:{ type, department, list }}) {
   console.log(`Upload stud ${department}`);
   console.log(department);
 
@@ -166,6 +166,8 @@ function* uploadStudentsRequest({ payload:{ type, department, list}}) {
           type: UPLOAD_STUDENTS_LIST_SUCCESS,
           payload: { },
       });
+
+      alert("Applications created and students added successfully!");
   } catch (error) {
     yield put({
       type: UPLOAD_STUDENTS_LIST_FAIL,
