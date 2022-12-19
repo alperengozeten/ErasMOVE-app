@@ -72,7 +72,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const PlacedStudentsTable = ({ applications }) => {
+const PlacedStudentsTable = ({ applications, addLanguageByStudentId, languages }) => {
 
   const [page, setPage] = useState(0);
 
@@ -196,7 +196,9 @@ const PlacedStudentsTable = ({ applications }) => {
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
-                                      languageEditable={false}
+                                      addLanguageByStudentId={addLanguageByStudentId}
+                                      languages={languages}
+                                      languageEditable={true}
                                       application={
                                         applications.filter(
                                           req => req.id === applicationDetailsID
@@ -282,6 +284,8 @@ const boxStyle = {
 };
 
 PlacedStudentsTable.propTypes = {
+    addLanguageByStudentId: PropTypes.func,
+    languages: PropTypes.array,
     applications: PropTypes.array,
 };
   

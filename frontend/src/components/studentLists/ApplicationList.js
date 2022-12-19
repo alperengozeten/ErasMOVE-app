@@ -4,10 +4,10 @@ import { connect, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import StudentsTable from '../table/StudentsTable';
-import { getApplicationsByDepartment, getLanguageByStudentId } from '../../actions';
+import { getApplicationsByDepartment, getLanguageByStudentId, addLanguageByStudentId } from '../../actions';
 import { PLACE_STUDENTS_REQUEST } from '../../constants/actionTypes';
 
-const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, user, typeForReq, languages }) => {
+const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, addLanguageByStudentId, user, typeForReq, languages }) => {
     const [department, setDepartment] = useState(0);
     const [type, setType] = useState('');
 
@@ -77,7 +77,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguag
 
                 </>) : null}
                 <Grid item xs={12}>
-                    { applications[0] ? <StudentsTable languages={languages} getLanguageByStudentId={getLanguageByStudentId} applications={applications} /> : null}
+                    { applications[0] ? <StudentsTable languages={languages} getLanguageByStudentId={getLanguageByStudentId} addLanguageByStudentId={addLanguageByStudentId} applications={applications} /> : null}
                 </Grid>
             </Grid>
         </Stack>
@@ -100,6 +100,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
     getApplicationsByDepartment,
     getLanguageByStudentId,
+    addLanguageByStudentId,
 };
 
 ApplicationList.propTypes = {
@@ -107,6 +108,7 @@ ApplicationList.propTypes = {
     languages: PropTypes.array,
     getApplicationsByDepartment: PropTypes.func,
     getLanguageByStudentId: PropTypes.func,
+    addLanguageByStudentId: PropTypes.func,
     user: PropTypes.object,
     typeForReq: PropTypes.string,
 };

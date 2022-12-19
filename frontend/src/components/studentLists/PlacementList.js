@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import PlacedStudentTable from '../table/PlacedStudentsTable';
-import { getApplicationsByDepartment } from '../../actions';
+import { getApplicationsByDepartment, addLanguageByStudentId } from '../../actions';
 
-const PlacementList = ({ applications, user, getApplicationsByDepartment, typeForReq }) => {
+const PlacementList = ({ applications, user, getApplicationsByDepartment, typeForReq, addLanguageByStudentId, languages }) => {
     useEffect(() => {
         getApplicationsByDepartment(user, typeForReq);
     }, [user, getApplicationsByDepartment, typeForReq]);
@@ -17,7 +17,7 @@ const PlacementList = ({ applications, user, getApplicationsByDepartment, typeFo
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <PlacedStudentTable applications={ applications } />
+                    <PlacedStudentTable addLanguageByStudentId={addLanguageByStudentId} languages={languages} applications={ applications } />
                 </Grid>
             </Grid>
         </Stack>
@@ -28,15 +28,18 @@ const mapStateToProps = state => {
     const applications = state.applications.placedApplications;
     const user = state.user.user;
     const typeForReq = state.auth.authTypeForReq;
+    const languages = state.languages.languages;
     return {
         applications,
         user,
         typeForReq,
+        languages,
     };
 };
 
 const mapActionsToProps = {
     getApplicationsByDepartment,
+    addLanguageByStudentId,
 };
 
 PlacementList.propTypes = {
@@ -44,6 +47,8 @@ PlacementList.propTypes = {
     getApplicationsByDepartment: PropTypes.func,
     user: PropTypes.object,
     typeForReq: PropTypes.string,
+    addLanguageByStudentId: PropTypes.func,
+    languages: PropTypes.array,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(PlacementList);

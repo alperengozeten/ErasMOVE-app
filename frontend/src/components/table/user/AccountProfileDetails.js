@@ -11,16 +11,16 @@ import PropTypes from 'prop-types';
 
 
 export const AccountProfileDetails = ({ user }) => {
-  const values = {
-    firstName: "Kütür Kütür Şad",
-    lastName: "BeautifulRock",
-    email: "igdirli76serserii@hotmail.com",
-    password: "0123456789",
-    phone: "05313113131",
-    department: "Computer Science",
-    cgpa: "3.31",
-    languages: ["English", "German", "Iğdırish"],
-  };
+  // const values = {
+  //   firstName: "Kütür Kütür Şad",
+  //   lastName: "BeautifulRock",
+  //   email: "igdirli76serserii@hotmail.com",
+  //   password: "0123456789",
+  //   phone: "05313113131",
+  //   department: "Computer Science",
+  //   cgpa: "3.31",
+  //   languages: ["English", "German", "Iğdırish"],
+  // };
 
   return (
     <form autoComplete="off">
@@ -93,7 +93,7 @@ export const AccountProfileDetails = ({ user }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item md={12} xs={12}>
+            {/* <Grid item md={12} xs={12}>
               <TextField
                 select
                 fullWidth
@@ -109,7 +109,7 @@ export const AccountProfileDetails = ({ user }) => {
                   </option>
                 ))}
               </TextField>
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -34,10 +34,13 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application, languageEditable, languages }) => {
+const ApplicationDetails = ({ application, languageEditable, languages, addLanguageByStudentId }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
+  const [level, setLevel] = useState("");
 
+
+  const handleLevelChange = e => setLevel(e.target.value);
   //var languageList = languages.map(lang => {languageList.push(lang.language);});
   //console.log(languages);
 
@@ -46,26 +49,26 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
   };
 
   const handleClose = () => {
-    setLangAdded([]);
+    setLangAdded("");
     setEditable(false);
     setOpen(false);
   };
 
-  var languageList = [];
-  languages.map(lang => {languageList.push(lang.language);});
-  const [langAdded, setLangAdded] = useState(languageList);
-  console.log(languageList);
-
-  const handleChange = event => {
-    const {
-      target: { value },
-    } = event;
-    setLangAdded(
-      // On autofill we get a stringified value.
-      typeof value === "string" ? value.split(",") : value
-    );
-    console.log(langAdded);
+  const handleClickAdd = () => {
+    const langObj = {
+      language: langAdded,
+      level: level,
+      outgoingStudent: {
+        id: application.outgoingStudent.id
+      },
+    };
+    addLanguageByStudentId(langObj);
+    handleClose();
   };
+
+  const [langAdded, setLangAdded] = useState("");
+
+  const handleChange = event => setLangAdded(event.target.value);
 
   var selectedUniversitiesNames = [];
   application.selectedUniversities.map(uni =>
@@ -202,7 +205,7 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         Languages
       </Typography>
-      {languages.length === 0 ? (
+      {languages?.length === 0 ? (
         <TextField
           required
           autoFocus
@@ -214,7 +217,7 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
           disabled
         />
       ) : (
-        languages.map((lang, id) => (
+        languages?.map((lang, id) => (
           <TextField
             key={id}
             required
@@ -246,20 +249,12 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
               </InputLabel>
 
               <Select
+                label="Add Language"
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
-                multiple
                 value={langAdded}
                 onChange={handleChange}
                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                renderValue={selected => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map(value => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}
-                MenuProps={MenuProps}
               >
                 {defaultLanguages.map(lang => (
                   <MenuItem key={lang} value={lang}>
@@ -268,9 +263,29 @@ const ApplicationDetails = ({ application, languageEditable, languages }) => {
                 ))}
               </Select>
             </FormControl>
+            <FormControl sx={{ m: 1, width: 300 }}>
+              <InputLabel id="demo-multiple-chip-label">
+                Level
+              </InputLabel>
+
+              <Select
+                label="Level"
+                labelId="demo-multiple-chip-label"
+                id="demo-multiple-chip"
+                value={level}
+                onChange={handleLevelChange}
+                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+              >
+                <MenuItem disabled value={""}>Select</MenuItem>
+                <MenuItem value={"B1"}>B1</MenuItem>
+                <MenuItem value={"B2"}>B2</MenuItem>
+                <MenuItem value={"C1"}>C1</MenuItem>
+                <MenuItem value={"C2"}>C2</MenuItem>
+              </Select>
+            </FormControl>
           </Container>
           {languageEditable ? (
-            <Button onClick={handleClose}>Add Languages</Button>
+            <Button onClick={handleClickAdd}>Add Languages</Button>
           ) : null}
         </Box>
       </Modal>
@@ -297,6 +312,7 @@ ApplicationDetails.propTypes = {
   languages: PropTypes.array,
   languageEditable: PropTypes.bool,
   getLanguageByStudentId: PropTypes.func,
+  addLanguageByStudentId: PropTypes.func,
 };
 
 ApplicationDetails.defaultProps = {

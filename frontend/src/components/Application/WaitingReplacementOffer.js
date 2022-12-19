@@ -30,7 +30,7 @@ export const WaitingReplacementOffer = ({acceptReplacementRequest, declineReplac
   };
 
   return (
-    offer ? (<form autoComplete="off">
+    (offer.departmentCoordinator) ? (<form autoComplete="off">
       <Card>
         <CardHeader
           subheader="You have a replacement offer to be answered."
@@ -65,7 +65,7 @@ export const WaitingReplacementOffer = ({acceptReplacementRequest, declineReplac
                 disabled
                 label="New University"
                 name="uni"
-                value={offer.student.isErasmus ? offer.erasmusUniversity.universityName : offer.exchangeUniversity.universityName}
+                value={offer?.student?.isErasmus ? offer?.erasmusUniversity?.universityName : offer?.exchangeUniversity?.universityName}
                 variant="outlined"
               />
             </Grid>

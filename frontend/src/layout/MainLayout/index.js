@@ -116,7 +116,6 @@ const MainLayout = ({ authType }) => {
                 <Outlet style={{ backgroundColor: 'blue' }} />
             </Main>
             <ChatDrawer drawerOpen={ rightDrawerOpened } drawerToggle={ handleRightDrawerToggle } />
-            <Customization />
         </Box>
     );
 };
