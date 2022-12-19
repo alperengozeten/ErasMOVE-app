@@ -58,7 +58,7 @@ const ProposalPageListToolbar = ({user}) => {
   const [empty,setEmpty] = React.useState(false);
   const [openSnackBar,setOpenSnackBar] = React.useState(false);
   const [snackBarMsg,setSnackBarMsg] = React.useState("");
-  const [severity,setSeverity] = React.useState("");
+  const [severity,setSeverity] = React.useState("success");
 
 
 
@@ -67,7 +67,7 @@ const ProposalPageListToolbar = ({user}) => {
 
   const handleCloseSnackBar = ()=>{
     setSnackBarMsg("");
-    setSeverity("");
+    setSeverity("success");
     setOpenSnackBar(false);
   };
 

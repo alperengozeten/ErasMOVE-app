@@ -122,12 +122,12 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
   
   const [openSnackBar,setOpenSnackBar] = React.useState(false);
   const [snackBarMsg,setSnackBarMsg] = React.useState("");
-  const [severity,setSeverity] = React.useState("");
+  const [severity,setSeverity] = React.useState("success");
   const baseURL = 'http://localhost:8080';
 
   const handleCloseSnackBar = ()=>{
     setSnackBarMsg("");
-    setSeverity("");
+    setSeverity("success");
     setOpenSnackBar(false);
   };
 

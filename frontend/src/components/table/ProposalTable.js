@@ -1,6 +1,6 @@
 import React from 'react';
 import { filter } from 'lodash';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { sentenceCase } from 'change-case';
 import Label from '../label';
@@ -8,6 +8,8 @@ import { Button, Grid, Modal, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ProposalDetail from './detailModals/ProposalDetail';
+import { connect } from "react-redux";
+import axios from 'axios';
 
 // @mui
 import {
@@ -69,7 +71,7 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) => {
+const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests, proposals }) => {
 
   const [page, setPage] = useState(0);
 
@@ -82,6 +84,7 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [requesDetailsID, setRequesDetailsID] = React.useState(0);
+  const baseURL = 'http://localhost:8080';
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -135,8 +138,21 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
     //TODO
     setOpenDecline(false);
   };
+//   const[proposals,setProposals] = React.useState([]);
 
-  const proposals= [{studentName: "Kürşad Güzelkaya", name:"Proposal 1", status: "WAITING"},{studentName: "Gökhan Tekin",name:"Proposal 2", status:"DECLINED"},{studentName: "Alperen Gözeten",name:"Proposal 3", status:"ACCEPTED"} ];
+
+// const proposals= [{studentName: "Kürşad Güzelkaya", name:"Proposal 1", status: "WAITING"},{studentName: "Gökhan Tekin",name:"Proposal 2", status:"DECLINED"},{studentName: "Alperen Gözeten",name:"Proposal 3", status:"ACCEPTED"} ];
+//   function getProposals(id) {
+//     axios.get(`${baseURL}/incomingStudent/courseProposal/administrativeStaff/${id}`).then(response => response.data)
+//     .then(result => {
+//       setProposals(result);
+//     });
+
+//     useEffect(() => {
+// getProposals(user.id);
+        
+//       }, []);
+
 
   return (
     <>
@@ -152,39 +168,37 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
                   onRequestSort={handleRequestSort}
                 />
                 <TableBody>
-                  {proposals.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                    const { id ,studentName, name,status } = row;
-
+                  {proposals.map((proposal,index) => {
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" >
+                      <TableRow hover key={index} tabIndex={-1} role="checkbox" >
                         <TableCell padding="checkbox"></TableCell>
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="left" spacing={2}>
                             <Typography variant="subtitle2" noWrap>
-                              {studentName}
+                              {proposal.incomingStudent.name}
                             </Typography>
                           </Stack>
                         </TableCell>
                         <TableCell align="center">
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              Course Proposal
                             </Typography>
                         </TableCell>
 
                         <TableCell align="center">
-                          <Label color={(status === 'WAITING' && 'warning') || (status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(status)}</Label>
+                          <Label color={(proposal.status === 'WAITING' && 'warning') || (proposal.status === 'DECLINED' && 'error') || 'success'}>{sentenceCase(proposal.status)}</Label>
                         </TableCell>
 
                    
                         <TableCell align="right">
                           <Tooltip describeChild title="Open details">
-                            <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(id) }>
+                            <IconButton size="large" color="inherit" onClick={() => handleOpenDetails(index) }>
                               <DescriptionIcon />
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <ProposalDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} status={status} name={name}/>
+                        <ProposalDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} status={proposal.status} proposal={proposal} />
                        
                       </TableRow>
                     );
@@ -240,8 +254,23 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests }) =
 
 ProposalTable.propTypes = {
     courseRequests: PropTypes.array,
-    deleteCourseApprovalRequestRequest: PropTypes.func
+    deleteCourseApprovalRequestRequest: PropTypes.func,
+  user: PropTypes.object,
+  proposals: PropTypes.array,
+
+
 };
+
+const mapStateToProps = state => {
+    const authType = state.auth.authType;
+    const user = state.user.user;
+  
+    return {
+      authType,
+      user,
+    };
+  };
+  
   
 ProposalTable.defaultProps = {
     courseRequests: [],
@@ -259,4 +288,5 @@ const style ={
     boxShadow: 24,
     p: 4,
 };
-export default ProposalTable;
+
+export default connect(mapStateToProps, {})(ProposalTable);
