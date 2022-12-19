@@ -198,7 +198,7 @@ const CourseRequestDetail = ({ openDetails, handleCloseDetails, authType, course
                                                                 </MDBCol>
                                                                 <MDBCol sm="9">
                                                                     <MDBCardText className="text-muted">
-                                                                        {courseRequest.courseCoordinator}
+                                                                        {courseRequest.info ? courseRequest.courseCoordinator.name : courseRequest.departmentCoordinator.name}
                                                                     </MDBCardText>
                                                                 </MDBCol>
                                                             </MDBRow>
