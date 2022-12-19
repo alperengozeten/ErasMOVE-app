@@ -1,17 +1,16 @@
-import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS } from "../constants/actionTypes";
+import { DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_SUCCESS, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_SUCCESS, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS } from "../constants/actionTypes";
 
 const INITIAL_STATE = {
     courseRequests: [], 
     fileRequests: [], 
     preApprovalForms: [],
-    replacementOffers: [{
+    replacementOffer: {
         from: "Eray Tüzün",
         student: "Alperen Gözeten",
         university: "Bilkent University",
         status: "Waiting for your response...",
         info: "You have a replacement offer for the Exchange Program.",
-      },
-    ],
+    },
 };
 
 const requestsReducer = (state = INITIAL_STATE, action) => {
@@ -30,6 +29,8 @@ const requestsReducer = (state = INITIAL_STATE, action) => {
             return { ...state, courseRequests: state.courseRequests.filter(courseRequest => courseRequest.id !== action.payload) };
         case DELETE_FILE_REQUEST_SUCCESS:
             return { ...state, fileRequests: state.fileRequests.filter(fileRequest => fileRequest.id !== action.payload) };
+        case GET_REPLACEMENT_OFFER_SUCCESS:
+            return { ...state, replacementOffer: action.payload};
     }
   };
   

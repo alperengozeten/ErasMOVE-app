@@ -180,6 +180,10 @@ export const declinePreApprovalForm = (id, feedback) => (
 );
 
 // Replacement request exchange
+export const getExchangeReplacementRequest = id => (
+  axios.get(`${baseURL}/exchangeReplacementRequest/outgoingStudent/${id}`, )
+);
+
 export const sendExchangeReplacementRequest = replacementRequest => (
   fetch(`${baseURL}/exchangeReplacementRequest/add`, {
     method: 'POST',
@@ -199,6 +203,10 @@ export const declineExchangeReplacementRequest = id => (
 );
 
 // Replacement request erasmus
+export const getErasmusReplacementRequest = id => (
+  axios.get(`${baseURL}/erasmusReplacementRequest/outgoingStudent/${id}`, )
+);
+
 export const sendErasmusReplacementRequest = replacementRequest => (
   fetch(`${baseURL}/erasmusReplacementRequest/add`, {
     method: 'POST',

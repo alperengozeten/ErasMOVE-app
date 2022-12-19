@@ -25,6 +25,7 @@ import {
     deleteFileRequestRequest,
     createFileRequestRequest,
     getFileRequestsRequest,
+    getReplacementRequests,
 } from "../../actions";
 import FileRequestsForStudent from "./FileRequestForStudent";
 
@@ -50,6 +51,7 @@ const Application = ({
     deleteFileRequestRequest,
     createFileRequestRequest,
     getFileRequestsRequest,
+    getReplacementRequests,
 }) => {
 
   useEffect(() => {
@@ -58,6 +60,8 @@ const Application = ({
         getCourseApprovalRequestsRequest(userId, typeForReq);
         getFileRequestsRequest(userId, typeForReq);
         getDepartments();
+    } else {
+        getReplacementRequests(userId, typeForReq, application.outgoingStudent.isErasmus);
     }
   }, [getPreApprovalFormsRequest, getCourseApprovalRequestsRequest, userId]);
 
@@ -83,6 +87,7 @@ const Application = ({
                         {(application.admittedStatus ===  "NOT ADMITTED") ? (
                             <TabList onChange={handleChange}>
                                 <Tab label="Application" value={"0"} />
+                                <Tab label="Waiting Replacement Offer" value={"4"} />
                             </TabList>
                         ) : (
                             <TabList onChange={handleChange}>
@@ -90,7 +95,6 @@ const Application = ({
                                 <Tab label="PreApproval Forms" value={"1"} />
                                 <Tab label="Course Requests" value={"2"} />
                                 <Tab label="File Requests" value={"3"} />
-                                <Tab label="Waiting Replacement Offer" value={"4"} />
                             </TabList>
                         )}
                     </Box>
@@ -132,7 +136,7 @@ const Application = ({
                     </TabPanel>
                     <TabPanel value="4" index={3}>
                         <Box sx={{ flexGrow: 1 }}>
-                            <WaitingReplacementOffer offer={replacementOffers[0]}/>
+                            <WaitingReplacementOffer offer={replacementOffers}/>
                         </Box>
                     </TabPanel>
                 </TabContext>
@@ -146,7 +150,7 @@ const Application = ({
 const mapStateToProps = state => {
     const courseRequests = state.requests.courseRequests;
     const preApprovalForms = state.requests.preApprovalForms;
-    const replacementOffers = state.requests.replacementOffers;
+    const replacementOffers = state.requests.replacementOffer;
     const hostCourses = state.courses.hostCourses;
     const approvedCourses = state.courses.approvedCourses;
     const userId = state.user.user.id;
@@ -182,6 +186,7 @@ const mapActionsToProps = {
     deleteFileRequestRequest,
     createFileRequestRequest,
     getFileRequestsRequest,
+    getReplacementRequests,
 };
 
 Application.propTypes = {
@@ -207,6 +212,7 @@ Application.propTypes = {
     deleteFileRequestRequest: PropTypes.func,
     createFileRequestRequest: PropTypes.func,
     getFileRequestsRequest: PropTypes.func,
+    getReplacementRequests: PropTypes.func,
 };
   
 Application.defaultProps = {

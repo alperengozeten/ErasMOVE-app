@@ -8,12 +8,14 @@ import { ACCEPT_COURSE_APPROVAL_REQUEST_FAIL, ACCEPT_COURSE_APPROVAL_REQUEST_REQ
   DECLINE_PREAPPROVAL_FORM_SUCCESS, DELETE_COURSE_APPROVAL_REQUEST_FAIL, DELETE_COURSE_APPROVAL_REQUEST_REQUEST,
   DELETE_COURSE_APPROVAL_REQUEST_SUCCESS, DELETE_FILE_REQUEST_FAIL, DELETE_FILE_REQUEST_REQUEST, DELETE_FILE_REQUEST_SUCCESS, DELETE_PREAPPROVAL_FORM_FAIL, DELETE_PREAPPROVAL_FORM_REQUEST, DELETE_PREAPPROVAL_FORM_SUCCESS,
   GET_COURSE_APPROVAL_REQUESTS_FAIL, GET_COURSE_APPROVAL_REQUESTS_REQUEST, GET_COURSE_APPROVAL_REQUESTS_SUCCESS, GET_FILE_REQUESTS_FAIL, GET_FILE_REQUESTS_REQUEST, GET_FILE_REQUESTS_SUCCESS, GET_PREAPPROVAL_FORMS_FAIL,
-  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
+  GET_PREAPPROVAL_FORMS_REQUEST, GET_PREAPPROVAL_FORMS_SUCCESS, GET_REPLACEMENT_OFFER_FAIL, GET_REPLACEMENT_OFFER_REQUEST, GET_REPLACEMENT_OFFER_SUCCESS, RESPOND_FILE_REQUEST_FAIL, RESPOND_FILE_REQUEST_REQUEST, RESPOND_FILE_REQUEST_SUCCESS, SEND_REPLACEMENT_OFFER_REQUEST } from '../constants/actionTypes';
 import {
   acceptElectiveCourseApproval, acceptMandatoryCourseApproval, acceptPreApprvalForm,  addMobilityCoursesToPreApprovalForm,
   createElectiveCourseApproval,  createFileRequest,  createMandatoryCourseApproval, createPreApprovalForm, declineElectiveCourseApproval,
   declineMandatoryCourseApproval, declinePreApprovalForm, deleteElectiveCourseApproval, deleteFileRequest,
   deleteMandatoryCourseApproval, deletePreApprovalForm, getElectiveCourseApprovalDocument, getElectiveCourseApprovals,
+  getErasmusReplacementRequest,
+  getExchangeReplacementRequest,
   getFileRequests, getMandatoryCourseApprovalDocument, getMandatoryCourseApprovals, getPreApprovalFormMobilityCourses, getPreApprovalForms,
   respondFileRequest,
   respondFileRequestSendFile,
@@ -570,6 +572,37 @@ function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
   }
 }
 
+function* getReplacementRequests({ payload: { id, typeForReq, isErasmus } }) {
+  console.log(`create file request `);
+
+  try {
+      let response = '';
+      if (isErasmus) {
+         response = yield call(getErasmusReplacementRequest, id);  
+      } else {
+        response = yield call(getExchangeReplacementRequest, id);  
+      }
+      console.log(response);
+      const offer = response.data.filter(form => form.status === "WAITING")[0];
+      console.log(offer);
+
+      const status = 200;
+      if (status !== 200) {
+        throw Error('Accept request failed for  course approval request ');
+      }
+
+      yield put({
+          type: GET_REPLACEMENT_OFFER_SUCCESS,
+          payload: offer,
+      });
+  } catch (error) {
+    yield put({
+      type: GET_REPLACEMENT_OFFER_FAIL,
+      payload: error.message,
+    });
+  }
+}
+
 const requestSaga = [
   takeEvery(SEND_REPLACEMENT_OFFER_REQUEST, sendReplacementOffer),
   takeEvery(GET_PREAPPROVAL_FORMS_REQUEST, getPreApprovalFormsRequest),
@@ -586,6 +619,7 @@ const requestSaga = [
   takeEvery(DELETE_FILE_REQUEST_REQUEST, deleteFileRequestReq),
   takeEvery(CREATE_FILE_REQUEST_REQUEST, createFileRequestRequest),
   takeEvery(RESPOND_FILE_REQUEST_REQUEST, respondFileRequestRequest),
+  takeEvery(GET_REPLACEMENT_OFFER_REQUEST, getReplacementRequests),
 ];
 
 export default requestSaga;
