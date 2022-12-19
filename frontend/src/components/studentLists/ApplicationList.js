@@ -29,7 +29,7 @@ const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguag
                 Application List
             </Typography>
             <Grid container justifyContent={'center'}>
-            {(typeForReq==='administrativeStaff') && (applications.filter(application => application.status !=='NOT ADMITTED').length<1) ? ( 
+            {(typeForReq==='administrativeStaff') ? ( 
                 <>
                     <Grid item xs={1}></Grid>
                     <Grid item xs={3}>        

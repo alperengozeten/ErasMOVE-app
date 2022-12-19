@@ -96,6 +96,7 @@ public class ExchangeUniversityDepartmentService {
 
         courseList.add(course);
         courseRepository.save(course);
+        exchangeUniversityDepartment.setCourseList(courseList);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
 
@@ -123,6 +124,7 @@ public class ExchangeUniversityDepartmentService {
 
         courseList.remove(course);
         courseRepository.deleteById(courseID);
+        exchangeUniversityDepartment.setCourseList(courseList);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
 
@@ -153,6 +155,7 @@ public class ExchangeUniversityDepartmentService {
 
         courseList.remove(foundCourse);
         courseRepository.deleteById(foundCourse.getID());
+        exchangeUniversityDepartment.setCourseList(courseList);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
 
@@ -197,6 +200,7 @@ public class ExchangeUniversityDepartmentService {
 
         electiveCourseList.add(course);
         courseRepository.save(course);
+        exchangeUniversityDepartment.setElectiveCourseList(electiveCourseList);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
 
@@ -224,6 +228,7 @@ public class ExchangeUniversityDepartmentService {
 
         electiveCourseList.remove(electiveCourse);
         courseRepository.deleteById(electiveCourseID);
+        exchangeUniversityDepartment.setElectiveCourseList(electiveCourseList);
         exchangeUniversityDepartmentRepository.save(exchangeUniversityDepartment);
     }
 

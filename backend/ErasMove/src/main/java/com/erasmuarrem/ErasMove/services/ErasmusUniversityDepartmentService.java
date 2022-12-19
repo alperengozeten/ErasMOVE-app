@@ -106,6 +106,7 @@ public class ErasmusUniversityDepartmentService {
         }
 
         courseList.add(course);
+        erasmusUniversityDepartment.setCourseList(courseList);
         courseRepository.save(course);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
@@ -134,6 +135,7 @@ public class ErasmusUniversityDepartmentService {
 
         courseList.remove(course);
         courseRepository.deleteById(courseID);
+        erasmusUniversityDepartment.setCourseList(courseList);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
 
@@ -293,6 +295,7 @@ public class ErasmusUniversityDepartmentService {
 
         electiveCourseList.add(course);
         courseRepository.save(course);
+        erasmusUniversityDepartment.setElectiveCourseList(electiveCourseList);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
     }
 
@@ -320,6 +323,7 @@ public class ErasmusUniversityDepartmentService {
 
         electiveCourseList.remove(electiveCourse); //  remove from the list
         courseRepository.deleteById(electiveCourseID); // delete the course
+        erasmusUniversityDepartment.setElectiveCourseList(electiveCourseList);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment); // save the department back
     }
 

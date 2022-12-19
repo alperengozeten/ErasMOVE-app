@@ -40,7 +40,7 @@ import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
 
 // ==============================|| PROFILE MENU ||============================== //
 
-const ProfileSection = ({ authType }) => {
+const ProfileSection = ({ authType, user }) => {
     const theme = useTheme();
     const customization = useSelector(state => state.customization);
     const navigate = useNavigate();
@@ -154,6 +154,17 @@ const ProfileSection = ({ authType }) => {
                         <Paper>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MainCard border={false} elevation={16} content={false} boxShadow shadow={theme.shadows[16]}>
+                                    <Box sx={{ p: 2 }}>
+                                        <Stack>
+                                            <Stack direction="row" spacing={0.5} alignItems="center">
+                                                <Typography variant="h3">Good Morning,</Typography>
+                                                <Typography component="span" variant="h3" sx={{ fontWeight: 400 }}>
+                                                    {user.name}
+                                                </Typography>
+                                            </Stack>
+                                            <Typography color={'secondary'} variant="h4">{authType}</Typography>
+                                        </Stack>
+                                    </Box>
                                     <PerfectScrollbar style={{ height: '50%', overflowX: 'hidden' }}>
                                         <Box sx={{ p: 2 }}>
                                             <List
@@ -177,27 +188,7 @@ const ProfileSection = ({ authType }) => {
                                                     selected={selectedIndex === 1}
                                                     onClick={event => handleListItemClick(event, 1, '/main/profile')}
                                                 >
-                                                    <ListItemIcon>
-                                                        <IconUser stroke={1.5} size="1.3rem" />
-                                                    </ListItemIcon>
-                                                    <ListItemText
-                                                        primary={
-                                                            <Grid container spacing={1} justifyContent="space-between">
-                                                                <Grid item>
-                                                                    <Typography variant="body2">Profile</Typography>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    {/* <Chip
-                                                                        size="small"
-                                                                        sx={{
-                                                                            bgcolor: theme.palette.warning.dark,
-                                                                            color: theme.palette.background.default
-                                                                        }}
-                                                                    /> */}
-                                                                </Grid>
-                                                            </Grid>
-                                                        }
-                                                    />
+                                                    
                                                 </ListItemButton>
                                                 <ListItemButton
                                                     sx={{ borderRadius: `${customization.borderRadius}px` }}
@@ -224,13 +215,16 @@ const ProfileSection = ({ authType }) => {
 
 const mapStateToProps = state => {
     const authType = state.auth.authType;
+    const user = state.user.user;
     return {
         authType,
+        user,
     };
 };
 
 ProfileSection.propTypes = {
     authType: PropTypes.string,
+    user: PropTypes.object,
 };
 
 export default connect(mapStateToProps, {})(ProfileSection);
