@@ -298,7 +298,7 @@ const StudentsTable = ({ applications, languages, getLanguageByStudentId, addLan
                                     <ApplicationDetails
                                       addLanguageByStudentId={addLanguageByStudentId}
                                       languages={languages}
-                                      languageEditable={true}
+                                      languageEditable={false}
                                       application={
                                         applications.filter(
                                           req => req.id === applicationDetailsID

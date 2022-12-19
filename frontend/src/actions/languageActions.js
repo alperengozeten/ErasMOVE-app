@@ -6,7 +6,7 @@ export const getLanguageByStudentId = id => ({
   payload: { id },
 });
 
-export const addLanguageByStudentId = (languages, id) => ({
+export const addLanguageByStudentId = langObj => ({
     type: ADD_LANGUAGE_BY_STUDENTID_REQUEST,
-    payload: { languages, id },
+    payload: { langObj },
 });

@@ -40,13 +40,13 @@ function* getLanguageByStudentIdReq({ payload: { id } }) {
 }
 
 function* addLanguageByStudentIdReq({
-  payload: { languages, id },
+  payload: { langObj },
 }) {
   yield console.log(`ADD LANGUAGES... `);
 
   try {
     // TODO: send Post request here
-    const { data } = yield call(addLanguage, languages, id);
+    const { data } = yield call(addLanguage, langObj);
 
     const status = 200;
     if (status !== 200) {
@@ -57,13 +57,9 @@ function* addLanguageByStudentIdReq({
 
     yield put({
       type: ADD_LANGUAGE_BY_STUDENTID_SUCCESS,
-      payload: {id},
+      payload: {},
     });
 
-    yield put({
-      type: ADD_LANGUAGE_BY_STUDENTID_REQUEST,
-      payload: { languages },
-    });
   } catch (error) {
     yield put({
       type: ADD_LANGUAGE_BY_STUDENTID_FAIL,
