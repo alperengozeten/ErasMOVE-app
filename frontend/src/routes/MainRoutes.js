@@ -28,7 +28,7 @@ const MainRoutes = {
     children: [
         {
             path: '/main',
-            element: <DashboardContainer />
+            element: <Announcements />
         },
         {
             path: '/main/applicationList',

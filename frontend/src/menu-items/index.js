@@ -17,18 +17,18 @@ const menuItems = authType => {
     let list = [];
 
     if (authType === 'Outgoing Student') {
-        list = [dashboard, student(authType), announcements];
+        list = [ student(authType), announcements];
     } else if (authType === 'Incoming Student') {
-        list = [dashboard, student(authType), announcements];
+        list = [ student(authType), announcements];
     }  else if (authType === 'Department Coordinator') {
-        list = [dashboard, pages, requests(authType), announcements, toDoList];
+        list = [ pages, requests(authType), announcements, toDoList];
     }  else if (authType === 'Course Coordinator') {
-        list = [dashboard, pages, requests(authType), announcements, toDoList];
+        list = [ pages, requests(authType), announcements, toDoList];
     } else if (authType === 'Administrative Staff') {
-        list = [dashboard, pages, requests(authType), universities, announcements, toDoList];
+        list = [ pages, requests(authType), universities, announcements, toDoList];
     } else if (authType === 'Admin') {
         // TODO: update this list
-        list = [dashboard, adminUsersPage];
+        list = [ adminUsersPage];
     }
     return list;
 };
