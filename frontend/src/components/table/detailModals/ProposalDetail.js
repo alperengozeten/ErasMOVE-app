@@ -14,7 +14,7 @@ import {
     MDBRow,
   } from "mdb-react-ui-kit";
 
-const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }) => {
+const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal, userId, getProposals }) => {
   const baseURL = 'http://localhost:8080';
 
     const [openAccept, setOpenAccept] = React.useState(false);
@@ -37,7 +37,9 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
           'Content-type' : 'application/json'
          }, 
          body: {}
-    });
+        });
+
+        getProposals(userId);
         setOpenAccept(false);
       };
       const handleDecline= () => { 
@@ -48,6 +50,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
          }, 
          body: {}
     });
+        getProposals(userId);
         setOpenDecline(false);
       };
     
@@ -158,7 +161,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
                   </MDBCol>
                 </MDBRow>
 
-                <Grid container justifyContent={"center"}>
+                {proposal.status === 'WAITING' ? (<Grid container justifyContent={"center"}>
                   
                   <Grid item xs={4}>
                     
@@ -182,7 +185,7 @@ const ProposalDetail = ({ openDetails, handleCloseDetails,status,name,proposal }
                     Close
                   </Button>
                 </Grid>
-                </Grid>
+                </Grid>) : null}
                 <Modal
             open={openAccept}
             onClose={handleCloseAcceptAndDecline}
@@ -302,7 +305,9 @@ const style = {
     name: PropTypes.string,
 
     handleCloseDetails: PropTypes.func,
-    proposal: PropTypes.object
+    proposal: PropTypes.object,
+    userId: PropTypes.string,
+    getProposals: PropTypes.func,
 
 };
   

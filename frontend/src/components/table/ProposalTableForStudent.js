@@ -119,7 +119,7 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
   const [openDelete, setOpenDelete] = React.useState(false);
 
   const [requestType, setRequestType] = React.useState("");
-  
+
   const [openSnackBar,setOpenSnackBar] = React.useState(false);
   const [snackBarMsg,setSnackBarMsg] = React.useState("");
   const [severity,setSeverity] = React.useState("success");
@@ -165,6 +165,7 @@ const ProposalTableForStudent = ({ deleteCourseApprovalRequestRequest, courseReq
   
                setSnackBarMsg("Proposal is successfully deleted!");
               setOpenSnackBar(true);
+              getProposal(user.id);
   
               
               }
@@ -193,7 +194,7 @@ console.log("proposal " + proposals);
     <>
       <Container>
         <Card>
-          <ProposalPageListToolbar filterName={filterName} onFilterName={handleFilterByName} user={user} />
+          <ProposalPageListToolbar getProposal={getProposal} filterName={filterName} onFilterName={handleFilterByName} user={user} />
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
