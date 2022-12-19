@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller class for the admin
+ */
 @RestController
 @RequestMapping("/admin")
 @CrossOrigin
@@ -19,16 +22,29 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    /**
+     * method to create an admin
+     * @param admin the admin object
+     */
     @PostMapping("/add")
     public void addAdmin(@RequestBody Admin admin ) {
         adminService.addAdmin(admin);
     }
 
+    /**
+     * Method to change password for the admin
+     * @param newPassword string
+     * @param id Long
+     */
     @PatchMapping("/changePassword/{id}")
     public void changeAdminPassword( @RequestParam String newPassword, @PathVariable Long id ) {
         adminService.changeAdminPassword( newPassword, id);
     }
 
+    /**
+     * Method that returns the list of all admins
+     * @return List<Admin> all admins
+     */
     @GetMapping
     public List<Admin> getAllAdmins() {
         return adminService.getAllAdmins();
