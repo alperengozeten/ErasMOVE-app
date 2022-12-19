@@ -79,7 +79,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const StudentsTable = ({ applications, getLanguageByStudentId }) => {
+const StudentsTable = ({ applications, languages, getLanguageByStudentId }) => {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState("asc");
@@ -154,8 +154,9 @@ const StudentsTable = ({ applications, getLanguageByStudentId }) => {
   const [open, setOpen] = useState(false);
   const [applicationDetailsID, setApplicationDetailsID] = React.useState(0);
 
-  const handleClickOpen = id => {
-    getLanguageByStudentId(id, "outgoingStudent");
+  const handleClickOpen = (id, studentId) => {
+    // console.log(studentId);
+    getLanguageByStudentId(studentId);
     setApplicationDetailsID(id);
     setOpen(true);
   };
@@ -278,7 +279,7 @@ const StudentsTable = ({ applications, getLanguageByStudentId }) => {
                               <IconButton
                                 size="large"
                                 color="inherit"
-                                onClick={() => handleClickOpen(id)}
+                                onClick={() => handleClickOpen(id, outgoingStudent.id)}
                               >
                                 <DescriptionIcon />
                               </IconButton>
@@ -295,7 +296,7 @@ const StudentsTable = ({ applications, getLanguageByStudentId }) => {
                                 <Container>
                                   {applicationDetailsID ? (
                                     <ApplicationDetails
-                                      language={["Turkish", "German", "English"]}
+                                      languages={languages}
                                       languageEditable={true}
                                       application={
                                         applications.filter(
@@ -382,15 +383,17 @@ const boxStyle = {
   overflowY: "scroll",
 };
 
+
+
 StudentsTable.propTypes = {
   applications: PropTypes.array,
-  language: PropTypes.object,
+  languages: PropTypes.array,
   getLanguageByStudentId: PropTypes.func,
 };
 
 StudentsTable.defaultProps = {
   applications: [],
-  language: {},
+  languages: [],
 };
 
 export default StudentsTable;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 // @mui
 import {
   Container,
@@ -21,7 +21,6 @@ import {
 // ----------------------------------------------------------------------
 
 const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -35,20 +34,27 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application, languageEditable, language }) => {
+const ApplicationDetails = ({ application, languageEditable, languages }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
+
+  //var languageList = languages.map(lang => {languageList.push(lang.language);});
+  //console.log(languages);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
+    setLangAdded([]);
     setEditable(false);
     setOpen(false);
   };
 
-  const [langAdded, setLangAdded] = useState(language);
+  var languageList = [];
+  languages.map(lang => {languageList.push(lang.language);});
+  const [langAdded, setLangAdded] = useState(languageList);
+  console.log(languageList);
 
   const handleChange = event => {
     const {
@@ -56,16 +62,24 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
     } = event;
     setLangAdded(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
+    console.log(langAdded);
   };
 
   var selectedUniversitiesNames = [];
-  application.selectedUniversities.map( uni => selectedUniversitiesNames.push(uni.universityName));
+  application.selectedUniversities.map(uni =>
+    selectedUniversitiesNames.push(uni.universityName)
+  );
 
   return (
     <>
-      <Typography id="modal-modal-title" variant="h3" component="h2" textAlign={"center"}>
+      <Typography
+        id="modal-modal-title"
+        variant="h3"
+        component="h2"
+        textAlign={"center"}
+      >
         Application Details
       </Typography>
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -173,7 +187,7 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
         disabled
       />
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-        Languages
+        Language Requirements
       </Typography>
       <TextField
         required
@@ -185,7 +199,38 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
         defaultValue={application.languageStatus}
         disabled
       />
-      {languageEditable ? (<Button onClick={handleClickOpen}>Add Language</Button>) : null}
+      <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        Languages
+      </Typography>
+      {languages.length === 0 ? (
+        <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="lng"
+          fullWidth
+          variant="standard"
+          defaultValue={"Empty"}
+          disabled
+        />
+      ) : (
+        languages.map((lang, id) => (
+          <TextField
+            key={id}
+            required
+            autoFocus
+            margin="dense"
+            id="lng"
+            fullWidth
+            variant="standard"
+            defaultValue={lang.language}
+            disabled
+          />
+        ))
+      )}
+      {languageEditable ? (
+        <Button onClick={handleClickOpen}>Add Language</Button>
+      ) : null}
       <Modal
         open={open}
         onClose={handleClose}
@@ -196,7 +241,10 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
         <Box sx={style}>
           <Container>
             <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="demo-multiple-chip-label">Add Language</InputLabel>
+              <InputLabel id="demo-multiple-chip-label">
+                Add Language
+              </InputLabel>
+
               <Select
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
@@ -205,7 +253,7 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
                 onChange={handleChange}
                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                 renderValue={selected => (
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                     {selected.map(value => (
                       <Chip key={value} label={value} />
                     ))}
@@ -214,17 +262,16 @@ const ApplicationDetails = ({ application, languageEditable, language }) => {
                 MenuProps={MenuProps}
               >
                 {defaultLanguages.map(lang => (
-                  <MenuItem
-                    key={lang}
-                    value={lang}
-                  >
+                  <MenuItem key={lang} value={lang}>
                     {lang}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
           </Container>
-          {languageEditable ? (<Button onClick={handleClose}>Add Languages</Button>) : null}
+          {languageEditable ? (
+            <Button onClick={handleClose}>Add Languages</Button>
+          ) : null}
         </Box>
       </Modal>
     </>
@@ -245,27 +292,16 @@ const style = {
   p: 4,
 };
 
-// const mapStateToProps = state => {
-//   const language = state.language.language;
-//   const user = state.user.user;
-//   const typeForReq = state.auth.authTypeForReq;
-//   return {
-//       language,
-//       user,
-//       typeForReq,
-//   };
-// };
-
 ApplicationDetails.propTypes = {
   application: PropTypes.object,
-  language: PropTypes.array,
+  languages: PropTypes.array,
   languageEditable: PropTypes.bool,
   getLanguageByStudentId: PropTypes.func,
 };
 
 ApplicationDetails.defaultProps = {
   application: {},
-  language: {},
+  language: [],
   languageEditable: false,
 };
 
