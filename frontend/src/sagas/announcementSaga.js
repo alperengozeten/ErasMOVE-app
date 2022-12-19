@@ -2,13 +2,23 @@ import { takeEvery, put, call, delay } from 'redux-saga/effects';
 import { CREATE_ANNOUNCEMENT_FAIL, CREATE_ANNOUNCEMENT_REQUEST, CREATE_ANNOUNCEMENT_SUCCESS, GET_ANNOUNCEMENTS_FAIL, GET_ANNOUNCEMENTS_REQUEST, GET_ANNOUNCEMENTS_SUCCESS } from '../constants/actionTypes';
 import { createAnnouncement, getAnnouncements } from '../lib/api/unsplashService';
 
-function* getAnnouncementRequest({ payload: { departmentId } }) {
+function* getAnnouncementRequest({ payload: { user, reqForType } }) {
     yield console.log(`Get announcements...`);
 
     try {
         // TODO: send Post request here
-        const { data } = yield call(getAnnouncements, departmentId);
-        console.log('data: ', data);
+        let announcements = [];
+        if (reqForType === "Administrative Staff") {
+          for (let i = 0; i < user.departments.length; i++) {
+            const { data: ann } = yield call(getAnnouncements, user.departments[i].id);
+            announcements = [...announcements, ...ann];
+          }
+        } else {
+          const { data: ann } = yield call(getAnnouncements, user.department.id);
+          announcements = ann;
+        }
+
+        console.log('data: ', announcements);
   
         const status = 200;
         if (status !== 200) {
@@ -17,7 +27,7 @@ function* getAnnouncementRequest({ payload: { departmentId } }) {
   
         yield put({
             type: GET_ANNOUNCEMENTS_SUCCESS,
-            payload: data,
+            payload: announcements,
         });
     } catch (error) {
       yield put({

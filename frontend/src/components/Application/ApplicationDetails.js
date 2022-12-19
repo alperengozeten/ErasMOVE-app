@@ -20,7 +20,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-const defaultLanguages = ["English", "German", "Spanish", "French", "Danish"];
+const defaultLanguages = ["English", "German", "Spanish", "French", "Danish", "Korean"];
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {

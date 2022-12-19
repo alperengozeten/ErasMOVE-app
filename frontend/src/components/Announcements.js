@@ -7,7 +7,7 @@ import { getAnnouncementRequest, createAnnouncementRequest } from "../actions/an
 
 const Announcements = ({ announcements, getAnnouncementRequest, createAnnouncementRequest, authType, userId, user }) => {
   React.useEffect(() => {
-    getAnnouncementRequest(user?.department?.id);
+    getAnnouncementRequest(user, authType);
   }, [user, getAnnouncementRequest]);
 
   return (
