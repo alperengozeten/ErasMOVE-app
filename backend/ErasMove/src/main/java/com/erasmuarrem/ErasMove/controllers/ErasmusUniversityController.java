@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * this controller class is to manage operations related to the erasmus university
+ */
 @RestController
 @RequestMapping("/erasmusUniversity")
 @CrossOrigin
@@ -23,31 +26,60 @@ public class ErasmusUniversityController {
         this.erasmusUniversityService = erasmusUniversityService;
     }
 
+    /**
+     * this method returns the list of all erasmus universities
+     * @return List<ErasmusUniversity>
+     */
     @GetMapping()
     public List<ErasmusUniversity> getErasmusUniversities() {
         return erasmusUniversityService.getErasmusUniversities();
     }
 
+    /**
+     * this method fetches the Erasmus University with a given ID
+     * @param id Long
+     * @return ErasmusUniversity
+     */
     @GetMapping("/{id}")
     public ErasmusUniversity getErasmusUniversityByID(@PathVariable("id") Long id) {
         return erasmusUniversityService.getErasmusUniversityByID(id);
     }
 
+    /**
+     * this method fetches an Erasmus University with a given name
+     * @param universityName String
+     * @return ErasmusUniversity
+     */
     @GetMapping("/name/{name}")
     public ErasmusUniversity getErasmusUniversityByName(@PathVariable("name") String universityName) {
         return erasmusUniversityService.getErasmusUniversityByName(universityName);
     }
 
+    /**
+     * this method fetches the list of all erasmus universities with a given country
+     * @param countryName String
+     * @return List<ErasmusUniversity>
+     */
     @GetMapping("/country/{name}")
     public List<ErasmusUniversity> getErasmusUniversitiesByCountryName(@PathVariable("name") String countryName) {
         return erasmusUniversityService.getErasmusUniversitiesByCountryName(countryName);
     }
 
+    /**
+     * this method returns the ErasmusUniversity if student is accepted, null otherwise
+     * @param acceptedStudentID Long
+     * @return ErasmusUniversity
+     */
     @GetMapping("/acceptedStudent/{acceptedStudentID}")
     public ErasmusUniversity getErasmusUniversityByAcceptedStudentID(@PathVariable("acceptedStudentID") Long acceptedStudentID) {
         return erasmusUniversityService.getErasmusUniversityByAcceptedStudentID(acceptedStudentID);
     }
 
+    /**
+     * this method returns the list of all students with a given departmentID
+     * @param departmentID Long
+     * @return List<OutgoingStudent>
+     */
     @GetMapping("/allAccepted/departmentID/{departmentID}")
     public List<OutgoingStudent> getAllAcceptedOutgoingStudentsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
         return erasmusUniversityService.getAllAcceptedOutgoingStudentsByDepartmentID(departmentID);
