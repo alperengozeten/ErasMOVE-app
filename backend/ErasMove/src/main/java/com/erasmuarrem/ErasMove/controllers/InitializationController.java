@@ -1129,6 +1129,42 @@ public class InitializationController {
         acceptedQueen2.setCourseName("IE-341");
         acceptedQueen2.setDescription("Industrial Revolution");
 
+        ExchangeUniversityDepartment queensCS = new ExchangeUniversityDepartment();
+        queensCS.setDepartmentName("CS");
+        queensCS.setExchangeUniversity(queens);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(queensCS);
+
+        Course queensCS1 = new Course();
+        queensCS1.setCourseName("CISC-220");
+        queensCS1.setDescription("System Level Programming");
+        queensCS1.setEcts(5.0);
+
+        Course queensCS2 = new Course();
+        queensCS2.setCourseName("CISC-221");
+        queensCS2.setDescription("Computer Architecture");
+        queensCS2.setEcts(5.0);
+
+        ExchangeUniversityDepartment queensEEE = new ExchangeUniversityDepartment();
+        queensEEE.setDepartmentName("EEE");
+        queensEEE.setExchangeUniversity(queens);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(queensEEE);
+
+        Course queensEEE1 = new Course();
+        queensEEE1.setCourseName("ELEC-221");
+        queensEEE1.setDescription("Electric Circuits");
+        queensEEE1.setEcts(5.0);
+
+        Course queensEEE2 = new Course();
+        queensEEE2.setCourseName("ELEC-271");
+        queensEEE2.setDescription("Digital Systems");
+        queensEEE2.setEcts(5.0);
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(queensCS1, queensCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(queensCS2, queensCS.getID());
+
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(queensEEE1, queensEEE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(queensEEE2, queensEEE.getID());
+
 
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen1,queensIE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(acceptedQueen2,queensIE.getID());
@@ -1179,6 +1215,16 @@ public class InitializationController {
         seoulEEE.setExchangeUniversity(seoul);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulEEE);
 
+        ExchangeUniversityDepartment seoulCS = new ExchangeUniversityDepartment();
+        seoulCS.setDepartmentName("CS");
+        seoulCS.setExchangeUniversity(seoul);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulCS);
+
+        ExchangeUniversityDepartment seoulIE = new ExchangeUniversityDepartment();
+        seoulIE.setDepartmentName("IE");
+        seoulIE.setExchangeUniversity(seoul);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(seoulIE);
+
 
         Course seoulME1 = new Course();
         seoulME1.setEcts(4.5);
@@ -1212,6 +1258,7 @@ public class InitializationController {
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE1,seoulEEE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(seoulEEE2,seoulEEE.getID());
         exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(seoulEEE3, seoulEEE.getID());
+
         //Austin Texas at University
         ExchangeUniversity austin = new ExchangeUniversity();
         austin.setCountry("America");
@@ -1250,7 +1297,10 @@ public class InitializationController {
         austinCS.setExchangeUniversity(austin);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(austinCS);
 
-
+        ExchangeUniversityDepartment austinEEE = new ExchangeUniversityDepartment();
+        austinEEE.setDepartmentName("EEE");
+        austinEEE.setExchangeUniversity(austin);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(austinEEE);
 
         Course acceptedAustin1 = new Course();
         acceptedAustin1.setEcts(15.0);
@@ -1334,7 +1384,10 @@ public class InitializationController {
         nusCS.setExchangeUniversity(nus);
         exchangeUniversityDepartmentService.addExchangeUniversityDepartment(nusCS);
 
-
+        ExchangeUniversityDepartment nusEEE = new ExchangeUniversityDepartment();
+        nusEEE.setDepartmentName("EEE");
+        nusEEE.setExchangeUniversity(nus);
+        exchangeUniversityDepartmentService.addExchangeUniversityDepartment(nusEEE);
 
         Course nusIE1 = new Course();
         nusIE1.setEcts(11.0);
@@ -1372,14 +1425,26 @@ public class InitializationController {
         nusCS5.setCourseName("CS-131");
         nusCS5.setDescription("Programming for Social Sciences");
 
+        Course nusEEE1 = new Course();
+        nusEEE1.setCourseName("EE-2023");
+        nusEEE1.setDescription("Signals and Systems");
+        nusEEE1.setEcts(6.5);
+
+        Course nusEEE2 = new Course();
+        nusEEE2.setCourseName("EE-2026");
+        nusEEE2.setDescription("Digital Design");
+        nusEEE2.setEcts(6.5);
+
+        // save the courses
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusIE2,nusIE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusIE1,nusIE.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS1,nusCS.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS3,nusCS.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS4,nusCS.getID());
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusCS2,nusCS.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusEEE1, nusEEE.getID());
+        exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusEEE2, nusEEE.getID());
         exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(nusCS5, nusCS.getID());
-
 
         // applications
         ApplicationWrapper awp1 = new ApplicationWrapper();
