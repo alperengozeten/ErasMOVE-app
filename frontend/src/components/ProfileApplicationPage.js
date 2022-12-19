@@ -54,13 +54,24 @@ export default function ProfileApplicationPage({ application }) {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
+                    <MDBCardText>Pre-Approval Form Status</MDBCardText>
+                  </MDBCol>
+                  <MDBCol sm="9">
+                    <MDBCardText className="text-muted">
+                      {application.preApprovalFormStatus}
+                    </MDBCardText>
+                  </MDBCol>
+                </MDBRow>
+                <hr />
+                <MDBRow>
+                  <MDBCol sm="3">
                     <MDBCardText>Admitted University</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
                     <MDBCardText className="text-muted">
-                      {dummyStudent.admittedUniversity == null
+                      {application.acceptedUniversity == null
                         ? "-"
-                        : dummyStudent.admittedUniversity}
+                        : application.acceptedUniversity.universityName}
                     </MDBCardText>
                   </MDBCol>
                 </MDBRow>
@@ -89,21 +100,10 @@ export default function ProfileApplicationPage({ application }) {
                 <hr />
                 <MDBRow>
                   <MDBCol sm="3">
-                    <MDBCardText>Languages</MDBCardText>
+                    <MDBCardText>Language Status</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">German</MDBCardText>
-                  </MDBCol>
-                </MDBRow>
-                <hr />
-                <MDBRow>
-                  <MDBCol sm="3">
-                    <MDBCardText>Next Step</MDBCardText>
-                  </MDBCol>
-                  <MDBCol sm="9">
-                    <MDBCardText className="text-muted">
-                      Acceptance Letter
-                    </MDBCardText>
+                    <MDBCardText className="text-muted">{application.languageStatus}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
