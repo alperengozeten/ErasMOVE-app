@@ -75,6 +75,8 @@ const ApplicationDetails = ({ application, languageEditable, languages, addLangu
     selectedUniversitiesNames.push(uni.universityName)
   );
 
+  //console.log(languages);
+
   return (
     <>
       <Typography
@@ -205,7 +207,7 @@ const ApplicationDetails = ({ application, languageEditable, languages, addLangu
       <Typography id="modal-modal-description" sx={{ mt: 2 }}>
         Languages
       </Typography>
-      {languages?.length === 0 ? (
+      {(languages?.length === 0 || languages === undefined) ? (
         <TextField
           required
           autoFocus
