@@ -5,10 +5,8 @@ import PropTypes from 'prop-types';
 
 import StudentsTable from '../table/StudentsTable';
 import { getApplicationsByDepartment, getLanguageByStudentId } from '../../actions';
-import { getApplicationsByDepartment } from '../../actions';
 import { PLACE_STUDENTS_REQUEST } from '../../constants/actionTypes';
 
-const ApplicationList = ({ applications, getApplicationsByDepartment, getLanguageByStudentId, user, typeForReq }) => {
 const ApplicationList = ({ applications, getApplicationsByDepartment, user, typeForReq }) => {
     const [department, setDepartment] = useState(0);
     const [type, setType] = useState('');
