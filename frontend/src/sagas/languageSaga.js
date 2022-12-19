@@ -6,6 +6,7 @@ import {
   ADD_LANGUAGE_BY_STUDENTID_FAIL,
   ADD_LANGUAGE_BY_STUDENTID_REQUEST,
   ADD_LANGUAGE_BY_STUDENTID_SUCCESS,
+  GET_APPLICATIONS_BY_DEPARTMENT_REQUEST,
 } from "../constants/actionTypes";
 import { addLanguage, getLanguageByStudentId } from "../lib/api/unsplashService"; //TO BE CHANGED
 
@@ -39,9 +40,7 @@ function* getLanguageByStudentIdReq({ payload: { id } }) {
   }
 }
 
-function* addLanguageByStudentIdReq({
-  payload: { langObj },
-}) {
+function* addLanguageByStudentIdReq({payload: { langObj, user }}) {
   yield console.log(`ADD LANGUAGES... `);
 
   try {
@@ -58,6 +57,11 @@ function* addLanguageByStudentIdReq({
     yield put({
       type: ADD_LANGUAGE_BY_STUDENTID_SUCCESS,
       payload: {},
+    });
+
+    yield put({
+      type: GET_APPLICATIONS_BY_DEPARTMENT_REQUEST,
+      payload: { user: user, typeForReq: "departmentCoordinator"  }
     });
 
   } catch (error) {

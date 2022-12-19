@@ -17,7 +17,7 @@ const PlacementList = ({ applications, user, getApplicationsByDepartment, typeFo
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <PlacedStudentTable addLanguageByStudentId={addLanguageByStudentId} languages={languages} applications={ applications } />
+                    <PlacedStudentTable typeForReq={typeForReq} user={user} addLanguageByStudentId={addLanguageByStudentId} languages={languages} applications={ applications } />
                 </Grid>
             </Grid>
         </Stack>

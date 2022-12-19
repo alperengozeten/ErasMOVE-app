@@ -20,7 +20,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-const defaultLanguages = ["English", "German", "Spanish", "French", "Turkish"];
+const defaultLanguages = ["English", "German", "Spanish", "French", "Danish"];
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -34,7 +34,7 @@ const MenuProps = {
 
 // ----------------------------------------------------------------------
 
-const ApplicationDetails = ({ application, languageEditable, languages, addLanguageByStudentId }) => {
+const ApplicationDetails = ({ application, languageEditable, languages, addLanguageByStudentId, user, typeForReq }) => {
   const [open, setOpen] = useState(false);
   const [editable, setEditable] = useState(true);
   const [level, setLevel] = useState("");
@@ -62,7 +62,7 @@ const ApplicationDetails = ({ application, languageEditable, languages, addLangu
         id: application.outgoingStudent.id
       },
     };
-    addLanguageByStudentId(langObj);
+    addLanguageByStudentId(langObj, user);
     handleClose();
   };
 
@@ -231,7 +231,7 @@ const ApplicationDetails = ({ application, languageEditable, languages, addLangu
           />
         ))
       )}
-      {languageEditable ? (
+      {(languageEditable && typeForReq==="departmentCoordinator") ? (
         <Button onClick={handleClickOpen}>Add Language</Button>
       ) : null}
       <Modal
@@ -313,6 +313,8 @@ ApplicationDetails.propTypes = {
   languageEditable: PropTypes.bool,
   getLanguageByStudentId: PropTypes.func,
   addLanguageByStudentId: PropTypes.func,
+  user: PropTypes.object,
+  typeForReq: PropTypes.string
 };
 
 ApplicationDetails.defaultProps = {
