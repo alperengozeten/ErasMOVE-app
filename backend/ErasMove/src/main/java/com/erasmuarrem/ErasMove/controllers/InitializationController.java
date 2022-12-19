@@ -1375,6 +1375,9 @@ public class InitializationController {
         List<Department> departmentsOfYelda = new ArrayList<>();
         departmentsOfYelda.add(cs);
         departmentsOfYelda.add(man);
+        departmentsOfYelda.add(me);
+        departmentsOfYelda.add(ie);
+        departmentsOfYelda.add(eee);
         yelda.setHashedPassword(hashingPasswordHelper.Hash());
         yelda.setDepartments(departmentsOfYelda);
         administrativeStaffService.addAdministrativeStaff(yelda);
