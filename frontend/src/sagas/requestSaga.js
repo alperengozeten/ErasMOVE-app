@@ -535,13 +535,15 @@ function* respondFileRequestRequest({ payload: { id, file, userId, type } }) {
 
   try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('syllabus', file);
 
       console.log(file);
       console.log(formData);
 
       const response = yield call(respondFileRequest, id, file);  
       console.log(response);
+
+      const res2 = yield call(sendSyllabusMandatory, id, formData);
 
       //const { dat } = yield call(respondFileRequestSendFile, id, file, type);  
       //console.log(dat);
