@@ -4,6 +4,7 @@ import com.erasmuarrem.ErasMove.models.PreApprovalFormRequest;
 import com.erasmuarrem.ErasMove.models.ResponseMessage;
 import com.erasmuarrem.ErasMove.services.PreApprovalFormRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,11 @@ public class PreApprovalFormRequestController {
     @GetMapping("/department/{departmentID}")
     public List<PreApprovalFormRequest> getPreApprovalFormRequestsByDepartmentID(@PathVariable("departmentID") Long departmentID) {
         return preApprovalFormRequestService.getPreApprovalFormRequestsByDepartmentID(departmentID);
+    }
+
+    @GetMapping("/pdf/{id}")
+    public ResponseEntity<Resource> getPDFPreApprovalFormByID(@PathVariable("id") Long id) {
+        return preApprovalFormRequestService.getPDFPreApprovalFormByID(id);
     }
 
     @PostMapping("/add") // the student must be admitted to be able to call this!
