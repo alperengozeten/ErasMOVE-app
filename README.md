@@ -100,3 +100,20 @@
 -   Outgoing student actors will have the lowest priority in the design and implementation of our application.
     
 -   We plan to provide them with the ability to create a proposal for their planned courses in Bilkent, which will then be approved by the department coordinator.
+
+⚙️ Build Instructions
+1.  Install PostgreSQL. Use the default instructions and the port number (which is 5432). In this process, you will be asked to create a password for the superuser (postgres), remember this password.
+2.  Clone our repository https://github.com/alperengozeten/ErasMOVE-app
+3.  Add the psql to the path to be able to run the psql from the terminal and create a new database.
+4.  Navigate to the path /backend/ErasMove from the cloned project and open IntelliJ from there. Then, please wait for the Maven indexing to finish.
+5.  Open “”application.properties” which can be found under “src/main/resources”. Then, fill the empty spring.datasource.password= with the password you picked for the superuser.
+6.  Now, open the cmd and run the command “psql -U postgres” to login as the superuser “postgres”. Enter your password when asked.
+7.  Here, run the command “CREATE DATABASE erasmove”;
+8.  Now, you can run “ErasMoveApplication.java” under “src/main/java/com.erasmusmuarrem.ErasMove/”. 
+9.  If everything works fine, you should be able to make a HTTP request to the server.
+10. Install Postman. Then, make a GET request to the following endpoint: “http://localhost:8080/initialize”. This will allow to initiate necessary entities to successfully start the application such as an admin user with email “korhan@gmail.com” and password “admin”, courses, universites, and other Bilkent Members.
+11. If query is successful, you should get the response “Initialized Successfully!”. 
+12. On terminal, cd into the frontend directory of the cloned project which is simply “frontend”. From there run the command “yarn install”. Then run the command “yarn start”. Note that you need to have Node.js installed on your computer and you need to install yarn from npm with “npm install --globally yarn” in order to run “yarn” commands. If you don’t have this installed, simply download it from the internet. 
+13. After “yarn start”, you should be able to see the application running on your browser. If you cannot see it, you can visit “localhost:3000, localhost:3001, localhost:3002…” 
+14. If everything works fine, you should see the login page of ErasMOVE on your browser. Choose admin from the radio button under the input fields, and then login with the credentials given on step 9. 
+15. After logging in, please follow 3.6 Admin under 3. User’s Guide to get detailed information about adding new users. 
