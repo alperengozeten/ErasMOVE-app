@@ -96,9 +96,6 @@ const PreApprovalForms = ({ deletePreApprovalFormRequest, preApprovalForms, host
                 });
             }
 
-            if(!(mergedCourses[i].type === "Mandatory" || mergedCourses[i].type === "Elective"))
-                missingInfo = true;
-
             if(missingInfo)
                 break;
 
