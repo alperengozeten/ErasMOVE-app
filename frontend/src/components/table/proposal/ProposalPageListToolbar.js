@@ -47,7 +47,7 @@ const StyledRoot = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const ProposalPageListToolbar = ({user}) => {
+const ProposalPageListToolbar = ({user, getProposal}) => {
   const [open, setOpen] = useState(false);
   const [courseOne, setCourseOne] = React.useState(0);
   const [courseTwo, setCourseTwo] = React.useState(0);
@@ -125,6 +125,8 @@ const ProposalPageListToolbar = ({user}) => {
 
              setSnackBarMsg("Proposal successfully created!");
             setOpenSnackBar(true);
+            getProposal(user.id);
+
 
             
             }
@@ -136,7 +138,7 @@ const ProposalPageListToolbar = ({user}) => {
      setEmpty(true);
      setEmpty(false);
     setEmpty(true);
-
+        handleClose();
     }
   };
 
@@ -750,7 +752,8 @@ ProposalPageListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  user: PropTypes.object
+  user: PropTypes.object,
+  getProposal: PropTypes.func,
 };
 
 

@@ -71,7 +71,7 @@ function applySortFilter(array, comparator, query) {
   }
   return stabilizedThis.map(el => el[0]);
 }
-const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests, proposals }) => {
+const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests, proposals, userId, getProposals }) => {
 
   const [page, setPage] = useState(0);
 
@@ -198,7 +198,7 @@ const ProposalTable = ({ deleteCourseApprovalRequestRequest, courseRequests, pro
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <ProposalDetail openDetails={openDetails} handleCloseDetails={handleCloseDetails} status={proposal.status} proposal={proposal} />
+                        <ProposalDetail userId={userId} getProposals={getProposals} openDetails={openDetails} handleCloseDetails={handleCloseDetails} status={proposal.status} proposal={proposal} />
                        
                       </TableRow>
                     );
@@ -257,6 +257,8 @@ ProposalTable.propTypes = {
     deleteCourseApprovalRequestRequest: PropTypes.func,
   user: PropTypes.object,
   proposals: PropTypes.array,
+  userId: PropTypes.string,
+  getProposals: PropTypes.func,
 
 
 };

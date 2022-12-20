@@ -29,7 +29,7 @@ const ProposalPage = user => {
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <ProposalTable proposals = {proposals}/>
+                    <ProposalTable userId={user.user.id} getProposals={getProposals} proposals = {proposals}/>
                 </Grid>
             </Grid>
         </Stack>
