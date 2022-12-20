@@ -191,6 +191,9 @@ function* placeStudentsRequest({ payload:{ type, department, user, typeForReq}})
       if (status !== 200) {
         throw Error('Accept request failed for  course approval request ');
       }
+
+      alert("Placement made successfully!");
+
         yield put({
           type: GET_APPLICATIONS_BY_DEPARTMENT_REQUEST,
           payload: { user, typeForReq },

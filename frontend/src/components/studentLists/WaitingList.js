@@ -57,11 +57,13 @@ const WaitingList = ({ applications, getProposedRequestRequest, proposedRequests
         }
     
         dispatch(sendReplacementOffer(replacementRequest, type, user.id));
+        getProposedRequestRequest(user.id);
     };
 
     const handleDecline = id => {
         const type = proposedRequests?.filter(app => app.id === id)[0]?.student.isErasmus ? 'Erasmus' : 'Exchange';
         dispatch({ type: DELETE_PROPOSED_REQUEST_REQUEST, payload: { id, type }});
+        getProposedRequestRequest(user.id);
     };
     //----DUMMY DATA----
     const propose = [{universityName: "EPFL", quota: 1, studentName: "Kürşad Güzelkaya"},{universityName: "Harvard", quota: 1, studentName: "Alperen Gözeten"}];
