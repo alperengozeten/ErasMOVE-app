@@ -565,6 +565,12 @@ public class InitializationController {
         epfl.setAcceptedStudents(new ArrayList<>());
         erasmusUniversityService.addErasmusUniversity(epfl);
 
+        Language french = new Language();
+        french.setLanguage("French");
+        french.setLevel("B2");
+        languageRepository.save(french);
+        epfl.setLanguageRequirement(french);
+
         // EPFL CS DEPARTMENT
         ErasmusUniversityDepartment epflCS = new ErasmusUniversityDepartment();
         epflCS.setDepartmentName("CS");

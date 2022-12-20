@@ -168,9 +168,9 @@ public class ErasmusUniversityDepartmentService {
             return "Outgoing student has unmatching department:" + outgoingStudent.getDepartment().getDepartmentName() + "!";
         }
 
-        if ( erasmusUniversityDepartment.getQuota() <= 0 ) {
-            return "The Erasmus Department quota is full!";
-        }
+        //if ( erasmusUniversityDepartment.getQuota() <= 0 ) {
+         //   return "The Erasmus Department quota is full!";
+        //}
 
         if ( acceptedStudents.contains(outgoingStudent) ) {
             return "Outgoing student with id:" + id + " is already accepted to this university!";
@@ -217,6 +217,7 @@ public class ErasmusUniversityDepartmentService {
         notificationService.saveNotification(newNotification);
 
         acceptedStudents.add(outgoingStudent);
+        erasmusUniversity.setAcceptedStudents(acceptedStudents);
         erasmusUniversityDepartment.setQuota(erasmusUniversityDepartment.getQuota() - 1);
         erasmusUniversityDepartmentRepository.save(erasmusUniversityDepartment);
         erasmusUniversityRepository.save(erasmusUniversity);

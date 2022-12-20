@@ -341,7 +341,7 @@ public class MandatoryCourseApprovalRequestService {
         newNotification.setRead(false);
         newNotification.setApplicationUser(outgoingStudent);
         newNotification.setDate(LocalDate.now());
-        newNotification.setContent("Your Elective Course Approval Request has been accepted by the Course Coordinator: " +
+        newNotification.setContent("Your Mandatory Course Approval Request has been accepted by the Course Coordinator: " +
                 courseCoordinator.getName() + "!");
 
         notificationService.saveNotification(newNotification);
