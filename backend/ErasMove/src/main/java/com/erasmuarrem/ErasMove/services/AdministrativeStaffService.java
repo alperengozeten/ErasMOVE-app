@@ -120,12 +120,16 @@ public class AdministrativeStaffService {
             String newPassword = RandomPasswordGenerator();
             hashingPasswordHelper.setPassword("123");
             newStudent.setHashedPassword(hashingPasswordHelper.Hash());
-            Email email = new Email();
-            email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
-                    + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
-            email.setRecipient(newStudent.getEmail());
-            email.setSubject("Welcome to ErasMove! Login Credentials");
-            System.out.println(emailService.sendSimpleMail(email));
+
+            // send email only to Kursad and Alperen for demonstration
+            if ( applicationLine.getFirstName().equalsIgnoreCase("Alperen") || applicationLine.getFirstName().equalsIgnoreCase("Kursad") ) {
+                Email email = new Email();
+                email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
+                        + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
+                email.setRecipient(newStudent.getEmail());
+                email.setSubject("Welcome to ErasMove! Login Credentials");
+                System.out.println(emailService.sendSimpleMail(email));
+            }
 
             outgoingStudentService.addOutgoingStudent(newStudent);
 

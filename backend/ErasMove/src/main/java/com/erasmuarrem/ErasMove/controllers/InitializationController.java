@@ -1446,6 +1446,7 @@ public class InitializationController {
         exchangeUniversityDepartmentService.addCourseByExchangeDepartmentID(nusEEE2, nusEEE.getID());
         exchangeUniversityDepartmentService.addElectiveCourseByExchangeDepartmentID(nusCS5, nusCS.getID());
 
+        /*
         // applications
         ApplicationWrapper awp1 = new ApplicationWrapper();
         awp1.setCgpa(3.80);
@@ -1484,6 +1485,7 @@ public class InitializationController {
 
         hashingPasswordHelper.setPassword("123");
         student2.setHashedPassword(hashingPasswordHelper.Hash());
+        */
 
         //Administrative Staff
         AdministrativeStaff yelda  = new AdministrativeStaff();
@@ -1518,6 +1520,8 @@ public class InitializationController {
         List<Course> selimCourses = new ArrayList<>();
         selimCourses.add(course3);
         selimCourses.add(course4);
+        selimCourses.add(course6);
+        selimCourses.add(course7);
         selim.setCourseList(selimCourses);
         selim.setEmail("saksoy@cs.bilkent.edu.tr");
         hashingPasswordHelper.setPassword("123");
