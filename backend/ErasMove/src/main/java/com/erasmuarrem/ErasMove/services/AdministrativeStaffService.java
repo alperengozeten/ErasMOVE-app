@@ -121,8 +121,8 @@ public class AdministrativeStaffService {
             hashingPasswordHelper.setPassword("123");
             newStudent.setHashedPassword(hashingPasswordHelper.Hash());
 
-            // send email only to Kursad and Alperen for demonstration
-            if ( applicationLine.getFirstName().equalsIgnoreCase("Alperen") || applicationLine.getFirstName().equalsIgnoreCase("Kursad") ) {
+            // send email only to Kursad for demonstration
+            if ( applicationLine.getFirstName().equalsIgnoreCase("Kursad") ) {
                 Email email = new Email();
                 email.setMail("Dear " + newStudent.getName() + ",\n\n" + "You can use the attached login credentials below: \n\n"
                         + "ID : " + newStudent.getStudentId() + "\nPassword : " + newPassword);
