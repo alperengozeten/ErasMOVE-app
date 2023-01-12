@@ -1,7 +1,7 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 
-import { ADD_COURSE_TO_DEPARTMENT_FAIL, ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_COURSE_TO_DEPARTMENT_SUCCESS, ADD_HOST_DEPARTMENT_FAIL, ADD_HOST_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_SUCCESS, CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_APPLICATIONS_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_FAIL, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_FAIL, GET_UNIVERSITIES_REQUEST, GET_UNIVERSITIES_SUCCESS, PLACE_STUDENTS_REQUEST, UPLOAD_STUDENTS_LIST_FAIL, UPLOAD_STUDENTS_LIST_REQUEST, UPLOAD_STUDENTS_LIST_SUCCESS } from '../constants/actionTypes';
-import { addDepartment, addElectiveCourseToDepartment, addMandatoryCourseToDepartment, getDepartments, getErasmusUniversities, getExchangeUniversities, placeStudentsErasmus, placeStudentsExchange, uploadStudentList } from '../lib/api/unsplashService';
+import { ADD_COURSE_TO_DEPARTMENT_FAIL, ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_COURSE_TO_DEPARTMENT_SUCCESS, ADD_HOST_DEPARTMENT_FAIL, ADD_HOST_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_SUCCESS, ADD_UNIVERSITY_FAIL, ADD_UNIVERSITY_REQUEST, ADD_UNIVERSITY_SUCCESS, CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, GET_APPLICATIONS_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_FAIL, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_COURSES_BY_DEPARTMENT_SUCCESS, GET_DEPARTMENTS_FAIL, GET_DEPARTMENTS_REQUEST, GET_DEPARTMENTS_SUCCESS, GET_UNIVERSITIES_FAIL, GET_UNIVERSITIES_REQUEST, GET_UNIVERSITIES_SUCCESS, PLACE_STUDENTS_REQUEST, UPLOAD_STUDENTS_LIST_FAIL, UPLOAD_STUDENTS_LIST_REQUEST, UPLOAD_STUDENTS_LIST_SUCCESS } from '../constants/actionTypes';
+import { addDepartment, addElectiveCourseToDepartment, addErasmusUniversity, addExchangeUniversity, addMandatoryCourseToDepartment, getDepartments, getErasmusUniversities, getExchangeUniversities, placeStudentsErasmus, placeStudentsExchange, uploadStudentList } from '../lib/api/unsplashService';
 
 
 function createApplicationsFromExcel({ payload: { id } }) {
@@ -203,6 +203,36 @@ function* placeStudentsRequest({ payload:{ type, department, user, typeForReq}})
   }
 }
 
+function* addUniversityReq({ payload:{ university, isErasmus}}) {
+  console.log(`add uni ${university}`);
+
+  try {
+      if (isErasmus === 'Erasmus') {
+        const { data } = yield call(addErasmusUniversity, university);
+      } else {
+        const { data } = yield call(addExchangeUniversity, university);
+      }
+
+      alert("University added successfully!");
+
+      yield put({
+        type: ADD_UNIVERSITY_SUCCESS,
+        payload: { university, isErasmus },
+      });
+
+      yield put({
+        type: GET_UNIVERSITIES_REQUEST,
+        payload: {},
+      });
+  } catch (error) {
+    console.log(error);
+    yield put({
+      type: ADD_UNIVERSITY_FAIL,
+      payload: { error },
+    });
+  }
+}
+
 const universitySaga = [
   takeEvery(CREATE_APPLICATIONS_FROM_EXCEL_REQUEST, createApplicationsFromExcel),
   takeEvery(GET_COURSES_BY_DEPARTMENT_REQUEST, getCoursesByDepartment),
@@ -212,6 +242,7 @@ const universitySaga = [
   takeEvery(GET_UNIVERSITIES_REQUEST, getUniversitiesFunc),
   takeEvery(UPLOAD_STUDENTS_LIST_REQUEST, uploadStudentsRequest),
   takeEvery(PLACE_STUDENTS_REQUEST, placeStudentsRequest),
+  takeEvery(ADD_UNIVERSITY_REQUEST, addUniversityReq),
 ];
 
 export default universitySaga;

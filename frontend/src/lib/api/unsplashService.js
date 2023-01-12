@@ -360,3 +360,23 @@ export const placeStudentsErasmus = id => (
 export const placeStudentsExchange = () => (
   axios.post(`${baseURL}/administrativeStaff/exchange/place`)
 );
+
+export const addErasmusUniversity = university => (
+  fetch(`${baseURL}/erasmusUniversity/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(university)
+  })
+);
+
+export const addExchangeUniversity = university => (
+  fetch(`${baseURL}/exchangeUniversity/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(university)
+  })
+);

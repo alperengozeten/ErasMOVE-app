@@ -3,9 +3,9 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UniversityTable from './table/UniversityTable';
-import { getDepartments, getUniversities } from '../actions';
+import { getDepartments, getUniversities, addUniversity } from '../actions';
 
-const Universities = ({ universities, erasmusUniversities, getUniversities, exchangeUniversities, getDepartments, erasmusDepartments, exchangeDepartments}) => {
+const Universities = ({ universities, erasmusUniversities, getUniversities, exchangeUniversities, getDepartments, erasmusDepartments, exchangeDepartments, addUniversity}) => {
     useEffect(() => {
         getUniversities();
         getDepartments();
@@ -17,7 +17,7 @@ const Universities = ({ universities, erasmusUniversities, getUniversities, exch
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <UniversityTable universities={universities} erasmusDepartments={erasmusDepartments} exchangeDepartments={exchangeDepartments} exchangeUniversities={exchangeUniversities} erasmusUniversities={erasmusUniversities} />
+                    <UniversityTable universities={universities} erasmusDepartments={erasmusDepartments} exchangeDepartments={exchangeDepartments} exchangeUniversities={exchangeUniversities} erasmusUniversities={erasmusUniversities} addUniversity={addUniversity} />
                 </Grid>
             </Grid>
         </Stack>
@@ -41,6 +41,7 @@ const mapStateToProps = state => {
 const mapActionsToProps = {
     getUniversities,
     getDepartments,
+    addUniversity,
 };
 
 Universities.propTypes = {
@@ -51,6 +52,7 @@ Universities.propTypes = {
     getDepartments: PropTypes.func,
     erasmusDepartments: PropTypes.array, 
     exchangeDepartments: PropTypes.array,
+    addUniversity: PropTypes.func,
 };
   
 Universities.defaultProps = {

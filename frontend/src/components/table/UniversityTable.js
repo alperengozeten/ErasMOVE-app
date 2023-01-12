@@ -148,7 +148,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDepartments, exchangeDepartments }) => {
+const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDepartments, exchangeDepartments, addUniversity }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -316,6 +316,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
             onFilterName={handleFilterByName}
             setIsExchange={setIsExchange}
             isExchange={isExchange}
+            addUniversity={addUniversity}
           />
 
           <Scrollbar>
@@ -963,6 +964,7 @@ UniversityTable.propTypes = {
   exchangeUniversities: PropTypes.array,
   erasmusDepartments: PropTypes.array, 
   exchangeDepartments: PropTypes.array,
+  addUniversity: PropTypes.func,
 };
 
 UniversityTable.defaultProps = {

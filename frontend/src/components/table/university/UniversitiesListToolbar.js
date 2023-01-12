@@ -71,6 +71,7 @@ UniversitiesListToolbar.propTypes = {
   onFilterName: PropTypes.func,
   isExchange: PropTypes.string,
   setIsExchange: PropTypes.func,
+  addUniversity: PropTypes.func,
 };
 
 export default function UniversitiesListToolbar({
@@ -79,10 +80,12 @@ export default function UniversitiesListToolbar({
   onFilterName,
   isExchange,
   setIsExchange,
+  addUniversity,
 }) {
   const [open, setOpen] = useState(false);
   const [universityName, setUniversityName] = React.useState("");
-  const [isErasmus, setIsErasmus] = React.useState(false);
+  const [country, setCountry] = React.useState("");
+  const [isErasmus, setIsErasmus] = React.useState("Erasmus");
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
   const [departmentName, setDepartmentName] = React.useState("");
 
@@ -92,6 +95,7 @@ export default function UniversitiesListToolbar({
 
   const handleUniversityNameChange = e => setUniversityName(e.target.value);
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
+  const handleCountryChange = e => setCountry(e.target.value);
   const handleQuotaValueChange = e => setQuotaValue(e.target.value);
   const handleErasmusChange = e => setIsErasmus(e.target.value);
   const handleClickOpen = () => {setOpen(true);};
@@ -104,12 +108,26 @@ export default function UniversitiesListToolbar({
 
   const handleAddNewUniversityRequest = () => {
     if (
-      universityName === "" ||
-      quotaValue === 0
+      universityName === "" || country === "" || (isErasmus !== "Erasmus" &&
+      quotaValue < 1 )
     ) {
       setError(true);
     } 
-    else {handleClose();}
+    else {
+      const erasmusUniversity = {
+        universityName,
+        country,
+      };
+      const exchangeUniversity = {
+        universityName,
+        country,
+        universityQuota: quotaValue,
+        maxUniversityQuota: quotaValue,
+      };
+      const university = isErasmus === "Erasmus" ? erasmusUniversity : exchangeUniversity;
+      addUniversity(university, isErasmus);
+      handleClose();
+    }
   };
 
   const handleAddDepartmentRequest = () => {
@@ -121,8 +139,10 @@ export default function UniversitiesListToolbar({
       handleAddDepartmentClose();
     }
   };
+
   const handleClose = () => {
     setUniversityName("");
+    setCountry("");
     setQuotaValue(0);
     setError(false);
     setOpen(false);
@@ -208,7 +228,6 @@ export default function UniversitiesListToolbar({
                 <MDBContainer className="py-5">
                   <MDBCard className="mb-4">
                     <MDBCardBody>
-                      <hr />
                       <MDBRow>
                         <MDBCol sm="3">
                           <MDBCardText>University Name*</MDBCardText>
@@ -226,6 +245,20 @@ export default function UniversitiesListToolbar({
                       <hr />
                       <MDBRow>
                         <MDBCol sm="3">
+                          <MDBCardText>Country*</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <TextField
+                            id="outlined-multiline-flexible"
+                            value={country}
+                            onChange={handleCountryChange}
+                            error={error}
+                          />
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
                           <MDBCardText>Program*</MDBCardText>
                         </MDBCol>
                         <MDBCol sm="9">
@@ -233,18 +266,18 @@ export default function UniversitiesListToolbar({
                             <RadioGroup
                               row
                               aria-labelledby="demo-radio-buttons-group-label"
-                              defaultValue={false}
+                              defaultValue={"Erasmus"}
                               name="radio-buttons-group"
                               value={isErasmus}
                               onChange={handleErasmusChange}
                             >
                               <FormControlLabel
-                                value={false}
+                                value={"Erasmus"}
                                 control={<Radio />}
                                 label="Erasmus"
                               />
                               <FormControlLabel
-                                value={true}
+                                value={"Exchange"}
                                 control={<Radio />}
                                 label="Exchange"
                               />
@@ -252,7 +285,7 @@ export default function UniversitiesListToolbar({
                           </FormControl>
                         </MDBCol>
                       </MDBRow>
-                      <hr />
+                      {isErasmus !== "Erasmus" ? (<><hr />
                       <MDBRow>
                         <MDBCol sm="3">
                           <MDBCardText>Quota*</MDBCardText>
@@ -266,23 +299,7 @@ export default function UniversitiesListToolbar({
                             error={error}
                           />
                         </MDBCol>
-                      </MDBRow>
-                      <hr />
-                      <MDBRow>
-                        <MDBCol sm="3">
-                          <MDBCardText>Departments</MDBCardText>
-                        </MDBCol>
-                        <MDBCol sm="9">
-                          <Button
-                            sx={{ margin: "auto" }}
-                            variant="contained"
-                            size="medium"
-                            onClick={handleAddDepartment}
-                          >
-                            Add Department
-                          </Button>
-                        </MDBCol>
-                      </MDBRow>
+                      </MDBRow></>) : null}
                       {error ? (
                         <Alert severity="error">
                           Required places must be filled!

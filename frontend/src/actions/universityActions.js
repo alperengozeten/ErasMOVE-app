@@ -32,7 +32,7 @@ export const getUniversities = () =>
         payload: {},
     });
 
-export const addUniversity = ({ university, isErasmus }) => 
+export const addUniversity = ( university, isErasmus) => 
     ({
         type: ADD_UNIVERSITY_REQUEST,
         payload: {university, isErasmus},
