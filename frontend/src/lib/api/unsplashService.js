@@ -380,3 +380,23 @@ export const addExchangeUniversity = university => (
     body: JSON.stringify(university)
   })
 );
+
+export const addExchangeDepartment = department => (
+  fetch(`${baseURL}/exchangeUniversityDepartment/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(department)
+  })
+);
+
+export const addErasmusDepartment = department => (
+  fetch(`${baseURL}/erasmusUniversityDepartment/add`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(department)
+  })
+);

@@ -3,9 +3,19 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import UniversityTable from './table/UniversityTable';
-import { getDepartments, getUniversities, addUniversity } from '../actions';
+import { getDepartments, getUniversities, addUniversity, addDepartment } from '../actions';
 
-const Universities = ({ universities, erasmusUniversities, getUniversities, exchangeUniversities, getDepartments, erasmusDepartments, exchangeDepartments, addUniversity}) => {
+const Universities = ({
+    universities,
+    erasmusUniversities,
+    getUniversities,
+    exchangeUniversities,
+    getDepartments,
+    erasmusDepartments,
+    exchangeDepartments,
+    addUniversity,
+    addDepartment,
+}) => {
     useEffect(() => {
         getUniversities();
         getDepartments();
@@ -17,7 +27,15 @@ const Universities = ({ universities, erasmusUniversities, getUniversities, exch
             </Typography>
             <Grid container justifyContent={'center'}>
                 <Grid item xs={12}>
-                    <UniversityTable universities={universities} erasmusDepartments={erasmusDepartments} exchangeDepartments={exchangeDepartments} exchangeUniversities={exchangeUniversities} erasmusUniversities={erasmusUniversities} addUniversity={addUniversity} />
+                    <UniversityTable
+                        universities={universities}
+                        erasmusDepartments={erasmusDepartments}
+                        exchangeDepartments={exchangeDepartments}
+                        exchangeUniversities={exchangeUniversities}
+                        erasmusUniversities={erasmusUniversities}
+                        addUniversity={addUniversity}
+                        addDepartment={addDepartment}
+                    />
                 </Grid>
             </Grid>
         </Stack>
@@ -42,6 +60,7 @@ const mapActionsToProps = {
     getUniversities,
     getDepartments,
     addUniversity,
+    addDepartment,
 };
 
 Universities.propTypes = {
@@ -53,6 +72,7 @@ Universities.propTypes = {
     erasmusDepartments: PropTypes.array, 
     exchangeDepartments: PropTypes.array,
     addUniversity: PropTypes.func,
+    addDepartment: PropTypes.func,
 };
   
 Universities.defaultProps = {

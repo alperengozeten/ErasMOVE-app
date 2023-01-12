@@ -1,4 +1,4 @@
-import { ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_REQUEST, ADD_UNIVERSITY_REQUEST, DELETE_UNIVERSITY_REQUEST, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_DEPARTMENTS_REQUEST, GET_UNIVERSITIES_REQUEST, UPLOAD_STUDENTS_LIST_REQUEST } from "../constants/actionTypes";
+import { ADD_COURSE_TO_DEPARTMENT_REQUEST, ADD_DEPARTMENT_REQUEST, ADD_HOST_DEPARTMENT_REQUEST, ADD_UNIVERSITY_REQUEST, DELETE_UNIVERSITY_REQUEST, GET_COURSES_BY_DEPARTMENT_REQUEST, GET_DEPARTMENTS_REQUEST, GET_UNIVERSITIES_REQUEST, UPLOAD_STUDENTS_LIST_REQUEST } from "../constants/actionTypes";
 
 // Courses
 export const getCoursesByDepartment = (type, department, university) => 
@@ -48,4 +48,10 @@ export const uploadStudentsRequest = ({ type, department, list }) =>
     ({
         type: UPLOAD_STUDENTS_LIST_REQUEST,
         payload: { type, department, list },
+    });
+
+export const addDepartment = (department, isErasmus) => 
+    ({
+        type: ADD_DEPARTMENT_REQUEST,
+        payload: {department, isErasmus},
     });

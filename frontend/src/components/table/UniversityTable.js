@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { filter } from "lodash";
 import { useState } from "react";
 import PropTypes from "prop-types";
@@ -148,7 +148,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDepartments, exchangeDepartments, addUniversity }) => {
+const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDepartments, exchangeDepartments, addUniversity, addDepartment }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -168,6 +168,14 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   const [courseError, setCourseError] = React.useState(false);
 
   const [isExchange, setIsExchange] = useState("Erasmus");
+
+  useEffect(() => {
+    if (isExchange === "Exchange") {
+      setSelectedUniDepartments(exchangeDepartments.filter(dep => dep?.exchangeUniversity?.id === selected?.id));
+    } else {
+      setSelectedUniDepartments(erasmusDepartments.filter(dep => dep?.erasmusUniversity?.id === selected?.id));
+    }
+  }, [erasmusDepartments, exchangeDepartments]);
 
   const handleDepartmentChange = e => {
     setDepartmentValue(e.target.value);
@@ -276,6 +284,8 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   const [disabled, setDisabled] = useState(true);
   const [selectedUniDepartments, setSelectedUniDepartments] = useState([]);
 
+  console.log("deps", selectedUniDepartments);
+
   
   const handleClickOpen = id => {
     setOpen(true);
@@ -299,8 +309,25 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
       setError(true);
     } else {
 
-      const newDep = {departmentName: departmentName, maxQuota: departmentQuota, quota: departmentQuota, courseList: [], electiveCourseList: []};
-      departments.push(newDep);
+      const erasmusDepartment = {
+        departmentName: departmentName,
+        maxQuota: departmentQuota,
+        quota: departmentQuota,
+        erasmusUniversity: {
+          id: selected?.id
+        }
+      };
+
+      const exchangeDepartment = {
+        departmentName: departmentName,
+        exchangeDepartment: {
+          id: selected?.id
+        }
+      };
+
+      const department = isExchange === "Erasmus" ? erasmusDepartment : exchangeDepartment;
+
+      addDepartment(department, isExchange);
       setDepartmentName("");
       setDepartmentQuota(0);
       setError(false);
@@ -851,7 +878,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                                               />
                                             </MDBCol>
                                           </MDBRow>
-                                          <hr />
+                                          {isExchange === "Erasmus" ? (<><hr />
                                           <MDBRow>
                                             <MDBCol sm="3">
                                               <MDBCardText>
@@ -869,8 +896,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                                                 error={error}
                                               />
                                             </MDBCol>
-                                          </MDBRow>
-                                          <hr />
+                                          </MDBRow></>): null}
                                           {error ? (
                                             <Alert severity="error">
                                               Required places must be filled!
@@ -965,6 +991,7 @@ UniversityTable.propTypes = {
   erasmusDepartments: PropTypes.array, 
   exchangeDepartments: PropTypes.array,
   addUniversity: PropTypes.func,
+  addDepartment: PropTypes.func,
 };
 
 UniversityTable.defaultProps = {
