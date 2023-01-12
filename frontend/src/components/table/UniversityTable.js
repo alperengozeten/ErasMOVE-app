@@ -28,7 +28,6 @@ import {
   IconButton,
   Tooltip,
   Button,
-  Divider,
 } from "@mui/material";
 
 import {
@@ -149,7 +148,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map(el => el[0]);
 }
 
-const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
+const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDepartments, exchangeDepartments }) => {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -267,25 +266,32 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
   const universities =
     isExchange === "Exchange" ? exchangeUniversities : erasmusUniversities;
 
-  console.log(erasmusUniversities);
-
   const filteredUsers =
     universities.length > 0
       ? applySortFilter(universities, getComparator(order, orderBy), filterName)
       : [];
 
-  console.log("filterxx: ", filteredUsers);
-
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState({});
   const [disabled, setDisabled] = useState(true);
+  const [selectedUniDepartments, setSelectedUniDepartments] = useState([]);
 
-  const handleClickOpen = () => {
+  
+  const handleClickOpen = id => {
     setOpen(true);
+    setSelected(universities.filter(uni => uni.id === id)[0]);
+    if (isExchange === "Exchange") {
+      setSelectedUniDepartments(exchangeDepartments.filter(dep => dep?.exchangeUniversity?.id === universities.filter(uni => uni.id === id)[0]?.id));
+    } else {
+      setSelectedUniDepartments(erasmusDepartments.filter(dep => dep?.erasmusUniversity?.id === universities.filter(uni => uni.id === id)[0]?.id));
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
     setDisabled(true);
+    setSelected({});
+    setSelectedUniDepartments([]);
   };
 
   const handleAddDepartmentRequest = () => {
@@ -327,7 +333,6 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
-                      console.log("row: ", row);
                       const {
                         id,
                         universityName,
@@ -362,7 +367,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                               variant="contained"
                               color="inherit"
                               size="small"
-                              onClick={handleClickOpen}
+                              onClick={() => handleClickOpen(id)}
                             >
                               Details
                             </Button>
@@ -423,7 +428,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                             <MDBCol sm="9">
                                               <TextField
                                                 id="outlined-multiline-flexible"
-                                                defaultValue={name}
+                                                defaultValue={selected.universityName}
                                                 disabled={!isEdit}
                                               />
                                             </MDBCol>
@@ -434,13 +439,49 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                               <MDBCardText>Program</MDBCardText>
                                             </MDBCol>
                                             <MDBCol sm="9">
-                                              <TextField
-                                                id="outlined-multiline-flexible"
-                                                //defaultValue={type}
+                                            <FormControl fullWidth>          
+                                              <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={isExchange}
                                                 disabled={!isEdit}
-                                              />
+                                                onChange={e => setIsExchange(e.target.value) }
+                                              >
+                                                <MenuItem value={'Erasmus'}>Erasmus</MenuItem>
+                                                <MenuItem value={'Exchange'}>Exchange</MenuItem>
+                                              </Select>
+                                            </FormControl>
                                             </MDBCol>
                                           </MDBRow>
+                                          {isExchange === "Exchange" ? 
+                                          (<><hr />
+                                            <MDBRow>
+                                              <MDBCol sm="3">
+                                                <MDBCardText>Quota</MDBCardText>
+                                              </MDBCol>
+                                              <MDBCol sm="9">
+                                                <TextField
+                                                  id="outlined-multiline-flexible"
+                                                  defaultValue={selected.universityQuota}
+                                                  disabled={!isEdit}
+                                                  type="number"
+                                                />
+                                              </MDBCol>
+                                            </MDBRow>
+                                            <hr />
+                                            <MDBRow>
+                                              <MDBCol sm="3">
+                                                <MDBCardText>Max Quota</MDBCardText>
+                                              </MDBCol>
+                                              <MDBCol sm="9">
+                                                <TextField
+                                                  id="outlined-multiline-flexible"
+                                                  defaultValue={selected.maxUniversityQuota}
+                                                  disabled={!isEdit}
+                                                  type="number"
+                                                />
+                                              </MDBCol>
+                                            </MDBRow></>): null}
                                           <hr />
                                           <MDBRow>
                                             <MDBCol sm="3">
@@ -450,7 +491,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                             </MDBCol>
                                             {isEdit ? (
                                               <MDBCol sm="3">
-                                                {departments.map(
+                                                {selectedUniDepartments.map(
                                                   (department, index) => (
                                                     <section key={index}>
                                                       <MDBCardText className="text-muted">
@@ -483,7 +524,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                               </MDBCol>
                                             ) : (
                                               <MDBCol sm="3">
-                                                {departments.map(
+                                                {selectedUniDepartments.map(
                                                   (department, index) => (
                                                     <section key={index}>
                                                       <MDBCardText className="text-muted"> Department Name: 
@@ -491,7 +532,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                                           department.departmentName
                                                         }
                                                       </MDBCardText>
-                                                      <MDBCardText className="text-muted"> Max Quota: 
+                                                      {isExchange !== "Exchange" ? (<><MDBCardText className="text-muted"> Max Quota: 
                                                         {
                                                           department.maxQuota
                                                         }
@@ -500,7 +541,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities }) => {
                                                         {
                                                           department.quota
                                                         }
-                                                      </MDBCardText>
+                                                      </MDBCardText></>) : null}
                                                       <hr />
                                                     </section>
                                                   )
@@ -920,12 +961,16 @@ UniversityTable.propTypes = {
   universities: PropTypes.array,
   erasmusUniversities: PropTypes.array,
   exchangeUniversities: PropTypes.array,
+  erasmusDepartments: PropTypes.array, 
+  exchangeDepartments: PropTypes.array,
 };
 
 UniversityTable.defaultProps = {
   universities: [],
   erasmusUniversities: [],
   exchangeUniversities: [],
+  erasmusDepartments: [], 
+  exchangeDepartmetns: [],
 };
 
 export default UniversityTable;
