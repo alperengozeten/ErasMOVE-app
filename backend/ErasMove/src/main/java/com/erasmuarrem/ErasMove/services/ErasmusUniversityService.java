@@ -54,6 +54,12 @@ public class ErasmusUniversityService {
             throw new IllegalStateException("Erasmus University with name:" + universityName + " already exists!");
         }
 
+        Language languageRequirement = erasmusUniversity.getLanguageRequirement();
+
+        if ( languageRequirement != null ) {
+            languageRepository.save(languageRequirement);
+        }
+
         erasmusUniversityRepository.save(erasmusUniversity);
 
     }

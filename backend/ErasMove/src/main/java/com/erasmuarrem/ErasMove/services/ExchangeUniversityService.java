@@ -65,6 +65,12 @@ public class ExchangeUniversityService {
 
         exchangeUniversity.setMaxUniversityQuota(exchangeUniversity.getUniversityQuota()); // set the maximum!
 
+        Language languageRequirement = exchangeUniversity.getLanguageRequirement();
+
+        if ( languageRequirement != null ) {
+            languageRepository.save(languageRequirement); // save the language separately
+        }
+
         exchangeUniversityRepository.save(exchangeUniversity);
     }
 
