@@ -305,7 +305,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   };
 
   const handleAddDepartmentRequest = () => {
-    if (departmentName === "" || departmentQuota === 0) {
+    if (departmentName === "" || (isExchange === "Erasmus" && departmentQuota === 0)) {
       setError(true);
     } else {
 
