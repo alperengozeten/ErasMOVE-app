@@ -88,10 +88,14 @@ export default function UniversitiesListToolbar({
   const [isErasmus, setIsErasmus] = React.useState("Erasmus");
   const [openAddDepartment, setOpenAddDepartment] = useState(false);
   const [departmentName, setDepartmentName] = React.useState("");
+  const [langRequired, setLangRequired] = React.useState("None");
+  const [level, setLevel] = React.useState("");
+  const defaultLanguages = ["English", "German", "Spanish", "French", "Danish", "Korean"];
 
   const [quotaValue, setQuotaValue] = React.useState(0);
   const [error, setError] = useState(false);
   const [errorDepartment, setErrorDepartment] = useState(false);
+
 
   const handleUniversityNameChange = e => setUniversityName(e.target.value);
   const handleDepartmentNameChange = e => setDepartmentName(e.target.value);
@@ -114,13 +118,19 @@ export default function UniversitiesListToolbar({
       setError(true);
     } 
     else {
+      const languageRequirement = langRequired !== "None" ? {
+        language: langRequired,
+        level
+      } : null;
       const erasmusUniversity = {
         universityName,
         country,
+        languageRequirement,
       };
       const exchangeUniversity = {
         universityName,
         country,
+        languageRequirement,
         universityQuota: quotaValue,
         maxUniversityQuota: quotaValue,
       };
@@ -285,6 +295,63 @@ export default function UniversitiesListToolbar({
                           </FormControl>
                         </MDBCol>
                       </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Language Requirement</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <FormControl sx={{ m: 1, width: 300 }}>
+                            <Select
+                              labelId="demo-multiple-chip-label"
+                              id="demo-multiple-chip"
+                              defaultValue="None"
+                              value={langRequired}
+                              onChange={e => setLangRequired(e.target.value)}
+                              input={<OutlinedInput id="select-multiple-chip" />}
+                            >
+                              <MenuItem  value={"None"}>None</MenuItem>
+                              {defaultLanguages.map(lang => (
+                                <MenuItem key={lang} value={lang}>
+                                  {lang}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </MDBCol>
+                      </MDBRow>
+                      <hr />
+                      <MDBRow>
+                        <MDBCol sm="3">
+                          <MDBCardText>Language Level</MDBCardText>
+                        </MDBCol>
+                        <MDBCol sm="9">
+                          <FormControl sx={{ m: 1, width: 300 }}>
+                            <Select
+                              label="Level"
+                              labelId="demo-multiple-chip-label"
+                              id="demo-multiple-chip"
+                              disabled={langRequired === "None"}
+                              value={level}
+                              onChange={e => setLevel(e.target.value)}
+                              input={<OutlinedInput id="select-multiple-chip" />}
+                            >
+                              <MenuItem disabled value={""}>Select</MenuItem>
+                              <MenuItem value={"A1"}>A1</MenuItem>
+                              <MenuItem value={"A2"}>A2</MenuItem>
+                              <MenuItem value={"B1"}>B1</MenuItem>
+                              <MenuItem value={"B2"}>B2</MenuItem>
+                              <MenuItem value={"C1"}>C1</MenuItem>
+                              <MenuItem value={"C2"}>C2</MenuItem>
+                            </Select>
+                          </FormControl>
+                        </MDBCol>
+                      </MDBRow>
+                      
+                      
+
+
+
                       {isErasmus !== "Erasmus" ? (<><hr />
                       <MDBRow>
                         <MDBCol sm="3">

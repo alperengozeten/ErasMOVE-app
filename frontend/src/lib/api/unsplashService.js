@@ -400,3 +400,23 @@ export const addErasmusDepartment = department => (
     body: JSON.stringify(department)
   })
 );
+
+export const addExchangeLangRequirement = (languageRequirement, id) => (
+  fetch(`${baseURL}/exchangeUniversity/addLanguageRequirement/exchangeUniversity/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(languageRequirement),
+  })
+);
+
+export const addErasmusLangRequirement = (languageRequirement, id) => (
+  fetch(`${baseURL}/erasmusUniversity/addLanguageRequirement/erasmusUniversity/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-type' : 'application/json'
+    }, 
+    body: JSON.stringify(languageRequirement),
+  })
+);

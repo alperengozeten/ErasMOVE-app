@@ -28,6 +28,7 @@ import {
   IconButton,
   Tooltip,
   Button,
+  OutlinedInput,
 } from "@mui/material";
 
 import {
@@ -45,6 +46,8 @@ import Scrollbar from "./scrollbar";
 import { UniversityListHead } from "./university";
 
 import { UniversitiesListToolbar } from "./university";
+import { useDispatch } from "react-redux";
+import { ADD_LANG_REQUIREMENT_REQUEST } from "../../constants/actionTypes";
 
 // ----------------------------------------------------------------------
 
@@ -132,7 +135,6 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
-  console.log("array: ", array);
   const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -168,14 +170,25 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   const [courseError, setCourseError] = React.useState(false);
 
   const [isExchange, setIsExchange] = useState("Erasmus");
+  const [langRequired, setLangRequired] = React.useState("None");
+  const [level, setLevel] = React.useState("");
+  const defaultLanguages = ["English", "German", "Spanish", "French", "Danish", "Korean"];
+  const [openAddLangReq, setOpenAddLangReq] = React.useState(false);
+
 
   useEffect(() => {
     if (isExchange === "Exchange") {
       setSelectedUniDepartments(exchangeDepartments.filter(dep => dep?.exchangeUniversity?.id === selected?.id));
+      if(selected) {
+        setSelected(exchangeUniversities.filter(uni => uni.id === selected.id)[0]);
+      }
     } else {
       setSelectedUniDepartments(erasmusDepartments.filter(dep => dep?.erasmusUniversity?.id === selected?.id));
+      if(selected) {
+        setSelected(erasmusUniversities.filter(uni => uni.id === selected.id)[0]);
+      }
     }
-  }, [erasmusDepartments, exchangeDepartments]);
+  }, [erasmusDepartments, exchangeDepartments, erasmusUniversities, exchangeUniversities]);
 
   const handleDepartmentChange = e => {
     setDepartmentValue(e.target.value);
@@ -207,6 +220,32 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   const handleOpenAddDepartment = () => {
     setOpenAddDepartment(true);
   };
+
+  const handleOpenAddLangReq = () => {
+    setOpenAddLangReq(true);
+  };
+  const handleCloseAddLangReq = () => {
+    setOpenAddLangReq(false);
+    setSelected(universities.filter(uni => uni.id === selected.id)[0]);
+  };
+
+  const dispatch = useDispatch();
+
+  const handleAddLangReqRequest = () => {
+    dispatch({ type: ADD_LANG_REQUIREMENT_REQUEST, payload: { 
+      languageRequirement: {
+        language: langRequired,
+        level,
+      },
+      isErasmus: isExchange,
+      id: selected.id
+    }});
+
+    setLangRequired('');
+    setLevel('');
+    handleCloseAddLangReq();
+  };
+
   const handleAddDepartmentClose = () => {
     setDepartmentName("");
     setError(false);
@@ -284,8 +323,6 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
   const [disabled, setDisabled] = useState(true);
   const [selectedUniDepartments, setSelectedUniDepartments] = useState([]);
 
-  console.log("deps", selectedUniDepartments);
-
   
   const handleClickOpen = id => {
     setOpen(true);
@@ -357,7 +394,6 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                 />
 
                 <TableBody>
-                  {console.log("filtered: ", filteredUsers)}
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map(row => {
@@ -456,7 +492,7 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                                             <MDBCol sm="9">
                                               <TextField
                                                 id="outlined-multiline-flexible"
-                                                defaultValue={selected.universityName}
+                                                defaultValue={selected?.universityName}
                                                 disabled={!isEdit}
                                               />
                                             </MDBCol>
@@ -510,6 +546,28 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                                                 />
                                               </MDBCol>
                                             </MDBRow></>): null}
+                                          <hr />
+                                          <MDBRow>
+                                            <MDBCol sm="3">
+                                              <MDBCardText>Language Requirement</MDBCardText>
+                                            </MDBCol>
+                                            <MDBCol sm="3">
+                                              {selected?.languageRequirement ? `${selected?.languageRequirement?.language} - ${selected.languageRequirement.level}` : 'None'}
+                                            </MDBCol>
+                                            <MDBCol sm="6">
+                                              {(!selected?.languageRequirement && isEdit) ? 
+                                                  <Button
+                                                    sx={{ margin: "auto" }}
+                                                    variant="contained"
+                                                    size="medium"
+                                                    onClick={
+                                                      handleOpenAddLangReq
+                                                    }
+                                                  >
+                                                    Add Language Requirement
+                                                  </Button> : null}
+                                            </MDBCol>
+                                          </MDBRow>
                                           <hr />
                                           <MDBRow>
                                             <MDBCol sm="3">
@@ -825,6 +883,123 @@ const UniversityTable = ({ erasmusUniversities, exchangeUniversities, erasmusDep
                                         color="error"
                                         size="medium"
                                         onClick={handleCourseBack}
+                                      >
+                                        Back
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={1}></Grid>
+                                  </Grid>
+                                </Stack>
+                              </Stack>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            open={openAddLangReq}
+                            onClose={handleCloseAddLangReq}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={style}>
+                              <Stack spacing={6}>
+                                <Typography
+                                  id="modal-modal-title"
+                                  textAlign={"center"}
+                                  variant="h2"
+                                  component="h1"
+                                >
+                                  Add Language Requirement
+                                </Typography>
+                                <Stack alignItems={"center"} spacing={3}>
+                                  <section
+                                    style={{
+                                      width: "100%",
+                                      backgroundColor: "#eee",
+                                    }}
+                                  >
+                                    <MDBContainer className="py-5">
+                                      <MDBCard className="mb-4">
+                                        <MDBCardBody>
+                                        <MDBRow>
+                                          <MDBCol sm="3">
+                                            <MDBCardText>Language Requirement</MDBCardText>
+                                          </MDBCol>
+                                          <MDBCol sm="9">
+                                            <FormControl sx={{ m: 1, width: 300 }}>
+                                              <Select
+                                                labelId="demo-multiple-chip-label"
+                                                id="demo-multiple-chip"
+                                                defaultValue="None"
+                                                value={langRequired}
+                                                onChange={e => setLangRequired(e.target.value)}
+                                                input={<OutlinedInput id="select-multiple-chip" />}
+                                              >
+                                                <MenuItem  value={"None"}>None</MenuItem>
+                                                {defaultLanguages.map(lang => (
+                                                  <MenuItem key={lang} value={lang}>
+                                                    {lang}
+                                                  </MenuItem>
+                                                ))}
+                                              </Select>
+                                            </FormControl>
+                                          </MDBCol>
+                                        </MDBRow>
+                                        <hr />
+                                        <MDBRow>
+                                          <MDBCol sm="3">
+                                            <MDBCardText>Language Level</MDBCardText>
+                                          </MDBCol>
+                                          <MDBCol sm="9">
+                                            <FormControl sx={{ m: 1, width: 300 }}>
+                                              <Select
+                                                label="Level"
+                                                labelId="demo-multiple-chip-label"
+                                                id="demo-multiple-chip"
+                                                disabled={langRequired === "None"}
+                                                value={level}
+                                                onChange={e => setLevel(e.target.value)}
+                                                input={<OutlinedInput id="select-multiple-chip" />}
+                                              >
+                                                <MenuItem disabled value={""}>Select</MenuItem>
+                                                <MenuItem value={"A1"}>A1</MenuItem>
+                                                <MenuItem value={"A2"}>A2</MenuItem>
+                                                <MenuItem value={"B1"}>B1</MenuItem>
+                                                <MenuItem value={"B2"}>B2</MenuItem>
+                                                <MenuItem value={"C1"}>C1</MenuItem>
+                                                <MenuItem value={"C2"}>C2</MenuItem>
+                                              </Select>
+                                            </FormControl>
+                                          </MDBCol>
+                                        </MDBRow>
+                                          {error ? (
+                                            <Alert severity="error">
+                                              Required places must be filled!
+                                            </Alert>
+                                          ) : null}
+                                          
+                                        </MDBCardBody>
+                                      </MDBCard>
+                                    </MDBContainer>
+                                  </section>
+                                  <Grid container justifyContent={"center"}>
+                                    <Grid item xs={3}></Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="success"
+                                        size="medium"
+                                        onClick={handleAddLangReqRequest}
+                                      >
+                                        Add
+                                      </Button>
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                      <Button
+                                        sx={{ margin: "auto" }}
+                                        variant="contained"
+                                        color="error"
+                                        size="medium"
+                                        onClick={handleCloseAddLangReq}
                                       >
                                         Back
                                       </Button>
