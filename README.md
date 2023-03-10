@@ -11,6 +11,10 @@
 
 **ErasMOVE** is a website that will be designed to provide ease to students, staff, and department personnel during the Erasmus and Exchange applications. The department coordinators can easily keep track of the application processes of students and update information related to the students or universities. Students, on the other hand, can handle pre-application and post-application processes through our app and contact university staff for document-related issues. The course coordinator and the administrative staff will be the other actors in our app who will have the ability to manage document and course-related requests of students. Incoming students, as the least essential actor, can propose a list of courses they plan to take and track its status.
 
+## Demo Video 
+
+https://www.youtube.com/watch?v=jyVZl0ptRYA&t=3s
+
 ## Roles in ErasMOVE :memo:
 
 #### - Outgoing Student :man_student: :woman_student: 
